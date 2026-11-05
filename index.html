@@ -316,8 +316,8 @@ const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออ�
 const L = {
   th: {
     branch: 'สาขาสมุทรปราการ', online: 'ออนไลน์', offline: 'ออฟไลน์', waiting: 'รอส่ง', back: 'ย้อนกลับ', inspector: 'ผู้ตรวจ',
-    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ครั้งเดียวต่อเครื่อง', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจสอบ…',
-    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตตอนเข้าใช้ครั้งแรก', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
+    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจสอบ…',
+    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
     today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
     rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลา · กุ้ง · พริก/สมุนไพร', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
     resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
@@ -354,8 +354,8 @@ const L = {
   },
   en: {
     branch: 'Samut Prakan branch', online: 'Online', offline: 'Offline', waiting: 'To send', back: 'Back', inspector: 'Inspector',
-    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · once per phone', enter: 'Continue', checking: 'Checking…',
-    badId: 'Staff ID not found', needNet: 'The first sign-in needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
+    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Continue', checking: 'Checking…',
+    badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
     today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
     rm: 'Raw material receiving', rmSub: 'Fish · shrimp · chilli/herbs', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
     resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
@@ -392,7 +392,7 @@ const L = {
   },
   my: {
     branch: 'ဆမွတ်ပရာကန် ဌာနခွဲ', online: 'အွန်လိုင်း', offline: 'အော့ဖ်လိုင်း', waiting: 'ပို့ရန်', back: 'နောက်သို့', inspector: 'စစ်ဆေးသူ',
-    welcome: 'ကြိုဆိုပါတယ်', loginSub: 'ဝန်ထမ်းနံပါတ် ၇ လုံး ထည့်ပါ', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖုန်းတစ်လုံး တစ်ကြိမ်', enter: 'ဝင်မည်', checking: 'စစ်ဆေးနေသည်…',
+    welcome: 'ကြိုဆိုပါတယ်', loginSub: 'ဝန်ထမ်းနံပါတ် ၇ လုံး ထည့်ပါ', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်မည်', checking: 'စစ်ဆေးနေသည်…',
     badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေးသောကား ရှိ — ဖျက်ပြီးထွက်ရန် ထပ်နှိပ်ပါ', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
     today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
     rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ငါး · ပုစွန် · ငရုတ်/ဟင်းခတ်', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
@@ -432,15 +432,16 @@ const L = {
 
 /* ---------------- state ---------------- */
 const S = load();
-S.screen = S.staff ? 'home' : 'login';
-S.pad = S.staff ? null : { kind: 'sid' };
+S.staff = null;   // always start at the ID screen
+S.screen = 'login';
+S.pad = { kind: 'sid' };
 S.sid = ''; S.buf = ''; S.justFilled = null; S.busy = false; S.err = ''; S.online = navigator.onLine; S.confirm = null;
 let lastScreen = null, lastPad = false;
 
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null }, s);
+  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null, known: {} }, s);
   // drafts from an older version had 12 fish slots — grow them to the current maximum
   const grow = (d) => d && (d.lines || []).forEach((l) => { while (l.fishes.length < N_T) l.fishes.push({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] }); upgradeLine(l); });
   grow(out.d);
@@ -453,7 +454,8 @@ function persist() {
     const stored = (JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}).outbox || [];
     stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
   } catch (e) { /* ignore */ }
-  const keep = { lang: S.lang, staff: S.staff, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn };
+  // staff is NOT kept: every time the app is opened it asks for the ID again (Sal, 5 Nov). Drafts and unsent trucks stay.
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn, known: S.known };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 const t = () => L[S.lang] || L.th;
@@ -735,7 +737,8 @@ function renderHeader() {
 
 function viewLogin() {
   const T = t();
-  const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + esc(S.sid[i] || '') + '</i>').join('');
+  // the ID is hidden while typing (Sal, 5 Nov): filled boxes show ● — only the digit just typed shows for a moment
+  const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + (S.sid[i] ? (i === S.sid.length - 1 && S.peek ? esc(S.sid[i]) : '●') : '') + '</i>').join('');
   return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · ' + esc(branch()) + '</div>' +
     '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
     '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' +
@@ -1095,7 +1098,7 @@ function press(key) {
   if (pad.kind === 'sid') {
     if (key === 'del') S.sid = S.sid.slice(0, -1);
     else if (key === 'ok') return login();
-    else if (/^\d$/.test(key) && S.sid.length < 7) S.sid += key;
+    else if (/^\d$/.test(key) && S.sid.length < 7) { S.sid += key; S.peek = true; clearTimeout(press.peekT); press.peekT = setTimeout(() => { S.peek = false; render(); }, 600); }
     S.err = '';
     return render();
   }
@@ -1258,11 +1261,20 @@ function login() {
     S.busy = false;
     if (!j.valid) { S.err = t().badId; return render(); }
     S.staff = { id: S.sid, name: j.name || '', dept: j.department || '' };
+    (S.known = S.known || {})[S.sid] = { name: S.staff.name, dept: S.staff.dept };   // lets this person in when the phone has no signal
     S.online = true;
     go('home', { pad: null });
     refreshConfig(true);
     refreshToday(true);   // a different person may have just signed in — never show an empty or old list
-  }, (e) => { S.busy = false; S.err = e.net ? t().needNet : e.message; render(); });
+  }, (e) => {
+    S.busy = false;
+    const k = e.net && S.known && S.known[S.sid];
+    if (k) {   // no signal, but this ID has logged in on this phone before — let them work; every save is re-checked by the server
+      S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false;
+      go('home', { pad: null }); flush(); return;
+    }
+    S.err = e.net ? t().needNet : e.message; render();
+  });
 }
 function signOut() {
   if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
