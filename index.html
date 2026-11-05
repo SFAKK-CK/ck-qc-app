@@ -347,7 +347,7 @@ const L = {
     sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา',
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
-    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
     newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
     cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
     cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
@@ -385,7 +385,7 @@ const L = {
     sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
     tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems',
     recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
-    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', savedLocal: 'Saved on this phone · sends when there is signal',
+    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
     newTruck: 'Start next truck', home: 'Home', lines: 'lines',
     cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
     cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
@@ -423,7 +423,7 @@ const L = {
     sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့',
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
-    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
     newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
     cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
     cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
@@ -755,7 +755,7 @@ function viewHome() {
   const rows = pendRows.concat(td.trucks);
   let h = '<div class="stg">';
   h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
-    '</div>';
+    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="hardrefresh">↻ ' + T.refresh + '</button></div>';
   h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
@@ -1261,12 +1261,13 @@ function login() {
     S.online = true;
     go('home', { pad: null });
     refreshConfig(true);
+    refreshToday(true);   // a different person may have just signed in — never show an empty or old list
   }, (e) => { S.busy = false; S.err = e.net ? t().needNet : e.message; render(); });
 }
 function signOut() {
   if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
   S.confirmOut = false;
-  S.staff = null; S.sid = ''; S.today = null; S.cfg = null; S.d = null;
+  S.staff = null; S.sid = ''; S.today = null; S.cfg = null; S.d = null; todayAt = 0;
   go('login', { pad: { kind: 'sid' } });
 }
 function toast(msg) {
@@ -1312,12 +1313,18 @@ function openTruckSheet(id) {
       '<span class="pill ' + (l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok') + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span></div>').join('') + '</div>';
   if (tr && tr.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(tr.voidReason) + '</div>';
   else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
+  else if (!canCancel()) h += '<div class="note">🔒 ' + T.gmOnly + '</div>';
   else {
     h += '<span class="lbl" style="color:var(--ink)">' + T.cancelTruck + '</span><div class="fixes">' + T.reasons.map((r, i) => '<button data-act="reason" data-v="' + i + '">' + esc(r) + '</button>').join('') + '</div>' +
       '<textarea id="why" placeholder="' + esc(T.cancelWhy) + '"></textarea><button class="btn" style="background:var(--red);flex:none" data-act="dovoid" data-v="' + esc(id) + '">' + T.confirmCancel + '</button>';
   }
   $('sheet').innerHTML = '<div class="box">' + h + '</div>';
   $('sheet').classList.add('open');
+}
+/** cancel is for GM only (Settings → RM_CANCEL_DEPTS); the server checks again on every cancel */
+function canCancel() {
+  const deps = (rmCfg().cancelDepts && rmCfg().cancelDepts.length ? rmCfg().cancelDepts : ['general manager']);
+  return !!(S.staff && deps.indexOf(String(S.staff.dept || '').trim().toLowerCase()) >= 0);
 }
 function closeSheet() { $('sheet').classList.remove('open'); }
 
@@ -1329,6 +1336,14 @@ const ACT = {
   },
   signout: signOut,
   hidewarn: () => { S.reportWarn = null; render(); },
+  /* hard refresh: newest app version from GitHub + fresh supplier list and today's trucks; drafts and unsent trucks stay on the phone */
+  hardrefresh: (el) => {
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    persist();
+    const go = () => { const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
+    const done = S.outbox.length && navigator.onLine ? flush() : Promise.resolve();
+    Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(go, go);
+  },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   startrm: () => (S.d ? go('truck') : startTruck()),
   resume: () => go(S.d.stage || (S.d.supName ? 'fish' : 'truck')),
@@ -1461,8 +1476,9 @@ window.addEventListener('online', () => { S.online = true; flush(); render(); })
 window.addEventListener('offline', () => { S.online = false; render(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden && S.staff) { flush(); refreshToday(); } });
 
+if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href); u.searchParams.delete('r'); history.replaceState(null, '', u.toString()); } catch (e) { /* ignore */ } }
 render();
-if (S.staff) { refreshConfig(); refreshToday(true); flush(); }
+if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
 </script>
 </body>
 </html>
