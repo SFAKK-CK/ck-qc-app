@@ -347,7 +347,7 @@ const L = {
     sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา',
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
-    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
     newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
     cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
     cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
@@ -385,7 +385,7 @@ const L = {
     sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
     tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems',
     recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
-    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on this phone · sends when there is signal',
+    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', savedLocal: 'Saved on this phone · sends when there is signal',
     newTruck: 'Start next truck', home: 'Home', lines: 'lines',
     cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
     cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
@@ -423,7 +423,7 @@ const L = {
     sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့',
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
-    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
     newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
     cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
     cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
@@ -440,7 +440,7 @@ let lastScreen = null, lastPad = false;
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null }, s);
+  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null }, s);
   // drafts from an older version had 12 fish slots — grow them to the current maximum
   const grow = (d) => d && (d.lines || []).forEach((l) => { while (l.fishes.length < N_T) l.fishes.push({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] }); upgradeLine(l); });
   grow(out.d);
@@ -453,7 +453,7 @@ function persist() {
     const stored = (JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}).outbox || [];
     stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
   } catch (e) { /* ignore */ }
-  const keep = { lang: S.lang, staff: S.staff, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last };
+  const keep = { lang: S.lang, staff: S.staff, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 const t = () => L[S.lang] || L.th;
@@ -654,7 +654,11 @@ function flush() {
     const item = S.outbox.find((o) => !o.hold);
     if (!item) return Promise.resolve();
     item.record.sentLate = Date.now() - item.savedAt > 10 * 60 * 1000;
-    return api('rmSave', { staffId: item.staffId, record: item.record }, 45000).then(() => {
+    return api('rmSave', { staffId: item.staffId, record: item.record }, 45000).then((j) => {
+      // the record is safe; but say so loudly if the daily report file could not be updated
+      if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: item.record.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
+      else if (j && j.report === 'ok') S.reportWarn = null;
+      if (S.last && S.last.id === item.record.id) S.last.report = j && j.report;
       S.outbox = S.outbox.filter((o) => o !== item);
       sentIds[item.record.id] = true;
       S.online = true;
@@ -756,6 +760,11 @@ function viewHome() {
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
     '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
+  if (S.reportWarn) {
+    h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
+      '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
+      '<button class="linkbtn" data-act="hidewarn">' + T.reportOkNow + '</button></div></div>';
+  }
   if (S.outbox.length) {
     const bad = S.outbox.find((o) => o.err);
     h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
@@ -1061,6 +1070,7 @@ function viewDone() {
   return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
     '<div class="sub" style="font-size:15px">Lot ' + esc(last.lot || '') + ' · ' + last.lines + ' ' + T.lines + '</div>' +
     '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') +
     (td ? '<div class="card glass" style="width:100%"><div class="sum"><div><b>' + td.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.kg) + '</b><span>kg</span></div><hr><div><b>' + td.failed + '</b><span>' + T.failShort + '</span></div></div></div>' : '') + '</div>';
 }
 
@@ -1318,6 +1328,7 @@ const ACT = {
     go(to);
   },
   signout: signOut,
+  hidewarn: () => { S.reportWarn = null; render(); },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   startrm: () => (S.d ? go('truck') : startTruck()),
   resume: () => go(S.d.stage || (S.d.supName ? 'fish' : 'truck')),
