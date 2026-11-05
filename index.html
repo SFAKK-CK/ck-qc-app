@@ -56,11 +56,15 @@ select option{color:var(--ink)}
 #hdr{flex:none;padding:calc(10px + env(safe-area-inset-top,0)) 16px 10px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);display:flex;flex-direction:column;gap:8px}
 .hrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .htitle{display:flex;align-items:center;gap:8px;min-width:0}
-.htitle b{font-size:17px;line-height:1.2;display:block}
+.htitle>div{min-width:0}
+.htitle b,.htitle small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.htitle b{font-size:17px;line-height:1.2}
 .htitle small{font-size:12px;color:var(--ink-3)}
 .back{width:36px;height:36px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.6);font-size:22px;line-height:1;color:var(--ink-2);display:grid;place-items:center}
+.hright{display:flex;align-items:center;gap:6px;flex:none}
+.logout{font-size:12px;font-weight:700;color:var(--red-ink);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7)}
 .langs{display:flex;gap:2px;background:rgba(40,42,50,.07);padding:3px;border-radius:999px;flex:none}
-.langs button{border-radius:999px;padding:5px 9px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.langs button{border-radius:999px;padding:5px 7px;font-size:13px;font-weight:600;color:var(--ink-3)}
 .langs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,22,18,.12)}
 .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
 .steps div{display:flex;flex-direction:column;gap:3px}
@@ -284,8 +288,10 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 const APP_VERSION = '1.0.0';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
-const STORE = 'ckqc.v1';
-const N_T = 12;
+const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
+const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
+const N_T = 20;   // most fish ever sampled (largest AQL sample); each line uses its own number from the AQL table
+const AQL_DEFAULT = [[2, 15, 2, 0, 1], [16, 50, 3, 0, 1], [51, 150, 5, 0, 1], [151, 500, 8, 1, 2], [501, 1200, 13, 2, 3], [1201, 3200, 13, 3, 4], [3201, 10000, 20, 5, 6]];
 const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
 
 /* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
@@ -293,13 +299,13 @@ const L = {
   th: {
     branch: 'สาขาสมุทรปราการ', online: 'ออนไลน์', offline: 'ออฟไลน์', waiting: 'รอส่ง', back: 'ย้อนกลับ', inspector: 'ผู้ตรวจ',
     welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ครั้งเดียวต่อเครื่อง', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจสอบ…',
-    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตตอนเข้าใช้ครั้งแรก', signOut: 'ออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
+    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตตอนเข้าใช้ครั้งแรก', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
     today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
     rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลาน้ำจืด · FM-QA-010.15', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
     resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
     pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
     steps: ['รถ', 'ปลา', 'ตรวจ', 'สรุป'],
-    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers',
+    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
     fishNext: 'ชนิดปลาเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
     fishT: 'ปลาในรถ', fishSub: 'ชื่อปลา / Processing type / ขนาด ต่างกัน = คนละรายการ', fishName: 'ชื่อปลา', proc: 'Processing type',
     typeOwn: '+ พิมพ์ชื่อเอง…', fromList: 'เลือกจากรายการ', manualTag: 'พิมพ์ชื่อเอง', newLine: 'รายการใหม่', incomplete: 'ยังไม่ครบ',
@@ -310,7 +316,7 @@ const L = {
     checks: ['เนื้อแน่น ไม่เละ', 'ท้องตึง ไม่แตก', 'กลิ่นคาวปกติ ไม่เหม็น', 'ตากลมใส', 'เหงือกสีแดงสด', 'เกล็ดเรียบเงาไม่หลุด', 'ไม่พบสิ่งแปลกปลอม / สิ่งปลอมปน', 'ไม่พบพยาธิ (มองเห็นด้วยตา)'],
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
-    chilliNote: 'พริก: ยังไม่มีเกณฑ์ตรวจลักษณะ · วัดอุณหภูมิได้ตามปกติ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิอย่างน้อย {n} ตัว',
+    chilliNote: 'พริก: ยังไม่มีเกณฑ์ตรวจลักษณะ · วัดอุณหภูมิได้ตามปกติ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
     nextLine: 'รายการถัดไป ›', toSummary: 'สรุป ›', tempsN: 'วัดอุณหภูมิ', max: 'สูงสุด', weight: 'น้ำหนัก',
     sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา', physNA: 'กายภาพ: ไม่ใช้กับพริก',
@@ -323,13 +329,13 @@ const L = {
   en: {
     branch: 'Samut Prakan branch', online: 'Online', offline: 'Offline', waiting: 'To send', back: 'Back', inspector: 'Inspector',
     welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · once per phone', enter: 'Continue', checking: 'Checking…',
-    badId: 'Staff ID not found', needNet: 'The first sign-in needs internet', signOut: 'Sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
+    badId: 'Staff ID not found', needNet: 'The first sign-in needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
     today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
     rm: 'Raw material receiving', rmSub: 'Freshwater fish · FM-QA-010.15', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
     resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
     pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
     steps: ['Truck', 'Fish', 'Inspect', 'Review'],
-    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab',
+    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
     fishNext: 'Fish are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
     fishT: 'Fish on this truck', fishSub: 'Different fish / processing type / size = separate line', fishName: 'Fish name', proc: 'Processing type',
     typeOwn: '+ Type a name…', fromList: 'Pick from list', manualTag: 'Typed by hand', newLine: 'New line', incomplete: 'Incomplete',
@@ -340,7 +346,7 @@ const L = {
     checks: ['Firm flesh, not soft', 'Belly tight, not burst', 'Normal smell', 'Eyes round and clear', 'Gills bright red', 'Scales smooth and intact', 'No foreign objects', 'No visible parasites'],
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
-    chilliNote: 'Chilli: no inspection checklist yet · temperature works as normal', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure at least {n} fish',
+    chilliNote: 'Chilli: no inspection checklist yet · temperature works as normal', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
     nextLine: 'Next line ›', toSummary: 'Review ›', tempsN: 'Temps', max: 'Highest', weight: 'Weight',
     sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
     tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems', physNA: 'Physical: not for chilli',
@@ -353,13 +359,13 @@ const L = {
   my: {
     branch: 'ဆမွတ်ပရာကန် ဌာနခွဲ', online: 'အွန်လိုင်း', offline: 'အော့ဖ်လိုင်း', waiting: 'ပို့ရန်', back: 'နောက်သို့', inspector: 'စစ်ဆေးသူ',
     welcome: 'ကြိုဆိုပါတယ်', loginSub: 'ဝန်ထမ်းနံပါတ် ၇ လုံး ထည့်ပါ', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖုန်းတစ်လုံး တစ်ကြိမ်', enter: 'ဝင်မည်', checking: 'စစ်ဆေးနေသည်…',
-    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
+    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေးသောကား ရှိ — ဖျက်ပြီးထွက်ရန် ထပ်နှိပ်ပါ', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
     today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
     rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ရေချိုငါး · FM-QA-010.15', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
     resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', noTrucks: 'ယနေ့ ကား မရှိသေး',
     pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
     steps: ['ကား', 'ငါး', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
-    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ',
+    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
     fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
     fishT: 'ကားပေါ်ရှိ ငါး', fishSub: 'ငါး/Processing type/အရွယ် မတူ = သီးခြားစာရင်း', fishName: 'ငါးအမည်', proc: 'Processing type',
     typeOwn: '+ အမည် ကိုယ်တိုင်ရိုက်…', fromList: 'စာရင်းမှ ရွေး', manualTag: 'ကိုယ်တိုင်ရိုက်', newLine: 'စာရင်းသစ်', incomplete: 'မပြည့်စုံ',
@@ -370,7 +376,7 @@ const L = {
     checks: ['အသားမာ၊ မပျော့', 'ဗိုက်တင်း၊ မပေါက်', 'ငါးနံ့ ပုံမှန်', 'မျက်လုံး ဝိုင်း၍ ကြည်', 'ပါးဟက် နီရဲ', 'အကြေး ချော၊ မကျွတ်', 'ပြင်ပပစ္စည်း မတွေ့', 'ကပ်ပါးကောင် မတွေ့'],
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
-    chilliNote: 'ငရုတ်သီး: စစ်ဆေးရန်စာရင်း မရှိသေး · အပူချိန် ပုံမှန်တိုင်းနိုင်', wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: 'အနည်းဆုံး {n} ကောင် တိုင်းပါ',
+    chilliNote: 'ငရုတ်သီး: စစ်ဆေးရန်စာရင်း မရှိသေး · အပူချိန် ပုံမှန်တိုင်းနိုင်', wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
     nextLine: 'နောက်စာရင်း ›', toSummary: 'အနှစ်ချုပ် ›', tempsN: 'တိုင်းပြီး', max: 'အမြင့်ဆုံး', weight: 'အလေးချိန်',
     sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့', physNA: 'ရုပ်ပိုင်း: ငရုတ်သီးအတွက် မသုံး',
@@ -391,17 +397,22 @@ let lastScreen = null, lastPad = false;
 
 function load() {
   let s = {};
-  try { s = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { s = {}; }
-  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null }, s);
+  try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
+  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null }, s);
+  // drafts from an older version had 12 fish slots — grow them to the current maximum
+  const grow = (d) => d && (d.lines || []).forEach((l) => { while (l.fishes.length < N_T) l.fishes.push({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] }); });
+  grow(out.d);
+  (out.outbox || []).forEach((o) => grow(o.draft));
+  return out;
 }
 const sentIds = {};
 function persist() {
   try {
-    const stored = (JSON.parse(localStorage.getItem(STORE) || '{}') || {}).outbox || [];
+    const stored = (JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}).outbox || [];
     stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
   } catch (e) { /* ignore */ }
   const keep = { lang: S.lang, staff: S.staff, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last };
-  try { localStorage.setItem(STORE, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 const t = () => L[S.lang] || L.th;
 const fmt = (s, o) => String(s).replace(/\{(\w+)\}/g, (_, k) => o[k]);
@@ -410,8 +421,9 @@ const P2 = (n) => String(n).padStart(2, '0');
 const nowHM = () => { const d = new Date(); return P2(d.getHours()) + ':' + P2(d.getMinutes()); };
 const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate()); };
 const kgFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
-const settings = () => Object.assign({ TEMP_MAX: 2, PHYS_LIMIT: 10, MIN_TEMPS: 1 }, (S.cfg && S.cfg.rm && S.cfg.rm.settings) || {});
-const rmCfg = () => (S.cfg && S.cfg.rm) || DEMO_CFG.rm;
+const settings = () => Object.assign({ TEMP_MAX: 2 }, (S.cfg && S.cfg.rm && S.cfg.rm.settings) || {});
+const EMPTY_RM = { suppliers: [], fish: [], procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: [], thermos: [], usual: {}, settings: {} };
+const rmCfg = () => (S.cfg && S.cfg.rm) || (DEMO ? DEMO_CFG.rm : EMPTY_RM);
 const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
 
 /* ---------------- rules (same as the server) ---------------- */
@@ -425,20 +437,30 @@ const lineReady = (l) => !!(l.fish && l.fish.length <= 40 && l.proc && (l.chilli
 const MAX_LINES = 20;
 /** everything the server will check, so a saved truck is never refused later */
 const canSave = (d) => d.lines.length > 0 && d.lines.length <= MAX_LINES &&
-  d.lines.every((l) => { const e = evalLine(l); return lineReady(l) && e.n >= settings().MIN_TEMPS && (!e.needFix || l.fix); });
-const sampleKg = (w) => { const n = Number(w); return n > 0 ? (n <= 500 ? 8 : n <= 3200 ? 13 : 20) : null; };
-const counts = (l) => l.extra.map((x, k) => x + l.fishes.reduce((a, f) => a + (f.d[k] ? 1 : 0), 0));
+  d.lines.every((l) => { const e = evalLine(l); return lineReady(l) && e.n >= e.plan.pcs && (!e.needFix || l.fix); });
+/** AQL special inspection S-3 (file การสุ่มตัวอย่าง AQL), counted in fish: weight received → { pcs, ac, re } */
+function planOf(w) {
+  const t = (rmCfg().aql && rmCfg().aql.length ? rmCfg().aql : AQL_DEFAULT);
+  const kg = Number(w) || 0;
+  for (let i = 0; i < t.length; i++) if (kg <= t[i][1]) return { pcs: Math.min(N_T, t[i][2]), ac: t[i][3], re: t[i][4] };
+  const last = t[t.length - 1];
+  return { pcs: Math.min(N_T, last[2]), ac: last[3], re: last[4] };
+}
+const pcsOf = (l) => planOf(l.w).pcs;
+/* defective fish per item, only among the sampled fish */
+const counts = (l) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => l.fishes.slice(0, pcsOf(l)).reduce((a, f) => a + (f.d[k] ? 1 : 0), 0));
 function evalLine(l) {
   const st = settings();
   const c = counts(l);
-  const physFail = !l.chilli && c.some((n, k) => (k >= 6 ? n >= 1 : n > st.PHYS_LIMIT));
-  const temps = l.fishes.map((f) => f.t).filter((v) => v !== '' && v !== '-' && !isNaN(Number(v))).map(Number);
+  const plan = planOf(l.w);
+  const physFail = !l.chilli && c.some((n, k) => (k >= 6 ? n >= 1 : n >= plan.re));
+  const temps = l.fishes.slice(0, plan.pcs).map((f) => f.t).filter((v) => v !== '' && v !== '-' && !isNaN(Number(v))).map(Number);
   const max = temps.length ? Math.max.apply(null, temps) : null;
   const warm = max !== null && max > st.TEMP_MAX;
   const rc = l.recheck === '' || l.recheck === undefined || isNaN(Number(l.recheck)) ? null : Number(l.recheck);
   const tempFail = warm && !(rc !== null && rc <= st.TEMP_MAX);
   const status = physFail || tempFail ? 'fail' : warm ? 'fixed' : 'pass';
-  return { c, physFail, max, warm, n: temps.length, status, needFix: physFail || warm };
+  return { c, plan, physFail, max, warm, n: temps.length, status, needFix: physFail || warm };
 }
 function blankLine(fish, proc, size) {
   const chilli = fish ? isChilli(fish) : false;
@@ -482,7 +504,7 @@ const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปร
   fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'PUTI', 'MRIGAL', 'CARFU', 'PABDA', 'TANGRA', 'KHOLSHA', 'MAGUR', 'CHITAL', 'KORAL', 'GULSHA', 'E-MOLA', 'KESKI', 'DIMA ESSA', 'GREEN CHILLI', 'RED CHILLI']
     .map((n) => ({ name: n, chilli: /CHILLI/.test(n) })),
   procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: ['SC-01', 'SC-02'], thermos: ['TM-01', 'TM-02'],
-  usual: { 'ตัวอย่าง ผู้ขาย A / 01': [['TILAPIA', 'WR', '800'], ['TILAPIA', 'WR', '600']] }, settings: { TEMP_MAX: 2, PHYS_LIMIT: 10, MIN_TEMPS: 1 } } };
+  usual: { 'ตัวอย่าง ผู้ขาย A / 01': [['TILAPIA', 'WR', '800'], ['TILAPIA', 'WR', '600']] }, settings: { TEMP_MAX: 2 }, aql: AQL_DEFAULT } };
 function demoApi(action, p) {
   return new Promise((res) => setTimeout(() => {
     let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.demo') || '{}'); } catch (e) { mem = {}; }
@@ -542,14 +564,20 @@ let cfgAt = 0;
 function refreshConfig(force) {
   if (!S.staff || (!force && Date.now() - cfgAt < 5000)) return;
   cfgAt = Date.now();
-  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.online = true; persist(); render(); },
-    (e) => { if (e.code === 'STAFF') { signOut(); toast(t().badId); } else if (e.net) { S.online = false; render(); } });
+  S.cfgErr = '';
+  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.cfgErr = ''; S.online = true; persist(); render(); },
+    (e) => {
+      if (e.code === 'STAFF') { signOut(); toast(t().badId); return; }
+      if (e.net) S.online = false;
+      S.cfgErr = e.net ? t().offline : e.message;
+      render();
+    });
 }
 
 /* ---------------- screens ---------------- */
 function go(screen, extra) {
   Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
-  if (!extra || !('pad' in extra)) S.pad = screen === 'inspect' && curLine() && curLine().fi < N_T ? { kind: 't' } : null;
+  if (!extra || !('pad' in extra)) S.pad = screen === 'inspect' && curLine() && curLine().fi < pcsOf(curLine()) ? { kind: 't' } : null;
   if (S.d && ['truck', 'fish', 'inspect', 'summary'].indexOf(screen) >= 0) S.d.stage = screen;   // "continue" reopens the same page
   render();
   if (screen === 'home') { refreshToday(); flush(); }
@@ -573,8 +601,9 @@ function renderHeader() {
   let h = '<div class="hrow"><div class="htitle">' +
     (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
     '<div><b>' + (at >= 0 || S.screen === 'done' ? esc(T.rm) : 'CK QC') + '</b><small>CK QC · ' + esc(branch()) + '</small></div></div>' +
-    '<div class="langs">' + [['th', 'ไทย'], ['en', 'EN'], ['my', 'မြန်မာ']].map((x) =>
-      '<button data-act="lang" data-v="' + x[0] + '" class="' + (S.lang === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div></div>';
+    '<div class="hright"><div class="langs">' + [['th', 'ไทย'], ['en', 'EN'], ['my', 'မြန်မာ']].map((x) =>
+      '<button data-act="lang" data-v="' + x[0] + '" class="' + (S.lang === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>' +
+    (S.staff ? '<button class="logout" data-act="signout" aria-label="' + T.signOut + '">⎋ ' + T.signOut + '</button>' : '') + '</div></div>';
   if (DEMO) h += '<div class="demo">' + T.demo + '</div>';
   if (at >= 0) h += '<div class="steps">' + T.steps.map((s, i) => '<div class="' + (i < at ? 'sd' : i === at ? 'sn' : '') + '"><i></i><span>' + esc(s) + '</span></div>').join('') + '</div>';
   if (S.staff && S.screen !== 'login' && S.screen !== 'home') h += '<div class="who"><span>' + T.inspector + ': <b>' + esc(S.staff.name) + '</b> · ' + esc(S.staff.id) + '</span>' + net + '</div>';
@@ -603,7 +632,7 @@ function viewHome() {
   const rows = pendRows.concat(td.trucks);
   let h = '<div class="stg">';
   h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
-    '<button class="signout" data-act="signout">' + T.signOut + '</button></div>';
+    '</div>';
   h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
@@ -647,7 +676,10 @@ function viewTruck() {
   const d = S.d;
   const lotActive = S.pad && S.pad.kind === 'lot';
   let h = '<div class="stg"><h2>' + T.truckT + '</h2>';
-  if (!c.suppliers.length) h += '<div class="note">' + T.noSup + '</div>';
+  if (!c.suppliers.length) {
+    h += S.cfgErr ? '<div class="err">' + T.cfgFail + ': ' + esc(S.cfgErr) + '</div>' : !S.cfg ? '<div class="note">' + T.loadingSup + '</div>' : '<div class="note">' + T.noSup + '</div>';
+    h += '<button class="linkbtn" style="font-size:14px;align-self:flex-start" data-act="reloadcfg">↻ ' + T.reload + '</button>';
+  }
   h += '<label style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.supplier + '</span><select class="sel' + (d.supCode || d.supName ? ' ok' : '') + '" data-on="sup">' +
     '<option value="">' + T.pickSup + '</option>' + c.suppliers.map((s, i) => '<option value="' + i + '"' + (s.code === d.supCode && s.name === d.supName ? ' selected' : '') + '>' + esc(s.name) + (s.code ? ' · ' + esc(s.code) : '') + '</option>').join('') + '</select></label>';
   if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
@@ -676,7 +708,7 @@ function viewFish() {
     const zA = S.pad && S.pad.kind === 'size' && S.pad.line === i;
     const wA = S.pad && S.pad.kind === 'w' && S.pad.line === i;
     const procs = l.chilli ? c.chilliProcs : c.procs;
-    const sam = sampleKg(l.w);
+    const sam = Number(l.w) > 0 ? planOf(l.w) : null;
     const confirmDel = S.confirm === 'del' + i;
     h += '<div class="fl glass' + pop + '"><div class="fl-body">' +
       '<div class="row"><span class="num on">' + (i + 1) + '</span><span class="grow"><b id="title' + i + '" style="font-size:16px">' + esc(l.fish ? savedName(l) : T.newLine) + '</b><div class="sub" style="font-size:12px">' + (l.custom ? T.manualTag : '') + '</div></span>' +
@@ -698,7 +730,7 @@ function viewFish() {
     // weight kg
     h += '<button class="tile wt ' + (wA ? 'f-act' : Number(l.w) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="w" data-i="' + i + '">' +
       '<span class="t-l">' + T.weightL + '</span><span class="t-v"><b class="' + (wA ? 'caret' : '') + '">' + (l.w ? esc(wShow(l.w)) : wA ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
-    h += '</div><div class="sample"><span>' + T.sample + '</span><b>' + (sam ? sam + ' kg' : '—') + '</b></div>';
+    h += '</div><div class="sample"><span>' + T.sample + '</span><b>' + (sam ? fmt(T.samplePcs, { n: sam.pcs, ac: sam.ac }) : '—') + '</b></div>';
     [['md', T.md, T.yes, T.no, '2'], ['gl', T.gl, T.yes, T.no, '2'], ['ice', T.ice, T.little, T.lots, '1']].forEach((g) => {
       h += '<div class="tog"><span>' + g[1] + '</span><div class="seg">' +
         '<button class="' + (l[g[0]] === '1' ? 'on' + (g[4] === '1' ? ' warn' : '') : '') + '" data-act="seg" data-v="' + g[0] + '" data-i="' + i + '" data-x="1">' + g[2] + '</button>' +
@@ -722,20 +754,22 @@ function viewInspect() {
   if (d.lines.length > 1) {
     h += '<div class="tabs">' + d.lines.map((x, i) => '<button class="glass' + (i === d.cur ? ' on' : '') + '" data-act="tab" data-v="' + i + '">' + (i + 1) + '. ' + esc(savedName(x)) + (evalLine(x).status === 'fail' ? ' ⚠' : '') + '</button>').join('') + '</div>';
   } else h += '<div class="lbl">' + esc(savedName(l)) + '</div>';
-  const strip = '<div class="strip">' + l.fishes.map((f, k) => {
+  const pcs = ev.plan.pcs;
+  const strip = '<div class="strip">' + l.fishes.slice(0, pcs).map((f, k) => {
     const n = f.t === '' ? null : Number(f.t);
     const bad = f.d.some((x) => x);
     const cls = k === l.fi ? 'here' : n !== null && n > st.TEMP_MAX ? 'tbad' : bad ? 'dfx' : n !== null ? 'tok' : '';
     return '<button class="' + cls + '" data-act="pickfish" data-v="' + k + '"><small>' + (k + 1) + '</small><span>' + esc(f.t || (k === l.fi ? '▏' : '·')) + (bad ? '•' : '') + '</span></button>';
-  }).join('') + '<button class="rest' + (l.fi >= N_T ? ' here' : '') + '" data-act="pickfish" data-v="' + N_T + '">+ ' + T.rest + '</button></div>';
+  }).join('') + '</div>';
   const found = ev.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
   const lsum = l.chilli ? '' : '<div class="lsum ' + (ev.physFail ? 'ls-bad' : found.length ? 'ls-warn' : 'ls-ok') + '">' +
     (ev.physFail ? '✗ ' + T.physBad + ' · ' + esc(found.join(', ')) : found.length ? T.found + ': ' + esc(found.join(', ')) + ' (' + T.pass + ')' : T.allOk) + '</div>';
-  if (l.fi < N_T) {
+  h += '<div class="sample"><span>' + fmt(T.planLine, { kg: kgFmt(l.w), n: pcs }) + '</span><b>' + ev.n + ' / ' + pcs + '</b></div>';
+  if (l.fi < pcs) {
     const f = l.fishes[l.fi];
     const val = S.buf || f.t;
     const n = f.t === '' ? null : Number(f.t);
-    h += '<div class="card glass"><div class="row"><span class="grow"><b style="font-size:18px">' + T.fishNo + ' ' + (l.fi + 1) + '</b><div class="sub" style="font-size:12px">' + T.flowHint + '</div></span>' +
+    h += '<div class="card glass"><div class="row"><span class="grow"><b style="font-size:18px">' + T.fishNo + ' ' + (l.fi + 1) + ' / ' + pcs + '</b><div class="sub" style="font-size:12px">' + T.flowHint + '</div></span>' +
       '<button class="temp ' + (n === null ? '' : n > st.TEMP_MAX ? 'bad' : 'ok') + '" data-act="wide" aria-label="' + T.wideHint + '"><span class="' + (S.buf || f.t === '' ? 'caret' : '') + '">' + esc(val === '' ? '' : val) + '</span>' + (val === '' ? '—' : '') + ' °C' +
       '<small style="display:block;font:600 10px var(--mono);color:' + (S.wide ? 'var(--red)' : 'var(--ink-3)') + '">' + (S.wide ? T.wideOn : T.wideHint) + '</small></button></div>';
     if (l.chilli) h += '<div class="note">' + T.chilliNote + '</div>';
@@ -743,17 +777,18 @@ function viewInspect() {
       '<button class="' + (f.d[k] ? 'on' : k >= 6 ? 'zero' : '') + '" data-act="defect" data-v="' + k + '">' + (f.d[k] ? '✗ ' : '') + esc(lab) + '</button>').join('') + '</div>';
     h += '</div>' + strip + lsum;
   } else {
-    h += '<div><b style="font-size:18px">' + T.restT + '</b><div class="sub" style="font-size:12px">' + T.restSub + '</div></div>';
+    // every sampled fish done: result per item (tap a fish in the strip to change it)
+    h += '<div><b style="font-size:18px">✓ ' + fmt(T.allDone, { n: pcs }) + '</b><div class="sub" style="font-size:12px">' + T.tapToEdit + '</div></div>';
     if (l.chilli) h += '<div class="note">' + T.chilliNote + '</div>';
     else h += '<div class="rest-list glass">' + T.checks.map((lab, k) => {
       const n = ev.c[k];
-      const fail = k >= 6 ? n >= 1 : n > st.PHYS_LIMIT;
-      return '<div class="rrow ' + (fail ? 'fail' : n ? 'found' : '') + '"><span class="rl"><span style="font-size:15px;font-weight:500">' + esc(lab) + '</span><small>' + (k >= 6 ? T.rule0 : fmt(T.rule10, { n: st.PHYS_LIMIT })) + '</small></span>' +
-        '<button class="step" data-act="bump" data-v="' + k + '" data-x="-1" aria-label="-1">−</button><span class="rn">' + n + '</span><button class="step" data-act="bump" data-v="' + k + '" data-x="1" aria-label="+1">+</button></div>';
+      const fail = k >= 6 ? n >= 1 : n >= ev.plan.re;
+      return '<div class="rrow ' + (fail ? 'fail' : n ? 'found' : '') + '"><span class="rl"><span style="font-size:15px;font-weight:500">' + esc(lab) + '</span><small>' +
+        (k >= 6 ? T.rule0 : fmt(T.ruleAql, { ac: ev.plan.ac, re: ev.plan.re })) + '</small></span><span class="rn">' + n + '</span></div>';
     }).join('') + '</div>';
     h += strip + lsum;
   }
-  if (ev.n < st.MIN_TEMPS) h += '<div class="sub" style="text-align:center">' + fmt(T.needTemps, { n: st.MIN_TEMPS }) + '</div>';
+  if (ev.n < pcs) h += '<div class="sub" style="text-align:center">' + fmt(T.needTemps, { n: pcs }) + '</div>';
   return '<div class="stg">' + h + '</div>';
 }
 
@@ -770,10 +805,10 @@ function viewSummary() {
     const probs = [];
     if (e.physFail) probs.push(T.physBad);
     if (e.warm) probs.push(fmt(T.tooWarm, { t: st.TEMP_MAX }) + ' (' + e.max.toFixed(1) + ')');
-    const short = e.n < st.MIN_TEMPS;
+    const short = e.n < e.plan.pcs;
     h += '<div class="sl glass' + ((e.needFix && !l.fix) || short ? ' bad' : '') + '"><div class="row"><b class="grow" style="font-size:16px">' + (i + 1) + '. ' + esc(savedName(l)) + '</b>' + pill + '</div>' +
-      (short ? '<button class="err" style="text-align:left" data-act="gotoline" data-v="' + i + '">' + fmt(T.needTemps, { n: st.MIN_TEMPS }) + ' ›</button>' : '') +
-      '<div class="kv"><span>' + T.weight + '<b>' + kgFmt(l.w) + ' kg</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + N_T + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span></div>' +
+      (short ? '<button class="err" style="text-align:left" data-act="gotoline" data-v="' + i + '">' + fmt(T.needTemps, { n: e.plan.pcs }) + ' ›</button>' : '') +
+      '<div class="kv"><span>' + T.weight + '<b>' + kgFmt(l.w) + ' kg</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + e.plan.pcs + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span></div>' +
       '<span class="sub">' + (l.chilli ? T.physNA : found.length ? T.found + ': ' + esc(found.join(', ')) : T.physNone) + '</span>' +
       (probs.length ? '<span style="font-size:13px;color:var(--red);font-weight:700">' + esc(probs.join(' · ')) + '</span>' : '');
     if (e.needFix) {
@@ -861,14 +896,15 @@ function press(key) {
   }
   if (pad.kind === 't') {
     const l = curLine();
-    if (!l || l.fi >= N_T) return;
+    const pcs = l ? pcsOf(l) : 0;
+    if (!l || l.fi >= pcs) return;
     const f = l.fishes[l.fi];
     const need = S.wide ? 3 : 2;               // normal: 2 digits = d.d · "10 °C up" mode: 3 digits = dd.d
     let buf = S.buf;
-    const store = (v) => { f.t = v; if (!l.time) l.time = nowHM(); l.fi = nextEmpty(l, l.fi); S.buf = ''; S.wide = false; if (l.fi >= N_T) S.pad = null; };
+    const store = (v) => { f.t = v; if (!l.time) l.time = nowHM(); l.fi = nextEmpty(l, l.fi); S.buf = ''; S.wide = false; if (l.fi >= pcs) S.pad = null; };
     if (key === 'ok') {
       if (buf.replace('-', '')) store(tempOf(buf, need));   // 5 then Next = 5.0 — a typed digit is never thrown away
-      else { l.fi = Math.min(N_T, l.fi + 1); S.buf = ''; S.wide = false; if (l.fi >= N_T) S.pad = null; }
+      else { l.fi = Math.min(pcs, l.fi + 1); S.buf = ''; S.wide = false; if (l.fi >= pcs) S.pad = null; }
       return render();
     }
     if (key === 'pm') {
@@ -894,9 +930,10 @@ function press(key) {
 }
 /** after a reading, jump to the next fish that has no temperature yet (never onto one that already has a value) */
 function nextEmpty(l, from) {
-  for (let k = from + 1; k < N_T; k++) if (l.fishes[k].t === '') return k;
-  for (let k = 0; k < from; k++) if (l.fishes[k].t === '') return k;
-  return N_T;
+  const pcs = pcsOf(l);
+  for (let k = from + 1; k < pcs; k++) if (l.fishes[k].t === '') return k;
+  for (let k = 0; k < Math.min(from, pcs); k++) if (l.fishes[k].t === '') return k;
+  return pcs;
 }
 /** digits → temperature: 2 digits = d.d (1 2 → 1.2) · 3 digits = dd.d (1 2 3 → 12.3) · one digit + OK = d.0 */
 function tempOf(buf, need) {
@@ -920,7 +957,8 @@ function viewAction() {
   if (scr === 'truck') return '<button class="btn" data-act="next"' + (d.supName && d.lot ? '' : ' disabled') + '>' + T.next + ' ›</button>';
   if (scr === 'fish') return '<button class="btn" data-act="next"' + (d.lines.length && d.lines.every(lineReady) ? '' : ' disabled') + '>' + T.next + ' ›</button>';
   if (scr === 'inspect') {
-    const ok = evalLine(curLine()).n >= settings().MIN_TEMPS;
+    const ev = evalLine(curLine());
+    const ok = ev.n >= ev.plan.pcs;
     return '<button class="btn" data-act="next"' + (ok ? '' : ' disabled') + '>' + (d.cur + 1 < d.lines.length ? T.nextLine : T.toSummary) + '</button>';
   }
   if (scr === 'summary') {
@@ -979,7 +1017,9 @@ function login() {
   }, (e) => { S.busy = false; S.err = e.net ? t().needNet : e.message; render(); });
 }
 function signOut() {
-  S.staff = null; S.sid = ''; S.today = null;
+  if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
+  S.confirmOut = false;
+  S.staff = null; S.sid = ''; S.today = null; S.cfg = null; S.d = null;
   go('login', { pad: { kind: 'sid' } });
 }
 function toast(msg) {
@@ -997,7 +1037,7 @@ function saveTruck() {
     lines: d.lines.map((l) => {
       const e = evalLine(l);
       return { fish: l.fish.trim().toUpperCase(), custom: !!l.custom, chilli: !!l.chilli, proc: l.proc, size: l.chilli ? '' : l.size, w: l.w, md: l.md, gl: l.gl, ice: l.ice,
-        time: l.time, temps: l.fishes.map((f) => f.t), phys: e.c, recheck: e.warm ? l.recheck : '', fix: l.fix || '',
+        time: l.time, temps: l.fishes.slice(0, e.plan.pcs).map((f) => f.t), phys: e.c, recheck: e.warm ? l.recheck : '', fix: l.fix || '',
         _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน' };
     })
   };
@@ -1061,7 +1101,7 @@ const ACT = {
     }
     if (S.screen === 'fish') { d.lines.forEach((l) => (l.open = false)); d.cur = 0; return go('inspect'); }
     if (S.screen === 'inspect') {
-      if (d.cur + 1 < d.lines.length) { d.cur += 1; S.buf = ''; S.pad = curLine().fi < N_T ? { kind: 't' } : null; return render(); }
+      if (d.cur + 1 < d.lines.length) { d.cur += 1; S.buf = ''; S.pad = curLine().fi < pcsOf(curLine()) ? { kind: 't' } : null; return render(); }
       return go('summary');
     }
   },
@@ -1081,13 +1121,13 @@ const ACT = {
   },
   tolist: (el) => { const l = S.d.lines[Number(el.dataset.v)]; l.custom = false; l.fish = ''; render(); },
   seg: (el) => { S.d.lines[Number(el.dataset.i)][el.dataset.v] = el.dataset.x; render(); },
-  tab: (el) => { S.d.cur = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = curLine().fi < N_T ? { kind: 't' } : null; render(); },
-  pickfish: (el) => { const l = curLine(); l.fi = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = l.fi < N_T ? { kind: 't' } : null; render(); },
+  tab: (el) => { S.d.cur = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = curLine().fi < pcsOf(curLine()) ? { kind: 't' } : null; render(); },
+  pickfish: (el) => { const l = curLine(); l.fi = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = l.fi < pcsOf(l) ? { kind: 't' } : null; render(); },
   wide: () => { S.wide = !S.wide; S.buf = ''; S.pad = { kind: 't' }; render(); },
   defect: (el) => { const l = curLine(); const f = l.fishes[l.fi]; const k = Number(el.dataset.v); f.d[k] = f.d[k] ? 0 : 1; S.justFilled = null; render(); },
-  bump: (el) => { const l = curLine(); const k = Number(el.dataset.v); l.extra[k] = Math.max(0, l.extra[k] + Number(el.dataset.x)); render(); },
   fix: (el) => { const l = S.d.lines[Number(el.dataset.v)]; const v = FIX_TH[Number(el.dataset.x)]; l.fix = l.fix === v ? '' : v; S.err = ''; render(); },
   save: saveTruck,
+  reloadcfg: () => { refreshConfig(true); toast(t().loadingSup); },
   gotoline: (el) => { S.d.cur = Number(el.dataset.v); go('inspect'); },
   reopen: (el) => {
     if (S.d) { toast(t().finishFirst); return; }
@@ -1162,7 +1202,7 @@ document.addEventListener('keydown', (e) => {
   const k = /^\d$/.test(e.key) ? e.key : map[e.key];
   if (k) { e.preventDefault(); press(k); }
 });
-window.addEventListener('storage', (e) => { if (e.key === STORE) { persist(); render(); } });
+window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
 window.addEventListener('online', () => { S.online = true; flush(); render(); });
 window.addEventListener('offline', () => { S.online = false; render(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden && S.staff) { flush(); refreshToday(); } });
