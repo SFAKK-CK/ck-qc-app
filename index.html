@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#dff4f9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CK QC">
+<title>CK QC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
+  --accent:#2d5a87; --accent-soft:#dfe9f3; --accent-ink:#1c3d5e;
+  --teal:#3a7c7e; --teal-soft:#dceae8;
+  --amber:#8c5520; --amber-soft:#f5e9d4; --amber-ink:#6e4318;
+  --green:#2e6b3c; --green-soft:#dbe9d5;
+  --red:#9b2226; --red-soft:#f3dada; --red-ink:#7a1a1d;
+  --glass:rgba(255,255,255,.55); --glass-2:rgba(255,255,255,.35); --glass-line:rgba(255,255,255,.75);
+  --glass-fx:blur(20px) saturate(180%);
+  --shadow:0 6px 18px -10px rgba(50,60,80,.2), inset 0 1px 0 rgba(255,255,255,.7);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Manrope','Sarabun','Noto Sans Myanmar',-apple-system,system-ui,sans-serif;color:var(--ink);font-size:15px;line-height:1.45;overflow:hidden;
+  background:
+    radial-gradient(at 18% 15%,rgba(135,206,250,.65) 0%,transparent 45%),
+    radial-gradient(at 80% 10%,rgba(100,220,200,.55) 0%,transparent 50%),
+    radial-gradient(at 85% 80%,rgba(72,200,160,.5) 0%,transparent 50%),
+    radial-gradient(at 10% 85%,rgba(150,230,255,.55) 0%,transparent 50%),
+    linear-gradient(135deg,#dff4f9 0%,#e8f9f4 50%,#d6f0f8 100%);
+  background-size:200% 200%,200% 200%,200% 200%,200% 200%,100% 100%;
+  animation:aurora 22s ease-in-out infinite}
+body.lang-th{font-family:'Sarabun','Manrope','Noto Sans Myanmar',-apple-system,system-ui,sans-serif}
+@keyframes aurora{0%,100%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,0% 0%}50%{background-position:30% 30%,70% 30%,70% 70%,30% 70%,0% 0%}}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;transition:transform 140ms var(--ease),background 240ms var(--ease),box-shadow 240ms var(--ease),border-color 240ms var(--ease),opacity 200ms}
+button:active:not(:disabled){transform:scale(.96)}
+button:disabled{cursor:not-allowed}
+select option{color:var(--ink)}
+.app{height:100%;display:flex;justify-content:center}
+.phone{position:relative;isolation:isolate;width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:700px){.app{padding:16px}.phone{border-radius:32px;border:1px solid rgba(255,255,255,.55);box-shadow:0 30px 90px -30px rgba(40,40,60,.22);max-height:940px}}
+.orb{position:absolute;z-index:-1;border-radius:50%;filter:blur(50px);opacity:.55;pointer-events:none}
+.orb.o1{width:260px;height:260px;background:#9fd8ef;top:-90px;right:-90px;animation:bob 10s ease-in-out infinite}
+.orb.o2{width:220px;height:220px;background:#a8e6cf;bottom:80px;left:-80px;animation:bob 9s ease-in-out infinite reverse}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.glass{background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);border:1px solid var(--glass-line);box-shadow:var(--shadow)}
+
+/* header (iOS nav bar) */
+#hdr{flex:none;padding:calc(10px + env(safe-area-inset-top,0)) 16px 10px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);display:flex;flex-direction:column;gap:8px}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.htitle{display:flex;align-items:center;gap:8px;min-width:0}
+.htitle b{font-size:17px;line-height:1.2;display:block}
+.htitle small{font-size:12px;color:var(--ink-3)}
+.back{width:36px;height:36px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.6);font-size:22px;line-height:1;color:var(--ink-2);display:grid;place-items:center}
+.langs{display:flex;gap:2px;background:rgba(40,42,50,.07);padding:3px;border-radius:999px;flex:none}
+.langs button{border-radius:999px;padding:5px 9px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.langs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,22,18,.12)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.steps div{display:flex;flex-direction:column;gap:3px}
+.steps i{height:5px;border-radius:3px;background:rgba(40,42,50,.12);transition:background 380ms var(--ease)}
+.steps .sd i{background:var(--green)}.steps .sn i{background:var(--accent)}
+.steps span{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps .sn span{font-weight:700;color:var(--ink)}
+.who{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}
+.who span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.net{display:inline-flex;align-items:center;gap:6px;padding:1px 9px;border-radius:999px;font-weight:700;flex:none}
+.net::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
+.net.on{background:var(--green-soft);color:var(--green)}.net.on::before{animation:live 2s ease-in-out infinite}
+.net.off{background:var(--red-soft);color:var(--red);animation:offp 1.4s ease-in-out infinite}
+.net.wait{background:var(--amber-soft);color:var(--amber)}
+@keyframes live{0%,100%{box-shadow:0 0 0 0 rgba(46,107,60,.45)}50%{box-shadow:0 0 0 5px rgba(46,107,60,0)}}
+@keyframes offp{0%,100%{box-shadow:0 0 0 0 var(--red-soft)}50%{box-shadow:0 0 0 6px transparent}}
+.demo{background:var(--amber-soft);color:var(--amber-ink);font-size:12px;font-weight:700;text-align:center;padding:4px 8px;border-radius:8px}
+
+/* content */
+#main{flex:1 1 auto;min-height:0;overflow-y:auto;padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+#main::-webkit-scrollbar{width:0}
+#main.enter{animation:cardIn 380ms var(--ease) both}
+#main.enter .stg>*{animation:cardIn 380ms var(--ease) both}
+#main.enter .stg>*:nth-child(2){animation-delay:60ms}#main.enter .stg>*:nth-child(3){animation-delay:120ms}
+#main.enter .stg>*:nth-child(4){animation-delay:180ms}#main.enter .stg>*:nth-child(5){animation-delay:240ms}#main.enter .stg>*:nth-child(n+6){animation-delay:300ms}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pop{animation:cardIn 380ms var(--ease) both}
+.stg{display:flex;flex-direction:column;gap:12px}
+h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--ink-3)}
+.lbl{font-size:13px;font-weight:600;color:var(--ink-3)}
+.card{border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.mono{font-family:var(--mono)}
+.pill{flex:none;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--green-soft);color:var(--green)}.p-bad{background:var(--red);color:#fff}.p-warn{background:var(--amber-soft);color:var(--amber)}.p-mute{background:rgba(40,42,50,.08);color:var(--ink-3)}.p-fix{background:var(--amber-soft);color:var(--amber-ink)}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.err{background:var(--red-soft);color:var(--red-ink);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600}
+.note{background:var(--amber-soft);color:var(--amber-ink);border:1.5px dashed var(--amber);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600}
+
+/* login */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-top:6px}
+.mark{width:72px;height:72px;border-radius:20px;display:grid;place-items:center;font-size:38px;animation:bob 4s ease-in-out infinite}
+.mark span{display:inline-block;transform-origin:70% 70%;animation:wave 2.4s ease-in-out infinite}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
+.brand{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.hero h1{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.otp{display:flex;justify-content:center;gap:6px}
+.otp i{width:42px;height:56px;border-radius:12px;display:grid;place-items:center;font:600 24px var(--mono);font-style:normal;border:1.5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.55);transition:transform 140ms var(--ease),border-color 240ms,background 240ms}
+.otp i.now{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
+
+/* home */
+.greet{display:flex;align-items:center;gap:12px}
+.avatar{width:46px;height:46px;border-radius:50%;flex:none;background:linear-gradient(145deg,var(--teal),#2a5a5b);color:#fff;display:grid;place-items:center;font-weight:700;letter-spacing:.04em}
+.signout{font-size:13px;font-weight:600;color:var(--ink-3);padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.5)}
+.sum{display:flex;align-items:center}
+.sum>div{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.sum b{font:700 26px var(--mono);letter-spacing:-.02em;line-height:1}
+.sum span{font-size:12px;color:var(--ink-3);font-weight:500}
+.sum hr{width:1px;align-self:stretch;border:0;background:rgba(40,42,50,.1)}
+.dept{display:flex;align-items:center;gap:14px;text-align:left;border-radius:16px;padding:14px;width:100%}
+.dept.main{border:2px solid var(--accent)}
+.dept .ic{width:56px;height:56px;flex:none;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 18px var(--mono)}
+.dept.soon{background:rgba(255,255,255,.35);border:1px solid var(--glass-line);color:var(--ink-3);padding:12px 14px}
+.dept.soon .ic{width:46px;height:46px;background:rgba(255,255,255,.45);color:var(--ink-3);font-size:15px}
+.tlist{display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
+.tlist button{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
+.tlist button:first-child{border-top:0}
+.tlist .tm{font:600 14px var(--mono);color:var(--ink-3);flex:none;width:44px}
+.tlist .vd{opacity:.55;text-decoration:line-through}
+
+/* fields */
+.sel{height:54px;border-radius:14px;border:2px solid var(--accent);font-size:17px;padding:0 12px;width:100%;background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);box-shadow:var(--shadow);color:var(--ink)}
+.sel.ok{border:1.5px solid var(--glass-line)}
+.tap{height:56px;border-radius:14px;text-align:left;padding:0 14px;font:600 24px var(--mono);width:100%;color:var(--ink)}
+.f-act{border:2.5px solid var(--accent)!important;background:var(--glass)!important}
+.f-empty{border:1.5px dashed var(--red)!important}
+.f-ok{border:1.5px solid var(--glass-line)!important}
+.caret::after{content:'▏';animation:blink 1s steps(1) infinite;color:var(--accent)}
+@keyframes blink{50%{opacity:0}}
+.auto{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;align-items:center}
+.auto span{color:var(--ink-3)}.auto b{font-family:var(--mono);text-align:right}
+.auto select{border:0;background:transparent;font:700 14px var(--mono);text-align:right;text-align-last:right;width:100%}
+
+/* fish lines */
+.fl{border-radius:16px;overflow:hidden}
+.fl-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;text-align:left}
+.num{width:28px;height:28px;flex:none;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:600 14px var(--mono)}
+.num.on{background:var(--accent);color:#fff}
+.fl-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tile{height:72px;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;padding:6px 12px;border-radius:12px;text-align:left;border:1.5px solid var(--glass-line);background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);box-shadow:var(--shadow);overflow:hidden}
+.tile .t-l{font-size:12px;font-weight:600;color:var(--ink-3);display:flex;justify-content:space-between;width:100%;gap:4px}
+.tile select,.tile input{width:100%;height:34px;border:0;background:transparent;font:700 16px var(--mono);padding:0;color:var(--ink)}
+.tile input{border-bottom:2px solid var(--accent);text-transform:uppercase}
+.tile .t-v{display:flex;align-items:baseline;gap:6px;width:100%}
+.tile .t-v b{font:700 20px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
+.u-g{background:var(--teal)}.u-kg{background:var(--accent)}
+.tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}
+.linkbtn{color:var(--accent);font-size:12px;font-weight:700;padding:0}
+.sample{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--accent-soft);border-radius:10px;padding:6px 12px}
+.sample b{font:600 17px var(--mono);color:var(--accent)}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tog>span{font-size:15px;font-weight:600}
+.seg{display:flex;border:1.5px solid var(--glass-line);border-radius:10px;overflow:hidden}
+.seg button{padding:8px 12px;min-width:74px;font-size:14px;font-weight:600;background:rgba(255,255,255,.35)}
+.seg button.on{background:var(--accent);color:#fff}
+.seg button.on.warn{background:var(--red)}
+.addline{border:1.5px dashed var(--accent);color:var(--accent);border-radius:14px;padding:12px;font-size:16px;font-weight:600;width:100%}
+.ibtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink-3);font-size:15px;flex:none}
+.ibtn.confirm{width:auto;padding:0 10px;background:var(--red);color:#fff;font-weight:700;border-color:var(--red)}
+
+/* inspect */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tabs::-webkit-scrollbar{height:0}
+.tabs button{flex:none;padding:9px 12px;border-radius:12px;font-size:14px;font-weight:600;white-space:nowrap}
+.tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.temp{min-width:124px;line-height:1.1;text-align:center;padding:10px 12px;border-radius:14px;font:600 28px var(--mono);border:2.5px solid var(--accent);background:var(--glass)}
+.temp.ok{background:var(--green-soft);color:var(--green);border:2px solid var(--green)}
+.temp.bad{background:var(--red-soft);color:var(--red);border:2px solid var(--red)}
+.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.chips button{min-height:42px;padding:6px 8px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;background:rgba(255,255,255,.35);border:1.5px solid var(--glass-line)}
+.chips button.zero{color:var(--red-ink);border:1.5px dashed #e0a5a7;background:var(--glass)}
+.chips button.on{background:var(--red);color:#fff;border-color:var(--red);animation:chipIn 280ms var(--ease)}
+@keyframes chipIn{from{transform:scale(.92)}to{transform:none}}
+.strip{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.strip::-webkit-scrollbar{height:0}
+.strip button{flex:none;width:46px;height:44px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 13px var(--mono);border:1.5px solid var(--glass-line);background:var(--glass);color:var(--ink-3)}
+.strip button small{font-size:9px;color:var(--ink-3)}
+.strip .here{border:2.5px solid var(--accent);color:var(--ink)}
+.strip .tok{border-color:var(--green);background:var(--green-soft);color:var(--ink)}
+.strip .tbad{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.strip .dfx{border-color:var(--amber);background:var(--amber-soft);color:var(--ink)}
+.strip .rest{width:auto;min-width:60px;font-size:12px;font-weight:600;font-family:inherit;border:1.5px dashed var(--accent);background:transparent;color:var(--accent)}
+.strip .rest.here{border-style:solid;background:var(--glass);color:var(--ink)}
+.lsum{padding:10px 12px;border-radius:12px;font-weight:600;font-size:14px}
+.ls-ok{background:var(--green-soft);color:var(--green)}.ls-warn{background:var(--amber-soft);color:var(--amber-ink)}.ls-bad{background:var(--red);color:#fff}
+.rest-list{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.rrow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid rgba(255,255,255,.45)}
+.rrow:first-child{border-top:0}
+.rrow.found{background:var(--amber-soft)}.rrow.fail{background:var(--red-soft)}
+.rrow .rl{display:flex;flex-direction:column;flex:1;min-width:0}
+.rrow .rl small{font-size:12px;color:var(--ink-3)}.rrow.fail .rl small{color:var(--red);font-weight:700}
+.step{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--glass-line);background:var(--glass);font:700 22px var(--mono)}
+.rn{min-width:40px;text-align:center;font:700 20px var(--mono);color:var(--ink-3)}
+.found .rn{color:var(--amber)}.fail .rn{color:var(--red)}
+
+/* summary */
+.sl{border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.sl.bad{border:2px solid var(--red)}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-size:13px;color:var(--ink-3)}
+.kv b{display:block;font:600 16px var(--mono);color:var(--ink)}
+.kv b.bad{color:var(--red)}
+.fixes{display:flex;flex-wrap:wrap;gap:6px}
+.fixes button{padding:9px 13px;border-radius:999px;font-size:15px;font-weight:600;background:rgba(255,255,255,.35);border:1.5px solid var(--glass-line)}
+.fixes button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rc{display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:12px;padding:8px 12px;width:100%;text-align:left}
+.rc b{font:600 20px var(--mono)}
+
+/* done */
+.done{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:30px;text-align:center}
+.tick{width:120px;height:120px;border-radius:50%;background:rgba(219,233,213,.8);display:grid;place-items:center;animation:popc 520ms var(--ease) both,ring 1.6s ease-out 520ms 2}
+.tick div{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:46px;font-weight:700;animation:popc 520ms var(--ease) 160ms both}
+.tick.wait{background:rgba(245,233,212,.85);animation:popc 520ms var(--ease) both}
+.tick.wait div{background:var(--amber)}
+@keyframes popc{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(46,107,60,.35)}100%{box-shadow:0 0 0 22px rgba(46,107,60,0)}}
+
+/* number pad (iOS keyboard) */
+#pad{flex:none;background:rgba(210,222,228,.6);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border-top:1px solid rgba(255,255,255,.6);padding:6px 8px 8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#pad:empty{display:none}
+#pad.up{animation:padUp 280ms var(--ease) both}
+@keyframes padUp{from{transform:translateY(100%)}to{transform:none}}
+#pad button{height:46px;border-radius:12px;font:600 22px var(--mono);background:rgba(255,255,255,.85);color:var(--ink);box-shadow:0 1px 0 rgba(40,42,50,.18)}
+#pad button.fn{background:rgba(170,186,196,.55)}
+#pad button.blank{background:transparent;box-shadow:none;cursor:default}
+#pad button.ok{grid-column:1/-1;height:44px;font-size:16px;font-weight:700;font-family:inherit;background:var(--accent);color:#fff}
+
+/* action bar */
+#act{flex:none;padding:8px 16px calc(12px + env(safe-area-inset-bottom,0));background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-top:1px solid rgba(255,255,255,.6);display:flex;gap:8px}
+#act:empty{display:none}
+.btn{flex:1;height:50px;border-radius:14px;font-size:17px;font-weight:700;background:var(--ink);color:#fff;box-shadow:0 8px 20px -8px rgba(20,22,18,.5);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.green{background:var(--green);box-shadow:0 8px 20px -8px rgba(46,107,60,.6)}
+.btn.ghost{background:rgba(255,255,255,.55);color:var(--ink);border:1px solid var(--glass-line);box-shadow:none;flex:0 0 auto;padding:0 16px}
+.btn:disabled{opacity:.35}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* bottom sheet + toast */
+#sheet{position:fixed;inset:0;z-index:50;background:rgba(40,42,50,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 240ms var(--ease)}
+#sheet.open{opacity:1;pointer-events:auto}
+#sheet .box{width:100%;max-width:480px;max-height:85%;overflow-y:auto;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0));display:flex;flex-direction:column;gap:12px;transform:translateY(30px);transition:transform 380ms var(--ease)}
+#sheet.open .box{transform:none}
+#sheet textarea{width:100%;min-height:70px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:10px;font:inherit;font-size:16px;background:#fff}
+#toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;z-index:60;background:rgba(27,28,26,.9);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90%;text-align:center;transition:opacity 240ms var(--ease),transform 240ms var(--ease);pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="lang-th">
+<div class="app">
+  <div class="phone">
+    <div class="orb o1" aria-hidden="true"></div>
+    <div class="orb o2" aria-hidden="true"></div>
+    <header id="hdr"></header>
+    <main id="main"></main>
+    <div id="pad"></div>
+    <footer id="act"></footer>
+  </div>
+</div>
+<div id="sheet" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+ * CK QC — phone app (GitHub Pages) · RM receiving FM-QA-010.15 Rev.03
+ * Talks to the Apps Script Web app below. Paste your own URL after Deploy.
+ * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
+ * ===================================================================== */
+const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const APP_VERSION = '1.0.0';
+const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
+const STORE = 'ckqc.v1';
+const N_T = 12;
+const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
+
+/* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
+const L = {
+  th: {
+    branch: 'สาขาสมุทรปราการ', online: 'ออนไลน์', offline: 'ออฟไลน์', waiting: 'รอส่ง', back: 'ย้อนกลับ', inspector: 'ผู้ตรวจ',
+    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ครั้งเดียวต่อเครื่อง', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจสอบ…',
+    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตตอนเข้าใช้ครั้งแรก', signOut: 'ออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
+    today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
+    rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลาน้ำจืด · FM-QA-010.15', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
+    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
+    pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
+    steps: ['รถ', 'ปลา', 'ตรวจ', 'สรุป'],
+    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers',
+    fishNext: 'ชนิดปลาเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
+    fishT: 'ปลาในรถ', fishSub: 'ชื่อปลา / Processing type / ขนาด ต่างกัน = คนละรายการ', fishName: 'ชื่อปลา', proc: 'Processing type',
+    typeOwn: '+ พิมพ์ชื่อเอง…', fromList: 'เลือกจากรายการ', manualTag: 'พิมพ์ชื่อเอง', newLine: 'รายการใหม่', incomplete: 'ยังไม่ครบ',
+    sizeL: 'ขนาด (ต่อตัว)', weightL: 'น้ำหนักรับเข้า (รวม)', pickOne: '— เลือก —', noSize: 'ไม่มีขนาด', sample: 'ต้องสุ่ม', other: 'อื่นๆ',
+    md: 'ใบ MD', gl: 'ใบ GL', ice: 'น้ำแข็ง', yes: '1 มี', no: '2 ไม่มี', little: '1 น้อย', lots: '2 มาก', addFish: '+ เพิ่มรายการปลา', remove: 'ลบ?',
+    fishNo: 'ปลาตัวที่', flowHint: 'ดูตัวปลา → แตะถ้ามีปัญหา → วัดอุณหภูมิ → ตัวถัดไปเอง', anyProblem: 'ตัวนี้มีปัญหาไหม? (ไม่มี = ไม่ต้องแตะ)',
+    defects: ['เนื้อเละ', 'ท้องแตก', 'กลิ่นเหม็น', 'ตาขุ่น / ไม่กลม', 'เหงือกไม่แดง', 'เกล็ดหลุด', 'สิ่งแปลกปลอม', 'พยาธิ'],
+    checks: ['เนื้อแน่น ไม่เละ', 'ท้องตึง ไม่แตก', 'กลิ่นคาวปกติ ไม่เหม็น', 'ตากลมใส', 'เหงือกสีแดงสด', 'เกล็ดเรียบเงาไม่หลุด', 'ไม่พบสิ่งแปลกปลอม / สิ่งปลอมปน', 'ไม่พบพยาธิ (มองเห็นด้วยตา)'],
+    rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
+    allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
+    chilliNote: 'พริก: ยังไม่มีเกณฑ์ตรวจลักษณะ · วัดอุณหภูมิได้ตามปกติ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิอย่างน้อย {n} ตัว',
+    nextLine: 'รายการถัดไป ›', toSummary: 'สรุป ›', tempsN: 'วัดอุณหภูมิ', max: 'สูงสุด', weight: 'น้ำหนัก',
+    sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
+    tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา', physNA: 'กายภาพ: ไม่ใช้กับพริก',
+    recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
+    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
+    cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
+    cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
+  },
+  en: {
+    branch: 'Samut Prakan branch', online: 'Online', offline: 'Offline', waiting: 'To send', back: 'Back', inspector: 'Inspector',
+    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · once per phone', enter: 'Continue', checking: 'Checking…',
+    badId: 'Staff ID not found', needNet: 'The first sign-in needs internet', signOut: 'Sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
+    today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
+    rm: 'Raw material receiving', rmSub: 'Freshwater fish · FM-QA-010.15', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
+    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
+    pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
+    steps: ['Truck', 'Fish', 'Inspect', 'Review'],
+    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab',
+    fishNext: 'Fish are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
+    fishT: 'Fish on this truck', fishSub: 'Different fish / processing type / size = separate line', fishName: 'Fish name', proc: 'Processing type',
+    typeOwn: '+ Type a name…', fromList: 'Pick from list', manualTag: 'Typed by hand', newLine: 'New line', incomplete: 'Incomplete',
+    sizeL: 'Size (per fish)', weightL: 'Weight received (total)', pickOne: '— Choose —', noSize: 'No size', sample: 'Sample', other: 'Other',
+    md: 'MD document', gl: 'GL document', ice: 'Ice', yes: '1 Yes', no: '2 No', little: '1 Little', lots: '2 Plenty', addFish: '+ Add fish line', remove: 'Delete?',
+    fishNo: 'Fish no.', flowHint: 'Look → tap any problem → measure temp → moves on by itself', anyProblem: 'Any problem with this fish? (none = tap nothing)',
+    defects: ['Soft flesh', 'Burst belly', 'Bad smell', 'Cloudy eyes', 'Pale gills', 'Loose scales', 'Foreign object', 'Parasite'],
+    checks: ['Firm flesh, not soft', 'Belly tight, not burst', 'Normal smell', 'Eyes round and clear', 'Gills bright red', 'Scales smooth and intact', 'No foreign objects', 'No visible parasites'],
+    rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
+    allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
+    chilliNote: 'Chilli: no inspection checklist yet · temperature works as normal', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure at least {n} fish',
+    nextLine: 'Next line ›', toSummary: 'Review ›', tempsN: 'Temps', max: 'Highest', weight: 'Weight',
+    sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
+    tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems', physNA: 'Physical: not for chilli',
+    recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
+    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on this phone · sends when there is signal',
+    newTruck: 'Start next truck', home: 'Home', lines: 'lines',
+    cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
+    cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
+  },
+  my: {
+    branch: 'ဆမွတ်ပရာကန် ဌာနခွဲ', online: 'အွန်လိုင်း', offline: 'အော့ဖ်လိုင်း', waiting: 'ပို့ရန်', back: 'နောက်သို့', inspector: 'စစ်ဆေးသူ',
+    welcome: 'ကြိုဆိုပါတယ်', loginSub: 'ဝန်ထမ်းနံပါတ် ၇ လုံး ထည့်ပါ', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖုန်းတစ်လုံး တစ်ကြိမ်', enter: 'ဝင်မည်', checking: 'စစ်ဆေးနေသည်…',
+    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
+    today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
+    rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ရေချိုငါး · FM-QA-010.15', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
+    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', noTrucks: 'ယနေ့ ကား မရှိသေး',
+    pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
+    steps: ['ကား', 'ငါး', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
+    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ',
+    fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
+    fishT: 'ကားပေါ်ရှိ ငါး', fishSub: 'ငါး/Processing type/အရွယ် မတူ = သီးခြားစာရင်း', fishName: 'ငါးအမည်', proc: 'Processing type',
+    typeOwn: '+ အမည် ကိုယ်တိုင်ရိုက်…', fromList: 'စာရင်းမှ ရွေး', manualTag: 'ကိုယ်တိုင်ရိုက်', newLine: 'စာရင်းသစ်', incomplete: 'မပြည့်စုံ',
+    sizeL: 'အရွယ် (တစ်ကောင်)', weightL: 'လက်ခံအလေးချိန် (စုစုပေါင်း)', pickOne: '— ရွေးပါ —', noSize: 'အရွယ်မရှိ', sample: 'နမူနာ', other: 'အခြား',
+    md: 'MD စာရွက်', gl: 'GL စာရွက်', ice: 'ရေခဲ', yes: '1 ရှိ', no: '2 မရှိ', little: '1 နည်း', lots: '2 များ', addFish: '+ ငါးစာရင်း ထပ်ထည့်', remove: 'ဖျက်?',
+    fishNo: 'ငါး နံပါတ်', flowHint: 'ကြည့် → ပြဿနာရှိလျှင် နှိပ် → အပူချိန်တိုင်း → နောက်တစ်ကောင်', anyProblem: 'ဒီငါး ပြဿနာရှိလား? (မရှိ = မနှိပ်ပါနှင့်)',
+    defects: ['အသားပျော့', 'ဗိုက်ပေါက်', 'အနံ့ဆိုး', 'မျက်လုံးမှုန်', 'ပါးဟက်ဖျော့', 'အကြေးကျွတ်', 'ပြင်ပပစ္စည်း', 'ကပ်ပါးကောင်'],
+    checks: ['အသားမာ၊ မပျော့', 'ဗိုက်တင်း၊ မပေါက်', 'ငါးနံ့ ပုံမှန်', 'မျက်လုံး ဝိုင်း၍ ကြည်', 'ပါးဟက် နီရဲ', 'အကြေး ချော၊ မကျွတ်', 'ပြင်ပပစ္စည်း မတွေ့', 'ကပ်ပါးကောင် မတွေ့'],
+    rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
+    allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
+    chilliNote: 'ငရုတ်သီး: စစ်ဆေးရန်စာရင်း မရှိသေး · အပူချိန် ပုံမှန်တိုင်းနိုင်', wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: 'အနည်းဆုံး {n} ကောင် တိုင်းပါ',
+    nextLine: 'နောက်စာရင်း ›', toSummary: 'အနှစ်ချုပ် ›', tempsN: 'တိုင်းပြီး', max: 'အမြင့်ဆုံး', weight: 'အလေးချိန်',
+    sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
+    tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့', physNA: 'ရုပ်ပိုင်း: ငရုတ်သီးအတွက် မသုံး',
+    recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
+    cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
+    cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
+  }
+};
+
+/* ---------------- state ---------------- */
+const S = load();
+S.screen = S.staff ? 'home' : 'login';
+S.pad = S.staff ? null : { kind: 'sid' };
+S.sid = ''; S.buf = ''; S.justFilled = null; S.busy = false; S.err = ''; S.online = navigator.onLine; S.confirm = null;
+let lastScreen = null, lastPad = false;
+
+function load() {
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { s = {}; }
+  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null }, s);
+}
+const sentIds = {};
+function persist() {
+  try {
+    const stored = (JSON.parse(localStorage.getItem(STORE) || '{}') || {}).outbox || [];
+    stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
+  } catch (e) { /* ignore */ }
+  const keep = { lang: S.lang, staff: S.staff, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last };
+  try { localStorage.setItem(STORE, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
+}
+const t = () => L[S.lang] || L.th;
+const fmt = (s, o) => String(s).replace(/\{(\w+)\}/g, (_, k) => o[k]);
+const esc = (s) => String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const P2 = (n) => String(n).padStart(2, '0');
+const nowHM = () => { const d = new Date(); return P2(d.getHours()) + ':' + P2(d.getMinutes()); };
+const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate()); };
+const kgFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
+const settings = () => Object.assign({ TEMP_MAX: 2, PHYS_LIMIT: 10, MIN_TEMPS: 1 }, (S.cfg && S.cfg.rm && S.cfg.rm.settings) || {});
+const rmCfg = () => (S.cfg && S.cfg.rm) || DEMO_CFG.rm;
+const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
+
+/* ---------------- rules (same as the server) ---------------- */
+const isChilli = (name) => {
+  const f = rmCfg().fish.find((x) => x.name === name);
+  return f ? !!f.chilli : /CHILLI/.test(name || '');
+};
+const sizeName = (l) => { const n = Number(l.size); if (l.chilli || !(n > 0)) return ''; return n >= 1000 && n % 100 === 0 ? (n / 1000) + 'KG' : n + 'G'; };
+const savedName = (l) => (l.fish || '?') + '/' + (l.proc || '?') + (sizeName(l) ? ' ' + sizeName(l) : '');
+const lineReady = (l) => !!(l.fish && l.fish.length <= 40 && l.proc && (l.chilli || Number(l.size) > 0) && Number(l.w) > 0 && l.md && l.gl && l.ice);
+const MAX_LINES = 20;
+/** everything the server will check, so a saved truck is never refused later */
+const canSave = (d) => d.lines.length > 0 && d.lines.length <= MAX_LINES &&
+  d.lines.every((l) => { const e = evalLine(l); return lineReady(l) && e.n >= settings().MIN_TEMPS && (!e.needFix || l.fix); });
+const sampleKg = (w) => { const n = Number(w); return n > 0 ? (n <= 500 ? 8 : n <= 3200 ? 13 : 20) : null; };
+const counts = (l) => l.extra.map((x, k) => x + l.fishes.reduce((a, f) => a + (f.d[k] ? 1 : 0), 0));
+function evalLine(l) {
+  const st = settings();
+  const c = counts(l);
+  const physFail = !l.chilli && c.some((n, k) => (k >= 6 ? n >= 1 : n > st.PHYS_LIMIT));
+  const temps = l.fishes.map((f) => f.t).filter((v) => v !== '' && v !== '-' && !isNaN(Number(v))).map(Number);
+  const max = temps.length ? Math.max.apply(null, temps) : null;
+  const warm = max !== null && max > st.TEMP_MAX;
+  const rc = l.recheck === '' || l.recheck === undefined || isNaN(Number(l.recheck)) ? null : Number(l.recheck);
+  const tempFail = warm && !(rc !== null && rc <= st.TEMP_MAX);
+  const status = physFail || tempFail ? 'fail' : warm ? 'fixed' : 'pass';
+  return { c, physFail, max, warm, n: temps.length, status, needFix: physFail || warm };
+}
+function blankLine(fish, proc, size) {
+  const chilli = fish ? isChilli(fish) : false;
+  const list = chilli ? rmCfg().chilliProcs : rmCfg().procs;
+  const p = list.indexOf(proc) >= 0 ? proc : list.indexOf('WR') >= 0 && !chilli ? 'WR' : list[0];
+  const custom = !!fish && !rmCfg().fish.some((x) => x.name === fish);
+  return { fish: fish || '', custom: custom, chilli: chilli, proc: p, size: chilli ? '' : (Number(size) > 0 ? String(Number(size)) : ''), w: '', md: '', gl: '', ice: '',
+    open: true, fishes: Array.from({ length: N_T }, () => ({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] })), extra: [0, 0, 0, 0, 0, 0, 0, 0], fi: 0, fix: '', recheck: '', time: '' };
+}
+function newId() {
+  const d = new Date();
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let r = '';
+  const rnd = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(6)) : Array.from({ length: 6 }, () => Math.floor(Math.random() * 256));
+  for (let i = 0; i < 6; i++) r += abc[rnd[i] % abc.length];
+  return 'RM-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
+}
+
+/* ---------------- talking to Apps Script ---------------- */
+function api(action, params, timeoutMs) {
+  if (DEMO) return demoApi(action, params || {});
+  const ctl = 'AbortController' in window ? new AbortController() : null;
+  const timer = ctl ? setTimeout(() => ctl.abort(), timeoutMs || 25000) : null;
+  return fetch(API_URL, {
+    method: 'POST', mode: 'cors', cache: 'no-cache', redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ action: action }, params || {})),
+    signal: ctl ? ctl.signal : undefined
+  }).then((r) => {
+    if (!r.ok) throw netErr('HTTP ' + r.status);
+    return r.json().catch(() => { throw netErr('bad response'); });   // Google error page instead of JSON → try again later
+  }, (e) => { throw netErr(e && e.name === 'AbortError' ? 'timeout' : (e && e.message) || 'network'); })
+    .then((j) => { if (!j || j.ok === false) { const e = new Error((j && j.error) || 'error'); e.code = j && j.code; throw e; } return j; })
+    .finally(() => timer && clearTimeout(timer));
+}
+function netErr(m) { const e = new Error(m); e.net = true; return e; }
+
+/* demo backend: lets anyone try the screens before the Web app URL is pasted (nothing leaves the phone) */
+const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปราการ' }, rm: {
+  suppliers: [{ code: '01', name: 'ตัวอย่าง ผู้ขาย A', avl: '1' }, { code: '02', name: 'ตัวอย่าง ผู้ขาย B', avl: '' }],
+  fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'PUTI', 'MRIGAL', 'CARFU', 'PABDA', 'TANGRA', 'KHOLSHA', 'MAGUR', 'CHITAL', 'KORAL', 'GULSHA', 'E-MOLA', 'KESKI', 'DIMA ESSA', 'GREEN CHILLI', 'RED CHILLI']
+    .map((n) => ({ name: n, chilli: /CHILLI/.test(n) })),
+  procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: ['SC-01', 'SC-02'], thermos: ['TM-01', 'TM-02'],
+  usual: { 'ตัวอย่าง ผู้ขาย A / 01': [['TILAPIA', 'WR', '800'], ['TILAPIA', 'WR', '600']] }, settings: { TEMP_MAX: 2, PHYS_LIMIT: 10, MIN_TEMPS: 1 } } };
+function demoApi(action, p) {
+  return new Promise((res) => setTimeout(() => {
+    let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.demo') || '{}'); } catch (e) { mem = {}; }
+    mem.recs = mem.recs || [];
+    if (action === 'validateStaff') return res(/^\d{7}$/.test(p.staffId) ? { ok: true, valid: true, name: 'ผู้ทดลอง', department: 'QC' } : { ok: true, valid: false });
+    if (action === 'getConfig') return res(DEMO_CFG);
+    if (action === 'rmSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'rmVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
+    try { localStorage.setItem('ckqc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
+    if (action === 'rmToday') {
+      const day = mem.recs.filter((r) => r.date === (p.date || todayStr()));
+      const trucks = day.map((r) => ({ id: r.id, start: r.start, lot: r.lot, sup: r.supName + ' / ' + r.supCode, staffId: r.staffId, staffName: 'ผู้ทดลอง', void: !!r.void, voidReason: r.voidReason || '',
+        lines: r.lines.map((l) => ({ name: l.fish + '/' + l.proc + (l.chilli ? '' : ' ' + sizeName(l)), w: Number(l.w), status: l._status })) })).reverse();
+      const live = trucks.filter((x) => !x.void);
+      let kg = 0, failed = 0; live.forEach((x) => x.lines.forEach((l) => { kg += l.w; if (l.status === 'ไม่ผ่าน') failed++; }));
+      return res({ ok: true, trucks: trucks, totals: { trucks: live.length, kg: Math.round(kg), failed: failed } });
+    }
+    res({ ok: true, id: p.record && p.record.id });
+  }, 350));
+}
+
+/* ---------------- sending saved trucks (outbox) ---------------- */
+let flushing = false, retryTimer = null;
+function flush() {
+  if (flushing || !S.outbox.length) return Promise.resolve();
+  flushing = true;
+  const next = () => {
+    const item = S.outbox.find((o) => !o.hold);
+    if (!item) return Promise.resolve();
+    item.record.sentLate = Date.now() - item.savedAt > 10 * 60 * 1000;
+    return api('rmSave', { staffId: item.staffId, record: item.record }, 45000).then(() => {
+      S.outbox = S.outbox.filter((o) => o !== item);
+      sentIds[item.record.id] = true;
+      S.online = true;
+      if (S.last && S.last.id === item.record.id) S.last.sent = true;
+      persist(); render();
+      return next();
+    }, (e) => {
+      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.err = e.message; persist(); render(); return next(); }
+      throw e;
+    });
+  };
+  return next().then(() => { flushing = false; refreshToday(true); refreshConfig(); }, (e) => {
+    flushing = false; if (e && e.net) S.online = false; render();
+    clearTimeout(retryTimer); retryTimer = setTimeout(flush, 20000);
+  });
+}
+let todayAt = 0;
+function refreshToday(force) {
+  if (!S.staff || (!force && Date.now() - todayAt < 30000)) return;
+  todayAt = Date.now();
+  api('rmToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.today = { date: todayStr(), trucks: j.trucks, totals: j.totals }; S.online = true; persist(); render();
+  }, (e) => { if (e.net) { S.online = false; render(); } });
+}
+let cfgAt = 0;
+function refreshConfig(force) {
+  if (!S.staff || (!force && Date.now() - cfgAt < 5000)) return;
+  cfgAt = Date.now();
+  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.online = true; persist(); render(); },
+    (e) => { if (e.code === 'STAFF') { signOut(); toast(t().badId); } else if (e.net) { S.online = false; render(); } });
+}
+
+/* ---------------- screens ---------------- */
+function go(screen, extra) {
+  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
+  if (!extra || !('pad' in extra)) S.pad = screen === 'inspect' && curLine() && curLine().fi < N_T ? { kind: 't' } : null;
+  if (S.d && ['truck', 'fish', 'inspect', 'summary'].indexOf(screen) >= 0) S.d.stage = screen;   // "continue" reopens the same page
+  render();
+  if (screen === 'home') { refreshToday(); flush(); }
+}
+const curLine = () => S.d && S.d.lines[S.d.cur];
+
+function startTruck() {
+  S.d = { id: newId(), date: todayStr(), start: nowHM(), supCode: '', supName: '', lot: '', scale: S.scale || '', thermo: S.thermo || '', lines: [], cur: 0 };
+  go('truck');
+  refreshConfig();
+}
+
+function renderHeader() {
+  const T = t();
+  const steps = ['truck', 'fish', 'inspect', 'summary'];
+  const at = steps.indexOf(S.screen);
+  const backTo = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home' }[S.screen];
+  const pend = S.outbox.length;
+  const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
+    : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
+  let h = '<div class="hrow"><div class="htitle">' +
+    (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
+    '<div><b>' + (at >= 0 || S.screen === 'done' ? esc(T.rm) : 'CK QC') + '</b><small>CK QC · ' + esc(branch()) + '</small></div></div>' +
+    '<div class="langs">' + [['th', 'ไทย'], ['en', 'EN'], ['my', 'မြန်မာ']].map((x) =>
+      '<button data-act="lang" data-v="' + x[0] + '" class="' + (S.lang === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div></div>';
+  if (DEMO) h += '<div class="demo">' + T.demo + '</div>';
+  if (at >= 0) h += '<div class="steps">' + T.steps.map((s, i) => '<div class="' + (i < at ? 'sd' : i === at ? 'sn' : '') + '"><i></i><span>' + esc(s) + '</span></div>').join('') + '</div>';
+  if (S.staff && S.screen !== 'login' && S.screen !== 'home') h += '<div class="who"><span>' + T.inspector + ': <b>' + esc(S.staff.name) + '</b> · ' + esc(S.staff.id) + '</span>' + net + '</div>';
+  return h;
+}
+
+function viewLogin() {
+  const T = t();
+  const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + esc(S.sid[i] || '') + '</i>').join('');
+  return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · ' + esc(branch()) + '</div>' +
+    '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
+    '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' +
+    (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '</div>';
+}
+
+function viewHome() {
+  const T = t();
+  const st = S.staff;
+  const init = (st.name || '').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase() || '··';
+  const td = S.today && S.today.date === todayStr() ? S.today : { trucks: [], totals: { trucks: 0, kg: 0, failed: 0 } };
+  const pendIds = {};
+  S.outbox.forEach((o) => (pendIds[o.record.id] = o));
+  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.trucks.some((x) => x.id === o.record.id)).map((o) => ({
+    id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
+    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status })) }));
+  const rows = pendRows.concat(td.trucks);
+  let h = '<div class="stg">';
+  h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
+    '<button class="signout" data-act="signout">' + T.signOut + '</button></div>';
+  h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
+    (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
+    '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
+    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
+  if (S.outbox.length) {
+    const bad = S.outbox.find((o) => o.err);
+    h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
+      (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
+        (bad.draft ? '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') : '') + '</div>' +
+      '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
+  }
+  h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.pickDept + '</span>';
+  if (S.d) {
+    h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">RM</span><span class="grow"><b style="font-size:17px">' + T.resume + ' · Lot ' + esc(S.d.lot || '—') + '</b>' +
+      '<div class="sub">' + esc(S.d.supName || '—') + ' · ' + S.d.lines.length + ' ' + T.lines + ' · ' + esc(S.d.start) + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
+      '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button></div>';
+  } else {
+    h += '<button class="dept main glass" data-act="startrm"><span class="ic">RM</span><span class="grow"><b style="font-size:18px">' + T.rm + '</b><div class="sub">' + T.rmSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  }
+  ['pc', 'pk', 'cs'].forEach((k) => {
+    h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
+  });
+  h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
+  if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
+  else {
+    h += '<div class="tlist glass">' + rows.map((r) => {
+      const anyFail = r.lines.some((l) => l.status === 'ไม่ผ่าน' || l.status === 'fail');
+      const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' :
+        anyFail ? '<span class="pill p-bad">✗ ' + T.fail + '</span>' : '<span class="pill p-ok">✓ ' + T.pass + '</span>';
+      return '<button data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.start) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
+        '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div></span>' + pill + '</button>';
+    }).join('') + '</div>';
+  }
+  return h + '</div>';
+}
+function savedNameOf(l) { return l.fish + '/' + l.proc + (l.chilli ? '' : (Number(l.size) > 0 ? ' ' + sizeName(l) : '')); }
+
+function viewTruck() {
+  const T = t();
+  const c = rmCfg();
+  const d = S.d;
+  const lotActive = S.pad && S.pad.kind === 'lot';
+  let h = '<div class="stg"><h2>' + T.truckT + '</h2>';
+  if (!c.suppliers.length) h += '<div class="note">' + T.noSup + '</div>';
+  h += '<label style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.supplier + '</span><select class="sel' + (d.supCode || d.supName ? ' ok' : '') + '" data-on="sup">' +
+    '<option value="">' + T.pickSup + '</option>' + c.suppliers.map((s, i) => '<option value="' + i + '"' + (s.code === d.supCode && s.name === d.supName ? ' selected' : '') + '>' + esc(s.name) + (s.code ? ' · ' + esc(s.code) : '') + '</option>').join('') + '</select></label>';
+  if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
+  h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
+    '<button class="tap glass ' + (lotActive ? 'f-act' : d.lot ? 'f-ok' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="' + (lotActive ? 'caret' : '') + '">' + esc(d.lot || (lotActive ? '' : '—')) + '</span></button></div>';
+  const opt = (list, v) => '<option value="">' + T.none + '</option>' + list.map((x) => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('');
+  h += '<div class="card glass"><span class="lbl" style="color:var(--green)">✓ ' + T.auto + '</span><div class="auto"><span>' + T.time + '</span><b>' + esc(d.start) + '</b>' +
+    (c.scales.length ? '<span>' + T.scale + '</span><select data-on="scale">' + opt(c.scales, d.scale) + '</select>' : '') +
+    (c.thermos.length ? '<span>' + T.thermo + '</span><select data-on="thermo">' + opt(c.thermos, d.thermo) + '</select>' : '') + '</div></div>';
+  return h + '</div>';
+}
+
+function viewFish() {
+  const T = t();
+  const c = rmCfg();
+  let h = '<div class="stg"><div><h2>' + T.fishT + '</h2><div class="sub">' + T.fishSub + '</div></div>';
+  S.d.lines.forEach((l, i) => {
+    const ready = lineReady(l);
+    const pop = S.popLine === i ? ' pop' : '';
+    if (!l.open) {
+      h += '<div class="fl glass' + pop + '"><button class="fl-head" data-act="openline" data-v="' + i + '"><span class="num">' + (i + 1) + '</span><span class="grow"><b>' + esc(l.fish ? savedName(l) : T.newLine) + '</b>' +
+        '<div class="sub mono" style="font-size:12px">' + T.weightL + ' ' + kgFmt(l.w) + ' kg · MD ' + (l.md || '–') + ' · GL ' + (l.gl || '–') + ' · ' + T.ice + ' ' + (l.ice || '–') + '</div></span>' +
+        '<span class="pill ' + (ready ? 'p-ok' : 'p-warn') + '">' + (ready ? '✓' : T.incomplete) + '</span><span style="color:var(--ink-3)">▾</span></button></div>';
+      return;
+    }
+    const zA = S.pad && S.pad.kind === 'size' && S.pad.line === i;
+    const wA = S.pad && S.pad.kind === 'w' && S.pad.line === i;
+    const procs = l.chilli ? c.chilliProcs : c.procs;
+    const sam = sampleKg(l.w);
+    const confirmDel = S.confirm === 'del' + i;
+    h += '<div class="fl glass' + pop + '"><div class="fl-body">' +
+      '<div class="row"><span class="num on">' + (i + 1) + '</span><span class="grow"><b id="title' + i + '" style="font-size:16px">' + esc(l.fish ? savedName(l) : T.newLine) + '</b><div class="sub" style="font-size:12px">' + (l.custom ? T.manualTag : '') + '</div></span>' +
+      '<button class="ibtn' + (confirmDel ? ' confirm' : '') + '" data-act="delline" data-v="' + i + '" aria-label="remove">' + (confirmDel ? T.remove : '✕') + '</button>' +
+      '<button class="ibtn" data-act="closeline" data-v="' + i + '" aria-label="minimise">▴</button></div>' +
+      '<div class="grid2">';
+    // fish name
+    h += '<label class="tile' + (l.fish ? '' : ' f-act') + '"><span class="t-l"><span>' + T.fishName + '</span>' + (l.custom ? '<button class="linkbtn" data-act="tolist" data-v="' + i + '">' + T.fromList + '</button>' : '') + '</span>';
+    if (l.custom) h += '<input data-on="typefish" data-v="' + i + '" value="' + esc(l.fish) + '" maxlength="40" placeholder="FISH NAME" autocomplete="off" autocapitalize="characters" aria-label="' + T.fishName + '">';
+    else h += '<select data-on="fish" data-v="' + i + '"><option value="">' + T.pickOne + '</option>' + c.fish.map((f) => '<option' + (f.name === l.fish ? ' selected' : '') + '>' + esc(f.name) + '</option>').join('') +
+      '<option value="__other">' + T.typeOwn + '</option></select>';
+    h += '</label>';
+    // processing type
+    h += '<label class="tile"><span class="t-l">' + T.proc + '</span><select data-on="proc" data-v="' + i + '">' +
+      procs.map((p) => '<option value="' + esc(p) + '"' + (p === l.proc ? ' selected' : '') + '>' + esc(p === 'OTHER' ? T.other : p) + '</option>').join('') + '</select></label>';
+    // size g
+    h += '<button class="tile size ' + (l.chilli ? 'filled' : zA ? 'f-act' : Number(l.size) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="size" data-i="' + i + '"' + (l.chilli ? ' disabled' : '') + '>' +
+      '<span class="t-l">' + T.sizeL + '</span><span class="t-v"><b class="' + (zA ? 'caret' : '') + '">' + (l.chilli ? T.noSize : esc(l.size || (zA ? '' : '—'))) + '</b><span class="unit u-g">g</span></span></button>';
+    // weight kg
+    h += '<button class="tile wt ' + (wA ? 'f-act' : Number(l.w) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="w" data-i="' + i + '">' +
+      '<span class="t-l">' + T.weightL + '</span><span class="t-v"><b class="' + (wA ? 'caret' : '') + '">' + (l.w ? esc(wShow(l.w)) : wA ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
+    h += '</div><div class="sample"><span>' + T.sample + '</span><b>' + (sam ? sam + ' kg' : '—') + '</b></div>';
+    [['md', T.md, T.yes, T.no, '2'], ['gl', T.gl, T.yes, T.no, '2'], ['ice', T.ice, T.little, T.lots, '1']].forEach((g) => {
+      h += '<div class="tog"><span>' + g[1] + '</span><div class="seg">' +
+        '<button class="' + (l[g[0]] === '1' ? 'on' + (g[4] === '1' ? ' warn' : '') : '') + '" data-act="seg" data-v="' + g[0] + '" data-i="' + i + '" data-x="1">' + g[2] + '</button>' +
+        '<button class="' + (l[g[0]] === '2' ? 'on' + (g[4] === '2' ? ' warn' : '') : '') + '" data-act="seg" data-v="' + g[0] + '" data-i="' + i + '" data-x="2">' + g[3] + '</button></div></div>';
+    });
+    h += '</div></div>';
+  });
+  if (S.d.lines.length < MAX_LINES) h += '<button class="addline" data-act="addline">' + T.addFish + '</button>';
+  return h + '</div>';
+  return h;
+}
+const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
+
+function viewInspect() {
+  const T = t();
+  const st = settings();
+  const d = S.d;
+  const l = curLine();
+  const ev = evalLine(l);
+  let h = '';
+  if (d.lines.length > 1) {
+    h += '<div class="tabs">' + d.lines.map((x, i) => '<button class="glass' + (i === d.cur ? ' on' : '') + '" data-act="tab" data-v="' + i + '">' + (i + 1) + '. ' + esc(savedName(x)) + (evalLine(x).status === 'fail' ? ' ⚠' : '') + '</button>').join('') + '</div>';
+  } else h += '<div class="lbl">' + esc(savedName(l)) + '</div>';
+  const strip = '<div class="strip">' + l.fishes.map((f, k) => {
+    const n = f.t === '' ? null : Number(f.t);
+    const bad = f.d.some((x) => x);
+    const cls = k === l.fi ? 'here' : n !== null && n > st.TEMP_MAX ? 'tbad' : bad ? 'dfx' : n !== null ? 'tok' : '';
+    return '<button class="' + cls + '" data-act="pickfish" data-v="' + k + '"><small>' + (k + 1) + '</small><span>' + esc(f.t || (k === l.fi ? '▏' : '·')) + (bad ? '•' : '') + '</span></button>';
+  }).join('') + '<button class="rest' + (l.fi >= N_T ? ' here' : '') + '" data-act="pickfish" data-v="' + N_T + '">+ ' + T.rest + '</button></div>';
+  const found = ev.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
+  const lsum = l.chilli ? '' : '<div class="lsum ' + (ev.physFail ? 'ls-bad' : found.length ? 'ls-warn' : 'ls-ok') + '">' +
+    (ev.physFail ? '✗ ' + T.physBad + ' · ' + esc(found.join(', ')) : found.length ? T.found + ': ' + esc(found.join(', ')) + ' (' + T.pass + ')' : T.allOk) + '</div>';
+  if (l.fi < N_T) {
+    const f = l.fishes[l.fi];
+    const val = S.buf || f.t;
+    const n = f.t === '' ? null : Number(f.t);
+    h += '<div class="card glass"><div class="row"><span class="grow"><b style="font-size:18px">' + T.fishNo + ' ' + (l.fi + 1) + '</b><div class="sub" style="font-size:12px">' + T.flowHint + '</div></span>' +
+      '<button class="temp ' + (n === null ? '' : n > st.TEMP_MAX ? 'bad' : 'ok') + '" data-act="wide" aria-label="' + T.wideHint + '"><span class="' + (S.buf || f.t === '' ? 'caret' : '') + '">' + esc(val === '' ? '' : val) + '</span>' + (val === '' ? '—' : '') + ' °C' +
+      '<small style="display:block;font:600 10px var(--mono);color:' + (S.wide ? 'var(--red)' : 'var(--ink-3)') + '">' + (S.wide ? T.wideOn : T.wideHint) + '</small></button></div>';
+    if (l.chilli) h += '<div class="note">' + T.chilliNote + '</div>';
+    else h += '<span class="lbl">' + T.anyProblem + '</span><div class="chips">' + T.defects.map((lab, k) =>
+      '<button class="' + (f.d[k] ? 'on' : k >= 6 ? 'zero' : '') + '" data-act="defect" data-v="' + k + '">' + (f.d[k] ? '✗ ' : '') + esc(lab) + '</button>').join('') + '</div>';
+    h += '</div>' + strip + lsum;
+  } else {
+    h += '<div><b style="font-size:18px">' + T.restT + '</b><div class="sub" style="font-size:12px">' + T.restSub + '</div></div>';
+    if (l.chilli) h += '<div class="note">' + T.chilliNote + '</div>';
+    else h += '<div class="rest-list glass">' + T.checks.map((lab, k) => {
+      const n = ev.c[k];
+      const fail = k >= 6 ? n >= 1 : n > st.PHYS_LIMIT;
+      return '<div class="rrow ' + (fail ? 'fail' : n ? 'found' : '') + '"><span class="rl"><span style="font-size:15px;font-weight:500">' + esc(lab) + '</span><small>' + (k >= 6 ? T.rule0 : fmt(T.rule10, { n: st.PHYS_LIMIT })) + '</small></span>' +
+        '<button class="step" data-act="bump" data-v="' + k + '" data-x="-1" aria-label="-1">−</button><span class="rn">' + n + '</span><button class="step" data-act="bump" data-v="' + k + '" data-x="1" aria-label="+1">+</button></div>';
+    }).join('') + '</div>';
+    h += strip + lsum;
+  }
+  if (ev.n < st.MIN_TEMPS) h += '<div class="sub" style="text-align:center">' + fmt(T.needTemps, { n: st.MIN_TEMPS }) + '</div>';
+  return '<div class="stg">' + h + '</div>';
+}
+
+function viewSummary() {
+  const T = t();
+  const st = settings();
+  const d = S.d;
+  let h = '<div class="stg"><h2>' + T.sumT + '</h2>';
+  h += '<div class="card glass"><b>' + esc(d.supName) + (d.supCode ? ' / ' + esc(d.supCode) : '') + '</b><div class="sub">Lot ' + esc(d.lot) + ' · ' + esc(d.start) + (d.scale ? ' · ' + esc(d.scale) : '') + (d.thermo ? ' · ' + esc(d.thermo) : '') + '</div></div>';
+  d.lines.forEach((l, i) => {
+    const e = evalLine(l);
+    const found = l.chilli ? [] : e.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
+    const pill = e.status === 'pass' ? '<span class="pill p-ok">✓ ' + T.pass + ' · A</span>' : e.status === 'fixed' ? '<span class="pill p-fix">✓ ' + T.passFix + '</span>' : '<span class="pill p-bad">✗ ' + T.fail + '</span>';
+    const probs = [];
+    if (e.physFail) probs.push(T.physBad);
+    if (e.warm) probs.push(fmt(T.tooWarm, { t: st.TEMP_MAX }) + ' (' + e.max.toFixed(1) + ')');
+    const short = e.n < st.MIN_TEMPS;
+    h += '<div class="sl glass' + ((e.needFix && !l.fix) || short ? ' bad' : '') + '"><div class="row"><b class="grow" style="font-size:16px">' + (i + 1) + '. ' + esc(savedName(l)) + '</b>' + pill + '</div>' +
+      (short ? '<button class="err" style="text-align:left" data-act="gotoline" data-v="' + i + '">' + fmt(T.needTemps, { n: st.MIN_TEMPS }) + ' ›</button>' : '') +
+      '<div class="kv"><span>' + T.weight + '<b>' + kgFmt(l.w) + ' kg</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + N_T + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span></div>' +
+      '<span class="sub">' + (l.chilli ? T.physNA : found.length ? T.found + ': ' + esc(found.join(', ')) : T.physNone) + '</span>' +
+      (probs.length ? '<span style="font-size:13px;color:var(--red);font-weight:700">' + esc(probs.join(' · ')) + '</span>' : '');
+    if (e.needFix) {
+      h += '<span class="lbl" style="color:var(--ink)">' + T.fix + '</span><div class="fixes">' + T.fixes.map((f, q) =>
+        '<button class="' + (l.fix === FIX_TH[q] ? 'on' : '') + '" data-act="fix" data-v="' + i + '" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>';
+    }
+    if (e.warm) {
+      const act = S.pad && S.pad.kind === 'rt' && S.pad.line === i;
+      const rv = act ? S.buf || l.recheck : l.recheck;
+      const n = rv === '' || rv === '-' ? null : Number(rv);
+      h += '<button class="rc glass ' + (act ? 'f-act' : '') + '" data-act="focus" data-v="rt" data-i="' + i + '"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
+        '<b class="' + (act ? 'caret' : '') + '" style="color:' + (n === null ? 'var(--ink)' : n > st.TEMP_MAX ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (act ? '' : '—')) + ' °C</b></button>';
+    }
+    h += '</div>';
+  });
+  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+  return h + '</div>';
+}
+
+function viewDone() {
+  const T = t();
+  const last = S.last || { lines: 0, sent: false };
+  const td = S.today && S.today.date === todayStr() ? S.today.totals : null;
+  return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
+    '<div class="sub" style="font-size:15px">Lot ' + esc(last.lot || '') + ' · ' + last.lines + ' ' + T.lines + '</div>' +
+    '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    (td ? '<div class="card glass" style="width:100%"><div class="sum"><div><b>' + td.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.kg) + '</b><span>kg</span></div><hr><div><b>' + td.failed + '</b><span>' + T.failShort + '</span></div></div></div>' : '') + '</div>';
+}
+
+/* ---------------- number pad ---------------- */
+function viewPad() {
+  if (!S.pad) return '';
+  const T = t();
+  const k = S.pad.kind;
+  const special = k === 't' || k === 'rt' ? 'pm' : k === 'lot' ? '/' : k === 'w' ? '.' : '';
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', special, '0', 'del'];
+  let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
+    '<button class="' + (x === 'del' || x === 'pm' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x === 'pm' ? 'plus minus' : x) + '">' + (x === 'del' ? '⌫' : x === 'pm' ? '+/−' : x) + '</button>').join('');
+  const okLabel = k === 't' ? T.nextFish : k === 'sid' ? (S.busy ? '<span class="spin"></span> ' + T.checking : T.enter) : T.ok + ' ✓';
+  h += '<button class="ok" data-key="ok"' + (k === 'sid' && (S.sid.length !== 7 || S.busy) ? ' disabled style="opacity:.45"' : '') + '>' + okLabel + '</button>';
+  return h;
+}
+
+function press(key) {
+  const pad = S.pad;
+  if (!pad) return;
+  const d = S.d;
+  if (pad.kind === 'sid') {
+    if (key === 'del') S.sid = S.sid.slice(0, -1);
+    else if (key === 'ok') return login();
+    else if (/^\d$/.test(key) && S.sid.length < 7) S.sid += key;
+    S.err = '';
+    return render();
+  }
+  if (pad.kind === 'lot') {
+    if (key === 'del') d.lot = d.lot.slice(0, -1);
+    else if (key === 'ok') S.pad = null;
+    else if ((/^\d$/.test(key) || key === '/') && d.lot.length < 12) d.lot += key;
+    return render();
+  }
+  if (pad.kind === 'size') {
+    const l = d.lines[pad.line];
+    if (key === 'ok') S.pad = Number(l.w) > 0 ? null : { kind: 'w', line: pad.line };
+    else if (key === 'del') l.size = l.size.slice(0, -1);
+    else if (/^\d$/.test(key) && l.size.length < 5 && !(l.size === '' && key === '0')) l.size += key;
+    return render();
+  }
+  if (pad.kind === 'w') {
+    const l = d.lines[pad.line];
+    if (key === 'ok') S.pad = null;
+    else if (key === 'del') l.w = l.w.slice(0, -1);
+    else if (key === '.' ? l.w && l.w.indexOf('.') < 0 : /^\d$/.test(key) && l.w.replace('.', '').length < 7 && !(l.w.split('.')[1] || '').match(/^\d\d$/)) l.w += key;
+    return render();
+  }
+  if (pad.kind === 'rt') {
+    const l = d.lines[pad.line];
+    let buf = S.buf;
+    if (key === 'ok') { if (buf && buf !== '-') l.recheck = twoDigit(buf) || l.recheck; S.pad = null; S.buf = ''; return render(); }
+    if (key === 'pm') { if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf; else if (l.recheck) l.recheck = l.recheck[0] === '-' ? l.recheck.slice(1) : '-' + l.recheck; else S.buf = '-'; return render(); }
+    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else l.recheck = ''; return render(); }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length >= 2) { l.recheck = twoDigit(buf); S.buf = ''; S.pad = null; } else S.buf = buf;
+    return render();
+  }
+  if (pad.kind === 't') {
+    const l = curLine();
+    if (!l || l.fi >= N_T) return;
+    const f = l.fishes[l.fi];
+    const need = S.wide ? 3 : 2;               // normal: 2 digits = d.d · "10 °C up" mode: 3 digits = dd.d
+    let buf = S.buf;
+    const store = (v) => { f.t = v; if (!l.time) l.time = nowHM(); l.fi = nextEmpty(l, l.fi); S.buf = ''; S.wide = false; if (l.fi >= N_T) S.pad = null; };
+    if (key === 'ok') {
+      if (buf.replace('-', '')) store(tempOf(buf, need));   // 5 then Next = 5.0 — a typed digit is never thrown away
+      else { l.fi = Math.min(N_T, l.fi + 1); S.buf = ''; S.wide = false; if (l.fi >= N_T) S.pad = null; }
+      return render();
+    }
+    if (key === 'pm') {
+      /* ± always belongs to the fish under the cursor: before or between the digits it makes this reading negative;
+         on a fish that already has a value (tapped in the strip) it flips that value */
+      if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf;
+      else if (f.t !== '') f.t = f.t[0] === '-' ? f.t.slice(1) : '-' + f.t;
+      else S.buf = '-';
+      return render();
+    }
+    if (key === 'del') {
+      if (buf) S.buf = buf.slice(0, -1);
+      else if (f.t !== '') f.t = '';
+      else if (l.fi > 0) { l.fi -= 1; l.fishes[l.fi].t = ''; }
+      return render();
+    }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length < need) { S.buf = buf; return render(); }
+    store(tempOf(buf, need));
+    return render();
+  }
+}
+/** after a reading, jump to the next fish that has no temperature yet (never onto one that already has a value) */
+function nextEmpty(l, from) {
+  for (let k = from + 1; k < N_T; k++) if (l.fishes[k].t === '') return k;
+  for (let k = 0; k < from; k++) if (l.fishes[k].t === '') return k;
+  return N_T;
+}
+/** digits → temperature: 2 digits = d.d (1 2 → 1.2) · 3 digits = dd.d (1 2 3 → 12.3) · one digit + OK = d.0 */
+function tempOf(buf, need) {
+  const neg = buf[0] === '-';
+  const dg = buf.replace('-', '');
+  if (!dg) return '';
+  let v;
+  if (need === 3 && dg.length >= 3) v = String(Number(dg.slice(0, 2))) + '.' + dg[2];
+  else if (dg.length >= 2) v = need === 3 ? String(Number(dg)) + '.0' : dg[0] + '.' + dg[1];
+  else v = dg[0] + '.0';
+  return (neg && Number(v) !== 0 ? '-' : '') + v;
+}
+const twoDigit = (buf) => tempOf(buf, 2);
+
+/* ---------------- action bar ---------------- */
+function viewAction() {
+  const T = t();
+  const d = S.d;
+  const scr = S.screen;
+  if (scr === 'login' || scr === 'home') return '';
+  if (scr === 'truck') return '<button class="btn" data-act="next"' + (d.supName && d.lot ? '' : ' disabled') + '>' + T.next + ' ›</button>';
+  if (scr === 'fish') return '<button class="btn" data-act="next"' + (d.lines.length && d.lines.every(lineReady) ? '' : ' disabled') + '>' + T.next + ' ›</button>';
+  if (scr === 'inspect') {
+    const ok = evalLine(curLine()).n >= settings().MIN_TEMPS;
+    return '<button class="btn" data-act="next"' + (ok ? '' : ' disabled') + '>' + (d.cur + 1 < d.lines.length ? T.nextLine : T.toSummary) + '</button>';
+  }
+  if (scr === 'summary') {
+    const ok = canSave(d);
+    return '<button class="btn green" data-act="save"' + (ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
+  }
+  if (scr === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="startrm">' + T.newTruck + '</button>';
+  return '';
+}
+
+/* ---------------- render ---------------- */
+const $ = (id) => document.getElementById(id);
+/* a focused field losing focus during a redraw can fire change/blur → redraw again; queue it instead of nesting */
+let rendering = false, renderAgain = false;
+function render() {
+  if (rendering) { renderAgain = true; return; }
+  rendering = true;
+  try { draw(); } finally { rendering = false; }
+  if (renderAgain) { renderAgain = false; render(); }
+}
+function draw() {
+  document.body.className = 'lang-' + S.lang;
+  document.documentElement.lang = S.lang;
+  const main = $('main');
+  const keepScroll = lastScreen === S.screen ? main.scrollTop : 0;
+  $('hdr').innerHTML = renderHeader();
+  const views = { login: viewLogin, home: viewHome, truck: viewTruck, fish: viewFish, inspect: viewInspect, summary: viewSummary, done: viewDone };
+  if (S.screen !== 'login' && S.screen !== 'home' && S.screen !== 'done' && !S.d) S.screen = 'home';
+  main.innerHTML = (views[S.screen] || viewHome)();
+  if (lastScreen !== S.screen) {
+    main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
+    clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
+  }
+  main.scrollTop = keepScroll;
+  const pad = $('pad');
+  pad.innerHTML = viewPad();
+  if (S.pad && !lastPad) { pad.classList.remove('up'); void pad.offsetWidth; pad.classList.add('up'); }
+  lastPad = !!S.pad;
+  $('act').innerHTML = viewAction();
+  lastScreen = S.screen;
+  S.popLine = null;
+  persist();
+}
+
+/* ---------------- actions ---------------- */
+function login() {
+  if (S.sid.length !== 7 || S.busy) return;
+  S.busy = true; S.err = ''; render();
+  api('validateStaff', { staffId: S.sid }).then((j) => {
+    S.busy = false;
+    if (!j.valid) { S.err = t().badId; return render(); }
+    S.staff = { id: S.sid, name: j.name || '', dept: j.department || '' };
+    S.online = true;
+    go('home', { pad: null });
+    refreshConfig(true);
+  }, (e) => { S.busy = false; S.err = e.net ? t().needNet : e.message; render(); });
+}
+function signOut() {
+  S.staff = null; S.sid = ''; S.today = null;
+  go('login', { pad: { kind: 'sid' } });
+}
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+function saveTruck() {
+  const d = S.d;
+  if (!canSave(d)) { S.err = t().needFix; return render(); }
+  const rec = {
+    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, lot: d.lot, scale: d.scale, thermo: d.thermo,
+    device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    lines: d.lines.map((l) => {
+      const e = evalLine(l);
+      return { fish: l.fish.trim().toUpperCase(), custom: !!l.custom, chilli: !!l.chilli, proc: l.proc, size: l.chilli ? '' : l.size, w: l.w, md: l.md, gl: l.gl, ice: l.ice,
+        time: l.time, temps: l.fishes.map((f) => f.t), phys: e.c, recheck: e.warm ? l.recheck : '', fix: l.fix || '',
+        _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน' };
+    })
+  };
+  S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(d)) });
+  S.last = { id: rec.id, lot: rec.lot, lines: rec.lines.length, sent: false };
+  S.d = null;
+  go('done');
+  flush();
+}
+
+function openTruckSheet(id) {
+  const T = t();
+  const td = (S.today && S.today.trucks) || [];
+  const tr = td.find((x) => x.id === id);
+  const pend = S.outbox.find((o) => o.record.id === id);
+  if (!tr && !pend) return;
+  const lines = tr ? tr.lines : pend.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status }));
+  let h = '<div class="row"><b class="grow" style="font-size:18px">Lot ' + esc(tr ? tr.lot : pend.record.lot) + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">' + esc(tr ? tr.sup : pend.record.supName) + ' · ' + esc(tr ? tr.start : pend.record.start) + (tr && tr.staffName ? ' · ' + T.by + ' ' + esc(tr.staffName) : '') + '</div>' +
+    '<div class="tlist glass">' + lines.map((l) => '<div style="display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' + kgFmt(l.w) + ' kg</div></span>' +
+      '<span class="pill ' + (l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok') + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span></div>').join('') + '</div>';
+  if (tr && tr.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(tr.voidReason) + '</div>';
+  else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
+  else {
+    h += '<span class="lbl" style="color:var(--ink)">' + T.cancelTruck + '</span><div class="fixes">' + T.reasons.map((r, i) => '<button data-act="reason" data-v="' + i + '">' + esc(r) + '</button>').join('') + '</div>' +
+      '<textarea id="why" placeholder="' + esc(T.cancelWhy) + '"></textarea><button class="btn" style="background:var(--red);flex:none" data-act="dovoid" data-v="' + esc(id) + '">' + T.confirmCancel + '</button>';
+  }
+  $('sheet').innerHTML = '<div class="box">' + h + '</div>';
+  $('sheet').classList.add('open');
+}
+function closeSheet() { $('sheet').classList.remove('open'); }
+
+const ACT = {
+  lang: (el) => { S.lang = el.dataset.v; render(); },
+  back: () => {
+    const to = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home' }[S.screen] || 'home';
+    go(to);
+  },
+  signout: signOut,
+  sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
+  startrm: () => (S.d ? go('truck') : startTruck()),
+  resume: () => go(S.d.stage || (S.d.supName ? 'fish' : 'truck')),
+  discard: () => { if (S.confirm === 'discard') { S.d = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
+  home: () => go('home'),
+  focus: (el) => {
+    const k = el.dataset.v;
+    S.buf = ''; S.justFilled = null;
+    S.pad = k === 'lot' ? { kind: 'lot' } : { kind: k, line: Number(el.dataset.i) };
+    render();
+  },
+  next: () => {
+    const d = S.d;
+    if (S.screen === 'truck') {
+      if (!d.lines.length) {
+        const u = rmCfg().usual || {};
+        const usual = u[d.supName + (d.supCode ? ' / ' + d.supCode : '')] || [];
+        d.lines = usual.length ? usual.map((u) => blankLine(u[0], u[1], u[2])) : [blankLine('', 'WR', '')];
+        d.lines.forEach((l, i) => (l.open = i === 0));
+      }
+      return go('fish');
+    }
+    if (S.screen === 'fish') { d.lines.forEach((l) => (l.open = false)); d.cur = 0; return go('inspect'); }
+    if (S.screen === 'inspect') {
+      if (d.cur + 1 < d.lines.length) { d.cur += 1; S.buf = ''; S.pad = curLine().fi < N_T ? { kind: 't' } : null; return render(); }
+      return go('summary');
+    }
+  },
+  openline: (el) => { S.d.lines.forEach((l, i) => (l.open = i === Number(el.dataset.v))); S.pad = null; render(); },
+  closeline: (el) => { S.d.lines[Number(el.dataset.v)].open = false; S.pad = null; render(); },
+  delline: (el) => {
+    const i = Number(el.dataset.v);
+    if (S.confirm !== 'del' + i) { S.confirm = 'del' + i; return render(); }
+    S.d.lines.splice(i, 1); S.confirm = null; S.pad = null; render();
+  },
+  addline: () => {
+    S.d.lines.forEach((l) => (l.open = false));
+    S.d.lines.push(blankLine('', 'WR', ''));
+    S.popLine = S.d.lines.length - 1; S.pad = null;
+    render();
+    const m = $('main'); m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+  },
+  tolist: (el) => { const l = S.d.lines[Number(el.dataset.v)]; l.custom = false; l.fish = ''; render(); },
+  seg: (el) => { S.d.lines[Number(el.dataset.i)][el.dataset.v] = el.dataset.x; render(); },
+  tab: (el) => { S.d.cur = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = curLine().fi < N_T ? { kind: 't' } : null; render(); },
+  pickfish: (el) => { const l = curLine(); l.fi = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = l.fi < N_T ? { kind: 't' } : null; render(); },
+  wide: () => { S.wide = !S.wide; S.buf = ''; S.pad = { kind: 't' }; render(); },
+  defect: (el) => { const l = curLine(); const f = l.fishes[l.fi]; const k = Number(el.dataset.v); f.d[k] = f.d[k] ? 0 : 1; S.justFilled = null; render(); },
+  bump: (el) => { const l = curLine(); const k = Number(el.dataset.v); l.extra[k] = Math.max(0, l.extra[k] + Number(el.dataset.x)); render(); },
+  fix: (el) => { const l = S.d.lines[Number(el.dataset.v)]; const v = FIX_TH[Number(el.dataset.x)]; l.fix = l.fix === v ? '' : v; S.err = ''; render(); },
+  save: saveTruck,
+  gotoline: (el) => { S.d.cur = Number(el.dataset.v); go('inspect'); },
+  reopen: (el) => {
+    if (S.d) { toast(t().finishFirst); return; }
+    const item = S.outbox.find((o) => o.record.id === el.dataset.v);
+    if (!item || !item.draft) return;
+    S.outbox = S.outbox.filter((o) => o !== item);
+    sentIds[item.record.id] = true;   // don't pull the refused copy back in from storage
+    S.d = item.draft;
+    go('summary');
+  },
+  truck: (el) => openTruckSheet(el.dataset.v),
+  closesheet: closeSheet,
+  reason: (el) => { $('why').value = t().reasons[Number(el.dataset.v)]; },
+  dovoid: (el) => {
+    const why = ($('why').value || '').trim();
+    if (!why) { $('why').focus(); return; }
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    api('rmVoid', { staffId: S.staff.id, id: el.dataset.v, reason: why }).then(() => {
+      closeSheet(); toast(t().cancelled); refreshToday(true);
+    }, (e) => { el.disabled = false; el.textContent = t().confirmCancel; toast(e.net ? t().offline : e.message); });
+  }
+};
+
+document.addEventListener('click', (e) => {
+  const k = e.target.closest('[data-key]');
+  if (k && !k.disabled) { press(k.dataset.key); return; }
+  const a = e.target.closest('[data-act]');
+  if (a && !a.disabled && ACT[a.dataset.act]) { if (a.tagName === 'LABEL') return; ACT[a.dataset.act](a); }
+  if (e.target.id === 'sheet') closeSheet();
+});
+document.addEventListener('change', (e) => {
+  const el = e.target;
+  const on = el.dataset && el.dataset.on;
+  if (!on) return;
+  const d = S.d;
+  if (on === 'sup') {
+    const s = rmCfg().suppliers[Number(el.value)];
+    d.supCode = s ? s.code : ''; d.supName = s ? s.name : '';
+    if (s && !d.lot) S.pad = { kind: 'lot' };
+    return render();
+  }
+  if (on === 'scale') { d.scale = el.value; S.scale = el.value; return render(); }
+  if (on === 'thermo') { d.thermo = el.value; S.thermo = el.value; return render(); }
+  const l = d.lines[Number(el.dataset.v)];
+  if (on === 'fish') {
+    if (el.value === '__other') { l.custom = true; l.fish = ''; l.chilli = false; if (rmCfg().procs.indexOf(l.proc) < 0) l.proc = rmCfg().procs.indexOf('WR') >= 0 ? 'WR' : rmCfg().procs[0]; render(); const inp = document.querySelector('[data-on="typefish"]'); if (inp) inp.focus(); return; }
+    l.fish = el.value; l.chilli = isChilli(el.value);
+    const pl = l.chilli ? rmCfg().chilliProcs : rmCfg().procs;
+    if (l.chilli) l.size = '';
+    if (pl.indexOf(l.proc) < 0) l.proc = pl.indexOf('WR') >= 0 ? 'WR' : pl[0];
+    if (!l.chilli && !l.size) { S.pad = { kind: 'size', line: Number(el.dataset.v) }; S.buf = ''; }
+    return render();
+  }
+  if (on === 'proc') { l.proc = el.value; return render(); }
+  if (on === 'typefish') { const v = el.value.toUpperCase().replace(/\s+/g, ' ').trim(); if (v === l.fish) return; l.fish = v; return render(); }
+});
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.dataset && el.dataset.on === 'typefish') {
+    const i = Number(el.dataset.v);
+    const l = S.d.lines[i];
+    l.fish = el.value.toUpperCase().replace(/\s+/g, ' ').replace(/^\s/, '');
+    const title = $('title' + i);
+    if (title) title.textContent = l.fish ? savedName(l) : t().newLine;
+    persist();
+  }
+});
+/* physical keyboard on a tablet/PC: digits, Backspace, Enter, minus */
+document.addEventListener('keydown', (e) => {
+  if (!S.pad || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  const map = { Backspace: 'del', Enter: 'ok', '-': 'pm', '/': '/', '.': '.' };
+  const k = /^\d$/.test(e.key) ? e.key : map[e.key];
+  if (k) { e.preventDefault(); press(k); }
+});
+window.addEventListener('storage', (e) => { if (e.key === STORE) { persist(); render(); } });
+window.addEventListener('online', () => { S.online = true; flush(); render(); });
+window.addEventListener('offline', () => { S.online = false; render(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+
+render();
+if (S.staff) { refreshConfig(); refreshToday(true); flush(); }
+</script>
+</body>
+</html>
