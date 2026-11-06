@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#dff4f9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="CK QC PC">
-<title>CK QC · PC</title>
+<meta name="apple-mobile-web-app-title" content="CK QC">
+<title>CK QC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -135,6 +135,8 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tlist{display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
 .tlist button{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
 .tlist button:first-child{border-top:0}
+.tlist button.nokg{background:var(--red-soft);box-shadow:inset 4px 0 0 var(--red)}
+.tlist button.nokg .tm{color:var(--red)}
 .tlist .tm{font:600 14px var(--mono);color:var(--ink-3);flex:none;width:44px}
 .tlist .vd{opacity:.55;text-decoration:line-through}
 
@@ -284,35 +286,6 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 #toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;z-index:60;background:rgba(27,28,26,.9);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90%;text-align:center;transition:opacity 240ms var(--ease),transform 240ms var(--ease);pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-/* ---- PC screens (pc.html) — same design system as RM ---- */
-.dchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
-.dchips>*{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;border-radius:12px;background:var(--glass);border:1.5px solid var(--glass-line);box-shadow:var(--shadow);text-align:center;overflow:hidden}
-.dchips b{font-size:13px;font-weight:700;line-height:1.15}
-.dchips small{font:600 12px var(--mono);color:var(--ink-3)}
-.dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
-.dchips .on small{color:rgba(255,255,255,.85)}
-.dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
-.lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
-.lotno{font:700 17px var(--mono);color:var(--accent-ink);background:var(--accent-soft);border-radius:8px;padding:3px 9px;flex:none}
-.lline{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
-.lline.on{background:var(--accent-soft)}
-.lline .go{font-size:22px;color:var(--accent);flex:none}
-.ic2{width:44px;height:44px;flex:none;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 15px var(--mono)}
-.t3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.tt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;border:1.5px solid var(--glass-line);background:var(--glass);box-shadow:var(--shadow);min-height:84px;justify-content:center}
-.tt small{font-size:11px;font-weight:600;color:var(--ink-3)}
-.tt b{font:700 26px var(--mono);line-height:1.1}
-.tt.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
-.tt.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
-.tt.f-empty{border-style:dashed;border-color:var(--accent)}
-.lossbox{display:flex;align-items:baseline;gap:10px;border-radius:14px;padding:10px 14px;background:var(--glass);border:1.5px solid var(--glass-line);box-shadow:var(--shadow);flex-wrap:wrap}
-.lossbox span{font-size:14px;font-weight:600;color:var(--ink-3)}
-.lossbox b{font:700 30px var(--mono);letter-spacing:-.02em}
-.lossbox small{flex-basis:100%;font-size:13px;font-weight:600}
-.lossbox.ok{background:var(--green-soft);border-color:rgba(46,107,60,.35)}.lossbox.ok b{color:var(--green)}
-.lossbox.hi{background:var(--amber-soft);border-color:var(--amber)}.lossbox.hi b,.lossbox.hi small{color:var(--amber)}
-.fixes button small{font-size:12px}
 </style>
 </head>
 <body class="lang-th">
@@ -331,122 +304,161 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 
 <script>
 /* =====================================================================
- * CK QC — PC (ตรวจสอบคุณภาพ PC · FM-QA-010.10 Rev.02) · phone screen
- * Own file, own folder (Sal, 6 Nov 2026): the RM app (index.html) keeps working whatever happens here.
- * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
+ * CK QC — phone app (GitHub Pages) · RM receiving FM-QA-010.15 Rev.03
+ * Talks to the Apps Script Web app below. Paste your own URL after Deploy.
+ * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.0';
-const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
-const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
+const APP_VERSION = '1.1.0';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
-const STORE_KEY = DEMO ? 'ckqc.pc.demo.state' : 'ckqc.pc.v1';
+const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
+const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
+const N_T = 20;   // most fish ever sampled (largest AQL sample); each line uses its own number from the AQL table
+const AQL_DEFAULT = [[2, 15, 2, 0, 1], [16, 50, 3, 0, 1], [51, 150, 5, 0, 1], [151, 500, 8, 1, 2], [501, 1200, 13, 2, 3], [1201, 3200, 13, 3, 4], [3201, 10000, 20, 5, 6]];
 const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
+const PC_URL = 'pc.html';        // PC screen: its own file (System Setup / CK QC App PC (SMT)), uploaded next to this one on GitHub
+const HAND_KEY = 'ckqc.hand';    // one-time hand-over of the signed-in staff between index.html and pc.html (same tab only)
 
 /* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
 const L = {
   th: {
-    pc: 'ตรวจสอบคุณภาพ PC', pcShort: 'แปรรูป (PC)', pcSub: 'FM-QA-010.10 · อุณหภูมิหลังชั่ง · %Loss', branch: 'สาขาสมุทรปราการ', steps: ['ล็อต', 'ตรวจ'],
-    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจ…',
-    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'ยังมีการตรวจที่ยังไม่บันทึก — กด ออก อีกครั้งเพื่อทิ้งและออก',
-    demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet', offline: 'ออฟไลน์', online: 'ออนไลน์', waiting: 'รอส่ง', inspector: 'ผู้ตรวจ', back: 'กลับ', ok: 'ตกลง',
-    mainMenu: 'เมนูหลัก', refresh: 'รีเฟรช', today: 'วันนี้ (PC)', checks: 'ครั้งที่ตรวจ', heldN: 'ปลาดอง', failShort: 'ไม่ผ่าน',
-    start: 'เริ่มตรวจ PC', startSub: 'เลือกล็อตจาก RM แล้วตรวจ', resume: 'ทำต่อ', discard: 'ทิ้งการตรวจนี้', discardQ: 'แตะอีกครั้งเพื่อทิ้ง',
-    todayList: 'ตรวจแล้ววันนี้', none: 'ยังไม่มีการตรวจวันนี้', pendingT: 'รอส่ง', pendingSub: 'บันทึกไว้ในเครื่องแล้ว แอปส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้',
-    failedSend: 'ระบบไม่รับ', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งการตรวจที่ทำค้างก่อน',
-    reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
-    lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (เลขล็อตเริ่ม 1 ใหม่ทุกวัน)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
-    loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
-    heldBadge: 'ปลาดอง {n} วัน', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
-    manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
-    lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
-    trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
-    before: 'น้ำหนักก่อนตัดแต่ง', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
-    remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
-    recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
-    needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าก่อนตัดแต่ง', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
-    doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
-    pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
-    cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
-    gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ'
+    branch: 'สาขาสมุทรปราการ', online: 'ออนไลน์', offline: 'ออฟไลน์', waiting: 'รอส่ง', back: 'ย้อนกลับ', inspector: 'ผู้ตรวจ',
+    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจสอบ…',
+    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
+    today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
+    rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลา · กุ้ง · พริก/สมุนไพร', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
+    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
+    pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
+    steps: ['รถ', 'วัตถุดิบ', 'ตรวจ', 'สรุป'],
+    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', otherSup: '+ อื่นๆ (พิมพ์ชื่อเอง)…', typeSup: 'ชื่อผู้ขาย', supCodeL: 'รหัสผู้ขาย (2 หลัก)', needSupBoth: 'ใส่ทั้งชื่อผู้ขายและรหัส 2 หลัก', supCustomTag: 'ผู้ขายพิมพ์เอง — แจ้งหัวหน้าให้เพิ่มในรายชื่อ', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
+    fishNext: 'ชนิดวัตถุดิบเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
+    fishT: 'วัตถุดิบในรถ', fishSub: 'ปลา · กุ้ง · พริก/สมุนไพร — ชื่อ / Processing type / ขนาด ต่างกัน = คนละรายการ', fishName: 'ชื่อวัตถุดิบ', proc: 'Processing type',
+    typeOwn: '+ พิมพ์ชื่อเอง…', fromList: 'เลือกจากรายการ', manualTag: 'พิมพ์ชื่อเอง', newLine: 'รายการใหม่', incomplete: 'ยังไม่ครบ',
+    sizeL: 'ขนาด (ต่อตัว)', weightL: 'น้ำหนักรับเข้า (รวม)', pickOne: '— เลือก —', noSize: 'ไม่มีขนาด', sample: 'ต้องสุ่ม', other: 'อื่นๆ',
+    md: 'ใบ MD', gl: 'ใบ GL', ice: 'น้ำแข็ง', yes: '1 มี', no: '2 ไม่มี', little: '1 น้อย', lots: '2 มาก', addFish: '+ เพิ่มรายการ', remove: 'ลบ?',
+    fishNo: 'ปลาตัวที่', flowHint: 'ดูตัวปลา → แตะถ้ามีปัญหา → วัดอุณหภูมิ → ตัวถัดไปเอง', anyProblem: 'ตัวนี้มีปัญหาไหม? (ไม่มี = ไม่ต้องแตะ)',
+    defects: ['เนื้อเละ', 'ท้องแตก', 'กลิ่นเหม็น', 'ตาขุ่น / ไม่กลม', 'เหงือกไม่แดง', 'เกล็ดหลุด', 'สิ่งแปลกปลอม', 'พยาธิ'],
+    checks: ['เนื้อแน่น ไม่เละ', 'ท้องตึง ไม่แตก', 'กลิ่นคาวปกติ ไม่เหม็น', 'ตากลมใส', 'เหงือกสีแดงสด', 'เกล็ดเรียบเงาไม่หลุด', 'ไม่พบสิ่งแปลกปลอม / สิ่งปลอมปน', 'ไม่พบพยาธิ (มองเห็นด้วยตา)'],
+    rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
+    allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
+    wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
+    sizeS: 'ขนาด (ตัว/kg)', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
+    shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
+    shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
+      'บริเวณหางไม่มีสีแดงและไม่มีรอยแผลสีดำที่เปลือก', 'ไม่มีสีขาวขุ่นที่บริเวณปล้องสุดท้ายที่ติดกับแพนหาง', 'ไม่พบสิ่งแปลกปลอม / สิ่งปลอมปน', 'ไม่พบพยาธิ (มองเห็นด้วยตา)'],
+    sulfiteBad: 'ซัลไฟต์ไม่ผ่าน', wholeLot: 'ตรวจทั้งล็อต · คัดออกได้ไม่เกิน {max}%', sampleKg: 'น้ำหนักที่สุ่มตรวจ', rejectKg: 'น้ำหนักที่คัดออก', rejectPct: 'คัดออก',
+    limit: 'เกณฑ์ ≤ {max}%', cats: ['ขนาด', 'ลักษณะ', 'ความสด', 'สี'], specT: 'ตรวจตาม Spec — แตะข้อที่ไม่ผ่าน', noSpec: 'ยังไม่มีเกณฑ์ในแท็บ RM_Produce_Spec — ตรวจด้วยตาตามปกติ',
+    notUsed: 'ไม่ตรวจข้อนี้', rejectBad: 'คัดออก {p}% เกิน {max}%', checkBad: 'ไม่ผ่าน Spec', needProduce: 'ใส่น้ำหนักที่สุ่มและที่คัดออก', rejectOver: 'น้ำหนักที่คัดออกมากกว่าที่สุ่ม',
+    nextLine: 'รายการถัดไป ›', toSummary: 'สรุป ›', tempsN: 'วัดอุณหภูมิ', max: 'สูงสุด', weight: 'น้ำหนัก',
+    sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
+    tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา',
+    recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
+    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', wRange: 'ช่วงน้ำหนัก (ประมาณ)', pickRange: '— เลือกช่วง —', waitKg: 'รอชั่ง', waitKgN: 'รอน้ำหนักจริง', enterKg: 'ใส่น้ำหนักจริง (หลังผ่าน RM)', kgT: 'น้ำหนักจริงหลังผ่าน RM', kgSub: 'ใส่น้ำหนักของแต่ละรายการ แล้วกดบันทึก', saveKg: 'บันทึกน้ำหนัก', kgSaved: 'บันทึกน้ำหนักแล้ว', kgNeedSend: 'รอส่งเข้าระบบก่อน จึงใส่น้ำหนักจริงได้', kgUnder: 'น้ำหนักจริงเกินช่วงที่เลือก — สุ่มน้อยกว่าเกณฑ์ แจ้งหัวหน้า QC', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
+    cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
+    cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
   },
   en: {
-    pc: 'PC quality check', pcShort: 'Processing (PC)', pcSub: 'FM-QA-010.10 · temperature after weighing · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'Check'],
-    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Sign in', checking: 'Checking…',
-    badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved check — tap Sign out again to discard it',
-    demo: 'Demo mode — nothing is sent to Google Sheets', offline: 'Offline', online: 'Online', waiting: 'Waiting', inspector: 'Inspector', back: 'Back', ok: 'OK',
-    mainMenu: 'Main menu', refresh: 'Refresh', today: 'Today (PC)', checks: 'checks', heldN: 'held fish', failShort: 'failed',
-    start: 'Start PC check', startSub: 'Pick the RM lot, then check', resume: 'Continue', discard: 'Discard this check', discardQ: 'Tap again to discard',
-    todayList: 'Checked today', none: 'No checks yet today', pendingT: 'Waiting to send', pendingSub: 'Saved on this phone; sends itself when there is signal', sendNow: 'Send now',
-    failedSend: 'Refused', reopen: 'Open to fix', finishFirst: 'Save or discard the open check first',
-    reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
-    lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (lot numbers restart at 1 every day)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
-    loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
-    heldBadge: 'Held {n} day(s)', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
-    manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
-    lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
-    trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
-    before: 'Weight before trim', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
-    remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
-    recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
-    needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than before', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
-    doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
-    pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
-    cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
-    gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv'
+    branch: 'Samut Prakan branch', online: 'Online', offline: 'Offline', waiting: 'To send', back: 'Back', inspector: 'Inspector',
+    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Continue', checking: 'Checking…',
+    badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
+    today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
+    rm: 'Raw material receiving', rmSub: 'Fish · shrimp · chilli/herbs', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
+    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
+    pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
+    steps: ['Truck', 'Items', 'Inspect', 'Review'],
+    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', otherSup: '+ Other (type a name)…', typeSup: 'Supplier name', supCodeL: 'Supplier code (2 digits)', needSupBoth: 'Enter both the supplier name and the 2-digit code', supCustomTag: 'Typed by hand — ask the lead to add it to the list', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
+    fishNext: 'Items are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
+    fishT: 'Items on this truck', fishSub: 'Fish · shrimp · chilli/herbs — different name / processing type / size = separate line', fishName: 'Item', proc: 'Processing type',
+    typeOwn: '+ Type a name…', fromList: 'Pick from list', manualTag: 'Typed by hand', newLine: 'New line', incomplete: 'Incomplete',
+    sizeL: 'Size (per fish)', weightL: 'Weight received (total)', pickOne: '— Choose —', noSize: 'No size', sample: 'Sample', other: 'Other',
+    md: 'MD document', gl: 'GL document', ice: 'Ice', yes: '1 Yes', no: '2 No', little: '1 Little', lots: '2 Plenty', addFish: '+ Add line', remove: 'Delete?',
+    fishNo: 'Fish no.', flowHint: 'Look → tap any problem → measure temp → moves on by itself', anyProblem: 'Any problem with this fish? (none = tap nothing)',
+    defects: ['Soft flesh', 'Burst belly', 'Bad smell', 'Cloudy eyes', 'Pale gills', 'Loose scales', 'Foreign object', 'Parasite'],
+    checks: ['Firm flesh, not soft', 'Belly tight, not burst', 'Normal smell', 'Eyes round and clear', 'Gills bright red', 'Scales smooth and intact', 'No foreign objects', 'No visible parasites'],
+    rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
+    allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
+    wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
+    sizeS: 'Size (pcs/kg)', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
+    shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
+    shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
+      'Tail not red, no black wounds on the shell', 'No milky white at the last segment by the tail fan', 'No foreign objects', 'No visible parasites'],
+    sulfiteBad: 'Sulfite failed', wholeLot: 'Whole lot · reject at most {max}%', sampleKg: 'Weight checked', rejectKg: 'Weight rejected', rejectPct: 'Rejected',
+    limit: 'limit ≤ {max}%', cats: ['Size', 'Shape', 'Freshness', 'Colour'], specT: 'Check against the spec — tap any that fails', noSpec: 'No criteria in the RM_Produce_Spec tab yet — check by eye as usual',
+    notUsed: 'not checked for this item', rejectBad: 'Rejected {p}% is above {max}%', checkBad: 'Spec check failed', needProduce: 'Enter the weight checked and rejected', rejectOver: 'Rejected weight is more than the weight checked',
+    nextLine: 'Next line ›', toSummary: 'Review ›', tempsN: 'Temps', max: 'Highest', weight: 'Weight',
+    sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
+    tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems',
+    recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
+    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', wRange: 'Weight range (estimate)', pickRange: '— choose range —', waitKg: 'to weigh', waitKgN: 'waiting for real weight', enterKg: 'Enter real weight (after RM)', kgT: 'Real weight after RM processing', kgSub: 'Enter the weight of each line, then save', saveKg: 'Save weight', kgSaved: 'Weight saved', kgNeedSend: 'Send the truck first, then enter the real weight', kgUnder: 'Real weight is above the range chosen — fewer fish were checked than the rule needs; tell the QC lead', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
+    newTruck: 'Start next truck', home: 'Home', lines: 'lines',
+    cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
+    cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
   },
   my: {
-    pc: 'PC အရည်အသွေး စစ်ဆေး', pcShort: 'PC', pcSub: 'FM-QA-010.10 · ချိန်ပြီး အပူချိန် · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'စစ်'],
-    welcome: 'ကြိုဆိုပါသည်', loginSub: 'ဝန်ထမ်း နံပါတ် ၇ လုံး', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်ရန်', checking: 'စစ်နေသည်…',
-    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမဆုံး ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေး — ထွက်ရန် ထပ်နှိပ်ပါ',
-    demo: 'စမ်းသပ်မုဒ်', offline: 'အော့ဖ်လိုင်း', online: 'အွန်လိုင်း', waiting: 'ပို့ရန်', inspector: 'စစ်ဆေးသူ', back: 'နောက်', ok: 'အိုကေ',
-    mainMenu: 'ပင်မ', refresh: 'ပြန်ဖွင့်', today: 'ယနေ့ (PC)', checks: 'စစ်ပြီး', heldN: 'ထိန်းထားသော ငါး', failShort: 'မအောင်',
-    start: 'PC စစ်ဆေး စတင်', startSub: 'RM lot ရွေးပြီး စစ်ပါ', resume: 'ဆက်လုပ်', discard: 'ဤစစ်ဆေးမှု ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ',
-    todayList: 'ယနေ့ စစ်ပြီး', none: 'ယနေ့ မစစ်ရသေး', pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းတွင် သိမ်းပြီး', sendNow: 'ယခု ပို့',
-    failedSend: 'လက်မခံ', reopen: 'ပြင်ရန် ဖွင့်', finishFirst: 'ဖွင့်ထားသည်ကို အရင် သိမ်း/ဖျက်ပါ',
-    reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
-    lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
-    loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
-    heldBadge: '{n} ရက် ထိန်းထား', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
-    manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
-    lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
-    trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
-    before: 'ခုတ်ပြင်မီ အလေးချိန်', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
-    remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
-    recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
-    needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
-    doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
-    pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
-    cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
-    gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ'
+    branch: 'ဆမွတ်ပရာကန် ဌာနခွဲ', online: 'အွန်လိုင်း', offline: 'အော့ဖ်လိုင်း', waiting: 'ပို့ရန်', back: 'နောက်သို့', inspector: 'စစ်ဆေးသူ',
+    welcome: 'ကြိုဆိုပါတယ်', loginSub: 'ဝန်ထမ်းနံပါတ် ၇ လုံး ထည့်ပါ', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်မည်', checking: 'စစ်ဆေးနေသည်…',
+    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေးသောကား ရှိ — ဖျက်ပြီးထွက်ရန် ထပ်နှိပ်ပါ', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
+    today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
+    rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ငါး · ပုစွန် · ငရုတ်/ဟင်းခတ်', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
+    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', noTrucks: 'ယနေ့ ကား မရှိသေး',
+    pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
+    steps: ['ကား', 'ကုန်', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
+    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', otherSup: '+ အခြား (အမည် ရိုက်)…', typeSup: 'ပေးသွင်းသူ အမည်', supCodeL: 'ကုဒ် (၂ လုံး)', needSupBoth: 'အမည်နှင့် ကုဒ် ၂ လုံး ထည့်ပါ', supCustomTag: 'ကိုယ်တိုင်ရိုက် — စာရင်းထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
+    fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
+    fishT: 'ကားပေါ်ရှိ ကုန်ကြမ်း', fishSub: 'ငါး/Processing type/အရွယ် မတူ = သီးခြားစာရင်း', fishName: 'ငါးအမည်', proc: 'Processing type',
+    typeOwn: '+ အမည် ကိုယ်တိုင်ရိုက်…', fromList: 'စာရင်းမှ ရွေး', manualTag: 'ကိုယ်တိုင်ရိုက်', newLine: 'စာရင်းသစ်', incomplete: 'မပြည့်စုံ',
+    sizeL: 'အရွယ် (တစ်ကောင်)', weightL: 'လက်ခံအလေးချိန် (စုစုပေါင်း)', pickOne: '— ရွေးပါ —', noSize: 'အရွယ်မရှိ', sample: 'နမူနာ', other: 'အခြား',
+    md: 'MD စာရွက်', gl: 'GL စာရွက်', ice: 'ရေခဲ', yes: '1 ရှိ', no: '2 မရှိ', little: '1 နည်း', lots: '2 များ', addFish: '+ ငါးစာရင်း ထပ်ထည့်', remove: 'ဖျက်?',
+    fishNo: 'ငါး နံပါတ်', flowHint: 'ကြည့် → ပြဿနာရှိလျှင် နှိပ် → အပူချိန်တိုင်း → နောက်တစ်ကောင်', anyProblem: 'ဒီငါး ပြဿနာရှိလား? (မရှိ = မနှိပ်ပါနှင့်)',
+    defects: ['အသားပျော့', 'ဗိုက်ပေါက်', 'အနံ့ဆိုး', 'မျက်လုံးမှုန်', 'ပါးဟက်ဖျော့', 'အကြေးကျွတ်', 'ပြင်ပပစ္စည်း', 'ကပ်ပါးကောင်'],
+    checks: ['အသားမာ၊ မပျော့', 'ဗိုက်တင်း၊ မပေါက်', 'ငါးနံ့ ပုံမှန်', 'မျက်လုံး ဝိုင်း၍ ကြည်', 'ပါးဟက် နီရဲ', 'အကြေး ချော၊ မကျွတ်', 'ပြင်ပပစ္စည်း မတွေ့', 'ကပ်ပါးကောင် မတွေ့'],
+    rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
+    allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
+    wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
+    sizeS: 'အရွယ် (ကောင်/kg)', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
+    shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
+    shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
+      'အမြီး အနီမရှိ၊ အခွံပေါ် အမည်းဒဏ်ရာ မရှိ', 'အမြီးနား အဆစ် အဖြူနောက် မရှိ', 'ပြင်ပပစ္စည်း မတွေ့', 'ကပ်ပါးကောင် မတွေ့'],
+    sulfiteBad: 'ဆာလ်ဖိုက် မအောင်', wholeLot: 'အစုလုံး · ပယ် ≤ {max}%', sampleKg: 'စစ်သည့် အလေးချိန်', rejectKg: 'ပယ်သည့် အလေးချိန်', rejectPct: 'ပယ်',
+    limit: 'စံ ≤ {max}%', cats: ['အရွယ်', 'ပုံသဏ္ဌာန်', 'လတ်ဆတ်မှု', 'အရောင်'], specT: 'Spec အတိုင်း စစ် — မအောင်သည်ကို နှိပ်ပါ', noSpec: 'RM_Produce_Spec တွင် စံ မရှိသေး',
+    notUsed: 'ဒီအချက် မစစ်', rejectBad: 'ပယ် {p}% သည် {max}% ထက် များ', checkBad: 'Spec မအောင်', needProduce: 'စစ်/ပယ် အလေးချိန် ထည့်ပါ', rejectOver: 'ပယ်သည်က စစ်သည်ထက် များ',
+    nextLine: 'နောက်စာရင်း ›', toSummary: 'အနှစ်ချုပ် ›', tempsN: 'တိုင်းပြီး', max: 'အမြင့်ဆုံး', weight: 'အလေးချိန်',
+    sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
+    tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့',
+    recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', wRange: 'အလေးချိန် အပိုင်းအခြား (ခန့်မှန်း)', pickRange: '— ရွေးပါ —', waitKg: 'ချိန်ရန်', waitKgN: 'အမှန် အလေးချိန် စောင့်', enterKg: 'အမှန် အလေးချိန် ထည့် (RM ပြီး)', kgT: 'RM ပြီးနောက် အမှန် အလေးချိန်', kgSub: 'စာရင်းတိုင်း အလေးချိန် ထည့်ပြီး သိမ်းပါ', saveKg: 'အလေးချိန် သိမ်း', kgSaved: 'သိမ်းပြီး', kgNeedSend: 'ကားကို အရင်ပို့ပါ', kgUnder: 'အမှန်အလေးချိန် အပိုင်းအခြားထက် များ — QC ခေါင်းဆောင်ကို ပြောပါ', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
+    cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
+    cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
   }
 };
 
 /* ---------------- state ---------------- */
 const S = load();
-S.staff = null; S.screen = 'login'; S.pad = { kind: 'sid' };
-S.sid = ''; S.buf = ''; S.busy = false; S.err = ''; S.online = navigator.onLine; S.confirm = null; S.wide = false; S.lotsBusy = false;
-takeHandover();
+S.staff = null;   // always start at the ID screen
+S.screen = 'login';
+S.pad = { kind: 'sid' };
+(function takeHandover() {   // coming back from the PC screen in this tab: already signed in there (used once)
+  let h = null;
+  try { h = JSON.parse(sessionStorage.getItem(HAND_KEY) || 'null'); sessionStorage.removeItem(HAND_KEY); } catch (e) { h = null; }
+  if (h && h.staff && h.staff.id && Date.now() - (h.at || 0) < 120000) { S.staff = h.staff; if (h.lang) S.lang = h.lang; S.screen = 'home'; S.pad = null; }
+})();
+S.sid = ''; S.buf = ''; S.justFilled = null; S.busy = false; S.err = ''; S.online = navigator.onLine; S.confirm = null;
 let lastScreen = null, lastPad = false;
 
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, lots: {}, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
-}
-/** came from the main menu in this tab (index.html) → already signed in there; the hand-over is used once */
-function takeHandover() {
-  let h = null;
-  try { h = JSON.parse(sessionStorage.getItem(HAND_KEY) || 'null'); sessionStorage.removeItem(HAND_KEY); } catch (e) { h = null; }
-  if (h && h.staff && h.staff.id && Date.now() - (h.at || 0) < 120000) {
-    S.staff = h.staff; if (h.lang) S.lang = h.lang;
-    S.screen = 'home'; S.pad = null;
-  }
-}
-function toMainMenu() {
-  try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
-  persist();
-  location.href = HOME_URL;
+  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null, known: {} }, s);
+  // drafts from an older version had 12 fish slots — grow them to the current maximum
+  const grow = (d) => d && (d.lines || []).forEach((l) => { while (l.fishes.length < N_T) l.fishes.push({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] }); upgradeLine(l); });
+  grow(out.d);
+  (out.outbox || []).forEach((o) => grow(o.draft));
+  return out;
 }
 const sentIds = {};
 function persist() {
@@ -454,64 +466,160 @@ function persist() {
     const stored = (JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}).outbox || [];
     stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
   } catch (e) { /* ignore */ }
-  // keep only the last 7 receive dates of lots (offline use)
-  const days = Object.keys(S.lots || {}).sort().slice(-7);
-  const lots = {}; days.forEach((d) => (lots[d] = S.lots[d]));
-  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, lots: lots, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
+  // staff is NOT kept: every time the app is opened it asks for the ID again (Sal, 5 Nov). Drafts and unsent trucks stay.
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn, known: S.known };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
-
 const t = () => L[S.lang] || L.th;
 const fmt = (s, o) => String(s).replace(/\{(\w+)\}/g, (_, k) => o[k]);
 const esc = (s) => String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const P2 = (n) => String(n).padStart(2, '0');
 const nowHM = () => { const d = new Date(); return P2(d.getHours()) + ':' + P2(d.getMinutes()); };
-const dayStr = (d) => d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate());
-const todayStr = () => dayStr(new Date());
-const addDays = (s, n) => { const p = s.split('-').map(Number); return dayStr(new Date(p[0], p[1] - 1, p[2] + n)); };
-const daysBetween = (a, b) => { const p = a.split('-').map(Number), q = b.split('-').map(Number); return Math.round((new Date(q[0], q[1] - 1, q[2]) - new Date(p[0], p[1] - 1, p[2])) / 86400000); };
-const ddmm = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '');
-const numFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
-const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
-const EMPTY_PC = { trims: [{ code: 'G', name: 'ควักไส้ / Gutted', maxLoss: null }, { code: 'H/L', name: 'ตัดหัว / Headless', maxLoss: null }], settings: { TEMP_MAX: 2, HOLD_WARN: 2 }, cancelDepts: ['general manager'] };
-const pcCfg = () => (S.cfg && S.cfg.pc) || (DEMO ? DEMO_CFG.pc : EMPTY_PC);
-const rmFish = () => ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.rm.fish : [])).map((f) => f.name);
-const rmProcs = () => (S.cfg && S.cfg.rm && S.cfg.rm.procs) || ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'];
-const tempMax = () => Number(pcCfg().settings && pcCfg().settings.TEMP_MAX) || 2;
-const holdWarn = () => Number(pcCfg().settings && pcCfg().settings.HOLD_WARN) || 2;
+const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate()); };
+const kgFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
+const settings = () => Object.assign({ TEMP_MAX: 2 }, (S.cfg && S.cfg.rm && S.cfg.rm.settings) || {});
+const EMPTY_RM = { suppliers: [], fish: [], procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: [], thermos: [], usual: {}, settings: {} };
+const rmCfg = () => (S.cfg && S.cfg.rm) || (DEMO ? DEMO_CFG.rm : EMPTY_RM);
 const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
 
 /* ---------------- rules (same as the server) ---------------- */
+/* three kinds of goods: FISH (AQL in fish) · SHRIMP (5 % of weight, 5 points × 3 temps) · PRODUCE (chilli / herbs, reject %) */
+const KINDS = ['FISH', 'SHRIMP', 'PRODUCE'];
+function kindOfName(name) {
+  const f = rmCfg().fish.find((x) => x.name === name);
+  if (f && KINDS.indexOf(f.type) >= 0) return f.type;
+  if (f && f.chilli) return 'PRODUCE';
+  const n = String(name || '').toUpperCase();
+  return /SHRIMP|PRAWN/.test(n) ? 'SHRIMP' : /CHILLI|CHILI/.test(n) ? 'PRODUCE' : 'FISH';
+}
+const kindOf = (l) => (KINDS.indexOf(l.type) >= 0 ? l.type : l.chilli ? 'PRODUCE' : 'FISH');
+const shrimpCfg = () => Object.assign({ points: 5, repeats: 3, samplePct: 5 }, rmCfg().shrimp || {});
+const produceCfg = () => Object.assign({ rejectMax: 5 }, rmCfg().produce || {});
+/** drafts saved by an older version: give every line the fields of all three kinds */
+function upgradeLine(l) {
+  if (['FISH', 'SHRIMP', 'PRODUCE'].indexOf(l.type) < 0) l.type = l.chilli ? 'PRODUCE' : 'FISH';   // runs from load(), before KINDS exists
+  ['smin', 'smax', 'sulfite', 'sk', 'rk', 'wFrom', 'wTo'].forEach((k) => { if (l[k] === undefined) l[k] = ''; });
+  if (!Array.isArray(l.sc)) l.sc = [1, 1, 1, 1, 1, 1, 1, 1];
+  if (!Array.isArray(l.pc)) l.pc = [1, 1, 1, 1];
+  return l;
+}
+const sizeName = (l) => {
+  const k = kindOf(l);
+  if (k === 'SHRIMP') return Number(l.smin) > 0 && Number(l.smax) > 0 ? Number(l.smin) + '-' + Number(l.smax) : '';
+  const n = Number(l.size);
+  if (k !== 'FISH' || !(n > 0)) return '';
+  return n >= 1000 && n % 100 === 0 ? (n / 1000) + 'KG' : n + 'G';
+};
+const savedName = (l) => (l.fish || '?') + '/' + (l.proc || '?') + (sizeName(l) ? ' ' + sizeName(l) : '');
+/** weight ranges to choose from at inspection = the AQL rows, up to the biggest truck (Settings RM_TRUCK_MAX_KG, 4,500 kg) */
+function weightRanges() {
+  const t = (rmCfg().aql && rmCfg().aql.length ? rmCfg().aql : AQL_DEFAULT);
+  const max = Number((rmCfg().settings || {}).TRUCK_MAX) || 4500;
+  return t.filter((r) => r[0] <= max).map((r) => ({ from: r[0], to: Math.min(r[1], max), pcs: Math.min(N_T, r[2]), ac: r[3], re: r[4] }));
+}
+const hasRange = (l) => Number(l.wTo) > 0 || Number(l.w) > 0;
+const rangeText = (l) => (Number(l.wTo) > 0 ? kgFmt(l.wFrom) + '–' + kgFmt(l.wTo) + ' kg' : Number(l.w) > 0 ? kgFmt(l.w) + ' kg' : '—');
+/** the weight that sets the sample size: top of the range (older drafts: the weight typed) */
+const planKg = (l) => (Number(l.wTo) > 0 ? Number(l.wTo) : Number(l.w));
+function lineReady(l) {
+  if (!(l.fish && l.fish.length <= 40 && l.proc && hasRange(l))) return false;
+  const k = kindOf(l);
+  if (k === 'FISH') return !!(Number(l.size) > 0 && l.md && l.gl && l.ice);
+  if (k === 'SHRIMP') return !!(Number(l.smin) > 0 && Number(l.smax) >= Number(l.smin) && l.md && l.sulfite && l.ice);
+  return true;
+}
+const MAX_LINES = 20;
+/** everything the server will check, so a saved truck is never refused later */
+const canSave = (d) => d.lines.length > 0 && d.lines.length <= MAX_LINES &&
+  d.lines.every((l) => { const e = evalLine(l); return lineReady(l) && e.done && (!e.needFix || l.fix); });
+/** AQL special inspection S-3 (file การสุ่มตัวอย่าง AQL), counted in fish: weight received → { pcs, ac, re } */
+function planOf(w) {
+  const t = (rmCfg().aql && rmCfg().aql.length ? rmCfg().aql : AQL_DEFAULT);
+  const kg = Number(w) || 0;
+  for (let i = 0; i < t.length; i++) if (kg <= t[i][1]) return { pcs: Math.min(N_T, t[i][2]), ac: t[i][3], re: t[i][4] };
+  const last = t[t.length - 1];
+  return { pcs: Math.min(N_T, last[2]), ac: last[3], re: last[4] };
+}
+/** how many temperature readings this line needs */
+const pcsOf = (l) => { const k = kindOf(l); if (k === 'SHRIMP') { const c = shrimpCfg(); return Math.min(N_T, c.points * c.repeats); } return k === 'PRODUCE' ? 0 : planOf(planKg(l)).pcs; };
+/* defective fish per item, only among the sampled fish */
+const counts = (l) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => l.fishes.slice(0, pcsOf(l)).reduce((a, f) => a + (f.d[k] ? 1 : 0), 0));
+/** chilli / herbs: which of size · shape · freshness · colour this item is checked on (blank criteria = not checked; all blank = all four) */
+function specOf(l) {
+  const sp = ((rmCfg().spec || {})[String(l.fish || '').toUpperCase()]) || ['', '', '', ''];
+  const any = sp.some(String);
+  return sp.map((x) => ({ text: x, on: !any || !!x }));
+}
+/** shrimp sample: 5 % of the weight; before weighing, 5 % of the range */
+const shrimpKgText = (l) => {
+  const p = shrimpCfg().samplePct;
+  if (Number(l.wTo) > 0) return '≈ ' + kgFmt(Math.round(Number(l.wFrom) * p) / 100) + '–' + kgFmt(Math.round(Number(l.wTo) * p) / 100) + ' kg';
+  return Number(l.w) > 0 ? kgFmt(Math.round(Number(l.w) * p) / 100) + ' kg' : '—';
+};
+function evalLine(l) {
+  const st = settings();
+  const k = kindOf(l);
+  const need = pcsOf(l);
+  const temps = l.fishes.slice(0, need).map((f) => f.t).filter((v) => v !== '' && v !== '-' && !isNaN(Number(v))).map(Number);
+  const max = temps.length ? Math.max.apply(null, temps) : null;
+  const warm = max !== null && max > st.TEMP_MAX;
+  const rc = l.recheck === '' || l.recheck === undefined || isNaN(Number(l.recheck)) ? null : Number(l.recheck);
+  const tempFail = warm && !(rc !== null && rc <= st.TEMP_MAX);
+  let c = [0, 0, 0, 0, 0, 0, 0, 0], plan = null, bad = false, pct = null, done = temps.length >= need;
+  const why = [];
+  if (k === 'FISH') {
+    c = counts(l); plan = planOf(planKg(l));
+    bad = c.some((n, i) => (i >= 6 ? n >= 1 : n >= plan.re));
+    if (bad) why.push('phys');
+  }
+  if (k === 'SHRIMP') {
+    if ((l.sc || []).some((x) => x === 0)) { bad = true; why.push('phys'); }
+    if (l.sulfite === '2') { bad = true; why.push('sulfite'); }
+  }
+  if (k === 'PRODUCE') {
+    const sk = Number(l.sk), has = l.rk !== '' && l.rk !== undefined;
+    if (sk > 0 && has) pct = Math.round((Number(l.rk) / sk) * 1000) / 10;
+    done = sk > 0 && has && Number(l.rk) <= sk;
+    if (pct !== null && pct > produceCfg().rejectMax) { bad = true; why.push('reject'); }
+    if (specOf(l).some((x, i) => x.on && (l.pc || [])[i] === 0)) { bad = true; why.push('spec'); }
+  }
+  const status = bad || tempFail ? 'fail' : warm ? 'fixed' : 'pass';
+  return { kind: k, c, plan, physFail: bad, why, pct, max, warm, n: temps.length, need, done, status, needFix: bad || warm };
+}
+function blankLine(fish, proc, size) {
+  const k = fish ? kindOfName(fish) : 'FISH';
+  const list = k === 'PRODUCE' ? rmCfg().chilliProcs : rmCfg().procs;
+  const p = list.indexOf(proc) >= 0 ? proc : list.indexOf('WR') >= 0 ? 'WR' : list[0];
+  const custom = !!fish && !rmCfg().fish.some((x) => x.name === fish);
+  const m = String(size || '').match(/^(\d+)\s*-\s*(\d+)$/);
+  return upgradeLine({ type: k, fish: fish || '', custom: custom, proc: p, size: k === 'FISH' && Number(size) > 0 ? String(Number(size)) : '',
+    smin: k === 'SHRIMP' && m ? m[1] : '', smax: k === 'SHRIMP' && m ? m[2] : '', w: '', md: '', gl: '', ice: '', sulfite: '',
+    open: true, fishes: Array.from({ length: N_T }, () => ({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] })), extra: [0, 0, 0, 0, 0, 0, 0, 0], fi: 0, fix: '', recheck: '', time: '' });
+}
+/** choose an item from the list: switches the line to that kind of goods */
+function setItem(l, name) {
+  const k = kindOfName(name);
+  l.fish = name; l.type = k; l.custom = false; l.chilli = false;
+  upgradeLine(l);
+  const pl = k === 'PRODUCE' ? rmCfg().chilliProcs : rmCfg().procs;
+  if (pl.indexOf(l.proc) < 0) l.proc = pl.indexOf('WR') >= 0 ? 'WR' : pl[0];
+  if (k !== 'FISH') l.size = '';
+  if (k !== 'SHRIMP') { l.smin = ''; l.smax = ''; }
+  l.fi = Math.min(l.fi || 0, pcsOf(l));
+}
+/** the number pad that should open on the inspect page */
+function inspectPad(l) {
+  if (!l) return null;
+  if (kindOf(l) === 'PRODUCE') return !(Number(l.sk) > 0) ? { kind: 'sk', line: S.d.cur } : l.rk === '' ? { kind: 'rk', line: S.d.cur } : null;
+  return l.fi < pcsOf(l) ? { kind: 't' } : null;
+}
 function newId() {
   const d = new Date();
-  const r = Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, 'X');
-  return 'PC-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
-}
-function blankCheck(rmDate) {
-  return { id: newId(), date: todayStr(), rmDate: rmDate || todayStr(), lot: '', rmId: '', rmLine: '', sup: '', fish: '', proc: 'WR', size: '', rmStatus: '', manual: false,
-    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', after: '', remark: '', stage: 'lot' };
-}
-const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
-const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
-function evalCheck(c) {
-  const vals = c.temps.map((v) => (v === '' || v === '-' || isNaN(Number(v)) ? null : Number(v)));
-  const got = vals.filter((v) => v !== null);
-  const max = got.length ? Math.max.apply(null, got) : null;
-  const warm = max !== null && max > tempMax();
-  const rc = c.recheck === '' || isNaN(Number(c.recheck)) ? null : Number(c.recheck);
-  const tFail = warm && !(rc !== null && rc <= tempMax());
-  const b = Number(c.before), a = Number(c.after);
-  const loss = b > 0 && a > 0 && a <= b ? Math.round(((b - a) / b) * 10000) / 100 : null;
-  const tr = pcCfg().trims.find((x) => x.code === c.trim);
-  const lim = tr && tr.maxLoss !== null && tr.maxLoss !== undefined && tr.maxLoss !== '' ? Number(tr.maxLoss) : null;
-  const why = [];
-  if (!c.lot || !c.fish) why.push('lot');
-  if (!c.trim) why.push(t().needTrim);
-  if (vals[0] === null) why.push(t().needT1);
-  if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > b) why.push(t().afterBig);
-  if (warm && !c.fix) why.push(t().needFix);
-  return { vals, max, warm, tFail, loss, lim, high: lim !== null && loss !== null && loss > lim, held: heldOf(c), ok: !why.length, why,
-    status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let r = '';
+  const rnd = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(6)) : Array.from({ length: 6 }, () => Math.floor(Math.random() * 256));
+  for (let i = 0; i < 6; i++) r += abc[rnd[i] % abc.length];
+  return 'RM-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
 }
 
 /* ---------------- talking to Apps Script ---------------- */
@@ -526,47 +634,49 @@ function api(action, params, timeoutMs) {
     signal: ctl ? ctl.signal : undefined
   }).then((r) => {
     if (!r.ok) throw netErr('HTTP ' + r.status);
-    return r.json().catch(() => { throw netErr('bad response'); });
+    return r.json().catch(() => { throw netErr('bad response'); });   // Google error page instead of JSON → try again later
   }, (e) => { throw netErr(e && e.name === 'AbortError' ? 'timeout' : (e && e.message) || 'network'); })
     .then((j) => { if (!j || j.ok === false) { const e = new Error((j && j.error) || 'error'); e.code = j && j.code; throw e; } return j; })
     .finally(() => timer && clearTimeout(timer));
 }
 function netErr(m) { const e = new Error(m); e.net = true; return e; }
 
-/* demo mode (no Web app URL yet): try everything, nothing is sent */
-const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปราการ' },
-  rm: { fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'KORAL'].map((n) => ({ name: n, type: 'FISH' })), procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'] },
-  pc: { trims: [{ code: 'G', name: 'ควักไส้ / Gutted', maxLoss: null }, { code: 'H/L', name: 'ตัดหัว / Headless', maxLoss: 15 }, { code: 'TRIM', name: 'ตัดแต่งทั่วไป', maxLoss: null }],
-    settings: { TEMP_MAX: 2, HOLD_WARN: 2 }, cancelDepts: ['general manager'] } };
+/* demo backend: lets anyone try the screens before the Web app URL is pasted (nothing leaves the phone) */
+const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปราการ' }, rm: {
+  suppliers: [{ code: '01', name: 'ตัวอย่าง ผู้ขาย A', avl: '1' }, { code: '02', name: 'ตัวอย่าง ผู้ขาย B', avl: '' }],
+  fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'PUTI', 'MRIGAL', 'CARFU', 'PABDA', 'TANGRA', 'KHOLSHA', 'MAGUR', 'CHITAL', 'KORAL', 'GULSHA', 'E-MOLA', 'KESKI', 'DIMA ESSA']
+    .map((n) => ({ name: n, type: 'FISH' })).concat([{ name: 'SHRIMP', type: 'SHRIMP' }])
+    .concat(['GREEN CHILLI', 'RED CHILLI', 'KAFFIR LIME LEAF', 'GALANGAL', 'LEMONGRASS', 'ARECA NUT', 'TAMARIND', 'GARLIC'].map((n) => ({ name: n, type: 'PRODUCE' }))),
+  spec: { 'GREEN CHILLI': ['ความยาว 4 cm ขึ้นไป เม็ดอวบ ไม่เรียวเล็ก', 'ฝักตรงยาวหรืองอเล็กน้อย ผิวเรียบ กลิ่นปกติ ไม่คดงอ', 'สีเขียวสดเต็มเม็ด ไม่เหี่ยวหรือเน่า ขั้วพริกไม่คล้ำ ไม่มีหนอนเจาะ ไม่มีลักษณะช้ำ', 'สีเขียวเข้ม สีไม่อ่อน (พริกอ่อน)'],
+    'RED CHILLI': ['ความยาว 4 cm ขึ้นไป เม็ดอวบ ไม่เรียวเล็ก', 'ฝักตรงยาวหรืองอเล็กน้อย ผิวเรียบ กลิ่นปกติ ไม่คดงอ', 'สีแดงสดเต็มเม็ด ไม่เหี่ยวหรือเน่า ขั้วพริกไม่คล้ำ ไม่มีหนอนเจาะ ไม่มีลักษณะช้ำ', 'สีแดงเข้ม สม่ำเสมอทั้งเม็ด (สีส้มอ่อนคัดแยกไปคละตอนแพ็ค)'],
+    'GALANGAL': ['', 'เหง้าสมบูรณ์ ไม่ผิดรูปทรงจนใช้งานไม่ได้ ไม่มีรอยโรคพืชหรือรอยแมลงเจาะ', 'แน่น แข็ง ไม่นิ่มเหลว ไม่เหี่ยวแห้งหรือฝ่อซูบ', ''] },
+  shrimp: { points: 5, repeats: 3, samplePct: 5 }, produce: { rejectMax: 5 },
+  procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: ['SC-01', 'SC-02'], thermos: ['TM-01', 'TM-02'],
+  usual: { 'ตัวอย่าง ผู้ขาย A / 01': [['TILAPIA', 'WR', '800'], ['TILAPIA', 'WR', '600']] }, settings: { TEMP_MAX: 2 }, aql: AQL_DEFAULT } };
 function demoApi(action, p) {
   return new Promise((res) => setTimeout(() => {
-    let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.pc.demo') || '{}'); } catch (e) { mem = {}; }
+    let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.demo') || '{}'); } catch (e) { mem = {}; }
     mem.recs = mem.recs || [];
     if (action === 'validateStaff') return res(/^\d{7}$/.test(p.staffId) ? { ok: true, valid: true, name: 'ผู้ทดลอง', department: 'QC' } : { ok: true, valid: false });
     if (action === 'getConfig') return res(DEMO_CFG);
-    if (action === 'pcLots') {
-      const back = daysBetween(p.date, todayStr());
-      return res({ ok: true, date: p.date, lots: back > 3 ? [] : [
-        { id: 'RM-DEMO-' + p.date + '-1', lot: '1', sup: 'ตัวอย่าง ผู้ขาย A / 01', start: '07:10', lines: [
-          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน' },
-          { n: 2, name: 'ROHU/WR 800G', fish: 'ROHU', proc: 'WR', size: '800G', kind: 'FISH', wr: '51–150', w: 120, status: 'ผ่าน' }] },
-        { id: 'RM-DEMO-' + p.date + '-2', lot: '2', sup: 'ตัวอย่าง ผู้ขาย B / 02', start: '08:30', lines: [
-          { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
+    if (action === 'rmSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'rmVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
+    if (action === 'rmWeight') mem.recs.forEach((r) => { if (r.id === p.id) p.weights.forEach((x) => { if (r.lines[x.n - 1]) r.lines[x.n - 1].w = x.w; }); });
+    try { localStorage.setItem('ckqc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
+    if (action === 'rmToday') {
+      const day = mem.recs.filter((r) => r.date === (p.date || todayStr()));
+      const trucks = day.map((r) => ({ id: r.id, start: r.start, lot: r.lot, sup: r.supName + ' / ' + r.supCode, staffId: r.staffId, staffName: 'ผู้ทดลอง', void: !!r.void, voidReason: r.voidReason || '',
+        lines: r.lines.map((l, i) => ({ n: i + 1, name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', k: l.type || 'FISH', status: l._status })) })).reverse();
+      const live = trucks.filter((x) => !x.void);
+      let kg = 0, failed = 0, waitKg = 0;
+      live.forEach((x) => { x.lines.forEach((l) => { kg += l.w; if (l.status === 'ไม่ผ่าน') failed++; }); x.waitKg = x.lines.filter((l) => !l.w).length; if (x.waitKg) waitKg++; });
+      return res({ ok: true, trucks: trucks, totals: { trucks: live.length, kg: Math.round(kg), failed: failed, waitKg: waitKg } });
     }
-    if (action === 'pcSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
-    if (action === 'pcVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
-    try { localStorage.setItem('ckqc.pc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
-    if (action === 'pcToday') {
-      const checks = mem.recs.filter((r) => r.date === (p.date || todayStr())).map((r) => ({ id: r.id, time: r.time, item: r.item, size: r.size, lot: r.lot, rmDate: ddmm(r.rmDate),
-        held: Math.max(0, daysBetween(r.rmDate, r.date)), rmStatus: r._rm || '', trim: r.trim, loss: r._loss, lossCheck: '', status: r._status, staffName: 'ผู้ทดลอง', void: !!r.void, voidReason: r.voidReason || '' })).reverse();
-      const live = checks.filter((c) => !c.void);
-      return res({ ok: true, checks: checks, totals: { checks: live.length, held: live.filter((c) => c.held > 0).length, failed: live.filter((c) => c.status === 'ไม่ผ่าน').length } });
-    }
-    res({ ok: true, id: p.record && p.record.id, report: 'ok' });
-  }, 300));
+    res({ ok: true, id: p.record && p.record.id });
+  }, 350));
 }
 
-/* ---------------- sending saved checks (outbox) ---------------- */
+/* ---------------- sending saved trucks (outbox) ---------------- */
 let flushing = false, retryTimer = null;
 function flush() {
   if (flushing || !S.outbox.length) return Promise.resolve();
@@ -575,13 +685,15 @@ function flush() {
     const item = S.outbox.find((o) => !o.hold);
     if (!item) return Promise.resolve();
     item.record.sentLate = Date.now() - item.savedAt > 10 * 60 * 1000;
-    return api('pcSave', { staffId: item.staffId, record: item.record }, 45000).then((j) => {
+    return api('rmSave', { staffId: item.staffId, record: item.record }, 45000).then((j) => {
+      // the record is safe; but say so loudly if the daily report file could not be updated
       if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: item.record.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
       else if (j && j.report === 'ok') S.reportWarn = null;
+      if (S.last && S.last.id === item.record.id) S.last.report = j && j.report;
       S.outbox = S.outbox.filter((o) => o !== item);
       sentIds[item.record.id] = true;
       S.online = true;
-      if (S.last && S.last.id === item.record.id) { S.last.sent = true; S.last.report = j && j.report; }
+      if (S.last && S.last.id === item.record.id) S.last.sent = true;
       persist(); render();
       return next();
     }, (e) => {
@@ -589,7 +701,7 @@ function flush() {
       throw e;
     });
   };
-  return next().then(() => { flushing = false; refreshToday(true); }, (e) => {
+  return next().then(() => { flushing = false; refreshToday(true); refreshConfig(); }, (e) => {
     flushing = false; if (e && e.net) S.online = false; render();
     clearTimeout(retryTimer); retryTimer = setTimeout(flush, 20000);
   });
@@ -598,47 +710,51 @@ let todayAt = 0;
 function refreshToday(force) {
   if (!S.staff || (!force && Date.now() - todayAt < 30000)) return;
   todayAt = Date.now();
-  api('pcToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
-    S.today = { date: todayStr(), checks: j.checks, totals: j.totals }; S.online = true; persist(); render();
+  api('rmToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.today = { date: todayStr(), trucks: j.trucks, totals: j.totals }; S.online = true; persist(); render();
   }, (e) => { if (e.net) { S.online = false; render(); } });
 }
 let cfgAt = 0;
 function refreshConfig(force) {
   if (!S.staff || (!force && Date.now() - cfgAt < 5000)) return;
   cfgAt = Date.now();
-  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.online = true; persist(); render(); },
-    (e) => { if (e.code === 'STAFF') { signOut(); toast(t().badId); return; } if (e.net) S.online = false; render(); });
-}
-function loadLots(date, force) {
-  if (!S.staff || !date) return;
-  const have = S.lots[date];
-  if (have && !force && Date.now() - have.at < 60000) return;
-  S.lotsBusy = true; render();
-  api('pcLots', { staffId: S.staff.id, date: date }).then((j) => {
-    S.lots[date] = { lots: j.lots, at: Date.now() }; S.lotsBusy = false; S.online = true; persist(); render();
-  }, (e) => { S.lotsBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
+  S.cfgErr = '';
+  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.cfgErr = ''; S.online = true; persist(); render(); },
+    (e) => {
+      if (e.code === 'STAFF') { signOut(); toast(t().badId); return; }
+      if (e.net) S.online = false;
+      S.cfgErr = e.net ? t().offline : e.message;
+      render();
+    });
 }
 
 /* ---------------- screens ---------------- */
 function go(screen, extra) {
   Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
-  if (!extra || !('pad' in extra)) S.pad = null;
-  if (S.c && ['lot', 'manual', 'check'].indexOf(screen) >= 0) S.c.stage = screen;
+  if (!extra || !('pad' in extra)) S.pad = screen === 'inspect' ? inspectPad(curLine()) : null;
+  if (S.d && ['truck', 'fish', 'inspect', 'summary'].indexOf(screen) >= 0) S.d.stage = screen;   // "continue" reopens the same page
   render();
   if (screen === 'home') { refreshToday(); flush(); }
+}
+const curLine = () => S.d && S.d.lines[S.d.cur];
+
+function startTruck() {
+  S.d = { id: newId(), date: todayStr(), start: nowHM(), supCode: '', supName: '', lot: '', scale: S.scale || '', thermo: S.thermo || '', lines: [], cur: 0 };
+  go('truck');
+  refreshConfig();
 }
 
 function renderHeader() {
   const T = t();
-  const steps = { lot: 0, manual: 0, check: 1 };
-  const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
-  const backTo = { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
+  const steps = ['truck', 'fish', 'inspect', 'summary'];
+  const at = steps.indexOf(S.screen);
+  const backTo = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home', weigh: 'home' }[S.screen];
   const pend = S.outbox.length;
   const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
   let h = '<div class="hrow"><div class="htitle">' +
     (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
-    '<div><b>' + (S.screen === 'login' ? 'CK QC' : esc(T.pcShort)) + '</b><small>CK QC · PC · ' + esc(branch()) + '</small></div></div>' +
+    '<div><b>' + (at >= 0 || S.screen === 'done' ? esc(T.rm) : 'CK QC') + '</b><small>CK QC · ' + esc(branch()) + '</small></div></div>' +
     '<div class="hright"><div class="langs">' + [['th', 'ไทย'], ['en', 'EN'], ['my', 'မြန်မာ']].map((x) =>
       '<button data-act="lang" data-v="' + x[0] + '" class="' + (S.lang === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>' +
     (S.staff ? '<button class="logout" data-act="signout" aria-label="' + T.signOut + '">⎋ ' + T.signOut + '</button>' : '') + '</div></div>';
@@ -650,170 +766,361 @@ function renderHeader() {
 
 function viewLogin() {
   const T = t();
+  // the ID is hidden while typing (Sal, 5 Nov): filled boxes show ● — only the digit just typed shows for a moment
   const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + (S.sid[i] ? (i === S.sid.length - 1 && S.peek ? esc(S.sid[i]) : '●') : '') + '</i>').join('');
-  return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · PC · ' + esc(branch()) + '</div>' +
+  return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · ' + esc(branch()) + '</div>' +
     '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
     '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' +
     (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '</div>';
 }
 
-const statusPill = (s) => s === 'ไม่ผ่าน' || s === 'fail' ? '<span class="pill p-bad">✗ ' + t().fail + '</span>'
-  : s === 'ผ่านหลังแก้ไข' || s === 'fixed' ? '<span class="pill p-fix">✓ ' + t().passFix + '</span>' : '<span class="pill p-ok">✓ ' + t().pass + '</span>';
-const heldPill = (n) => (n > 0 ? '<span class="pill ' + (n >= holdWarn() ? 'p-bad' : 'p-warn') + '">🧊 ' + fmt(t().heldBadge, { n: n }) + '</span>' : '');
-
 function viewHome() {
   const T = t();
   const st = S.staff;
   const init = (st.name || '').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase() || '··';
-  const td = S.today && S.today.date === todayStr() ? S.today : { checks: [], totals: { checks: 0, held: 0, failed: 0 } };
-  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.checks.some((x) => x.id === o.record.id)).map((o) => ({
-    id: o.record.id, time: o.record.time, item: o.record.item, size: o.record.size, lot: o.record.lot, rmDate: ddmm(o.record.rmDate),
-    held: Math.max(0, daysBetween(o.record.rmDate, o.record.date)), loss: o.record._loss, status: o.record._status, pending: true, err: o.err }));
-  const rows = pendRows.concat(td.checks);
+  const td = S.today && S.today.date === todayStr() ? S.today : { trucks: [], totals: { trucks: 0, kg: 0, failed: 0 } };
+  const pendIds = {};
+  S.outbox.forEach((o) => (pendIds[o.record.id] = o));
+  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.trucks.some((x) => x.id === o.record.id)).map((o) => ({
+    id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
+    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', status: l._status })) }));
+  const rows = pendRows.concat(td.trucks);
   let h = '<div class="stg">';
   h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
-    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 12px;font-size:14px" data-act="mainmenu">‹ ' + T.mainMenu + '</button>' +
-    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 12px;font-size:14px" data-act="hardrefresh">↻</button></div>';
+    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="hardrefresh">↻ ' + T.refresh + '</button></div>';
   h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
-    '<div class="sum"><div><b>' + td.totals.checks + '</b><span>' + T.checks + '</span></div><hr><div><b style="color:' + (td.totals.held ? 'var(--amber)' : 'var(--ink)') + '">' + td.totals.held + '</b><span>' + T.heldN + '</span></div><hr>' +
-    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
+    '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
+    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div>' +
+    (td.totals.waitKg ? '<div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKgN + ' ' + td.totals.waitKg + ' ' + T.trucks + '</div>' : '') + '</div>';
   if (S.reportWarn) {
     h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
       '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
-      '<button class="linkbtn" data-act="hidewarn">' + T.hide + '</button></div></div>';
+      '<button class="linkbtn" data-act="hidewarn">' + T.reportOkNow + '</button></div></div>';
   }
   if (S.outbox.length) {
     const bad = S.outbox.find((o) => o.err);
     h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
       (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
-        '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') + '</div>' +
+        (bad.draft ? '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') : '') + '</div>' +
       '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
   }
-  if (S.c) {
-    const c = S.c;
-    h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">PC</span><span class="grow"><b style="font-size:17px">' + T.resume + (c.lot ? ' · Lot ' + esc(c.lot) : '') + '</b>' +
-      '<div class="sub">' + esc(itemOf(c) || '—') + (c.size ? ' ' + esc(c.size) : '') + (c.rmDate ? ' · ' + T.rcv + ' ' + ddmm(c.rmDate) : '') + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
+  h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.pickDept + '</span>';
+  if (S.d) {
+    h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">RM</span><span class="grow"><b style="font-size:17px">' + T.resume + ' · Lot ' + esc(S.d.lot || '—') + '</b>' +
+      '<div class="sub">' + esc(S.d.supName || '—') + ' · ' + S.d.lines.length + ' ' + T.lines + ' · ' + esc(S.d.start) + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
       '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button></div>';
   } else {
-    h += '<button class="dept main glass" data-act="start"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.start + '</b><div class="sub">' + T.startSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+    h += '<button class="dept main glass" data-act="startrm"><span class="ic">RM</span><span class="grow"><b style="font-size:18px">' + T.rm + '</b><div class="sub">' + T.rmSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   }
+  const pcOn = S.cfg && (S.cfg.modules || []).some((m) => m.key === 'PC' && m.ready);
+  if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">FM-QA-010.10 · %Loss</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  (pcOn ? ['pk', 'cs'] : ['pc', 'pk', 'cs']).forEach((k) => {
+    h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
+  });
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
-  if (!rows.length) h += '<div class="sub">' + T.none + '</div>';
+  if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
   else {
     h += '<div class="tlist glass">' + rows.map((r) => {
-      const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' : statusPill(r.status);
-      return '<button data-act="check" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.time) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>' + esc(r.item) + ' ' + esc(r.size || '') + '</b>' +
-        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + (r.loss !== null && r.loss !== undefined && r.loss !== '' ? ' · ' + numFmt(r.loss) + '%' : '') + '</div>' +
-        (r.held > 0 && !r.void ? '<div class="sub" style="color:var(--amber);font-weight:700">🧊 ' + fmt(T.heldBadge, { n: r.held }) + '</div>' : '') + '</span>' + pill + '</button>';
+      const anyFail = r.lines.some((l) => l.status === 'ไม่ผ่าน' || l.status === 'fail');
+      const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' :
+        anyFail ? '<span class="pill p-bad">✗ ' + T.fail + '</span>' : '<span class="pill p-ok">✓ ' + T.pass + '</span>';
+      const noKg = !r.void && !r.pending && r.lines.some((l) => !(l.w > 0));   // real weight not entered yet → this lot is red (Sal, 6 Nov)
+      return '<button class="' + (noKg ? 'nokg' : '') + '" data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.start) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
+        '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div>' +
+        (noKg ? '<div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKg + '</div>' : '') + '</span>' + pill + '</button>';
     }).join('') + '</div>';
   }
   return h + '</div>';
 }
+/** name of a line in a saved record (as sent to the server) */
+function savedNameOf(l) { return savedName({ type: l.type || (l.chilli ? 'PRODUCE' : 'FISH'), fish: l.fish, proc: l.proc, size: l.size, smin: l.sizeMin, smax: l.sizeMax }); }
 
-function viewLot() {
+function viewTruck() {
   const T = t();
-  const c = S.c;
-  const today = todayStr();
-  let h = '<div class="stg"><div><h2>' + T.lotT + '</h2><div class="sub">' + T.lotSub + '</div></div>';
-  const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
-  const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
-  h += '<span class="lbl">' + T.rcvDate + '</span><div class="dchips">' + chips +
-    '<label class="' + (other ? 'on' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
-  const held = heldOf(c);
-  if (held > 0) h += '<div class="note">🧊 ' + fmt(T.heldBadge, { n: held }) + (held >= holdWarn() ? ' — ' + T.heldLong : '') + '</div>';
-  const got = S.lots[c.rmDate];
-  if (S.lotsBusy && !got) h += '<div class="sub" style="text-align:center"><span class="spin"></span> ' + T.loading + '</div>';
-  else if (!got && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
-  else if (got && !got.lots.length) h += '<div class="sub" style="text-align:center">' + T.noLots + '</div>';
-  if (got && !S.online && got.lots.length) h += '<div class="sub">' + T.lotsOffline + '</div>';
-  if (got) {
-    got.lots.forEach((lot) => {
-      h += '<div class="lotc glass"><div class="lh"><span class="lotno">Lot ' + esc(lot.lot) + '</span><span class="grow sub">' + esc(String(lot.sup).split(' / ')[0]) + ' · ' + esc(lot.start) + '</span></div>' +
-        lot.lines.map((l) => {
-          const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
-          const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
-          return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
-            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + '</div></span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
-        }).join('') + '</div>';
+  const c = rmCfg();
+  const d = S.d;
+  const lotActive = S.pad && S.pad.kind === 'lot';
+  let h = '<div class="stg"><h2>' + T.truckT + '</h2>';
+  if (!c.suppliers.length) {
+    h += S.cfgErr ? '<div class="err">' + T.cfgFail + ': ' + esc(S.cfgErr) + '</div>' : !S.cfg ? '<div class="note">' + T.loadingSup + '</div>' : '<div class="note">' + T.noSup + '</div>';
+    h += '<button class="linkbtn" style="font-size:14px;align-self:flex-start" data-act="reloadcfg">↻ ' + T.reload + '</button>';
+  }
+  h += '<label style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.supplier + '</span><select class="sel' + (d.supCode || d.supName ? ' ok' : '') + '" data-on="sup">' +
+    '<option value="">' + T.pickSup + '</option>' + c.suppliers.map((s, i) => '<option value="' + i + '"' + (!d.supCustom && s.code === d.supCode && s.name === d.supName ? ' selected' : '') + '>' + esc(s.name) + (s.code ? ' · ' + esc(s.code) : '') + '</option>').join('') +
+    '<option value="__other"' + (d.supCustom ? ' selected' : '') + '>' + T.otherSup + '</option></select></label>';
+  if (d.supCustom) {
+    // supplier not in the list: name AND 2-digit code are both required (Sal, 6 Nov)
+    const cA = S.pad && S.pad.kind === 'supcode';
+    h += '<div class="grid2" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)">' +
+      '<label class="tile ' + (d.supName ? 'filled' : 'f-empty') + '" style="height:auto;min-height:72px"><span class="t-l">' + T.typeSup + '</span><input data-on="typesup" value="' + esc(d.supName) + '" maxlength="60" placeholder="' + esc(T.typeSup) + '" autocomplete="off" aria-label="' + T.typeSup + '"></label>' +
+      '<button class="tile ' + (cA ? 'f-act' : /^\d{2}$/.test(d.supCode || '') ? 'filled' : 'f-empty') + '" style="height:auto;min-height:72px" data-act="focus" data-v="supcode"><span class="t-l">' + T.supCodeL + '</span>' +
+        '<span class="t-v"><b class="' + (cA ? 'caret' : '') + '">' + esc(d.supCode || (cA ? '' : '00')) + '</b></span></button></div>' +
+      '<div class="sub" style="font-size:12px">' + (d.supName && /^\d{2}$/.test(d.supCode || '') ? T.supCustomTag : '<span style="color:var(--red);font-weight:700">' + T.needSupBoth + '</span>') + '</div>';
+  }
+  else if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
+  h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
+    '<button class="tap glass ' + (lotActive ? 'f-act' : d.lot ? 'f-ok' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="' + (lotActive ? 'caret' : '') + '">' + esc(d.lot || (lotActive ? '' : '—')) + '</span></button></div>';
+  const opt = (list, v) => '<option value="">' + T.none + '</option>' + list.map((x) => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('');
+  h += '<div class="card glass"><span class="lbl" style="color:var(--green)">✓ ' + T.auto + '</span><div class="auto"><span>' + T.time + '</span><b>' + esc(d.start) + '</b>' +
+    (c.scales.length ? '<span>' + T.scale + '</span><select data-on="scale">' + opt(c.scales, d.scale) + '</select>' : '') +
+    (c.thermos.length ? '<span>' + T.thermo + '</span><select data-on="thermo">' + opt(c.thermos, d.thermo) + '</select>' : '') + '</div></div>';
+  return h + '</div>';
+}
+
+function viewFish() {
+  const T = t();
+  const c = rmCfg();
+  let h = '<div class="stg"><div><h2>' + T.fishT + '</h2><div class="sub">' + T.fishSub + '</div></div>';
+  S.d.lines.forEach((l, i) => {
+    const k = kindOf(l);
+    const ready = lineReady(l);
+    const pop = S.popLine === i ? ' pop' : '';
+    if (!l.open) {
+      const facts = k === 'FISH' ? ' · MD ' + (l.md || '–') + ' · GL ' + (l.gl || '–') + ' · ' + T.ice + ' ' + (l.ice || '–')
+        : k === 'SHRIMP' ? ' · MD ' + (l.md || '–') + ' · ' + T.sulfite + ' ' + (l.sulfite || '–') + ' · ' + T.ice + ' ' + (l.ice || '–') : '';
+      h += '<div class="fl glass' + pop + '"><button class="fl-head" data-act="openline" data-v="' + i + '"><span class="num">' + (i + 1) + '</span><span class="grow"><b>' + esc(l.fish ? savedName(l) : T.newLine) + '</b>' +
+        '<div class="sub mono" style="font-size:12px">' + esc(rangeText(l)) + facts + '</div></span>' +
+        '<span class="pill ' + (ready ? 'p-ok' : 'p-warn') + '">' + (ready ? '✓' : T.incomplete) + '</span><span style="color:var(--ink-3)">▾</span></button></div>';
+      return;
+    }
+    const act = (kind) => S.pad && S.pad.kind === kind && S.pad.line === i;
+    const procs = k === 'PRODUCE' ? c.chilliProcs : c.procs;
+    const confirmDel = S.confirm === 'del' + i;
+    h += '<div class="fl glass' + pop + '"><div class="fl-body">' +
+      '<div class="row"><span class="num on">' + (i + 1) + '</span><span class="grow"><b id="title' + i + '" style="font-size:16px">' + esc(l.fish ? savedName(l) : T.newLine) + '</b><div class="sub" style="font-size:12px">' + (l.custom ? T.manualTag : '') + '</div></span>' +
+      '<button class="ibtn' + (confirmDel ? ' confirm' : '') + '" data-act="delline" data-v="' + i + '" aria-label="remove">' + (confirmDel ? T.remove : '✕') + '</button>' +
+      '<button class="ibtn" data-act="closeline" data-v="' + i + '" aria-label="minimise">▴</button></div>' +
+      '<div class="grid2">';
+    // item name
+    h += '<label class="tile' + (l.fish ? '' : ' f-act') + '"><span class="t-l"><span>' + T.fishName + '</span>' + (l.custom ? '<button class="linkbtn" data-act="tolist" data-v="' + i + '">' + T.fromList + '</button>' : '') + '</span>';
+    if (l.custom) h += '<input data-on="typefish" data-v="' + i + '" value="' + esc(l.fish) + '" maxlength="40" placeholder="FISH NAME" autocomplete="off" autocapitalize="characters" aria-label="' + T.fishName + '">';
+    else h += '<select data-on="fish" data-v="' + i + '"><option value="">' + T.pickOne + '</option>' + c.fish.map((f) => '<option' + (f.name === l.fish ? ' selected' : '') + '>' + esc(f.name) + '</option>').join('') +
+      '<option value="__other">' + T.typeOwn + '</option></select>';
+    h += '</label>';
+    // processing type
+    h += '<label class="tile"><span class="t-l">' + T.proc + '</span><select data-on="proc" data-v="' + i + '">' +
+      procs.map((p) => '<option value="' + esc(p) + '"' + (p === l.proc ? ' selected' : '') + '>' + esc(p === 'OTHER' ? T.other : p) + '</option>').join('') + '</select></label>';
+    // size: fish g per fish · shrimp pcs per kg (two boxes 00-00) · chilli/herbs none
+    if (k === 'SHRIMP') {
+      const box = (f) => '<button class="' + (act(f) ? 'f-act' : '') + '" data-act="focus" data-v="' + f + '" data-i="' + i + '"><span class="' + (act(f) ? 'caret' : '') + '">' + esc(l[f] || (act(f) ? '' : '00')) + '</span></button>';
+      const okSize = Number(l.smin) > 0 && Number(l.smax) >= Number(l.smin);
+      h += '<div class="tile size ' + (act('smin') || act('smax') ? 'f-act' : okSize ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.sizeS + '</span><div class="rng">' + box('smin') + '<i>–</i>' + box('smax') + '</div></div>';
+    } else {
+      const zA = act('size');
+      h += '<button class="tile size ' + (k !== 'FISH' ? 'filled' : zA ? 'f-act' : Number(l.size) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="size" data-i="' + i + '"' + (k !== 'FISH' ? ' disabled' : '') + '>' +
+        '<span class="t-l">' + T.sizeL + '</span><span class="t-v"><b class="' + (zA ? 'caret' : '') + '">' + (k !== 'FISH' ? T.noSize : esc(l.size || (zA ? '' : '—'))) + '</b>' + (k === 'FISH' ? '<span class="unit u-g">g</span>' : '') + '</span></button>';
+    }
+    // weight: only a rough range is known at the truck; the real kg is entered after RM processing (6 Nov 2026)
+    const cur = Number(l.wTo) > 0 ? l.wFrom + '-' + l.wTo : '';
+    h += '<label class="tile wt ' + (hasRange(l) ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.wRange + '</span><select data-on="wrange" data-v="' + i + '">' +
+      '<option value="">' + T.pickRange + '</option>' + weightRanges().map((r) => '<option value="' + r.from + '-' + r.to + '"' + (cur === r.from + '-' + r.to ? ' selected' : '') + '>' +
+        kgFmt(r.from) + '–' + kgFmt(r.to) + ' kg' + (k === 'FISH' ? ' · ' + r.pcs + ' ตัว' : '') + '</option>').join('') +
+      (!cur && Number(l.w) > 0 ? '<option selected value="">' + kgFmt(l.w) + ' kg</option>' : '') + '</select></label>';
+    const sam = hasRange(l);
+    const sampleTxt = k === 'FISH' ? (sam ? fmt(T.samplePcs, { n: planOf(planKg(l)).pcs, ac: planOf(planKg(l)).ac }) : '—')
+      : k === 'SHRIMP' ? (sam ? shrimpKgText(l) + ' (' + shrimpCfg().samplePct + '%)' : shrimpCfg().samplePct + '%')
+      : '≤ ' + produceCfg().rejectMax + '%';
+    h += '</div><div class="sample"><span>' + (k === 'PRODUCE' ? T.rejectPct : T.sample) + '</span><b>' + sampleTxt + '</b></div>';
+    const togs = k === 'FISH' ? [['md', T.md, T.yes, T.no, '2'], ['gl', T.gl, T.yes, T.no, '2'], ['ice', T.ice, T.little, T.lots, '1']]
+      : k === 'SHRIMP' ? [['md', T.appd, T.yes, T.no, '2'], ['sulfite', T.sulfite, T.sPass, T.sFail, '2'], ['ice', T.ice, T.little, T.lots, '1']] : [];
+    togs.forEach((g) => {
+      h += '<div class="tog"><span>' + g[1] + '</span><div class="seg">' +
+        '<button class="' + (l[g[0]] === '1' ? 'on' + (g[4] === '1' ? ' warn' : '') : '') + '" data-act="seg" data-v="' + g[0] + '" data-i="' + i + '" data-x="1">' + g[2] + '</button>' +
+        '<button class="' + (l[g[0]] === '2' ? 'on' + (g[4] === '2' ? ' warn' : '') : '') + '" data-act="seg" data-v="' + g[0] + '" data-i="' + i + '" data-x="2">' + g[3] + '</button></div></div>';
     });
-  }
-  h += '<button class="addline" data-act="manual">' + T.manual + '</button>';
-  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+    h += '</div></div>';
+  });
+  if (S.d.lines.length < MAX_LINES) h += '<button class="addline" data-act="addline">' + T.addFish + '</button>';
   return h + '</div>';
 }
+const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
 
-function viewManual() {
+function tempButton(f) {
   const T = t();
-  const c = S.c;
-  const lotA = S.pad && S.pad.kind === 'lot';
-  let h = '<div class="stg"><div><h2>' + T.manualT + '</h2><div class="sub">' + T.manualSub + '</div></div>';
-  h += '<div class="sample"><span>' + T.rcvDate + '</span><b>' + ddmm(c.rmDate) + '</b></div>';
-  h += '<div class="grid2">' +
-    '<button class="tile ' + (lotA ? 'f-act' : c.lot ? 'filled' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="t-l">' + T.lotL + '</span><span class="t-v"><b class="' + (lotA ? 'caret' : '') + '">' + esc(c.lot || (lotA ? '' : '—')) + '</b></span></button>' +
-    '<label class="tile ' + (c.fish ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.item + '</span><select data-on="mfish"><option value="">' + T.pickOne + '</option>' +
-      rmFish().map((n) => '<option' + (n === c.fish ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></label>' +
-    '<label class="tile filled"><span class="t-l">' + T.proc + '</span><select data-on="mproc">' + rmProcs().map((p) => '<option' + (p === c.proc ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
-    '<label class="tile ' + (c.size ? 'filled' : '') + '"><span class="t-l">' + T.size + '</span><input data-on="msize" value="' + esc(c.size) + '" maxlength="12" autocomplete="off" autocapitalize="characters" aria-label="' + T.size + '"></label>' +
-    '</div>';
-  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.sup + '</span><input data-on="msup" value="' + esc(c.sup) + '" maxlength="60" autocomplete="off" style="text-transform:none;font:600 17px inherit" aria-label="' + T.sup + '"></label>';
-  return h + '</div>';
+  const st = settings();
+  const val = S.buf || f.t;
+  const n = f.t === '' ? null : Number(f.t);
+  return '<button class="temp ' + (n === null ? '' : n > st.TEMP_MAX ? 'bad' : 'ok') + '" data-act="wide" aria-label="' + T.wideHint + '"><span class="' + (S.buf || f.t === '' ? 'caret' : '') + '">' + esc(val === '' ? '' : val) + '</span>' + (val === '' ? '—' : '') + ' °C' +
+    '<small style="display:block;font:600 10px var(--mono);color:' + (S.wide ? 'var(--red)' : 'var(--ink-3)') + '">' + (S.wide ? T.wideOn : T.wideHint) + '</small></button>';
 }
-
-function viewCheck() {
-  const T = t();
-  const c = S.c;
-  const e = evalCheck(c);
-  const act = (k, i) => S.pad && S.pad.kind === k && (i === undefined || S.pad.i === i);
-  let h = '<div class="stg">';
-  // the lot this check belongs to
-  h += '<div class="card glass"><div class="row"><span class="ic2">PC</span><div class="grow"><b style="font-size:18px">' + esc(itemOf(c)) + ' ' + esc(c.size) + '</b>' +
-    '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div></div>' +
-    '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
-    (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
-  // trim type
-  h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.map((x) =>
-    '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '">' + esc(x.code) + (x.name ? ' <small style="font-weight:500;opacity:.75">' + esc(String(x.name).split(' / ')[0]) + '</small>' : '') + '</button>').join('') + '</div>';
-  // temperatures: no. 1 required, 2 and 3 optional
-  h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
-    const a = act('pt', i);
-    const v = a && S.buf ? S.buf : c.temps[i];
-    const n = c.temps[i] === '' ? null : Number(c.temps[i]);
-    return '<button class="tt ' + (a ? 'f-act' : n === null ? (i === 0 ? 'f-empty' : '') : n > tempMax() ? 'bad' : 'ok') + '" data-act="focus" data-v="pt" data-i="' + i + '">' +
-      '<small>' + (i + 1) + ' · ' + (i === 0 ? T.tReq : T.tOpt) + '</small><b class="' + (a ? 'caret' : '') + '">' + esc(v === '' ? (a ? '' : '—') : v) + '</b><small>°C</small></button>';
+function stripOf(l, need, label, group) {
+  const st = settings();
+  return '<div class="strip">' + l.fishes.slice(0, need).map((f, k) => {
+    const n = f.t === '' ? null : Number(f.t);
+    const bad = f.d.some((x) => x);
+    const cls = (k === l.fi ? 'here' : n !== null && n > st.TEMP_MAX ? 'tbad' : bad ? 'dfx' : n !== null ? 'tok' : '') + (group && k && k % group === 0 ? ' g0' : '');
+    return '<button class="' + cls + '" data-act="pickfish" data-v="' + k + '"><small>' + label(k) + '</small><span>' + esc(f.t || (k === l.fi ? '▏' : '·')) + (bad ? '•' : '') + '</span></button>';
   }).join('') + '</div>';
-  if (S.pad && S.pad.kind === 'pt') h += '<button class="linkbtn" style="align-self:flex-end;font-size:13px;color:' + (S.wide ? 'var(--red)' : 'var(--accent)') + '" data-act="wide">' + (S.wide ? T.wideOn : T.wideHint) + '</button>';
-  if (e.warm) {
-    h += '<div class="card glass" style="border:2px solid var(--red)"><b style="color:var(--red)">' + fmt(T.tooWarm, { t: tempMax() }) + ' (' + e.max.toFixed(1) + ')</b>' +
-      '<span class="lbl" style="color:var(--ink)">' + T.fixL + '</span><div class="fixes">' + T.fixes.map((f, q) =>
-        '<button class="' + (c.fix === FIX_TH[q] ? 'on' : '') + '" data-act="fix" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>';
-    const ra = act('prt');
-    const rv = ra ? S.buf || c.recheck : c.recheck;
-    const rn = rv === '' || rv === '-' ? null : Number(rv);
-    h += '<button class="rc glass ' + (ra ? 'f-act' : '') + '" data-act="focus" data-v="prt"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
-      '<b class="' + (ra ? 'caret' : '') + '" style="color:' + (rn === null ? 'var(--ink)' : rn > tempMax() ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (ra ? '' : '—')) + ' °C</b></button></div>';
+}
+function viewInspect() {
+  const T = t();
+  const d = S.d;
+  const l = curLine();
+  const ev = evalLine(l);
+  let h = '';
+  if (d.lines.length > 1) {
+    h += '<div class="tabs">' + d.lines.map((x, i) => '<button class="glass' + (i === d.cur ? ' on' : '') + '" data-act="tab" data-v="' + i + '">' + (i + 1) + '. ' + esc(savedName(x)) + (evalLine(x).status === 'fail' ? ' ⚠' : '') + '</button>').join('') + '</div>';
+  } else h += '<div class="lbl">' + esc(savedName(l)) + '</div>';
+  if (ev.kind === 'SHRIMP') h += inspectShrimp(l, ev);
+  else if (ev.kind === 'PRODUCE') h += inspectProduce(l, ev);
+  else h += inspectFish(l, ev);
+  return '<div class="stg">' + h + '</div>';
+}
+function inspectFish(l, ev) {
+  const T = t();
+  let h = '';
+  const pcs = ev.need;
+  const strip = stripOf(l, pcs, (k) => k + 1);
+  const found = ev.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
+  const lsum = '<div class="lsum ' + (ev.physFail ? 'ls-bad' : found.length ? 'ls-warn' : 'ls-ok') + '">' +
+    (ev.physFail ? '✗ ' + T.physBad + ' · ' + esc(found.join(', ')) : found.length ? T.found + ': ' + esc(found.join(', ')) + ' (' + T.pass + ')' : T.allOk) + '</div>';
+  h += '<div class="sample"><span>' + fmt(T.planLine, { kg: rangeText(l).replace(' kg', ''), n: pcs }) + '</span><b>' + ev.n + ' / ' + pcs + '</b></div>';
+  if (l.fi < pcs) {
+    const f = l.fishes[l.fi];
+    h += '<div class="card glass"><div class="row"><span class="grow"><b style="font-size:18px">' + T.fishNo + ' ' + (l.fi + 1) + ' / ' + pcs + '</b><div class="sub" style="font-size:12px">' + T.flowHint + '</div></span>' + tempButton(f) + '</div>';
+    h += '<span class="lbl">' + T.anyProblem + '</span><div class="chips">' + T.defects.map((lab, k) =>
+      '<button class="' + (f.d[k] ? 'on' : k >= 6 ? 'zero' : '') + '" data-act="defect" data-v="' + k + '">' + (f.d[k] ? '✗ ' : '') + esc(lab) + '</button>').join('') + '</div>';
+    h += '</div>' + strip + lsum;
+  } else {
+    // every sampled fish done: result per item (tap a fish in the strip to change it)
+    h += '<div><b style="font-size:18px">✓ ' + fmt(T.allDone, { n: pcs }) + '</b><div class="sub" style="font-size:12px">' + T.tapToEdit + '</div></div>';
+    h += '<div class="rest-list glass">' + T.checks.map((lab, k) => {
+      const n = ev.c[k];
+      const fail = k >= 6 ? n >= 1 : n >= ev.plan.re;
+      return '<div class="rrow ' + (fail ? 'fail' : n ? 'found' : '') + '"><span class="rl"><span style="font-size:15px;font-weight:500">' + esc(lab) + '</span><small>' +
+        (k >= 6 ? T.rule0 : fmt(T.ruleAql, { ac: ev.plan.ac, re: ev.plan.re })) + '</small></span><span class="rn">' + n + '</span></div>';
+    }).join('') + '</div>';
+    h += strip + lsum;
   }
-  // weights → %Loss
-  const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
-    '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
-  h += '<div class="grid2">' + wt('gb', T.before) + wt('ga', T.after) + '</div>';
-  const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > Number(c.before);
-  h += '<div class="lossbox ' + (over || e.high ? 'hi' : e.loss !== null ? 'ok' : '') + '"><span>' + T.loss + '</span><b>' + (e.loss === null ? '—' : e.loss.toFixed(2) + '%') + '</b>' +
-    '<small>' + (over ? T.afterBig : e.lim !== null ? (e.high ? '⚠ ' + fmt(T.lossHigh, { max: e.lim }) : fmt(T.lossLim, { max: e.lim })) : '') + '</small></div>';
-  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
+  if (ev.n < pcs) h += '<div class="sub" style="text-align:center">' + fmt(T.needTemps, { n: pcs }) + '</div>';
+  return h;
+}
+/** shrimp: 5 points in the truck (1 2 top corners · 3 4 bottom corners · 5 middle, as on FM-QA-010.2) × 3 readings, then the 8 checks */
+function inspectShrimp(l, ev) {
+  const T = t();
+  const st = settings();
+  const sc = shrimpCfg();
+  const R = sc.repeats;
+  const need = ev.need;
+  let h = '<div class="sample"><span>' + fmt(T.sample5, { pct: sc.samplePct, kg: shrimpKgText(l).replace(' kg', '') }) + '</span><b>' + ev.n + ' / ' + need + '</b></div>';
+  const truck = '<div class="truck" aria-hidden="true">' + Array.from({ length: sc.points }, (_, i) => {
+    const vals = l.fishes.slice(i * R, i * R + R).map((f) => f.t).filter((v) => v !== '' && v !== '-');
+    const cls = Math.floor(l.fi / R) === i && l.fi < need ? 'pt-now' : vals.some((v) => Number(v) > st.TEMP_MAX) ? 'pt-bad' : vals.length === R ? 'pt-ok' : '';
+    return '<b class="p' + (i + 1) + ' ' + cls + '">' + (i + 1) + '</b>';
+  }).join('') + '</div>';
+  if (l.fi < need) {
+    const p = Math.floor(l.fi / R) + 1, r = (l.fi % R) + 1;
+    h += '<div class="card glass"><div><b style="font-size:18px">' + fmt(T.point, { p: p, r: r }) + '</b><div class="sub" style="font-size:12px">' + T.pointHint + '</div></div>' +
+      '<div class="row" style="justify-content:space-between">' + truck + tempButton(l.fishes[l.fi]) + '</div></div>';
+  } else {
+    h += '<div class="card glass"><div class="row">' + truck + '<span class="grow"><b style="font-size:17px">✓ ' + fmt(T.allPoints, { n: need }) + '</b><div class="sub" style="font-size:12px">' + T.tapToEdit + '</div></span></div></div>';
+  }
+  h += stripOf(l, need, (k) => Math.floor(k / R) + 1 + '·' + ((k % R) + 1), R);
+  h += '<span class="lbl" style="color:var(--ink)">' + T.shrimpChecksT + '</span><div class="ck glass">' + T.shrimpChecks.map((lab, k) =>
+    '<button class="' + (l.sc[k] === 0 ? 'x' : '') + '" data-act="sck" data-v="' + k + '"><span class="mk">' + (l.sc[k] === 0 ? '✗' : '✓') + '</span><span class="grow">' + esc(lab) + '</span></button>').join('') + '</div>';
+  const bads = [];
+  if (ev.why.indexOf('phys') >= 0) bads.push(T.physBad);
+  if (ev.why.indexOf('sulfite') >= 0) bads.push(T.sulfiteBad);
+  h += '<div class="lsum ' + (bads.length ? 'ls-bad' : 'ls-ok') + '">' + (bads.length ? '✗ ' + esc(bads.join(' · ')) : T.allOk) + '</div>';
+  if (ev.n < need) h += '<div class="sub" style="text-align:center">' + fmt(T.needTempsS, { n: need }) + '</div>';
+  return h;
+}
+/** chilli / herbs: whole lot — weigh a sample and what is sorted out → reject %, then size · shape · freshness · colour */
+function inspectProduce(l, ev) {
+  const T = t();
+  const max = produceCfg().rejectMax;
+  const i = S.d.cur;
+  const act = (k) => S.pad && S.pad.kind === k && S.pad.line === i;
+  const tile = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : l[k] !== '' ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '" data-i="' + i + '">' +
+    '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (l[k] !== '' ? esc(wShow(l[k])) : act(k) ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
+  let h = '<div class="sample"><span>' + fmt(T.wholeLot, { max: max }) + '</span><b>' + esc(rangeText(l)) + '</b></div>';
+  h += '<div class="grid2">' + tile('sk', T.sampleKg) + tile('rk', T.rejectKg) + '</div>';
+  const over = l.rk !== '' && Number(l.sk) > 0 && Number(l.rk) > Number(l.sk);
+  if (over) h += '<div class="err">' + T.rejectOver + '</div>';
+  else if (ev.pct !== null) {
+    const bad = ev.pct > max;
+    h += '<div class="lsum ' + (bad ? 'ls-bad' : 'ls-ok') + '" style="display:flex;justify-content:space-between"><span>' + (bad ? '✗ ' : '✓ ') + T.rejectPct + ' <b class="mono">' + ev.pct + '%</b></span><span>' + fmt(T.limit, { max: max }) + '</span></div>';
+  }
+  const spec = specOf(l);
+  const anyText = spec.some((x) => x.text);
+  h += '<span class="lbl" style="color:var(--ink)">' + T.specT + '</span>';
+  if (!anyText) h += '<div class="note">' + T.noSpec + '</div>';
+  h += '<div class="ck glass">' + T.cats.map((lab, k) => {
+    const sp = spec[k];
+    if (!sp.on) return '<button class="na" disabled><span class="mk">–</span><span class="grow">' + esc(lab) + '<small>' + T.notUsed + '</small></span></button>';
+    const x = l.pc[k] === 0;
+    return '<button class="' + (x ? 'x' : '') + '" data-act="pck" data-v="' + k + '"><span class="mk">' + (x ? '✗' : '✓') + '</span><span class="grow">' + esc(lab) + (sp.text ? '<small>' + esc(sp.text) + '</small>' : '') + '</span></button>';
+  }).join('') + '</div>';
+  if (!ev.done && !over) h += '<div class="sub" style="text-align:center">' + T.needProduce + '</div>';
+  return h;
+}
+
+function viewSummary() {
+  const T = t();
+  const st = settings();
+  const d = S.d;
+  let h = '<div class="stg"><h2>' + T.sumT + '</h2>';
+  h += '<div class="card glass"><b>' + esc(d.supName) + (d.supCode ? ' / ' + esc(d.supCode) : '') + '</b><div class="sub">Lot ' + esc(d.lot) + ' · ' + esc(d.start) + (d.scale ? ' · ' + esc(d.scale) : '') + (d.thermo ? ' · ' + esc(d.thermo) : '') + '</div></div>';
+  d.lines.forEach((l, i) => {
+    const e = evalLine(l);
+    const pill = e.status === 'pass' ? '<span class="pill p-ok">✓ ' + T.pass + ' · A</span>' : e.status === 'fixed' ? '<span class="pill p-fix">✓ ' + T.passFix + '</span>' : '<span class="pill p-bad">✗ ' + T.fail + '</span>';
+    const probs = [];
+    let note = '';
+    if (e.kind === 'FISH') {
+      const found = e.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
+      note = found.length ? T.found + ': ' + found.join(', ') : T.physNone;
+      if (e.physFail) probs.push(T.physBad);
+    }
+    if (e.kind === 'SHRIMP') {
+      const xs = T.shrimpChecks.filter((_, k) => l.sc[k] === 0);
+      note = xs.length ? '✗ ' + xs.join(' · ') : T.physNone;
+      if (e.why.indexOf('phys') >= 0) probs.push(T.physBad);
+      if (e.why.indexOf('sulfite') >= 0) probs.push(T.sulfiteBad);
+    }
+    if (e.kind === 'PRODUCE') {
+      const xs = T.cats.filter((_, k) => specOf(l)[k].on && l.pc[k] === 0);
+      note = xs.length ? '✗ ' + xs.join(' · ') : T.physNone;
+      if (e.why.indexOf('reject') >= 0) probs.push(fmt(T.rejectBad, { p: e.pct, max: produceCfg().rejectMax }));
+      if (e.why.indexOf('spec') >= 0) probs.push(T.checkBad);
+    }
+    if (e.warm) probs.push(fmt(T.tooWarm, { t: st.TEMP_MAX }) + ' (' + e.max.toFixed(1) + ')');
+    const short = !e.done;
+    const shortTxt = e.kind === 'PRODUCE' ? T.needProduce : fmt(e.kind === 'SHRIMP' ? T.needTempsS : T.needTemps, { n: e.need });
+    const kv = e.kind === 'PRODUCE'
+      ? '<span>' + T.weight + '<b>' + esc(rangeText(l)) + '</b></span><span>' + T.sampleKg + '<b>' + kgFmt(l.sk) + ' kg</b></span><span>' + T.rejectPct + '<b class="' + (e.why.indexOf('reject') >= 0 ? 'bad' : '') + '">' + (e.pct === null ? '—' : e.pct + '%') + '</b></span>'
+      : '<span>' + T.weight + '<b>' + esc(rangeText(l)) + '</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + e.need + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span>';
+    h += '<div class="sl glass' + ((e.needFix && !l.fix) || short ? ' bad' : '') + '"><div class="row"><b class="grow" style="font-size:16px">' + (i + 1) + '. ' + esc(savedName(l)) + '</b>' + pill + '</div>' +
+      (short ? '<button class="err" style="text-align:left" data-act="gotoline" data-v="' + i + '">' + shortTxt + ' ›</button>' : '') +
+      '<div class="kv">' + kv + '</div>' +
+      '<span class="sub">' + esc(note) + '</span>' +
+      (probs.length ? '<span style="font-size:13px;color:var(--red);font-weight:700">' + esc(probs.join(' · ')) + '</span>' : '');
+    if (e.needFix) {
+      h += '<span class="lbl" style="color:var(--ink)">' + T.fix + '</span><div class="fixes">' + T.fixes.map((f, q) =>
+        '<button class="' + (l.fix === FIX_TH[q] ? 'on' : '') + '" data-act="fix" data-v="' + i + '" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>';
+    }
+    if (e.warm) {
+      const act = S.pad && S.pad.kind === 'rt' && S.pad.line === i;
+      const rv = act ? S.buf || l.recheck : l.recheck;
+      const n = rv === '' || rv === '-' ? null : Number(rv);
+      h += '<button class="rc glass ' + (act ? 'f-act' : '') + '" data-act="focus" data-v="rt" data-i="' + i + '"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
+        '<b class="' + (act ? 'caret' : '') + '" style="color:' + (n === null ? 'var(--ink)' : n > st.TEMP_MAX ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (act ? '' : '—')) + ' °C</b></button>';
+    }
+    h += '</div>';
+  });
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
 }
 
 function viewDone() {
   const T = t();
-  const last = S.last || { sent: false };
+  const last = S.last || { lines: 0, sent: false };
+  const td = S.today && S.today.date === todayStr() ? S.today.totals : null;
   return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
-    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
-    '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) + '</div>' +
-    (last.loss !== null && last.loss !== undefined ? '<div class="lossbox ' + (last.high ? 'hi' : 'ok') + '" style="width:100%"><span>' + T.loss + '</span><b>' + Number(last.loss).toFixed(2) + '%</b><small></small></div>' : '') +
+    '<div class="sub" style="font-size:15px">Lot ' + esc(last.lot || '') + ' · ' + last.lines + ' ' + T.lines + '</div>' +
     '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
-    (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
+    (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') +
+    (td ? '<div class="card glass" style="width:100%"><div class="sum"><div><b>' + td.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.kg) + '</b><span>kg</span></div><hr><div><b>' + td.failed + '</b><span>' + T.failShort + '</span></div></div></div>' : '') + '</div>';
 }
 
 /* ---------------- number pad ---------------- */
@@ -821,13 +1128,125 @@ function viewPad() {
   if (!S.pad) return '';
   const T = t();
   const k = S.pad.kind;
-  const special = k === 'pt' || k === 'prt' ? 'pm' : k === 'lot' ? '/' : k === 'gb' || k === 'ga' ? '.' : '';
+  const special = k === 't' || k === 'rt' ? 'pm' : k === 'lot' ? '/' : k === 'w' || k === 'sk' || k === 'rk' || k === 'xw' ? '.' : '';
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', special, '0', 'del'];
   let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
     '<button class="' + (x === 'del' || x === 'pm' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x === 'pm' ? 'plus minus' : x) + '">' + (x === 'del' ? '⌫' : x === 'pm' ? '+/−' : x) + '</button>').join('');
-  const okLabel = k === 'sid' ? (S.busy ? '<span class="spin"></span> ' + T.checking : T.enter) : T.ok + ' ✓';
+  const okLabel = k === 't' ? T.nextFish : k === 'sid' ? (S.busy ? '<span class="spin"></span> ' + T.checking : T.enter) : T.ok + ' ✓';
   h += '<button class="ok" data-key="ok"' + (k === 'sid' && (S.sid.length !== 7 || S.busy) ? ' disabled style="opacity:.45"' : '') + '>' + okLabel + '</button>';
   return h;
+}
+
+function press(key) {
+  const pad = S.pad;
+  if (!pad) return;
+  const d = S.d;
+  if (pad.kind === 'sid') {
+    if (key === 'del') S.sid = S.sid.slice(0, -1);
+    else if (key === 'ok') return login();
+    else if (/^\d$/.test(key) && S.sid.length < 7) { S.sid += key; S.peek = true; clearTimeout(press.peekT); press.peekT = setTimeout(() => { S.peek = false; render(); }, 600); }
+    S.err = '';
+    return render();
+  }
+  if (pad.kind === 'supcode') {
+    const v = String(d.supCode || '');
+    if (key === 'del') d.supCode = v.slice(0, -1);
+    else if (key === 'ok') S.pad = /^\d{2}$/.test(v) && !d.lot ? { kind: 'lot' } : null;
+    else if (/^\d$/.test(key) && v.length < 2) { d.supCode = v + key; if (d.supCode.length === 2) S.pad = d.lot ? null : { kind: 'lot' }; }
+    return render();
+  }
+  if (pad.kind === 'lot') {
+    if (key === 'del') d.lot = d.lot.slice(0, -1);
+    else if (key === 'ok') S.pad = null;
+    else if ((/^\d$/.test(key) || key === '/') && d.lot.length < 12) d.lot += key;
+    return render();
+  }
+  if (pad.kind === 'size') {
+    const l = d.lines[pad.line];
+    if (key === 'ok') S.pad = null;
+    else if (key === 'del') l.size = l.size.slice(0, -1);
+    else if (/^\d$/.test(key) && l.size.length < 5 && !(l.size === '' && key === '0')) l.size += key;
+    return render();
+  }
+  if (pad.kind === 'w' || pad.kind === 'sk' || pad.kind === 'rk') {
+    const l = d.lines[pad.line];
+    const f = pad.kind;
+    const v = String(l[f] || '');
+    if (key === 'ok') S.pad = f === 'sk' && l.rk === '' ? { kind: 'rk', line: pad.line } : null;
+    else if (key === 'del') l[f] = v.slice(0, -1);
+    else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v.split('.')[1] || '').match(/^\d\d$/)) l[f] = v + key;
+    if (f !== 'w' && !l.time && l[f] !== '') l.time = nowHM();
+    return render();
+  }
+  if (pad.kind === 'xw') {
+    const l = S.wt.lines[pad.line];
+    const v = String(l.w || '');
+    if (key === 'ok') { const nx = S.wt.lines.findIndex((x, i) => i > pad.line && !(Number(x.w) > 0)); S.pad = nx >= 0 ? { kind: 'xw', line: nx } : null; }
+    else if (key === 'del') l.w = v.slice(0, -1);
+    else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v.split('.')[1] || '').match(/^\d\d$/)) l.w = v + key;
+    S.err = '';
+    return render();
+  }
+  if (pad.kind === 'smin' || pad.kind === 'smax') {
+    const l = d.lines[pad.line];
+    const f = pad.kind;
+    const v = String(l[f] || '');
+    if (key === 'ok') S.pad = f === 'smin' && !l.smax ? { kind: 'smax', line: pad.line } : null;
+    else if (key === 'del') l[f] = v.slice(0, -1);
+    else if (/^\d$/.test(key) && v.length < 3 && !(v === '' && key === '0')) l[f] = v + key;
+    return render();
+  }
+  if (pad.kind === 'rt') {
+    const l = d.lines[pad.line];
+    let buf = S.buf;
+    if (key === 'ok') { if (buf && buf !== '-') l.recheck = twoDigit(buf) || l.recheck; S.pad = null; S.buf = ''; return render(); }
+    if (key === 'pm') { if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf; else if (l.recheck) l.recheck = l.recheck[0] === '-' ? l.recheck.slice(1) : '-' + l.recheck; else S.buf = '-'; return render(); }
+    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else l.recheck = ''; return render(); }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length >= 2) { l.recheck = twoDigit(buf); S.buf = ''; S.pad = null; } else S.buf = buf;
+    return render();
+  }
+  if (pad.kind === 't') {
+    const l = curLine();
+    const pcs = l ? pcsOf(l) : 0;
+    if (!l || l.fi >= pcs) return;
+    const f = l.fishes[l.fi];
+    const need = S.wide ? 3 : 2;               // normal: 2 digits = d.d · "10 °C up" mode: 3 digits = dd.d
+    let buf = S.buf;
+    const store = (v) => { f.t = v; if (!l.time) l.time = nowHM(); l.fi = nextEmpty(l, l.fi); S.buf = ''; S.wide = false; if (l.fi >= pcs) S.pad = null; };
+    if (key === 'ok') {
+      if (buf.replace('-', '')) store(tempOf(buf, need));   // 5 then Next = 5.0 — a typed digit is never thrown away
+      else { l.fi = Math.min(pcs, l.fi + 1); S.buf = ''; S.wide = false; if (l.fi >= pcs) S.pad = null; }
+      return render();
+    }
+    if (key === 'pm') {
+      /* ± always belongs to the fish under the cursor: before or between the digits it makes this reading negative;
+         on a fish that already has a value (tapped in the strip) it flips that value */
+      if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf;
+      else if (f.t !== '') f.t = f.t[0] === '-' ? f.t.slice(1) : '-' + f.t;
+      else S.buf = '-';
+      return render();
+    }
+    if (key === 'del') {
+      if (buf) S.buf = buf.slice(0, -1);
+      else if (f.t !== '') f.t = '';
+      else if (l.fi > 0) { l.fi -= 1; l.fishes[l.fi].t = ''; }
+      return render();
+    }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length < need) { S.buf = buf; return render(); }
+    store(tempOf(buf, need));
+    return render();
+  }
+}
+/** after a reading, jump to the next fish that has no temperature yet (never onto one that already has a value) */
+function nextEmpty(l, from) {
+  const pcs = pcsOf(l);
+  for (let k = from + 1; k < pcs; k++) if (l.fishes[k].t === '') return k;
+  for (let k = 0; k < Math.min(from, pcs); k++) if (l.fishes[k].t === '') return k;
+  return pcs;
 }
 /** digits → temperature: 2 digits = d.d (1 2 → 1.2) · 3 digits = dd.d (1 2 3 → 12.3) · one digit + OK = d.0 */
 function tempOf(buf, need) {
@@ -840,81 +1259,51 @@ function tempOf(buf, need) {
   else v = dg[0] + '.0';
   return (neg && Number(v) !== 0 ? '-' : '') + v;
 }
-function press(key) {
-  const pad = S.pad;
-  if (!pad) return;
-  const c = S.c;
-  if (pad.kind === 'sid') {
-    if (key === 'del') S.sid = S.sid.slice(0, -1);
-    else if (key === 'ok') return login();
-    else if (/^\d$/.test(key) && S.sid.length < 7) { S.sid += key; S.peek = true; clearTimeout(press.peekT); press.peekT = setTimeout(() => { S.peek = false; render(); }, 600); }
-    S.err = '';
-    return render();
-  }
-  if (pad.kind === 'lot') {
-    if (key === 'del') c.lot = c.lot.slice(0, -1);
-    else if (key === 'ok') S.pad = null;
-    else if ((/^\d$/.test(key) || key === '/') && c.lot.length < 12) c.lot += key;
-    return render();
-  }
-  if (pad.kind === 'gb' || pad.kind === 'ga') {
-    const f = pad.kind === 'gb' ? 'before' : 'after';
-    const v = String(c[f] || '');
-    if (key === 'ok') S.pad = pad.kind === 'gb' && !c.after ? { kind: 'ga' } : null;
-    else if (key === 'del') c[f] = v.slice(0, -1);
-    else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v === '' && key === '0') && !(v.split('.')[1] || '').match(/^\d$/)) c[f] = v + key;
-    S.err = '';
-    return render();
-  }
-  if (pad.kind === 'prt') {
-    let buf = S.buf;
-    if (key === 'ok') { if (buf && buf !== '-') c.recheck = tempOf(buf, 2) || c.recheck; S.pad = null; S.buf = ''; return render(); }
-    if (key === 'pm') { if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf; else if (c.recheck) c.recheck = c.recheck[0] === '-' ? c.recheck.slice(1) : '-' + c.recheck; else S.buf = '-'; return render(); }
-    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else c.recheck = ''; return render(); }
-    if (!/^\d$/.test(key)) return;
-    buf += key;
-    if (buf.replace('-', '').length >= 2) { c.recheck = tempOf(buf, 2); S.buf = ''; S.pad = null; } else S.buf = buf;
-    return render();
-  }
-  if (pad.kind === 'pt') {
-    const i = pad.i;
-    const need = S.wide ? 3 : 2;
-    let buf = S.buf;
-    // after a reading: next empty optional box, then the weights (temperature 1 is the only required one)
-    const after = () => { S.buf = ''; S.wide = false; const nx = [1, 2].find((k) => k > i && c.temps[k] === ''); S.pad = nx !== undefined ? { kind: 'pt', i: nx } : !c.before ? { kind: 'gb' } : null; };
-    if (key === 'ok') {
-      if (buf.replace('-', '')) { c.temps[i] = tempOf(buf, need); after(); }
-      else { S.buf = ''; S.wide = false; S.pad = i === 0 && c.temps[0] === '' ? pad : !c.before ? { kind: 'gb' } : null; }
-      return render();
-    }
-    if (key === 'pm') {
-      if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf;
-      else if (c.temps[i] !== '') c.temps[i] = c.temps[i][0] === '-' ? c.temps[i].slice(1) : '-' + c.temps[i];
-      else S.buf = '-';
-      return render();
-    }
-    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else c.temps[i] = ''; return render(); }
-    if (!/^\d$/.test(key)) return;
-    buf += key;
-    if (buf.replace('-', '').length < need) { S.buf = buf; return render(); }
-    c.temps[i] = tempOf(buf, need);
-    after();
-    return render();
-  }
-}
+const twoDigit = (buf) => tempOf(buf, 2);
 
 /* ---------------- action bar ---------------- */
+/* ---------------- real weight after RM processing ---------------- */
+function viewWeigh() {
+  const T = t();
+  const w = S.wt;
+  let h = '<div class="stg"><div><h2>' + T.kgT + '</h2><div class="sub">Lot ' + esc(w.lot) + ' · ' + esc(String(w.sup).split(' / ')[0]) + ' — ' + T.kgSub + '</div></div>';
+  w.lines.forEach((l, i) => {
+    const a = S.pad && S.pad.kind === 'xw' && S.pad.line === i;
+    h += '<button class="tile wt ' + (a ? 'f-act' : Number(l.w) > 0 ? 'filled' : 'f-empty') + '" style="height:auto;min-height:84px" data-act="focus" data-v="xw" data-i="' + i + '">' +
+      '<span class="t-l">' + (i + 1) + '. ' + esc(l.name) + ' · ' + esc(l.wr || '') + ' kg</span>' +
+      '<span class="t-v"><b class="' + (a ? 'caret' : '') + '">' + (l.w ? esc(wShow(l.w)) : a ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
+    const r = String(l.wr || '').split('–').map(Number);
+    if (l.k === 'FISH' && Number(l.w) > 0 && r[1] > 0 && planOf(Number(l.w)).pcs > planOf(r[1]).pcs) h += '<div class="note">⚠ ' + T.kgUnder + '</div>';
+  });
+  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+  return h + '</div>';
+}
+
+/** supplier chosen: from the list, or typed by hand with both a name and a 2-digit code */
+const supOk = (d) => !!(d && d.supName && (!d.supCustom || /^\d{2}$/.test(d.supCode || '')));
 function viewAction() {
   const T = t();
-  const s = S.screen;
-  if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
-  if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
-  if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+  const d = S.d;
+  const scr = S.screen;
+  if (scr === 'login' || scr === 'home') return '';
+  if (scr === 'truck') return '<button class="btn" data-act="next"' + (supOk(d) && d.lot ? '' : ' disabled') + '>' + T.next + ' ›</button>';
+  if (scr === 'fish') return '<button class="btn" data-act="next"' + (d.lines.length && d.lines.every(lineReady) ? '' : ' disabled') + '>' + T.next + ' ›</button>';
+  if (scr === 'inspect') {
+    const ok = evalLine(curLine()).done;
+    return '<button class="btn" data-act="next"' + (ok ? '' : ' disabled') + '>' + (d.cur + 1 < d.lines.length ? T.nextLine : T.toSummary) + '</button>';
+  }
+  if (scr === 'summary') {
+    const ok = canSave(d);
+    return '<button class="btn green" data-act="save"' + (ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
+  }
+  if (scr === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="startrm">' + T.newTruck + '</button>';
+  if (scr === 'weigh') return '<button class="btn green" data-act="saveweights"' + (S.wt && S.wt.lines.every((l) => Number(l.w) > 0) && !S.busy ? '' : ' disabled') + '>⚖ ' + T.saveKg + '</button>';
   return '';
 }
 
 /* ---------------- render ---------------- */
 const $ = (id) => document.getElementById(id);
+/* a focused field losing focus during a redraw can fire change/blur → redraw again; queue it instead of nesting */
 let rendering = false, renderAgain = false;
 function render() {
   if (rendering) { renderAgain = true; return; }
@@ -927,23 +1316,23 @@ function draw() {
   document.documentElement.lang = S.lang;
   const main = $('main');
   const keepScroll = lastScreen === S.screen ? main.scrollTop : 0;
-  if (['lot', 'manual', 'check'].indexOf(S.screen) >= 0 && !S.c) S.screen = 'home';
-  if (S.screen !== 'login' && !S.staff) S.screen = 'login';
   $('hdr').innerHTML = renderHeader();
-  const views = { login: viewLogin, home: viewHome, lot: viewLot, manual: viewManual, check: viewCheck, done: viewDone };
+  const views = { login: viewLogin, home: viewHome, truck: viewTruck, fish: viewFish, inspect: viewInspect, summary: viewSummary, done: viewDone, weigh: viewWeigh };
+  if (S.screen !== 'login' && S.screen !== 'home' && S.screen !== 'done' && !S.d && !(S.screen === 'weigh' && S.wt)) S.screen = 'home';
   main.innerHTML = (views[S.screen] || viewHome)();
   if (lastScreen !== S.screen) {
     main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
     clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
   }
   main.scrollTop = keepScroll;
-  const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;
+  const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;   // a focused field can drag the frame sideways; keep it straight
   const pad = $('pad');
   pad.innerHTML = viewPad();
   if (S.pad && !lastPad) { pad.classList.remove('up'); void pad.offsetWidth; pad.classList.add('up'); }
   lastPad = !!S.pad;
   $('act').innerHTML = viewAction();
   lastScreen = S.screen;
+  S.popLine = null;
   persist();
 }
 
@@ -955,21 +1344,25 @@ function login() {
     S.busy = false;
     if (!j.valid) { S.err = t().badId; return render(); }
     S.staff = { id: S.sid, name: j.name || '', dept: j.department || '' };
-    (S.known = S.known || {})[S.sid] = { name: S.staff.name, dept: S.staff.dept };
+    (S.known = S.known || {})[S.sid] = { name: S.staff.name, dept: S.staff.dept };   // lets this person in when the phone has no signal
     S.online = true;
     go('home', { pad: null });
-    refreshConfig(true); refreshToday(true);
+    refreshConfig(true);
+    refreshToday(true);   // a different person may have just signed in — never show an empty or old list
   }, (e) => {
     S.busy = false;
     const k = e.net && S.known && S.known[S.sid];
-    if (k) { S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false; go('home', { pad: null }); flush(); return; }
+    if (k) {   // no signal, but this ID has logged in on this phone before — let them work; every save is re-checked by the server
+      S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false;
+      go('home', { pad: null }); flush(); return;
+    }
     S.err = e.net ? t().needNet : e.message; render();
   });
 }
 function signOut() {
-  if (S.c && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
+  if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
   S.confirmOut = false;
-  S.staff = null; S.sid = ''; S.today = null; S.c = null; todayAt = 0;
+  S.staff = null; S.sid = ''; S.today = null; S.cfg = null; S.d = null; todayAt = 0;
   go('login', { pad: { kind: 'sid' } });
 }
 function toast(msg) {
@@ -977,119 +1370,176 @@ function toast(msg) {
   el.textContent = msg; el.classList.add('show');
   clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2600);
 }
-function startCheck() {
-  S.c = blankCheck(todayStr());
-  go('lot');
-  loadLots(S.c.rmDate);
-  refreshConfig();
-}
-function saveCheck() {
-  const c = S.c;
-  const e = evalCheck(c);
-  if (!e.ok) { S.err = e.why.join(' · '); return render(); }
+
+function saveTruck() {
+  const d = S.d;
+  if (!canSave(d)) { S.err = t().needFix; return render(); }
   const rec = {
-    id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
-    item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, after: c.after, remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
-    _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
+    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, supCustom: !!d.supCustom, lot: d.lot, scale: d.scale, thermo: d.thermo,
+    device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    lines: d.lines.map((l) => {
+      const e = evalLine(l);
+      const base = { type: e.kind, fish: l.fish.trim().toUpperCase(), custom: !!l.custom, proc: l.proc, w: Number(l.wTo) > 0 ? '' : l.w, wFrom: l.wFrom, wTo: l.wTo, time: l.time || nowHM(), fix: e.needFix ? l.fix || '' : '',
+        _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน' };
+      if (e.kind === 'SHRIMP') return Object.assign(base, { sizeMin: l.smin, sizeMax: l.smax, md: l.md, sulfite: l.sulfite, ice: l.ice,
+        temps: l.fishes.slice(0, e.need).map((f) => f.t), checks: l.sc.slice(), recheck: e.warm ? l.recheck : '' });
+      if (e.kind === 'PRODUCE') return Object.assign(base, { sampleKg: l.sk, rejectKg: l.rk, checks: l.pc.slice() });
+      return Object.assign(base, { size: l.size, md: l.md, gl: l.gl, ice: l.ice,
+        temps: l.fishes.slice(0, e.need).map((f) => f.t), phys: e.c, recheck: e.warm ? l.recheck : '' });
+    })
   };
-  S.trimLast = c.trim;
-  S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
-  S.last = { id: rec.id, lot: c.lot, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
-    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim } };
-  S.c = null;
+  S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(d)) });
+  S.last = { id: rec.id, lot: rec.lot, lines: rec.lines.length, sent: false };
+  S.d = null;
   go('done');
   flush();
 }
-function openCheckSheet(id) {
+
+function openTruckSheet(id) {
   const T = t();
-  const td = (S.today && S.today.checks) || [];
-  const r = td.find((x) => x.id === id);
+  const td = (S.today && S.today.trucks) || [];
+  const tr = td.find((x) => x.id === id);
   const pend = S.outbox.find((o) => o.record.id === id);
-  if (!r && !pend) return;
-  const x = r || { item: pend.record.item, size: pend.record.size, lot: pend.record.lot, rmDate: ddmm(pend.record.rmDate), time: pend.record.time, loss: pend.record._loss, status: pend.record._status, held: Math.max(0, daysBetween(pend.record.rmDate, pend.record.date)) };
-  let h = '<div class="row"><b class="grow" style="font-size:18px">' + esc(x.item) + ' ' + esc(x.size || '') + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
-    '<div class="sub">Lot ' + esc(x.lot) + ' · ' + T.rcv + ' ' + esc(x.rmDate) + ' · ' + esc(x.time) + (r && r.staffName ? ' · ' + T.by + ' ' + esc(r.staffName) : '') + '</div>' +
-    '<div class="row" style="flex-wrap:wrap;gap:6px">' + statusPill(x.status) + heldPill(x.held) + (r && r.trim ? '<span class="pill p-mute">' + esc(r.trim) + '</span>' : '') + '</div>' +
-    (x.loss !== null && x.loss !== undefined && x.loss !== '' ? '<div class="lossbox ' + (r && /^สูง/.test(r.lossCheck || '') ? 'hi' : 'ok') + '"><span>' + T.loss + '</span><b>' + Number(x.loss).toFixed(2) + '%</b><small></small></div>' : '');
-  if (r && r.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(r.voidReason) + '</div>';
-  else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
+  if (!tr && !pend) return;
+  const lines = tr ? tr.lines : pend.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status }));
+  let h = '<div class="row"><b class="grow" style="font-size:18px">Lot ' + esc(tr ? tr.lot : pend.record.lot) + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">' + esc(tr ? tr.sup : pend.record.supName) + ' · ' + esc(tr ? tr.start : pend.record.start) + (tr && tr.staffName ? ' · ' + T.by + ' ' + esc(tr.staffName) : '') + '</div>' +
+    '<div class="tlist glass">' + lines.map((l) => '<div style="display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
+      (l.w > 0 ? kgFmt(l.w) + ' kg' : '<span style="color:var(--red);font-weight:700">' + esc(l.wr || '—') + ' kg · ' + T.waitKg + '</span>') + '</div></span>' +
+      '<span class="pill ' + (l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok') + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span></div>').join('') + '</div>';
+  if (tr && tr.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(tr.voidReason) + '</div>';
+  else if (pend) h += '<div class="note">' + T.pendingSub + '<br>' + T.kgNeedSend + '</div>';
+  if (tr && !tr.void) h += '<button class="btn" style="flex:none;height:54px;font-size:17px" data-act="weigh" data-v="' + esc(id) + '">⚖ ' + T.enterKg + '</button>';
+  if (pend || (tr && tr.void)) { /* no cancel */ }
   else if (!canCancel()) h += '<div class="note">🔒 ' + T.gmOnly + '</div>';
   else {
-    h += '<span class="lbl" style="color:var(--ink)">' + T.cancelT + '</span><div class="fixes">' + T.reasons.map((q, i) => '<button data-act="reason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+    h += '<span class="lbl" style="color:var(--ink)">' + T.cancelTruck + '</span><div class="fixes">' + T.reasons.map((r, i) => '<button data-act="reason" data-v="' + i + '">' + esc(r) + '</button>').join('') + '</div>' +
       '<textarea id="why" placeholder="' + esc(T.cancelWhy) + '"></textarea><button class="btn" style="background:var(--red);flex:none" data-act="dovoid" data-v="' + esc(id) + '">' + T.confirmCancel + '</button>';
   }
   $('sheet').innerHTML = '<div class="box">' + h + '</div>';
   $('sheet').classList.add('open');
 }
+/** cancel is for GM only (Settings → RM_CANCEL_DEPTS); the server checks again on every cancel */
 function canCancel() {
-  const deps = (pcCfg().cancelDepts && pcCfg().cancelDepts.length ? pcCfg().cancelDepts : ['general manager']);
+  const deps = (rmCfg().cancelDepts && rmCfg().cancelDepts.length ? rmCfg().cancelDepts : ['general manager']);
   return !!(S.staff && deps.indexOf(String(S.staff.dept || '').trim().toLowerCase()) >= 0);
 }
 function closeSheet() { $('sheet').classList.remove('open'); }
 
 const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
-  back: () => go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'),
+  back: () => {
+    const to = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home' }[S.screen] || 'home';
+    go(to);
+  },
   signout: signOut,
-  mainmenu: toMainMenu,
   hidewarn: () => { S.reportWarn = null; render(); },
+  openpc: () => {
+    try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
+    persist();
+    location.href = PC_URL;
+  },
+  weigh: (el) => {
+    const tr = ((S.today && S.today.trucks) || []).find((x) => x.id === el.dataset.v);
+    if (!tr) return;
+    closeSheet();
+    S.wt = { id: tr.id, lot: tr.lot, sup: tr.sup, lines: tr.lines.map((l) => ({ n: l.n, name: l.name, wr: l.wr, k: l.k, w: l.w > 0 ? String(l.w) : '' })) };
+    S.err = '';
+    const first = S.wt.lines.findIndex((l) => !(Number(l.w) > 0));
+    go('weigh', { pad: { kind: 'xw', line: first >= 0 ? first : 0 } });
+  },
+  saveweights: () => {
+    S.busy = true; S.err = ''; render();
+    api('rmWeight', { staffId: S.staff.id, id: S.wt.id, weights: S.wt.lines.map((l) => ({ n: l.n, w: Number(l.w) })) }, 45000).then((j) => {
+      S.busy = false;
+      if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: S.wt.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
+      else toast('✓ ' + t().kgSaved);
+      S.wt = null;
+      go('home', { pad: null });
+      refreshToday(true);
+    }, (e) => { S.busy = false; S.err = e.net ? t().offline : e.message; render(); });
+  },
+  /* hard refresh: newest app version from GitHub + fresh supplier list and today's trucks; drafts and unsent trucks stay on the phone */
   hardrefresh: (el) => {
     el.disabled = true; el.innerHTML = '<span class="spin"></span>';
     persist();
-    const reload = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ } const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
+    // stay signed in after a refresh (Sal, 6 Nov): only ออก or opening the website again asks for the ID
+    const go = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
+      const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
     const done = S.outbox.length && navigator.onLine ? flush() : Promise.resolve();
-    Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(reload, reload);
+    Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(go, go);
   },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
-  start: startCheck,
-  resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); },
-  discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
+  startrm: () => (S.d ? go('truck') : startTruck()),
+  resume: () => go(S.d.stage || (S.d.supName ? 'fish' : 'truck')),
+  discard: () => { if (S.confirm === 'discard') { S.d = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
-  rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
-  pickline: (el) => {
-    const got = S.lots[S.c.rmDate];
-    const lot = got && got.lots.find((x) => x.id === el.dataset.v);
-    const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
-    if (!l) return;
-    Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
-    go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
-  },
-  manual: () => { Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
-  usemanual: () => go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null }),
   focus: (el) => {
     const k = el.dataset.v;
-    S.buf = ''; S.wide = false;
-    S.pad = k === 'pt' ? { kind: 'pt', i: Number(el.dataset.i) } : { kind: k };
+    S.buf = ''; S.justFilled = null;
+    S.pad = k === 'lot' ? { kind: 'lot' } : { kind: k, line: Number(el.dataset.i) };
     render();
   },
-  wide: () => { S.wide = !S.wide; S.buf = ''; render(); },
-  trim: (el) => { S.c.trim = el.dataset.v; S.err = ''; render(); },
-  fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
-  save: saveCheck,
-  again: () => {
-    const a = S.last && S.last.again;
-    if (!a) return go('home');
-    S.c = Object.assign(blankCheck(a.rmDate), a);
-    go('check', { pad: { kind: 'pt', i: 0 } });
+  next: () => {
+    const d = S.d;
+    if (S.screen === 'truck') {
+      if (!d.lines.length) {
+        const u = rmCfg().usual || {};
+        const usual = u[d.supName + (d.supCode ? ' / ' + d.supCode : '')] || [];
+        d.lines = usual.length ? usual.map((u) => blankLine(u[0], u[1], u[2])) : [blankLine('', 'WR', '')];
+        d.lines.forEach((l, i) => (l.open = i === 0));
+      }
+      return go('fish');
+    }
+    if (S.screen === 'fish') { d.lines.forEach((l) => (l.open = false)); d.cur = 0; return go('inspect'); }
+    if (S.screen === 'inspect') {
+      if (d.cur + 1 < d.lines.length) { d.cur += 1; S.buf = ''; S.pad = inspectPad(curLine()); return render(); }
+      return go('summary');
+    }
   },
+  openline: (el) => { S.d.lines.forEach((l, i) => (l.open = i === Number(el.dataset.v))); S.pad = null; render(); },
+  closeline: (el) => { S.d.lines[Number(el.dataset.v)].open = false; S.pad = null; render(); },
+  delline: (el) => {
+    const i = Number(el.dataset.v);
+    if (S.confirm !== 'del' + i) { S.confirm = 'del' + i; return render(); }
+    S.d.lines.splice(i, 1); S.confirm = null; S.pad = null; render();
+  },
+  addline: () => {
+    S.d.lines.forEach((l) => (l.open = false));
+    S.d.lines.push(blankLine('', 'WR', ''));
+    S.popLine = S.d.lines.length - 1; S.pad = null;
+    render();
+    const m = $('main'); m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+  },
+  tolist: (el) => { const l = S.d.lines[Number(el.dataset.v)]; l.custom = false; l.fish = ''; render(); },
+  seg: (el) => { S.d.lines[Number(el.dataset.i)][el.dataset.v] = el.dataset.x; render(); },
+  tab: (el) => { S.d.cur = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = inspectPad(curLine()); render(); },
+  sck: (el) => { const l = curLine(); const k = Number(el.dataset.v); l.sc[k] = l.sc[k] === 0 ? 1 : 0; if (!l.time) l.time = nowHM(); render(); },
+  pck: (el) => { const l = curLine(); const k = Number(el.dataset.v); l.pc[k] = l.pc[k] === 0 ? 1 : 0; if (!l.time) l.time = nowHM(); render(); },
+  pickfish: (el) => { const l = curLine(); l.fi = Number(el.dataset.v); S.buf = ''; S.wide = false; S.pad = l.fi < pcsOf(l) ? { kind: 't' } : null; render(); },
+  wide: () => { S.wide = !S.wide; S.buf = ''; S.pad = { kind: 't' }; render(); },
+  defect: (el) => { const l = curLine(); const f = l.fishes[l.fi]; const k = Number(el.dataset.v); f.d[k] = f.d[k] ? 0 : 1; S.justFilled = null; render(); },
+  fix: (el) => { const l = S.d.lines[Number(el.dataset.v)]; const v = FIX_TH[Number(el.dataset.x)]; l.fix = l.fix === v ? '' : v; S.err = ''; render(); },
+  save: saveTruck,
+  reloadcfg: () => { refreshConfig(true); toast(t().loadingSup); },
+  gotoline: (el) => { S.d.cur = Number(el.dataset.v); go('inspect'); },
   reopen: (el) => {
-    if (S.c) { toast(t().finishFirst); return; }
+    if (S.d) { toast(t().finishFirst); return; }
     const item = S.outbox.find((o) => o.record.id === el.dataset.v);
     if (!item || !item.draft) return;
     S.outbox = S.outbox.filter((o) => o !== item);
-    sentIds[item.record.id] = true;
-    S.c = item.draft;
-    go('check');
+    sentIds[item.record.id] = true;   // don't pull the refused copy back in from storage
+    S.d = item.draft;
+    go('summary');
   },
-  check: (el) => openCheckSheet(el.dataset.v),
+  truck: (el) => openTruckSheet(el.dataset.v),
   closesheet: closeSheet,
   reason: (el) => { $('why').value = t().reasons[Number(el.dataset.v)]; },
   dovoid: (el) => {
     const why = ($('why').value || '').trim();
     if (!why) { $('why').focus(); return; }
     el.disabled = true; el.innerHTML = '<span class="spin"></span>';
-    api('pcVoid', { staffId: S.staff.id, id: el.dataset.v, reason: why }).then(() => {
+    api('rmVoid', { staffId: S.staff.id, id: el.dataset.v, reason: why }).then(() => {
       closeSheet(); toast(t().cancelled); refreshToday(true);
     }, (e) => { el.disabled = false; el.textContent = t().confirmCancel; toast(e.net ? t().offline : e.message); });
   }
@@ -1105,25 +1555,51 @@ document.addEventListener('click', (e) => {
 document.addEventListener('change', (e) => {
   const el = e.target;
   const on = el.dataset && el.dataset.on;
-  if (!on || !S.c) return;
-  const c = S.c;
-  if (on === 'rmdate') { if (/^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value <= todayStr()) { c.rmDate = el.value; render(); loadLots(c.rmDate); } return; }
-  if (on === 'mfish') { c.fish = el.value; return render(); }
-  if (on === 'mproc') { c.proc = el.value; return render(); }
-  if (on === 'msize') { c.size = el.value.toUpperCase().replace(/\s+/g, '').trim(); return render(); }
-  if (on === 'msup') { c.sup = el.value.replace(/\s+/g, ' ').trim(); return render(); }
-  if (on === 'remark') { c.remark = el.value.replace(/\s+/g, ' ').trim(); return render(); }
+  if (!on) return;
+  const d = S.d;
+  if (on === 'sup') {
+    if (el.value === '__other') { d.supCustom = true; d.supCode = ''; d.supName = ''; render(); const inp = document.querySelector('[data-on="typesup"]'); if (inp) inp.focus(); return; }
+    const s = rmCfg().suppliers[Number(el.value)];
+    d.supCustom = false; d.supCode = s ? s.code : ''; d.supName = s ? s.name : '';
+    if (s && !d.lot) S.pad = { kind: 'lot' };
+    return render();
+  }
+  if (on === 'wrange') {
+    const l = d.lines[Number(el.dataset.v)];
+    const m = String(el.value).match(/^([\d.]+)-([\d.]+)$/);
+    l.wFrom = m ? m[1] : ''; l.wTo = m ? m[2] : ''; l.w = '';
+    l.fi = Math.min(l.fi || 0, pcsOf(l));
+    return render();
+  }
+  if (on === 'typesup') { d.supName = el.value.replace(/\s+/g, ' ').trim(); if (d.supName) S.pad = !/^\d{2}$/.test(d.supCode || '') ? { kind: 'supcode' } : !d.lot ? { kind: 'lot' } : S.pad; return render(); }
+  if (on === 'scale') { d.scale = el.value; S.scale = el.value; return render(); }
+  if (on === 'thermo') { d.thermo = el.value; S.thermo = el.value; return render(); }
+  const l = d.lines[Number(el.dataset.v)];
+  if (on === 'fish') {
+    if (el.value === '__other') { l.custom = true; l.fish = ''; l.chilli = false; l.type = 'FISH'; l.smin = ''; l.smax = ''; if (rmCfg().procs.indexOf(l.proc) < 0) l.proc = rmCfg().procs.indexOf('WR') >= 0 ? 'WR' : rmCfg().procs[0]; render(); const inp = document.querySelector('[data-on="typefish"]'); if (inp) inp.focus(); return; }
+    setItem(l, el.value);
+    const k = kindOf(l), i = Number(el.dataset.v);
+    if (k === 'FISH' && !l.size) { S.pad = { kind: 'size', line: i }; S.buf = ''; }
+    else if (k === 'SHRIMP' && !l.smin) { S.pad = { kind: 'smin', line: i }; S.buf = ''; }
+    else S.pad = null;
+    return render();
+  }
+  if (on === 'proc') { l.proc = el.value; return render(); }
+  if (on === 'typefish') { const v = el.value.toUpperCase().replace(/\s+/g, ' ').trim(); if (v === l.fish) return; l.fish = v; return render(); }
 });
 document.addEventListener('input', (e) => {
   const el = e.target;
-  const on = el.dataset && el.dataset.on;
-  if (!on || !S.c) return;
-  if (on === 'msize') S.c.size = el.value.toUpperCase().replace(/\s+/g, '');
-  if (on === 'msup') S.c.sup = el.value;
-  if (on === 'remark') S.c.remark = el.value;
-  $('act').innerHTML = viewAction();
-  persist();
+  if (el.dataset && el.dataset.on === 'typesup') { S.d.supName = el.value.replace(/\s+/g, ' ').replace(/^\s/, ''); $('act').innerHTML = viewAction(); persist(); return; }
+  if (el.dataset && el.dataset.on === 'typefish') {
+    const i = Number(el.dataset.v);
+    const l = S.d.lines[i];
+    l.fish = el.value.toUpperCase().replace(/\s+/g, ' ').replace(/^\s/, '');
+    const title = $('title' + i);
+    if (title) title.textContent = l.fish ? savedName(l) : t().newLine;
+    persist();
+  }
 });
+/* physical keyboard on a tablet/PC: digits, Backspace, Enter, minus */
 document.addEventListener('keydown', (e) => {
   if (!S.pad || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
   const map = { Backspace: 'del', Enter: 'ok', '-': 'pm', '/': '/', '.': '.' };

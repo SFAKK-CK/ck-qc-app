@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#dff4f9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CK QC PC">
+<title>CK QC · PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
+  --accent:#2d5a87; --accent-soft:#dfe9f3; --accent-ink:#1c3d5e;
+  --teal:#3a7c7e; --teal-soft:#dceae8;
+  --amber:#8c5520; --amber-soft:#f5e9d4; --amber-ink:#6e4318;
+  --green:#2e6b3c; --green-soft:#dbe9d5;
+  --red:#9b2226; --red-soft:#f3dada; --red-ink:#7a1a1d;
+  --glass:rgba(255,255,255,.55); --glass-2:rgba(255,255,255,.35); --glass-line:rgba(255,255,255,.75);
+  --glass-fx:blur(20px) saturate(180%);
+  --shadow:0 6px 18px -10px rgba(50,60,80,.2), inset 0 1px 0 rgba(255,255,255,.7);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Manrope','Sarabun','Noto Sans Myanmar',-apple-system,system-ui,sans-serif;color:var(--ink);font-size:15px;line-height:1.45;overflow:hidden;
+  background:
+    radial-gradient(at 18% 15%,rgba(135,206,250,.65) 0%,transparent 45%),
+    radial-gradient(at 80% 10%,rgba(100,220,200,.55) 0%,transparent 50%),
+    radial-gradient(at 85% 80%,rgba(72,200,160,.5) 0%,transparent 50%),
+    radial-gradient(at 10% 85%,rgba(150,230,255,.55) 0%,transparent 50%),
+    linear-gradient(135deg,#dff4f9 0%,#e8f9f4 50%,#d6f0f8 100%);
+  background-size:200% 200%,200% 200%,200% 200%,200% 200%,100% 100%;
+  animation:aurora 22s ease-in-out infinite}
+body.lang-th{font-family:'Sarabun','Manrope','Noto Sans Myanmar',-apple-system,system-ui,sans-serif}
+@keyframes aurora{0%,100%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,0% 0%}50%{background-position:30% 30%,70% 30%,70% 70%,30% 70%,0% 0%}}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;transition:transform 140ms var(--ease),background 240ms var(--ease),box-shadow 240ms var(--ease),border-color 240ms var(--ease),opacity 200ms}
+button:active:not(:disabled){transform:scale(.96)}
+button:disabled{cursor:not-allowed}
+select option{color:var(--ink)}
+.app{height:100%;display:flex;justify-content:center}
+.phone{position:relative;isolation:isolate;width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none}
+#main{overflow-x:hidden}
+.tabs{overscroll-behavior-x:contain}
+@media(min-width:700px){.app{padding:16px}.phone{border-radius:32px;border:1px solid rgba(255,255,255,.55);box-shadow:0 30px 90px -30px rgba(40,40,60,.22);max-height:940px}}
+.orb{position:absolute;z-index:-1;border-radius:50%;filter:blur(50px);opacity:.55;pointer-events:none}
+.orb.o1{width:260px;height:260px;background:#9fd8ef;top:-90px;right:-90px;animation:bob 10s ease-in-out infinite}
+.orb.o2{width:220px;height:220px;background:#a8e6cf;bottom:80px;left:-80px;animation:bob 9s ease-in-out infinite reverse}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.glass{background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);border:1px solid var(--glass-line);box-shadow:var(--shadow)}
+
+/* header (iOS nav bar) */
+#hdr{flex:none;padding:calc(10px + env(safe-area-inset-top,0)) 16px 10px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);display:flex;flex-direction:column;gap:8px}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.htitle{display:flex;align-items:center;gap:8px;min-width:0}
+.htitle>div{min-width:0}
+.htitle b,.htitle small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.htitle b{font-size:17px;line-height:1.2}
+.htitle small{font-size:12px;color:var(--ink-3)}
+.back{width:36px;height:36px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.6);font-size:22px;line-height:1;color:var(--ink-2);display:grid;place-items:center}
+.hright{display:flex;align-items:center;gap:6px;flex:none}
+.logout{font-size:12px;font-weight:700;color:var(--red-ink);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7)}
+.langs{display:flex;gap:2px;background:rgba(40,42,50,.07);padding:3px;border-radius:999px;flex:none}
+.langs button{border-radius:999px;padding:5px 7px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.langs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,22,18,.12)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.steps div{display:flex;flex-direction:column;gap:3px}
+.steps i{height:5px;border-radius:3px;background:rgba(40,42,50,.12);transition:background 380ms var(--ease)}
+.steps .sd i{background:var(--green)}.steps .sn i{background:var(--accent)}
+.steps span{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps .sn span{font-weight:700;color:var(--ink)}
+.who{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}
+.who span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.net{display:inline-flex;align-items:center;gap:6px;padding:1px 9px;border-radius:999px;font-weight:700;flex:none}
+.net::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
+.net.on{background:var(--green-soft);color:var(--green)}.net.on::before{animation:live 2s ease-in-out infinite}
+.net.off{background:var(--red-soft);color:var(--red);animation:offp 1.4s ease-in-out infinite}
+.net.wait{background:var(--amber-soft);color:var(--amber)}
+@keyframes live{0%,100%{box-shadow:0 0 0 0 rgba(46,107,60,.45)}50%{box-shadow:0 0 0 5px rgba(46,107,60,0)}}
+@keyframes offp{0%,100%{box-shadow:0 0 0 0 var(--red-soft)}50%{box-shadow:0 0 0 6px transparent}}
+.demo{background:var(--amber-soft);color:var(--amber-ink);font-size:12px;font-weight:700;text-align:center;padding:4px 8px;border-radius:8px}
+
+/* content */
+#main{flex:1 1 auto;min-height:0;overflow-y:auto;padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+#main::-webkit-scrollbar{width:0}
+#main.enter{animation:cardIn 380ms var(--ease) both}
+#main.enter .stg>*{animation:cardIn 380ms var(--ease) both}
+#main.enter .stg>*:nth-child(2){animation-delay:60ms}#main.enter .stg>*:nth-child(3){animation-delay:120ms}
+#main.enter .stg>*:nth-child(4){animation-delay:180ms}#main.enter .stg>*:nth-child(5){animation-delay:240ms}#main.enter .stg>*:nth-child(n+6){animation-delay:300ms}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pop{animation:cardIn 380ms var(--ease) both}
+.stg{display:flex;flex-direction:column;gap:12px}
+h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--ink-3)}
+.lbl{font-size:13px;font-weight:600;color:var(--ink-3)}
+.card{border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.mono{font-family:var(--mono)}
+.pill{flex:none;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--green-soft);color:var(--green)}.p-bad{background:var(--red);color:#fff}.p-warn{background:var(--amber-soft);color:var(--amber)}.p-mute{background:rgba(40,42,50,.08);color:var(--ink-3)}.p-fix{background:var(--amber-soft);color:var(--amber-ink)}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.err{background:var(--red-soft);color:var(--red-ink);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600}
+.note{background:var(--amber-soft);color:var(--amber-ink);border:1.5px dashed var(--amber);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600}
+
+/* login */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-top:6px}
+.mark{width:72px;height:72px;border-radius:20px;display:grid;place-items:center;font-size:38px;animation:bob 4s ease-in-out infinite}
+.mark span{display:inline-block;transform-origin:70% 70%;animation:wave 2.4s ease-in-out infinite}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
+.brand{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.hero h1{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.otp{display:flex;justify-content:center;gap:6px}
+.otp i{width:42px;height:56px;border-radius:12px;display:grid;place-items:center;font:600 24px var(--mono);font-style:normal;border:1.5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.55);transition:transform 140ms var(--ease),border-color 240ms,background 240ms}
+.otp i.now{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
+
+/* home */
+.greet{display:flex;align-items:center;gap:12px}
+.avatar{width:46px;height:46px;border-radius:50%;flex:none;background:linear-gradient(145deg,var(--teal),#2a5a5b);color:#fff;display:grid;place-items:center;font-weight:700;letter-spacing:.04em}
+.signout{font-size:13px;font-weight:600;color:var(--ink-3);padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.5)}
+.sum{display:flex;align-items:center}
+.sum>div{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.sum b{font:700 26px var(--mono);letter-spacing:-.02em;line-height:1}
+.sum span{font-size:12px;color:var(--ink-3);font-weight:500}
+.sum hr{width:1px;align-self:stretch;border:0;background:rgba(40,42,50,.1)}
+.dept{display:flex;align-items:center;gap:14px;text-align:left;border-radius:16px;padding:14px;width:100%}
+.dept.main{border:2px solid var(--accent)}
+.dept .ic{width:56px;height:56px;flex:none;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 18px var(--mono)}
+.dept.soon{background:rgba(255,255,255,.35);border:1px solid var(--glass-line);color:var(--ink-3);padding:12px 14px}
+.dept.soon .ic{width:46px;height:46px;background:rgba(255,255,255,.45);color:var(--ink-3);font-size:15px}
+.tlist{display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
+.tlist button{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
+.tlist button:first-child{border-top:0}
+.tlist .tm{font:600 14px var(--mono);color:var(--ink-3);flex:none;width:44px}
+.tlist .vd{opacity:.55;text-decoration:line-through}
+
+/* fields */
+.sel{height:54px;border-radius:14px;border:2px solid var(--accent);font-size:17px;padding:0 12px;width:100%;background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);box-shadow:var(--shadow);color:var(--ink)}
+.sel.ok{border:1.5px solid var(--glass-line)}
+.tap{height:56px;border-radius:14px;text-align:left;padding:0 14px;font:600 24px var(--mono);width:100%;color:var(--ink)}
+.f-act{border:2.5px solid var(--accent)!important;background:var(--glass)!important}
+.f-empty{border:1.5px dashed var(--red)!important}
+.f-ok{border:1.5px solid var(--glass-line)!important}
+.caret::after{content:'▏';animation:blink 1s steps(1) infinite;color:var(--accent)}
+@keyframes blink{50%{opacity:0}}
+.auto{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;align-items:center}
+.auto span{color:var(--ink-3)}.auto b{font-family:var(--mono);text-align:right}
+.auto select{border:0;background:transparent;font:700 14px var(--mono);text-align:right;text-align-last:right;width:100%}
+
+/* fish lines */
+.fl{border-radius:16px;overflow:hidden}
+.fl-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;text-align:left}
+.num{width:28px;height:28px;flex:none;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:600 14px var(--mono)}
+.num.on{background:var(--accent);color:#fff}
+.fl-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tile{height:72px;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;padding:6px 12px;border-radius:12px;text-align:left;border:1.5px solid var(--glass-line);background:var(--glass);-webkit-backdrop-filter:var(--glass-fx);backdrop-filter:var(--glass-fx);box-shadow:var(--shadow);overflow:hidden}
+.tile .t-l{font-size:12px;font-weight:600;color:var(--ink-3);display:flex;justify-content:space-between;width:100%;gap:4px}
+.tile select,.tile input{width:100%;height:34px;border:0;background:transparent;font:700 16px var(--mono);padding:0;color:var(--ink)}
+.tile input{border-bottom:2px solid var(--accent);text-transform:uppercase}
+.tile input[data-on=typesup]{text-transform:none;font:600 17px var(--sans,inherit)}
+.tile .t-v{display:flex;align-items:baseline;gap:6px;width:100%}
+.tile .t-v b{font:700 20px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
+.u-g{background:var(--teal)}.u-kg{background:var(--accent)}
+.tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}
+.linkbtn{color:var(--accent);font-size:12px;font-weight:700;padding:0}
+.sample{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--accent-soft);border-radius:10px;padding:6px 12px}
+.sample b{font:600 17px var(--mono);color:var(--accent)}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tog>span{font-size:15px;font-weight:600}
+.seg{display:flex;border:1.5px solid var(--glass-line);border-radius:10px;overflow:hidden}
+.seg button{padding:8px 12px;min-width:74px;font-size:14px;font-weight:600;background:rgba(255,255,255,.35)}
+.seg button.on{background:var(--accent);color:#fff}
+.seg button.on.warn{background:var(--red)}
+.addline{border:1.5px dashed var(--accent);color:var(--accent);border-radius:14px;padding:12px;font-size:16px;font-weight:600;width:100%}
+.ibtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink-3);font-size:15px;flex:none}
+.ibtn.confirm{width:auto;padding:0 10px;background:var(--red);color:#fff;font-weight:700;border-color:var(--red)}
+
+/* inspect */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tabs::-webkit-scrollbar{height:0}
+.tabs button{flex:none;padding:9px 12px;border-radius:12px;font-size:14px;font-weight:600;white-space:nowrap}
+.tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.temp{min-width:124px;line-height:1.1;text-align:center;padding:10px 12px;border-radius:14px;font:600 28px var(--mono);border:2.5px solid var(--accent);background:var(--glass)}
+.temp.ok{background:var(--green-soft);color:var(--green);border:2px solid var(--green)}
+.temp.bad{background:var(--red-soft);color:var(--red);border:2px solid var(--red)}
+.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.chips button{min-height:42px;padding:6px 8px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;background:rgba(255,255,255,.35);border:1.5px solid var(--glass-line)}
+.chips button.zero{color:var(--red-ink);border:1.5px dashed #e0a5a7;background:var(--glass)}
+.chips button.on{background:var(--red);color:#fff;border-color:var(--red);animation:chipIn 280ms var(--ease)}
+@keyframes chipIn{from{transform:scale(.92)}to{transform:none}}
+.strip{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.strip::-webkit-scrollbar{height:0}
+.strip button{flex:none;width:46px;height:44px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 13px var(--mono);border:1.5px solid var(--glass-line);background:var(--glass);color:var(--ink-3)}
+.strip button small{font-size:9px;color:var(--ink-3)}
+.strip .here{border:2.5px solid var(--accent);color:var(--ink)}
+.strip .tok{border-color:var(--green);background:var(--green-soft);color:var(--ink)}
+.strip .tbad{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.strip .dfx{border-color:var(--amber);background:var(--amber-soft);color:var(--ink)}
+.strip .rest{width:auto;min-width:60px;font-size:12px;font-weight:600;font-family:inherit;border:1.5px dashed var(--accent);background:transparent;color:var(--accent)}
+.strip .rest.here{border-style:solid;background:var(--glass);color:var(--ink)}
+.lsum{padding:10px 12px;border-radius:12px;font-weight:600;font-size:14px}
+.ls-ok{background:var(--green-soft);color:var(--green)}.ls-warn{background:var(--amber-soft);color:var(--amber-ink)}.ls-bad{background:var(--red);color:#fff}
+.rest-list{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.rrow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid rgba(255,255,255,.45)}
+.rrow:first-child{border-top:0}
+.rrow.found{background:var(--amber-soft)}.rrow.fail{background:var(--red-soft)}
+.rrow .rl{display:flex;flex-direction:column;flex:1;min-width:0}
+.rrow .rl small{font-size:12px;color:var(--ink-3)}.rrow.fail .rl small{color:var(--red);font-weight:700}
+.step{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--glass-line);background:var(--glass);font:700 22px var(--mono)}
+.rn{min-width:40px;text-align:center;font:700 20px var(--mono);color:var(--ink-3)}
+.found .rn{color:var(--amber)}.fail .rn{color:var(--red)}
+
+/* summary */
+.sl{border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.sl.bad{border:2px solid var(--red)}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-size:13px;color:var(--ink-3)}
+.kv b{display:block;font:600 16px var(--mono);color:var(--ink)}
+.kv b.bad{color:var(--red)}
+.rng{display:flex;align-items:center;gap:6px;width:100%}
+.rng button{flex:1;min-width:0;height:34px;border-radius:9px;border:1.5px solid var(--glass-line);background:rgba(255,255,255,.45);font:700 18px var(--mono);color:var(--ink)}
+.rng button.f-act{border:2.5px solid var(--accent);background:var(--glass)}
+.rng i{font-style:normal;color:var(--ink-3);font-weight:700}
+.truck{position:relative;width:112px;height:80px;flex:none;border:2px solid var(--ink-3);border-radius:8px;background:rgba(255,255,255,.35)}
+.truck b{position:absolute;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:700 12px var(--mono);background:var(--glass);border:1.5px solid var(--glass-line);color:var(--ink-3)}
+.truck b.pt-ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.truck b.pt-bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.truck b.pt-now{background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(1.12)}
+.truck .p1{left:4px;top:4px}.truck .p2{right:4px;top:4px}.truck .p3{right:4px;bottom:4px}.truck .p4{left:4px;bottom:4px}.truck .p5{left:42px;top:26px}
+.ck{display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
+.ck button{display:flex;align-items:center;gap:10px;padding:10px 12px;text-align:left;border-top:1px solid rgba(255,255,255,.45);font-size:15px;font-weight:500;background:transparent;width:100%}
+.ck button:first-child{border-top:0}
+.ck .mk{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;background:var(--green-soft);color:var(--green)}
+.ck button.x{background:var(--red-soft)}.ck button.x .mk{background:var(--red);color:#fff}
+.ck button small{display:block;font-size:12px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.ck button.na{opacity:.55}.ck button.na .mk{background:transparent;color:var(--ink-3)}
+.strip .g0{margin-left:8px}
+.fixes{display:flex;flex-wrap:wrap;gap:6px}
+.fixes button{padding:9px 13px;border-radius:999px;font-size:15px;font-weight:600;background:rgba(255,255,255,.35);border:1.5px solid var(--glass-line)}
+.fixes button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rc{display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:12px;padding:8px 12px;width:100%;text-align:left}
+.rc b{font:600 20px var(--mono)}
+
+/* done */
+.done{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:30px;text-align:center}
+.tick{width:120px;height:120px;border-radius:50%;background:rgba(219,233,213,.8);display:grid;place-items:center;animation:popc 520ms var(--ease) both,ring 1.6s ease-out 520ms 2}
+.tick div{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:46px;font-weight:700;animation:popc 520ms var(--ease) 160ms both}
+.tick.wait{background:rgba(245,233,212,.85);animation:popc 520ms var(--ease) both}
+.tick.wait div{background:var(--amber)}
+@keyframes popc{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(46,107,60,.35)}100%{box-shadow:0 0 0 22px rgba(46,107,60,0)}}
+
+/* number pad (iOS keyboard) */
+#pad{flex:none;background:rgba(210,222,228,.6);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border-top:1px solid rgba(255,255,255,.6);padding:6px 8px 8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#pad:empty{display:none}
+#pad.up{animation:padUp 280ms var(--ease) both}
+@keyframes padUp{from{transform:translateY(100%)}to{transform:none}}
+#pad button{height:46px;border-radius:12px;font:600 22px var(--mono);background:rgba(255,255,255,.85);color:var(--ink);box-shadow:0 1px 0 rgba(40,42,50,.18)}
+#pad button.fn{background:rgba(170,186,196,.55)}
+#pad button.blank{background:transparent;box-shadow:none;cursor:default}
+#pad button.ok{grid-column:1/-1;height:44px;font-size:16px;font-weight:700;font-family:inherit;background:var(--accent);color:#fff}
+
+/* action bar */
+#act{flex:none;padding:8px 16px calc(12px + env(safe-area-inset-bottom,0));background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-top:1px solid rgba(255,255,255,.6);display:flex;gap:8px}
+#act:empty{display:none}
+.btn{flex:1;height:50px;border-radius:14px;font-size:17px;font-weight:700;background:var(--ink);color:#fff;box-shadow:0 8px 20px -8px rgba(20,22,18,.5);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.green{background:var(--green);box-shadow:0 8px 20px -8px rgba(46,107,60,.6)}
+.btn.ghost{background:rgba(255,255,255,.55);color:var(--ink);border:1px solid var(--glass-line);box-shadow:none;flex:0 0 auto;padding:0 16px}
+.btn:disabled{opacity:.35}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* bottom sheet + toast */
+#sheet{position:fixed;inset:0;z-index:50;background:rgba(40,42,50,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 240ms var(--ease)}
+#sheet.open{opacity:1;pointer-events:auto}
+#sheet .box{width:100%;max-width:480px;max-height:85%;overflow-y:auto;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0));display:flex;flex-direction:column;gap:12px;transform:translateY(30px);transition:transform 380ms var(--ease)}
+#sheet.open .box{transform:none}
+#sheet textarea{width:100%;min-height:70px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:10px;font:inherit;font-size:16px;background:#fff}
+#toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);opacity:0;z-index:60;background:rgba(27,28,26,.9);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90%;text-align:center;transition:opacity 240ms var(--ease),transform 240ms var(--ease);pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* ---- PC screens (pc.html) — same design system as RM ---- */
+.dchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.dchips>*{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;border-radius:12px;background:var(--glass);border:1.5px solid var(--glass-line);box-shadow:var(--shadow);text-align:center;overflow:hidden}
+.dchips b{font-size:13px;font-weight:700;line-height:1.15}
+.dchips small{font:600 12px var(--mono);color:var(--ink-3)}
+.dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
+.dchips .on small{color:rgba(255,255,255,.85)}
+.dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
+.lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
+.lotno{font:700 17px var(--mono);color:var(--accent-ink);background:var(--accent-soft);border-radius:8px;padding:3px 9px;flex:none}
+.lline{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
+.lline.on{background:var(--accent-soft)}
+.lline .go{font-size:22px;color:var(--accent);flex:none}
+.ic2{width:44px;height:44px;flex:none;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 15px var(--mono)}
+.t3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;border:1.5px solid var(--glass-line);background:var(--glass);box-shadow:var(--shadow);min-height:84px;justify-content:center}
+.tt small{font-size:11px;font-weight:600;color:var(--ink-3)}
+.tt b{font:700 26px var(--mono);line-height:1.1}
+.tt.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tt.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tt.f-empty{border-style:dashed;border-color:var(--accent)}
+.lossbox{display:flex;align-items:baseline;gap:10px;border-radius:14px;padding:10px 14px;background:var(--glass);border:1.5px solid var(--glass-line);box-shadow:var(--shadow);flex-wrap:wrap}
+.lossbox span{font-size:14px;font-weight:600;color:var(--ink-3)}
+.lossbox b{font:700 30px var(--mono);letter-spacing:-.02em}
+.lossbox small{flex-basis:100%;font-size:13px;font-weight:600}
+.lossbox.ok{background:var(--green-soft);border-color:rgba(46,107,60,.35)}.lossbox.ok b{color:var(--green)}
+.lossbox.hi{background:var(--amber-soft);border-color:var(--amber)}.lossbox.hi b,.lossbox.hi small{color:var(--amber)}
+.fixes button small{font-size:12px}
+</style>
+</head>
+<body class="lang-th">
+<div class="app">
+  <div class="phone">
+    <div class="orb o1" aria-hidden="true"></div>
+    <div class="orb o2" aria-hidden="true"></div>
+    <header id="hdr"></header>
+    <main id="main"></main>
+    <div id="pad"></div>
+    <footer id="act"></footer>
+  </div>
+</div>
+<div id="sheet" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+ * CK QC — PC (ตรวจสอบคุณภาพ PC · FM-QA-010.10 Rev.02) · phone screen
+ * Own file, own folder (Sal, 6 Nov 2026): the RM app (index.html) keeps working whatever happens here.
+ * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
+ * ===================================================================== */
+const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
+const APP_VERSION = '1.0.0';
+const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
+const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
+const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
+const STORE_KEY = DEMO ? 'ckqc.pc.demo.state' : 'ckqc.pc.v1';
+const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
+
+/* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
+const L = {
+  th: {
+    pc: 'ตรวจสอบคุณภาพ PC', pcShort: 'แปรรูป (PC)', pcSub: 'FM-QA-010.10 · อุณหภูมิหลังชั่ง · %Loss', branch: 'สาขาสมุทรปราการ', steps: ['ล็อต', 'ตรวจ'],
+    welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจ…',
+    badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'ยังมีการตรวจที่ยังไม่บันทึก — กด ออก อีกครั้งเพื่อทิ้งและออก',
+    demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet', offline: 'ออฟไลน์', online: 'ออนไลน์', waiting: 'รอส่ง', inspector: 'ผู้ตรวจ', back: 'กลับ', ok: 'ตกลง',
+    mainMenu: 'เมนูหลัก', refresh: 'รีเฟรช', today: 'วันนี้ (PC)', checks: 'ครั้งที่ตรวจ', heldN: 'ปลาดอง', failShort: 'ไม่ผ่าน',
+    start: 'เริ่มตรวจ PC', startSub: 'เลือกล็อตจาก RM แล้วตรวจ', resume: 'ทำต่อ', discard: 'ทิ้งการตรวจนี้', discardQ: 'แตะอีกครั้งเพื่อทิ้ง',
+    todayList: 'ตรวจแล้ววันนี้', none: 'ยังไม่มีการตรวจวันนี้', pendingT: 'รอส่ง', pendingSub: 'บันทึกไว้ในเครื่องแล้ว แอปส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้',
+    failedSend: 'ระบบไม่รับ', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งการตรวจที่ทำค้างก่อน',
+    reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
+    lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (เลขล็อตเริ่ม 1 ใหม่ทุกวัน)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
+    loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
+    heldBadge: 'ปลาดอง {n} วัน', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
+    manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
+    lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
+    trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
+    before: 'น้ำหนักก่อนตัดแต่ง', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
+    remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
+    recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
+    needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าก่อนตัดแต่ง', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
+    doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
+    pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
+    cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
+    gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ'
+  },
+  en: {
+    pc: 'PC quality check', pcShort: 'Processing (PC)', pcSub: 'FM-QA-010.10 · temperature after weighing · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'Check'],
+    welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Sign in', checking: 'Checking…',
+    badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved check — tap Sign out again to discard it',
+    demo: 'Demo mode — nothing is sent to Google Sheets', offline: 'Offline', online: 'Online', waiting: 'Waiting', inspector: 'Inspector', back: 'Back', ok: 'OK',
+    mainMenu: 'Main menu', refresh: 'Refresh', today: 'Today (PC)', checks: 'checks', heldN: 'held fish', failShort: 'failed',
+    start: 'Start PC check', startSub: 'Pick the RM lot, then check', resume: 'Continue', discard: 'Discard this check', discardQ: 'Tap again to discard',
+    todayList: 'Checked today', none: 'No checks yet today', pendingT: 'Waiting to send', pendingSub: 'Saved on this phone; sends itself when there is signal', sendNow: 'Send now',
+    failedSend: 'Refused', reopen: 'Open to fix', finishFirst: 'Save or discard the open check first',
+    reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
+    lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (lot numbers restart at 1 every day)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
+    loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
+    heldBadge: 'Held {n} day(s)', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
+    manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
+    lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
+    trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
+    before: 'Weight before trim', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
+    remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
+    recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
+    needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than before', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
+    doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
+    pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
+    cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
+    gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv'
+  },
+  my: {
+    pc: 'PC အရည်အသွေး စစ်ဆေး', pcShort: 'PC', pcSub: 'FM-QA-010.10 · ချိန်ပြီး အပူချိန် · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'စစ်'],
+    welcome: 'ကြိုဆိုပါသည်', loginSub: 'ဝန်ထမ်း နံပါတ် ၇ လုံး', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်ရန်', checking: 'စစ်နေသည်…',
+    badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမဆုံး ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေး — ထွက်ရန် ထပ်နှိပ်ပါ',
+    demo: 'စမ်းသပ်မုဒ်', offline: 'အော့ဖ်လိုင်း', online: 'အွန်လိုင်း', waiting: 'ပို့ရန်', inspector: 'စစ်ဆေးသူ', back: 'နောက်', ok: 'အိုကေ',
+    mainMenu: 'ပင်မ', refresh: 'ပြန်ဖွင့်', today: 'ယနေ့ (PC)', checks: 'စစ်ပြီး', heldN: 'ထိန်းထားသော ငါး', failShort: 'မအောင်',
+    start: 'PC စစ်ဆေး စတင်', startSub: 'RM lot ရွေးပြီး စစ်ပါ', resume: 'ဆက်လုပ်', discard: 'ဤစစ်ဆေးမှု ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ',
+    todayList: 'ယနေ့ စစ်ပြီး', none: 'ယနေ့ မစစ်ရသေး', pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းတွင် သိမ်းပြီး', sendNow: 'ယခု ပို့',
+    failedSend: 'လက်မခံ', reopen: 'ပြင်ရန် ဖွင့်', finishFirst: 'ဖွင့်ထားသည်ကို အရင် သိမ်း/ဖျက်ပါ',
+    reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
+    lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
+    loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
+    heldBadge: '{n} ရက် ထိန်းထား', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
+    manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
+    lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
+    trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
+    before: 'ခုတ်ပြင်မီ အလေးချိန်', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
+    remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
+    recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
+    needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
+    doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
+    pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
+    cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
+    gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ'
+  }
+};
+
+/* ---------------- state ---------------- */
+const S = load();
+S.staff = null; S.screen = 'login'; S.pad = { kind: 'sid' };
+S.sid = ''; S.buf = ''; S.busy = false; S.err = ''; S.online = navigator.onLine; S.confirm = null; S.wide = false; S.lotsBusy = false;
+takeHandover();
+let lastScreen = null, lastPad = false;
+
+function load() {
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
+  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, lots: {}, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
+}
+/** came from the main menu in this tab (index.html) → already signed in there; the hand-over is used once */
+function takeHandover() {
+  let h = null;
+  try { h = JSON.parse(sessionStorage.getItem(HAND_KEY) || 'null'); sessionStorage.removeItem(HAND_KEY); } catch (e) { h = null; }
+  if (h && h.staff && h.staff.id && Date.now() - (h.at || 0) < 120000) {
+    S.staff = h.staff; if (h.lang) S.lang = h.lang;
+    S.screen = 'home'; S.pad = null;
+  }
+}
+function toMainMenu() {
+  try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
+  persist();
+  location.href = HOME_URL;
+}
+const sentIds = {};
+function persist() {
+  try {
+    const stored = (JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}).outbox || [];
+    stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
+  } catch (e) { /* ignore */ }
+  // keep only the last 7 receive dates of lots (offline use)
+  const days = Object.keys(S.lots || {}).sort().slice(-7);
+  const lots = {}; days.forEach((d) => (lots[d] = S.lots[d]));
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, lots: lots, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
+}
+
+const t = () => L[S.lang] || L.th;
+const fmt = (s, o) => String(s).replace(/\{(\w+)\}/g, (_, k) => o[k]);
+const esc = (s) => String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const P2 = (n) => String(n).padStart(2, '0');
+const nowHM = () => { const d = new Date(); return P2(d.getHours()) + ':' + P2(d.getMinutes()); };
+const dayStr = (d) => d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate());
+const todayStr = () => dayStr(new Date());
+const addDays = (s, n) => { const p = s.split('-').map(Number); return dayStr(new Date(p[0], p[1] - 1, p[2] + n)); };
+const daysBetween = (a, b) => { const p = a.split('-').map(Number), q = b.split('-').map(Number); return Math.round((new Date(q[0], q[1] - 1, q[2]) - new Date(p[0], p[1] - 1, p[2])) / 86400000); };
+const ddmm = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '');
+const numFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
+const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
+const EMPTY_PC = { trims: [{ code: 'G', name: 'ควักไส้ / Gutted', maxLoss: null }, { code: 'H/L', name: 'ตัดหัว / Headless', maxLoss: null }], settings: { TEMP_MAX: 2, HOLD_WARN: 2 }, cancelDepts: ['general manager'] };
+const pcCfg = () => (S.cfg && S.cfg.pc) || (DEMO ? DEMO_CFG.pc : EMPTY_PC);
+const rmFish = () => ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.rm.fish : [])).map((f) => f.name);
+const rmProcs = () => (S.cfg && S.cfg.rm && S.cfg.rm.procs) || ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'];
+const tempMax = () => Number(pcCfg().settings && pcCfg().settings.TEMP_MAX) || 2;
+const holdWarn = () => Number(pcCfg().settings && pcCfg().settings.HOLD_WARN) || 2;
+const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
+
+/* ---------------- rules (same as the server) ---------------- */
+function newId() {
+  const d = new Date();
+  const r = Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, 'X');
+  return 'PC-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
+}
+function blankCheck(rmDate) {
+  return { id: newId(), date: todayStr(), rmDate: rmDate || todayStr(), lot: '', rmId: '', rmLine: '', sup: '', fish: '', proc: 'WR', size: '', rmStatus: '', manual: false,
+    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', after: '', remark: '', stage: 'lot' };
+}
+const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
+const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
+function evalCheck(c) {
+  const vals = c.temps.map((v) => (v === '' || v === '-' || isNaN(Number(v)) ? null : Number(v)));
+  const got = vals.filter((v) => v !== null);
+  const max = got.length ? Math.max.apply(null, got) : null;
+  const warm = max !== null && max > tempMax();
+  const rc = c.recheck === '' || isNaN(Number(c.recheck)) ? null : Number(c.recheck);
+  const tFail = warm && !(rc !== null && rc <= tempMax());
+  const b = Number(c.before), a = Number(c.after);
+  const loss = b > 0 && a > 0 && a <= b ? Math.round(((b - a) / b) * 10000) / 100 : null;
+  const tr = pcCfg().trims.find((x) => x.code === c.trim);
+  const lim = tr && tr.maxLoss !== null && tr.maxLoss !== undefined && tr.maxLoss !== '' ? Number(tr.maxLoss) : null;
+  const why = [];
+  if (!c.lot || !c.fish) why.push('lot');
+  if (!c.trim) why.push(t().needTrim);
+  if (vals[0] === null) why.push(t().needT1);
+  if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > b) why.push(t().afterBig);
+  if (warm && !c.fix) why.push(t().needFix);
+  return { vals, max, warm, tFail, loss, lim, high: lim !== null && loss !== null && loss > lim, held: heldOf(c), ok: !why.length, why,
+    status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
+}
+
+/* ---------------- talking to Apps Script ---------------- */
+function api(action, params, timeoutMs) {
+  if (DEMO) return demoApi(action, params || {});
+  const ctl = 'AbortController' in window ? new AbortController() : null;
+  const timer = ctl ? setTimeout(() => ctl.abort(), timeoutMs || 25000) : null;
+  return fetch(API_URL, {
+    method: 'POST', mode: 'cors', cache: 'no-cache', redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ action: action }, params || {})),
+    signal: ctl ? ctl.signal : undefined
+  }).then((r) => {
+    if (!r.ok) throw netErr('HTTP ' + r.status);
+    return r.json().catch(() => { throw netErr('bad response'); });
+  }, (e) => { throw netErr(e && e.name === 'AbortError' ? 'timeout' : (e && e.message) || 'network'); })
+    .then((j) => { if (!j || j.ok === false) { const e = new Error((j && j.error) || 'error'); e.code = j && j.code; throw e; } return j; })
+    .finally(() => timer && clearTimeout(timer));
+}
+function netErr(m) { const e = new Error(m); e.net = true; return e; }
+
+/* demo mode (no Web app URL yet): try everything, nothing is sent */
+const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปราการ' },
+  rm: { fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'KORAL'].map((n) => ({ name: n, type: 'FISH' })), procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'] },
+  pc: { trims: [{ code: 'G', name: 'ควักไส้ / Gutted', maxLoss: null }, { code: 'H/L', name: 'ตัดหัว / Headless', maxLoss: 15 }, { code: 'TRIM', name: 'ตัดแต่งทั่วไป', maxLoss: null }],
+    settings: { TEMP_MAX: 2, HOLD_WARN: 2 }, cancelDepts: ['general manager'] } };
+function demoApi(action, p) {
+  return new Promise((res) => setTimeout(() => {
+    let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.pc.demo') || '{}'); } catch (e) { mem = {}; }
+    mem.recs = mem.recs || [];
+    if (action === 'validateStaff') return res(/^\d{7}$/.test(p.staffId) ? { ok: true, valid: true, name: 'ผู้ทดลอง', department: 'QC' } : { ok: true, valid: false });
+    if (action === 'getConfig') return res(DEMO_CFG);
+    if (action === 'pcLots') {
+      const back = daysBetween(p.date, todayStr());
+      return res({ ok: true, date: p.date, lots: back > 3 ? [] : [
+        { id: 'RM-DEMO-' + p.date + '-1', lot: '1', sup: 'ตัวอย่าง ผู้ขาย A / 01', start: '07:10', lines: [
+          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน' },
+          { n: 2, name: 'ROHU/WR 800G', fish: 'ROHU', proc: 'WR', size: '800G', kind: 'FISH', wr: '51–150', w: 120, status: 'ผ่าน' }] },
+        { id: 'RM-DEMO-' + p.date + '-2', lot: '2', sup: 'ตัวอย่าง ผู้ขาย B / 02', start: '08:30', lines: [
+          { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
+    }
+    if (action === 'pcSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'pcVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
+    try { localStorage.setItem('ckqc.pc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
+    if (action === 'pcToday') {
+      const checks = mem.recs.filter((r) => r.date === (p.date || todayStr())).map((r) => ({ id: r.id, time: r.time, item: r.item, size: r.size, lot: r.lot, rmDate: ddmm(r.rmDate),
+        held: Math.max(0, daysBetween(r.rmDate, r.date)), rmStatus: r._rm || '', trim: r.trim, loss: r._loss, lossCheck: '', status: r._status, staffName: 'ผู้ทดลอง', void: !!r.void, voidReason: r.voidReason || '' })).reverse();
+      const live = checks.filter((c) => !c.void);
+      return res({ ok: true, checks: checks, totals: { checks: live.length, held: live.filter((c) => c.held > 0).length, failed: live.filter((c) => c.status === 'ไม่ผ่าน').length } });
+    }
+    res({ ok: true, id: p.record && p.record.id, report: 'ok' });
+  }, 300));
+}
+
+/* ---------------- sending saved checks (outbox) ---------------- */
+let flushing = false, retryTimer = null;
+function flush() {
+  if (flushing || !S.outbox.length) return Promise.resolve();
+  flushing = true;
+  const next = () => {
+    const item = S.outbox.find((o) => !o.hold);
+    if (!item) return Promise.resolve();
+    item.record.sentLate = Date.now() - item.savedAt > 10 * 60 * 1000;
+    return api('pcSave', { staffId: item.staffId, record: item.record }, 45000).then((j) => {
+      if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: item.record.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
+      else if (j && j.report === 'ok') S.reportWarn = null;
+      S.outbox = S.outbox.filter((o) => o !== item);
+      sentIds[item.record.id] = true;
+      S.online = true;
+      if (S.last && S.last.id === item.record.id) { S.last.sent = true; S.last.report = j && j.report; }
+      persist(); render();
+      return next();
+    }, (e) => {
+      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.err = e.message; persist(); render(); return next(); }
+      throw e;
+    });
+  };
+  return next().then(() => { flushing = false; refreshToday(true); }, (e) => {
+    flushing = false; if (e && e.net) S.online = false; render();
+    clearTimeout(retryTimer); retryTimer = setTimeout(flush, 20000);
+  });
+}
+let todayAt = 0;
+function refreshToday(force) {
+  if (!S.staff || (!force && Date.now() - todayAt < 30000)) return;
+  todayAt = Date.now();
+  api('pcToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.today = { date: todayStr(), checks: j.checks, totals: j.totals }; S.online = true; persist(); render();
+  }, (e) => { if (e.net) { S.online = false; render(); } });
+}
+let cfgAt = 0;
+function refreshConfig(force) {
+  if (!S.staff || (!force && Date.now() - cfgAt < 5000)) return;
+  cfgAt = Date.now();
+  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.online = true; persist(); render(); },
+    (e) => { if (e.code === 'STAFF') { signOut(); toast(t().badId); return; } if (e.net) S.online = false; render(); });
+}
+function loadLots(date, force) {
+  if (!S.staff || !date) return;
+  const have = S.lots[date];
+  if (have && !force && Date.now() - have.at < 60000) return;
+  S.lotsBusy = true; render();
+  api('pcLots', { staffId: S.staff.id, date: date }).then((j) => {
+    S.lots[date] = { lots: j.lots, at: Date.now() }; S.lotsBusy = false; S.online = true; persist(); render();
+  }, (e) => { S.lotsBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
+}
+
+/* ---------------- screens ---------------- */
+function go(screen, extra) {
+  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
+  if (!extra || !('pad' in extra)) S.pad = null;
+  if (S.c && ['lot', 'manual', 'check'].indexOf(screen) >= 0) S.c.stage = screen;
+  render();
+  if (screen === 'home') { refreshToday(); flush(); }
+}
+
+function renderHeader() {
+  const T = t();
+  const steps = { lot: 0, manual: 0, check: 1 };
+  const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
+  const backTo = { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
+  const pend = S.outbox.length;
+  const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
+    : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
+  let h = '<div class="hrow"><div class="htitle">' +
+    (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
+    '<div><b>' + (S.screen === 'login' ? 'CK QC' : esc(T.pcShort)) + '</b><small>CK QC · PC · ' + esc(branch()) + '</small></div></div>' +
+    '<div class="hright"><div class="langs">' + [['th', 'ไทย'], ['en', 'EN'], ['my', 'မြန်မာ']].map((x) =>
+      '<button data-act="lang" data-v="' + x[0] + '" class="' + (S.lang === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>' +
+    (S.staff ? '<button class="logout" data-act="signout" aria-label="' + T.signOut + '">⎋ ' + T.signOut + '</button>' : '') + '</div></div>';
+  if (DEMO) h += '<div class="demo">' + T.demo + '</div>';
+  if (at >= 0) h += '<div class="steps">' + T.steps.map((s, i) => '<div class="' + (i < at ? 'sd' : i === at ? 'sn' : '') + '"><i></i><span>' + esc(s) + '</span></div>').join('') + '</div>';
+  if (S.staff && S.screen !== 'login' && S.screen !== 'home') h += '<div class="who"><span>' + T.inspector + ': <b>' + esc(S.staff.name) + '</b> · ' + esc(S.staff.id) + '</span>' + net + '</div>';
+  return h;
+}
+
+function viewLogin() {
+  const T = t();
+  const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + (S.sid[i] ? (i === S.sid.length - 1 && S.peek ? esc(S.sid[i]) : '●') : '') + '</i>').join('');
+  return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · PC · ' + esc(branch()) + '</div>' +
+    '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
+    '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' +
+    (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '</div>';
+}
+
+const statusPill = (s) => s === 'ไม่ผ่าน' || s === 'fail' ? '<span class="pill p-bad">✗ ' + t().fail + '</span>'
+  : s === 'ผ่านหลังแก้ไข' || s === 'fixed' ? '<span class="pill p-fix">✓ ' + t().passFix + '</span>' : '<span class="pill p-ok">✓ ' + t().pass + '</span>';
+const heldPill = (n) => (n > 0 ? '<span class="pill ' + (n >= holdWarn() ? 'p-bad' : 'p-warn') + '">🧊 ' + fmt(t().heldBadge, { n: n }) + '</span>' : '');
+
+function viewHome() {
+  const T = t();
+  const st = S.staff;
+  const init = (st.name || '').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase() || '··';
+  const td = S.today && S.today.date === todayStr() ? S.today : { checks: [], totals: { checks: 0, held: 0, failed: 0 } };
+  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.checks.some((x) => x.id === o.record.id)).map((o) => ({
+    id: o.record.id, time: o.record.time, item: o.record.item, size: o.record.size, lot: o.record.lot, rmDate: ddmm(o.record.rmDate),
+    held: Math.max(0, daysBetween(o.record.rmDate, o.record.date)), loss: o.record._loss, status: o.record._status, pending: true, err: o.err }));
+  const rows = pendRows.concat(td.checks);
+  let h = '<div class="stg">';
+  h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
+    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 12px;font-size:14px" data-act="mainmenu">‹ ' + T.mainMenu + '</button>' +
+    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 12px;font-size:14px" data-act="hardrefresh">↻</button></div>';
+  h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
+    (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
+    '<div class="sum"><div><b>' + td.totals.checks + '</b><span>' + T.checks + '</span></div><hr><div><b style="color:' + (td.totals.held ? 'var(--amber)' : 'var(--ink)') + '">' + td.totals.held + '</b><span>' + T.heldN + '</span></div><hr>' +
+    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
+  if (S.reportWarn) {
+    h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
+      '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
+      '<button class="linkbtn" data-act="hidewarn">' + T.hide + '</button></div></div>';
+  }
+  if (S.outbox.length) {
+    const bad = S.outbox.find((o) => o.err);
+    h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
+      (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
+        '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') + '</div>' +
+      '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
+  }
+  if (S.c) {
+    const c = S.c;
+    h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">PC</span><span class="grow"><b style="font-size:17px">' + T.resume + (c.lot ? ' · Lot ' + esc(c.lot) : '') + '</b>' +
+      '<div class="sub">' + esc(itemOf(c) || '—') + (c.size ? ' ' + esc(c.size) : '') + (c.rmDate ? ' · ' + T.rcv + ' ' + ddmm(c.rmDate) : '') + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
+      '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button></div>';
+  } else {
+    h += '<button class="dept main glass" data-act="start"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.start + '</b><div class="sub">' + T.startSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  }
+  h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
+  if (!rows.length) h += '<div class="sub">' + T.none + '</div>';
+  else {
+    h += '<div class="tlist glass">' + rows.map((r) => {
+      const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' : statusPill(r.status);
+      return '<button data-act="check" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.time) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>' + esc(r.item) + ' ' + esc(r.size || '') + '</b>' +
+        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + (r.loss !== null && r.loss !== undefined && r.loss !== '' ? ' · ' + numFmt(r.loss) + '%' : '') + '</div>' +
+        (r.held > 0 && !r.void ? '<div class="sub" style="color:var(--amber);font-weight:700">🧊 ' + fmt(T.heldBadge, { n: r.held }) + '</div>' : '') + '</span>' + pill + '</button>';
+    }).join('') + '</div>';
+  }
+  return h + '</div>';
+}
+
+function viewLot() {
+  const T = t();
+  const c = S.c;
+  const today = todayStr();
+  let h = '<div class="stg"><div><h2>' + T.lotT + '</h2><div class="sub">' + T.lotSub + '</div></div>';
+  const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
+  const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
+  h += '<span class="lbl">' + T.rcvDate + '</span><div class="dchips">' + chips +
+    '<label class="' + (other ? 'on' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
+  const held = heldOf(c);
+  if (held > 0) h += '<div class="note">🧊 ' + fmt(T.heldBadge, { n: held }) + (held >= holdWarn() ? ' — ' + T.heldLong : '') + '</div>';
+  const got = S.lots[c.rmDate];
+  if (S.lotsBusy && !got) h += '<div class="sub" style="text-align:center"><span class="spin"></span> ' + T.loading + '</div>';
+  else if (!got && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
+  else if (got && !got.lots.length) h += '<div class="sub" style="text-align:center">' + T.noLots + '</div>';
+  if (got && !S.online && got.lots.length) h += '<div class="sub">' + T.lotsOffline + '</div>';
+  if (got) {
+    got.lots.forEach((lot) => {
+      h += '<div class="lotc glass"><div class="lh"><span class="lotno">Lot ' + esc(lot.lot) + '</span><span class="grow sub">' + esc(String(lot.sup).split(' / ')[0]) + ' · ' + esc(lot.start) + '</span></div>' +
+        lot.lines.map((l) => {
+          const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
+          const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
+          return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
+            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + '</div></span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
+        }).join('') + '</div>';
+    });
+  }
+  h += '<button class="addline" data-act="manual">' + T.manual + '</button>';
+  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+  return h + '</div>';
+}
+
+function viewManual() {
+  const T = t();
+  const c = S.c;
+  const lotA = S.pad && S.pad.kind === 'lot';
+  let h = '<div class="stg"><div><h2>' + T.manualT + '</h2><div class="sub">' + T.manualSub + '</div></div>';
+  h += '<div class="sample"><span>' + T.rcvDate + '</span><b>' + ddmm(c.rmDate) + '</b></div>';
+  h += '<div class="grid2">' +
+    '<button class="tile ' + (lotA ? 'f-act' : c.lot ? 'filled' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="t-l">' + T.lotL + '</span><span class="t-v"><b class="' + (lotA ? 'caret' : '') + '">' + esc(c.lot || (lotA ? '' : '—')) + '</b></span></button>' +
+    '<label class="tile ' + (c.fish ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.item + '</span><select data-on="mfish"><option value="">' + T.pickOne + '</option>' +
+      rmFish().map((n) => '<option' + (n === c.fish ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></label>' +
+    '<label class="tile filled"><span class="t-l">' + T.proc + '</span><select data-on="mproc">' + rmProcs().map((p) => '<option' + (p === c.proc ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
+    '<label class="tile ' + (c.size ? 'filled' : '') + '"><span class="t-l">' + T.size + '</span><input data-on="msize" value="' + esc(c.size) + '" maxlength="12" autocomplete="off" autocapitalize="characters" aria-label="' + T.size + '"></label>' +
+    '</div>';
+  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.sup + '</span><input data-on="msup" value="' + esc(c.sup) + '" maxlength="60" autocomplete="off" style="text-transform:none;font:600 17px inherit" aria-label="' + T.sup + '"></label>';
+  return h + '</div>';
+}
+
+function viewCheck() {
+  const T = t();
+  const c = S.c;
+  const e = evalCheck(c);
+  const act = (k, i) => S.pad && S.pad.kind === k && (i === undefined || S.pad.i === i);
+  let h = '<div class="stg">';
+  // the lot this check belongs to
+  h += '<div class="card glass"><div class="row"><span class="ic2">PC</span><div class="grow"><b style="font-size:18px">' + esc(itemOf(c)) + ' ' + esc(c.size) + '</b>' +
+    '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div></div>' +
+    '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
+    (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
+  // trim type
+  h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.map((x) =>
+    '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '">' + esc(x.code) + (x.name ? ' <small style="font-weight:500;opacity:.75">' + esc(String(x.name).split(' / ')[0]) + '</small>' : '') + '</button>').join('') + '</div>';
+  // temperatures: no. 1 required, 2 and 3 optional
+  h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
+    const a = act('pt', i);
+    const v = a && S.buf ? S.buf : c.temps[i];
+    const n = c.temps[i] === '' ? null : Number(c.temps[i]);
+    return '<button class="tt ' + (a ? 'f-act' : n === null ? (i === 0 ? 'f-empty' : '') : n > tempMax() ? 'bad' : 'ok') + '" data-act="focus" data-v="pt" data-i="' + i + '">' +
+      '<small>' + (i + 1) + ' · ' + (i === 0 ? T.tReq : T.tOpt) + '</small><b class="' + (a ? 'caret' : '') + '">' + esc(v === '' ? (a ? '' : '—') : v) + '</b><small>°C</small></button>';
+  }).join('') + '</div>';
+  if (S.pad && S.pad.kind === 'pt') h += '<button class="linkbtn" style="align-self:flex-end;font-size:13px;color:' + (S.wide ? 'var(--red)' : 'var(--accent)') + '" data-act="wide">' + (S.wide ? T.wideOn : T.wideHint) + '</button>';
+  if (e.warm) {
+    h += '<div class="card glass" style="border:2px solid var(--red)"><b style="color:var(--red)">' + fmt(T.tooWarm, { t: tempMax() }) + ' (' + e.max.toFixed(1) + ')</b>' +
+      '<span class="lbl" style="color:var(--ink)">' + T.fixL + '</span><div class="fixes">' + T.fixes.map((f, q) =>
+        '<button class="' + (c.fix === FIX_TH[q] ? 'on' : '') + '" data-act="fix" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>';
+    const ra = act('prt');
+    const rv = ra ? S.buf || c.recheck : c.recheck;
+    const rn = rv === '' || rv === '-' ? null : Number(rv);
+    h += '<button class="rc glass ' + (ra ? 'f-act' : '') + '" data-act="focus" data-v="prt"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
+      '<b class="' + (ra ? 'caret' : '') + '" style="color:' + (rn === null ? 'var(--ink)' : rn > tempMax() ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (ra ? '' : '—')) + ' °C</b></button></div>';
+  }
+  // weights → %Loss
+  const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
+    '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
+  h += '<div class="grid2">' + wt('gb', T.before) + wt('ga', T.after) + '</div>';
+  const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > Number(c.before);
+  h += '<div class="lossbox ' + (over || e.high ? 'hi' : e.loss !== null ? 'ok' : '') + '"><span>' + T.loss + '</span><b>' + (e.loss === null ? '—' : e.loss.toFixed(2) + '%') + '</b>' +
+    '<small>' + (over ? T.afterBig : e.lim !== null ? (e.high ? '⚠ ' + fmt(T.lossHigh, { max: e.lim }) : fmt(T.lossLim, { max: e.lim })) : '') + '</small></div>';
+  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
+  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+  return h + '</div>';
+}
+
+function viewDone() {
+  const T = t();
+  const last = S.last || { sent: false };
+  return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
+    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
+    '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) + '</div>' +
+    (last.loss !== null && last.loss !== undefined ? '<div class="lossbox ' + (last.high ? 'hi' : 'ok') + '" style="width:100%"><span>' + T.loss + '</span><b>' + Number(last.loss).toFixed(2) + '%</b><small></small></div>' : '') +
+    '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
+}
+
+/* ---------------- number pad ---------------- */
+function viewPad() {
+  if (!S.pad) return '';
+  const T = t();
+  const k = S.pad.kind;
+  const special = k === 'pt' || k === 'prt' ? 'pm' : k === 'lot' ? '/' : k === 'gb' || k === 'ga' ? '.' : '';
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', special, '0', 'del'];
+  let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
+    '<button class="' + (x === 'del' || x === 'pm' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x === 'pm' ? 'plus minus' : x) + '">' + (x === 'del' ? '⌫' : x === 'pm' ? '+/−' : x) + '</button>').join('');
+  const okLabel = k === 'sid' ? (S.busy ? '<span class="spin"></span> ' + T.checking : T.enter) : T.ok + ' ✓';
+  h += '<button class="ok" data-key="ok"' + (k === 'sid' && (S.sid.length !== 7 || S.busy) ? ' disabled style="opacity:.45"' : '') + '>' + okLabel + '</button>';
+  return h;
+}
+/** digits → temperature: 2 digits = d.d (1 2 → 1.2) · 3 digits = dd.d (1 2 3 → 12.3) · one digit + OK = d.0 */
+function tempOf(buf, need) {
+  const neg = buf[0] === '-';
+  const dg = buf.replace('-', '');
+  if (!dg) return '';
+  let v;
+  if (need === 3 && dg.length >= 3) v = String(Number(dg.slice(0, 2))) + '.' + dg[2];
+  else if (dg.length >= 2) v = need === 3 ? String(Number(dg)) + '.0' : dg[0] + '.' + dg[1];
+  else v = dg[0] + '.0';
+  return (neg && Number(v) !== 0 ? '-' : '') + v;
+}
+function press(key) {
+  const pad = S.pad;
+  if (!pad) return;
+  const c = S.c;
+  if (pad.kind === 'sid') {
+    if (key === 'del') S.sid = S.sid.slice(0, -1);
+    else if (key === 'ok') return login();
+    else if (/^\d$/.test(key) && S.sid.length < 7) { S.sid += key; S.peek = true; clearTimeout(press.peekT); press.peekT = setTimeout(() => { S.peek = false; render(); }, 600); }
+    S.err = '';
+    return render();
+  }
+  if (pad.kind === 'lot') {
+    if (key === 'del') c.lot = c.lot.slice(0, -1);
+    else if (key === 'ok') S.pad = null;
+    else if ((/^\d$/.test(key) || key === '/') && c.lot.length < 12) c.lot += key;
+    return render();
+  }
+  if (pad.kind === 'gb' || pad.kind === 'ga') {
+    const f = pad.kind === 'gb' ? 'before' : 'after';
+    const v = String(c[f] || '');
+    if (key === 'ok') S.pad = pad.kind === 'gb' && !c.after ? { kind: 'ga' } : null;
+    else if (key === 'del') c[f] = v.slice(0, -1);
+    else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v === '' && key === '0') && !(v.split('.')[1] || '').match(/^\d$/)) c[f] = v + key;
+    S.err = '';
+    return render();
+  }
+  if (pad.kind === 'prt') {
+    let buf = S.buf;
+    if (key === 'ok') { if (buf && buf !== '-') c.recheck = tempOf(buf, 2) || c.recheck; S.pad = null; S.buf = ''; return render(); }
+    if (key === 'pm') { if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf; else if (c.recheck) c.recheck = c.recheck[0] === '-' ? c.recheck.slice(1) : '-' + c.recheck; else S.buf = '-'; return render(); }
+    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else c.recheck = ''; return render(); }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length >= 2) { c.recheck = tempOf(buf, 2); S.buf = ''; S.pad = null; } else S.buf = buf;
+    return render();
+  }
+  if (pad.kind === 'pt') {
+    const i = pad.i;
+    const need = S.wide ? 3 : 2;
+    let buf = S.buf;
+    // after a reading: next empty optional box, then the weights (temperature 1 is the only required one)
+    const after = () => { S.buf = ''; S.wide = false; const nx = [1, 2].find((k) => k > i && c.temps[k] === ''); S.pad = nx !== undefined ? { kind: 'pt', i: nx } : !c.before ? { kind: 'gb' } : null; };
+    if (key === 'ok') {
+      if (buf.replace('-', '')) { c.temps[i] = tempOf(buf, need); after(); }
+      else { S.buf = ''; S.wide = false; S.pad = i === 0 && c.temps[0] === '' ? pad : !c.before ? { kind: 'gb' } : null; }
+      return render();
+    }
+    if (key === 'pm') {
+      if (buf) S.buf = buf[0] === '-' ? buf.slice(1) : '-' + buf;
+      else if (c.temps[i] !== '') c.temps[i] = c.temps[i][0] === '-' ? c.temps[i].slice(1) : '-' + c.temps[i];
+      else S.buf = '-';
+      return render();
+    }
+    if (key === 'del') { if (buf) S.buf = buf.slice(0, -1); else c.temps[i] = ''; return render(); }
+    if (!/^\d$/.test(key)) return;
+    buf += key;
+    if (buf.replace('-', '').length < need) { S.buf = buf; return render(); }
+    c.temps[i] = tempOf(buf, need);
+    after();
+    return render();
+  }
+}
+
+/* ---------------- action bar ---------------- */
+function viewAction() {
+  const T = t();
+  const s = S.screen;
+  if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
+  if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
+  if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+  return '';
+}
+
+/* ---------------- render ---------------- */
+const $ = (id) => document.getElementById(id);
+let rendering = false, renderAgain = false;
+function render() {
+  if (rendering) { renderAgain = true; return; }
+  rendering = true;
+  try { draw(); } finally { rendering = false; }
+  if (renderAgain) { renderAgain = false; render(); }
+}
+function draw() {
+  document.body.className = 'lang-' + S.lang;
+  document.documentElement.lang = S.lang;
+  const main = $('main');
+  const keepScroll = lastScreen === S.screen ? main.scrollTop : 0;
+  if (['lot', 'manual', 'check'].indexOf(S.screen) >= 0 && !S.c) S.screen = 'home';
+  if (S.screen !== 'login' && !S.staff) S.screen = 'login';
+  $('hdr').innerHTML = renderHeader();
+  const views = { login: viewLogin, home: viewHome, lot: viewLot, manual: viewManual, check: viewCheck, done: viewDone };
+  main.innerHTML = (views[S.screen] || viewHome)();
+  if (lastScreen !== S.screen) {
+    main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
+    clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
+  }
+  main.scrollTop = keepScroll;
+  const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;
+  const pad = $('pad');
+  pad.innerHTML = viewPad();
+  if (S.pad && !lastPad) { pad.classList.remove('up'); void pad.offsetWidth; pad.classList.add('up'); }
+  lastPad = !!S.pad;
+  $('act').innerHTML = viewAction();
+  lastScreen = S.screen;
+  persist();
+}
+
+/* ---------------- actions ---------------- */
+function login() {
+  if (S.sid.length !== 7 || S.busy) return;
+  S.busy = true; S.err = ''; render();
+  api('validateStaff', { staffId: S.sid }).then((j) => {
+    S.busy = false;
+    if (!j.valid) { S.err = t().badId; return render(); }
+    S.staff = { id: S.sid, name: j.name || '', dept: j.department || '' };
+    (S.known = S.known || {})[S.sid] = { name: S.staff.name, dept: S.staff.dept };
+    S.online = true;
+    go('home', { pad: null });
+    refreshConfig(true); refreshToday(true);
+  }, (e) => {
+    S.busy = false;
+    const k = e.net && S.known && S.known[S.sid];
+    if (k) { S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false; go('home', { pad: null }); flush(); return; }
+    S.err = e.net ? t().needNet : e.message; render();
+  });
+}
+function signOut() {
+  if (S.c && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
+  S.confirmOut = false;
+  S.staff = null; S.sid = ''; S.today = null; S.c = null; todayAt = 0;
+  go('login', { pad: { kind: 'sid' } });
+}
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2600);
+}
+function startCheck() {
+  S.c = blankCheck(todayStr());
+  go('lot');
+  loadLots(S.c.rmDate);
+  refreshConfig();
+}
+function saveCheck() {
+  const c = S.c;
+  const e = evalCheck(c);
+  if (!e.ok) { S.err = e.why.join(' · '); return render(); }
+  const rec = {
+    id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
+    item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
+    before: c.before, after: c.after, remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
+  };
+  S.trimLast = c.trim;
+  S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
+  S.last = { id: rec.id, lot: c.lot, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
+    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim } };
+  S.c = null;
+  go('done');
+  flush();
+}
+function openCheckSheet(id) {
+  const T = t();
+  const td = (S.today && S.today.checks) || [];
+  const r = td.find((x) => x.id === id);
+  const pend = S.outbox.find((o) => o.record.id === id);
+  if (!r && !pend) return;
+  const x = r || { item: pend.record.item, size: pend.record.size, lot: pend.record.lot, rmDate: ddmm(pend.record.rmDate), time: pend.record.time, loss: pend.record._loss, status: pend.record._status, held: Math.max(0, daysBetween(pend.record.rmDate, pend.record.date)) };
+  let h = '<div class="row"><b class="grow" style="font-size:18px">' + esc(x.item) + ' ' + esc(x.size || '') + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">Lot ' + esc(x.lot) + ' · ' + T.rcv + ' ' + esc(x.rmDate) + ' · ' + esc(x.time) + (r && r.staffName ? ' · ' + T.by + ' ' + esc(r.staffName) : '') + '</div>' +
+    '<div class="row" style="flex-wrap:wrap;gap:6px">' + statusPill(x.status) + heldPill(x.held) + (r && r.trim ? '<span class="pill p-mute">' + esc(r.trim) + '</span>' : '') + '</div>' +
+    (x.loss !== null && x.loss !== undefined && x.loss !== '' ? '<div class="lossbox ' + (r && /^สูง/.test(r.lossCheck || '') ? 'hi' : 'ok') + '"><span>' + T.loss + '</span><b>' + Number(x.loss).toFixed(2) + '%</b><small></small></div>' : '');
+  if (r && r.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(r.voidReason) + '</div>';
+  else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
+  else if (!canCancel()) h += '<div class="note">🔒 ' + T.gmOnly + '</div>';
+  else {
+    h += '<span class="lbl" style="color:var(--ink)">' + T.cancelT + '</span><div class="fixes">' + T.reasons.map((q, i) => '<button data-act="reason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+      '<textarea id="why" placeholder="' + esc(T.cancelWhy) + '"></textarea><button class="btn" style="background:var(--red);flex:none" data-act="dovoid" data-v="' + esc(id) + '">' + T.confirmCancel + '</button>';
+  }
+  $('sheet').innerHTML = '<div class="box">' + h + '</div>';
+  $('sheet').classList.add('open');
+}
+function canCancel() {
+  const deps = (pcCfg().cancelDepts && pcCfg().cancelDepts.length ? pcCfg().cancelDepts : ['general manager']);
+  return !!(S.staff && deps.indexOf(String(S.staff.dept || '').trim().toLowerCase()) >= 0);
+}
+function closeSheet() { $('sheet').classList.remove('open'); }
+
+const ACT = {
+  lang: (el) => { S.lang = el.dataset.v; render(); },
+  back: () => go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'),
+  signout: signOut,
+  mainmenu: toMainMenu,
+  hidewarn: () => { S.reportWarn = null; render(); },
+  hardrefresh: (el) => {
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    persist();
+    const reload = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ } const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
+    const done = S.outbox.length && navigator.onLine ? flush() : Promise.resolve();
+    Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(reload, reload);
+  },
+  sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
+  start: startCheck,
+  resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); },
+  discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
+  home: () => go('home'),
+  rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
+  pickline: (el) => {
+    const got = S.lots[S.c.rmDate];
+    const lot = got && got.lots.find((x) => x.id === el.dataset.v);
+    const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
+    if (!l) return;
+    Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
+    go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
+  },
+  manual: () => { Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
+  usemanual: () => go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null }),
+  focus: (el) => {
+    const k = el.dataset.v;
+    S.buf = ''; S.wide = false;
+    S.pad = k === 'pt' ? { kind: 'pt', i: Number(el.dataset.i) } : { kind: k };
+    render();
+  },
+  wide: () => { S.wide = !S.wide; S.buf = ''; render(); },
+  trim: (el) => { S.c.trim = el.dataset.v; S.err = ''; render(); },
+  fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
+  save: saveCheck,
+  again: () => {
+    const a = S.last && S.last.again;
+    if (!a) return go('home');
+    S.c = Object.assign(blankCheck(a.rmDate), a);
+    go('check', { pad: { kind: 'pt', i: 0 } });
+  },
+  reopen: (el) => {
+    if (S.c) { toast(t().finishFirst); return; }
+    const item = S.outbox.find((o) => o.record.id === el.dataset.v);
+    if (!item || !item.draft) return;
+    S.outbox = S.outbox.filter((o) => o !== item);
+    sentIds[item.record.id] = true;
+    S.c = item.draft;
+    go('check');
+  },
+  check: (el) => openCheckSheet(el.dataset.v),
+  closesheet: closeSheet,
+  reason: (el) => { $('why').value = t().reasons[Number(el.dataset.v)]; },
+  dovoid: (el) => {
+    const why = ($('why').value || '').trim();
+    if (!why) { $('why').focus(); return; }
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    api('pcVoid', { staffId: S.staff.id, id: el.dataset.v, reason: why }).then(() => {
+      closeSheet(); toast(t().cancelled); refreshToday(true);
+    }, (e) => { el.disabled = false; el.textContent = t().confirmCancel; toast(e.net ? t().offline : e.message); });
+  }
+};
+
+document.addEventListener('click', (e) => {
+  const k = e.target.closest('[data-key]');
+  if (k && !k.disabled) { press(k.dataset.key); return; }
+  const a = e.target.closest('[data-act]');
+  if (a && !a.disabled && ACT[a.dataset.act]) { if (a.tagName === 'LABEL') return; ACT[a.dataset.act](a); }
+  if (e.target.id === 'sheet') closeSheet();
+});
+document.addEventListener('change', (e) => {
+  const el = e.target;
+  const on = el.dataset && el.dataset.on;
+  if (!on || !S.c) return;
+  const c = S.c;
+  if (on === 'rmdate') { if (/^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value <= todayStr()) { c.rmDate = el.value; render(); loadLots(c.rmDate); } return; }
+  if (on === 'mfish') { c.fish = el.value; return render(); }
+  if (on === 'mproc') { c.proc = el.value; return render(); }
+  if (on === 'msize') { c.size = el.value.toUpperCase().replace(/\s+/g, '').trim(); return render(); }
+  if (on === 'msup') { c.sup = el.value.replace(/\s+/g, ' ').trim(); return render(); }
+  if (on === 'remark') { c.remark = el.value.replace(/\s+/g, ' ').trim(); return render(); }
+});
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  const on = el.dataset && el.dataset.on;
+  if (!on || !S.c) return;
+  if (on === 'msize') S.c.size = el.value.toUpperCase().replace(/\s+/g, '');
+  if (on === 'msup') S.c.sup = el.value;
+  if (on === 'remark') S.c.remark = el.value;
+  $('act').innerHTML = viewAction();
+  persist();
+});
+document.addEventListener('keydown', (e) => {
+  if (!S.pad || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  const map = { Backspace: 'del', Enter: 'ok', '-': 'pm', '/': '/', '.': '.' };
+  const k = /^\d$/.test(e.key) ? e.key : map[e.key];
+  if (k) { e.preventDefault(); press(k); }
+});
+window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
+window.addEventListener('online', () => { S.online = true; flush(); render(); });
+window.addEventListener('offline', () => { S.online = false; render(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+
+if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href); u.searchParams.delete('r'); history.replaceState(null, '', u.toString()); } catch (e) { /* ignore */ } }
+render();
+if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
+</script>
+</body>
+</html>
