@@ -44,7 +44,9 @@ button:active:not(:disabled){transform:scale(.96)}
 button:disabled{cursor:not-allowed}
 select option{color:var(--ink)}
 .app{height:100%;display:flex;justify-content:center}
-.phone{position:relative;isolation:isolate;width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.phone{position:relative;isolation:isolate;width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none}
+#main{overflow-x:hidden}
+.tabs{overscroll-behavior-x:contain}
 @media(min-width:700px){.app{padding:16px}.phone{border-radius:32px;border:1px solid rgba(255,255,255,.55);box-shadow:0 30px 90px -30px rgba(40,40,60,.22);max-height:940px}}
 .orb{position:absolute;z-index:-1;border-radius:50%;filter:blur(50px);opacity:.55;pointer-events:none}
 .orb.o1{width:260px;height:260px;background:#9fd8ef;top:-90px;right:-90px;animation:bob 10s ease-in-out infinite}
@@ -160,6 +162,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tile .t-l{font-size:12px;font-weight:600;color:var(--ink-3);display:flex;justify-content:space-between;width:100%;gap:4px}
 .tile select,.tile input{width:100%;height:34px;border:0;background:transparent;font:700 16px var(--mono);padding:0;color:var(--ink)}
 .tile input{border-bottom:2px solid var(--accent);text-transform:uppercase}
+.tile input[data-on=typesup]{text-transform:none;font:600 17px var(--sans,inherit)}
 .tile .t-v{display:flex;align-items:baseline;gap:6px;width:100%}
 .tile .t-v b{font:700 20px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
@@ -323,7 +326,7 @@ const L = {
     resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
     pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
     steps: ['รถ', 'วัตถุดิบ', 'ตรวจ', 'สรุป'],
-    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
+    truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', otherSup: '+ อื่นๆ (พิมพ์ชื่อเอง)…', typeSup: 'พิมพ์ชื่อผู้ขาย', supCustomTag: 'ผู้ขายพิมพ์เอง — แจ้งหัวหน้าให้เพิ่มในรายชื่อ', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
     fishNext: 'ชนิดวัตถุดิบเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
     fishT: 'วัตถุดิบในรถ', fishSub: 'ปลา · กุ้ง · พริก/สมุนไพร — ชื่อ / Processing type / ขนาด ต่างกัน = คนละรายการ', fishName: 'ชื่อวัตถุดิบ', proc: 'Processing type',
     typeOwn: '+ พิมพ์ชื่อเอง…', fromList: 'เลือกจากรายการ', manualTag: 'พิมพ์ชื่อเอง', newLine: 'รายการใหม่', incomplete: 'ยังไม่ครบ',
@@ -347,7 +350,7 @@ const L = {
     sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา',
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
-    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', wRange: 'ช่วงน้ำหนัก (ประมาณ)', pickRange: '— เลือกช่วง —', waitKg: 'รอชั่ง', waitKgN: 'รอน้ำหนักจริง', enterKg: 'ใส่น้ำหนักจริง (หลังผ่าน RM)', kgT: 'น้ำหนักจริงหลังผ่าน RM', kgSub: 'ใส่น้ำหนักของแต่ละรายการ แล้วกดบันทึก', saveKg: 'บันทึกน้ำหนัก', kgSaved: 'บันทึกน้ำหนักแล้ว', kgNeedSend: 'รอส่งเข้าระบบก่อน จึงใส่น้ำหนักจริงได้', kgUnder: 'น้ำหนักจริงเกินช่วงที่เลือก — สุ่มน้อยกว่าเกณฑ์ แจ้งหัวหน้า QC', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
     newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
     cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
     cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
@@ -361,7 +364,7 @@ const L = {
     resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
     pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
     steps: ['Truck', 'Items', 'Inspect', 'Review'],
-    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
+    truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', otherSup: '+ Other (type a name)…', typeSup: 'Type the supplier name', supCustomTag: 'Typed by hand — ask the lead to add it to the list', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
     fishNext: 'Items are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
     fishT: 'Items on this truck', fishSub: 'Fish · shrimp · chilli/herbs — different name / processing type / size = separate line', fishName: 'Item', proc: 'Processing type',
     typeOwn: '+ Type a name…', fromList: 'Pick from list', manualTag: 'Typed by hand', newLine: 'New line', incomplete: 'Incomplete',
@@ -385,7 +388,7 @@ const L = {
     sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
     tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems',
     recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
-    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
+    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', wRange: 'Weight range (estimate)', pickRange: '— choose range —', waitKg: 'to weigh', waitKgN: 'waiting for real weight', enterKg: 'Enter real weight (after RM)', kgT: 'Real weight after RM processing', kgSub: 'Enter the weight of each line, then save', saveKg: 'Save weight', kgSaved: 'Weight saved', kgNeedSend: 'Send the truck first, then enter the real weight', kgUnder: 'Real weight is above the range chosen — fewer fish were checked than the rule needs; tell the QC lead', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
     newTruck: 'Start next truck', home: 'Home', lines: 'lines',
     cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
     cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
@@ -399,7 +402,7 @@ const L = {
     resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', noTrucks: 'ယနေ့ ကား မရှိသေး',
     pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
     steps: ['ကား', 'ကုန်', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
-    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
+    truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', otherSup: '+ အခြား (အမည် ရိုက်)…', typeSup: 'ပေးသွင်းသူ အမည် ရိုက်ပါ', supCustomTag: 'ကိုယ်တိုင်ရိုက် — စာရင်းထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
     fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
     fishT: 'ကားပေါ်ရှိ ကုန်ကြမ်း', fishSub: 'ငါး/Processing type/အရွယ် မတူ = သီးခြားစာရင်း', fishName: 'ငါးအမည်', proc: 'Processing type',
     typeOwn: '+ အမည် ကိုယ်တိုင်ရိုက်…', fromList: 'စာရင်းမှ ရွေး', manualTag: 'ကိုယ်တိုင်ရိုက်', newLine: 'စာရင်းသစ်', incomplete: 'မပြည့်စုံ',
@@ -423,7 +426,7 @@ const L = {
     sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့',
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
-    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', wRange: 'အလေးချိန် အပိုင်းအခြား (ခန့်မှန်း)', pickRange: '— ရွေးပါ —', waitKg: 'ချိန်ရန်', waitKgN: 'အမှန် အလေးချိန် စောင့်', enterKg: 'အမှန် အလေးချိန် ထည့် (RM ပြီး)', kgT: 'RM ပြီးနောက် အမှန် အလေးချိန်', kgSub: 'စာရင်းတိုင်း အလေးချိန် ထည့်ပြီး သိမ်းပါ', saveKg: 'အလေးချိန် သိမ်း', kgSaved: 'သိမ်းပြီး', kgNeedSend: 'ကားကို အရင်ပို့ပါ', kgUnder: 'အမှန်အလေးချိန် အပိုင်းအခြားထက် များ — QC ခေါင်းဆောင်ကို ပြောပါ', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
     newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
     cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
     cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
@@ -486,7 +489,7 @@ const produceCfg = () => Object.assign({ rejectMax: 5 }, rmCfg().produce || {});
 /** drafts saved by an older version: give every line the fields of all three kinds */
 function upgradeLine(l) {
   if (['FISH', 'SHRIMP', 'PRODUCE'].indexOf(l.type) < 0) l.type = l.chilli ? 'PRODUCE' : 'FISH';   // runs from load(), before KINDS exists
-  ['smin', 'smax', 'sulfite', 'sk', 'rk'].forEach((k) => { if (l[k] === undefined) l[k] = ''; });
+  ['smin', 'smax', 'sulfite', 'sk', 'rk', 'wFrom', 'wTo'].forEach((k) => { if (l[k] === undefined) l[k] = ''; });
   if (!Array.isArray(l.sc)) l.sc = [1, 1, 1, 1, 1, 1, 1, 1];
   if (!Array.isArray(l.pc)) l.pc = [1, 1, 1, 1];
   return l;
@@ -499,8 +502,18 @@ const sizeName = (l) => {
   return n >= 1000 && n % 100 === 0 ? (n / 1000) + 'KG' : n + 'G';
 };
 const savedName = (l) => (l.fish || '?') + '/' + (l.proc || '?') + (sizeName(l) ? ' ' + sizeName(l) : '');
+/** weight ranges to choose from at inspection = the AQL rows, up to the biggest truck (Settings RM_TRUCK_MAX_KG, 4,500 kg) */
+function weightRanges() {
+  const t = (rmCfg().aql && rmCfg().aql.length ? rmCfg().aql : AQL_DEFAULT);
+  const max = Number((rmCfg().settings || {}).TRUCK_MAX) || 4500;
+  return t.filter((r) => r[0] <= max).map((r) => ({ from: r[0], to: Math.min(r[1], max), pcs: Math.min(N_T, r[2]), ac: r[3], re: r[4] }));
+}
+const hasRange = (l) => Number(l.wTo) > 0 || Number(l.w) > 0;
+const rangeText = (l) => (Number(l.wTo) > 0 ? kgFmt(l.wFrom) + '–' + kgFmt(l.wTo) + ' kg' : Number(l.w) > 0 ? kgFmt(l.w) + ' kg' : '—');
+/** the weight that sets the sample size: top of the range (older drafts: the weight typed) */
+const planKg = (l) => (Number(l.wTo) > 0 ? Number(l.wTo) : Number(l.w));
 function lineReady(l) {
-  if (!(l.fish && l.fish.length <= 40 && l.proc && Number(l.w) > 0)) return false;
+  if (!(l.fish && l.fish.length <= 40 && l.proc && hasRange(l))) return false;
   const k = kindOf(l);
   if (k === 'FISH') return !!(Number(l.size) > 0 && l.md && l.gl && l.ice);
   if (k === 'SHRIMP') return !!(Number(l.smin) > 0 && Number(l.smax) >= Number(l.smin) && l.md && l.sulfite && l.ice);
@@ -519,7 +532,7 @@ function planOf(w) {
   return { pcs: Math.min(N_T, last[2]), ac: last[3], re: last[4] };
 }
 /** how many temperature readings this line needs */
-const pcsOf = (l) => { const k = kindOf(l); if (k === 'SHRIMP') { const c = shrimpCfg(); return Math.min(N_T, c.points * c.repeats); } return k === 'PRODUCE' ? 0 : planOf(l.w).pcs; };
+const pcsOf = (l) => { const k = kindOf(l); if (k === 'SHRIMP') { const c = shrimpCfg(); return Math.min(N_T, c.points * c.repeats); } return k === 'PRODUCE' ? 0 : planOf(planKg(l)).pcs; };
 /* defective fish per item, only among the sampled fish */
 const counts = (l) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => l.fishes.slice(0, pcsOf(l)).reduce((a, f) => a + (f.d[k] ? 1 : 0), 0));
 /** chilli / herbs: which of size · shape · freshness · colour this item is checked on (blank criteria = not checked; all blank = all four) */
@@ -528,7 +541,12 @@ function specOf(l) {
   const any = sp.some(String);
   return sp.map((x) => ({ text: x, on: !any || !!x }));
 }
-const shrimpKg = (l) => Math.round((Number(l.w) || 0) * shrimpCfg().samplePct) / 100;
+/** shrimp sample: 5 % of the weight; before weighing, 5 % of the range */
+const shrimpKgText = (l) => {
+  const p = shrimpCfg().samplePct;
+  if (Number(l.wTo) > 0) return '≈ ' + kgFmt(Math.round(Number(l.wFrom) * p) / 100) + '–' + kgFmt(Math.round(Number(l.wTo) * p) / 100) + ' kg';
+  return Number(l.w) > 0 ? kgFmt(Math.round(Number(l.w) * p) / 100) + ' kg' : '—';
+};
 function evalLine(l) {
   const st = settings();
   const k = kindOf(l);
@@ -541,7 +559,7 @@ function evalLine(l) {
   let c = [0, 0, 0, 0, 0, 0, 0, 0], plan = null, bad = false, pct = null, done = temps.length >= need;
   const why = [];
   if (k === 'FISH') {
-    c = counts(l); plan = planOf(l.w);
+    c = counts(l); plan = planOf(planKg(l));
     bad = c.some((n, i) => (i >= 6 ? n >= 1 : n >= plan.re));
     if (bad) why.push('phys');
   }
@@ -634,14 +652,16 @@ function demoApi(action, p) {
     if (action === 'getConfig') return res(DEMO_CFG);
     if (action === 'rmSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
     if (action === 'rmVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
+    if (action === 'rmWeight') mem.recs.forEach((r) => { if (r.id === p.id) p.weights.forEach((x) => { if (r.lines[x.n - 1]) r.lines[x.n - 1].w = x.w; }); });
     try { localStorage.setItem('ckqc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
     if (action === 'rmToday') {
       const day = mem.recs.filter((r) => r.date === (p.date || todayStr()));
       const trucks = day.map((r) => ({ id: r.id, start: r.start, lot: r.lot, sup: r.supName + ' / ' + r.supCode, staffId: r.staffId, staffName: 'ผู้ทดลอง', void: !!r.void, voidReason: r.voidReason || '',
-        lines: r.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status })) })).reverse();
+        lines: r.lines.map((l, i) => ({ n: i + 1, name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', k: l.type || 'FISH', status: l._status })) })).reverse();
       const live = trucks.filter((x) => !x.void);
-      let kg = 0, failed = 0; live.forEach((x) => x.lines.forEach((l) => { kg += l.w; if (l.status === 'ไม่ผ่าน') failed++; }));
-      return res({ ok: true, trucks: trucks, totals: { trucks: live.length, kg: Math.round(kg), failed: failed } });
+      let kg = 0, failed = 0, waitKg = 0;
+      live.forEach((x) => { x.lines.forEach((l) => { kg += l.w; if (l.status === 'ไม่ผ่าน') failed++; }); x.waitKg = x.lines.filter((l) => !l.w).length; if (x.waitKg) waitKg++; });
+      return res({ ok: true, trucks: trucks, totals: { trucks: live.length, kg: Math.round(kg), failed: failed, waitKg: waitKg } });
     }
     res({ ok: true, id: p.record && p.record.id });
   }, 350));
@@ -719,7 +739,7 @@ function renderHeader() {
   const T = t();
   const steps = ['truck', 'fish', 'inspect', 'summary'];
   const at = steps.indexOf(S.screen);
-  const backTo = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home' }[S.screen];
+  const backTo = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home', weigh: 'home' }[S.screen];
   const pend = S.outbox.length;
   const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
@@ -754,7 +774,7 @@ function viewHome() {
   S.outbox.forEach((o) => (pendIds[o.record.id] = o));
   const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.trucks.some((x) => x.id === o.record.id)).map((o) => ({
     id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
-    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status })) }));
+    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', status: l._status })) }));
   const rows = pendRows.concat(td.trucks);
   let h = '<div class="stg">';
   h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
@@ -762,7 +782,8 @@ function viewHome() {
   h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
-    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
+    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div>' +
+    (td.totals.waitKg ? '<div class="sub" style="color:#8c5520;font-weight:700">⚖ ' + T.waitKgN + ' ' + td.totals.waitKg + ' ' + T.trucks + '</div>' : '') + '</div>';
   if (S.reportWarn) {
     h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
       '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
@@ -794,7 +815,8 @@ function viewHome() {
       const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' :
         anyFail ? '<span class="pill p-bad">✗ ' + T.fail + '</span>' : '<span class="pill p-ok">✓ ' + T.pass + '</span>';
       return '<button data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.start) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
-        '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div></span>' + pill + '</button>';
+        '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div>' +
+        (!r.void && !r.pending && r.lines.some((l) => !(l.w > 0)) ? '<div class="sub" style="color:#8c5520;font-weight:700">⚖ ' + T.waitKg + '</div>' : '') + '</span>' + pill + '</button>';
     }).join('') + '</div>';
   }
   return h + '</div>';
@@ -813,8 +835,10 @@ function viewTruck() {
     h += '<button class="linkbtn" style="font-size:14px;align-self:flex-start" data-act="reloadcfg">↻ ' + T.reload + '</button>';
   }
   h += '<label style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.supplier + '</span><select class="sel' + (d.supCode || d.supName ? ' ok' : '') + '" data-on="sup">' +
-    '<option value="">' + T.pickSup + '</option>' + c.suppliers.map((s, i) => '<option value="' + i + '"' + (s.code === d.supCode && s.name === d.supName ? ' selected' : '') + '>' + esc(s.name) + (s.code ? ' · ' + esc(s.code) : '') + '</option>').join('') + '</select></label>';
-  if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
+    '<option value="">' + T.pickSup + '</option>' + c.suppliers.map((s, i) => '<option value="' + i + '"' + (!d.supCustom && s.code === d.supCode && s.name === d.supName ? ' selected' : '') + '>' + esc(s.name) + (s.code ? ' · ' + esc(s.code) : '') + '</option>').join('') +
+    '<option value="__other"' + (d.supCustom ? ' selected' : '') + '>' + T.otherSup + '</option></select></label>';
+  if (d.supCustom) h += '<label class="tile f-act" style="height:auto;min-height:72px"><span class="t-l">' + T.typeSup + '</span><input data-on="typesup" value="' + esc(d.supName) + '" maxlength="60" placeholder="' + esc(T.typeSup) + '" autocomplete="off" aria-label="' + T.typeSup + '"><span class="sub" style="font-size:12px">' + T.supCustomTag + '</span></label>';
+  else if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
   h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
     '<button class="tap glass ' + (lotActive ? 'f-act' : d.lot ? 'f-ok' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="' + (lotActive ? 'caret' : '') + '">' + esc(d.lot || (lotActive ? '' : '—')) + '</span></button></div>';
   const opt = (list, v) => '<option value="">' + T.none + '</option>' + list.map((x) => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('');
@@ -836,7 +860,7 @@ function viewFish() {
       const facts = k === 'FISH' ? ' · MD ' + (l.md || '–') + ' · GL ' + (l.gl || '–') + ' · ' + T.ice + ' ' + (l.ice || '–')
         : k === 'SHRIMP' ? ' · MD ' + (l.md || '–') + ' · ' + T.sulfite + ' ' + (l.sulfite || '–') + ' · ' + T.ice + ' ' + (l.ice || '–') : '';
       h += '<div class="fl glass' + pop + '"><button class="fl-head" data-act="openline" data-v="' + i + '"><span class="num">' + (i + 1) + '</span><span class="grow"><b>' + esc(l.fish ? savedName(l) : T.newLine) + '</b>' +
-        '<div class="sub mono" style="font-size:12px">' + T.weightL + ' ' + kgFmt(l.w) + ' kg' + facts + '</div></span>' +
+        '<div class="sub mono" style="font-size:12px">' + esc(rangeText(l)) + facts + '</div></span>' +
         '<span class="pill ' + (ready ? 'p-ok' : 'p-warn') + '">' + (ready ? '✓' : T.incomplete) + '</span><span style="color:var(--ink-3)">▾</span></button></div>';
       return;
     }
@@ -867,13 +891,15 @@ function viewFish() {
       h += '<button class="tile size ' + (k !== 'FISH' ? 'filled' : zA ? 'f-act' : Number(l.size) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="size" data-i="' + i + '"' + (k !== 'FISH' ? ' disabled' : '') + '>' +
         '<span class="t-l">' + T.sizeL + '</span><span class="t-v"><b class="' + (zA ? 'caret' : '') + '">' + (k !== 'FISH' ? T.noSize : esc(l.size || (zA ? '' : '—'))) + '</b>' + (k === 'FISH' ? '<span class="unit u-g">g</span>' : '') + '</span></button>';
     }
-    // weight kg
-    const wA = act('w');
-    h += '<button class="tile wt ' + (wA ? 'f-act' : Number(l.w) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="w" data-i="' + i + '">' +
-      '<span class="t-l">' + T.weightL + '</span><span class="t-v"><b class="' + (wA ? 'caret' : '') + '">' + (l.w ? esc(wShow(l.w)) : wA ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
-    const sam = Number(l.w) > 0;
-    const sampleTxt = k === 'FISH' ? (sam ? fmt(T.samplePcs, { n: planOf(l.w).pcs, ac: planOf(l.w).ac }) : '—')
-      : k === 'SHRIMP' ? (sam ? kgFmt(shrimpKg(l)) + ' kg (' + shrimpCfg().samplePct + '%)' : shrimpCfg().samplePct + '%')
+    // weight: only a rough range is known at the truck; the real kg is entered after RM processing (6 Nov 2026)
+    const cur = Number(l.wTo) > 0 ? l.wFrom + '-' + l.wTo : '';
+    h += '<label class="tile wt ' + (hasRange(l) ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.wRange + '</span><select data-on="wrange" data-v="' + i + '">' +
+      '<option value="">' + T.pickRange + '</option>' + weightRanges().map((r) => '<option value="' + r.from + '-' + r.to + '"' + (cur === r.from + '-' + r.to ? ' selected' : '') + '>' +
+        kgFmt(r.from) + '–' + kgFmt(r.to) + ' kg' + (k === 'FISH' ? ' · ' + r.pcs + ' ตัว' : '') + '</option>').join('') +
+      (!cur && Number(l.w) > 0 ? '<option selected value="">' + kgFmt(l.w) + ' kg</option>' : '') + '</select></label>';
+    const sam = hasRange(l);
+    const sampleTxt = k === 'FISH' ? (sam ? fmt(T.samplePcs, { n: planOf(planKg(l)).pcs, ac: planOf(planKg(l)).ac }) : '—')
+      : k === 'SHRIMP' ? (sam ? shrimpKgText(l) + ' (' + shrimpCfg().samplePct + '%)' : shrimpCfg().samplePct + '%')
       : '≤ ' + produceCfg().rejectMax + '%';
     h += '</div><div class="sample"><span>' + (k === 'PRODUCE' ? T.rejectPct : T.sample) + '</span><b>' + sampleTxt + '</b></div>';
     const togs = k === 'FISH' ? [['md', T.md, T.yes, T.no, '2'], ['gl', T.gl, T.yes, T.no, '2'], ['ice', T.ice, T.little, T.lots, '1']]
@@ -929,7 +955,7 @@ function inspectFish(l, ev) {
   const found = ev.c.map((n, k) => (n ? T.defects[k] + ' ' + n : '')).filter(String);
   const lsum = '<div class="lsum ' + (ev.physFail ? 'ls-bad' : found.length ? 'ls-warn' : 'ls-ok') + '">' +
     (ev.physFail ? '✗ ' + T.physBad + ' · ' + esc(found.join(', ')) : found.length ? T.found + ': ' + esc(found.join(', ')) + ' (' + T.pass + ')' : T.allOk) + '</div>';
-  h += '<div class="sample"><span>' + fmt(T.planLine, { kg: kgFmt(l.w), n: pcs }) + '</span><b>' + ev.n + ' / ' + pcs + '</b></div>';
+  h += '<div class="sample"><span>' + fmt(T.planLine, { kg: rangeText(l).replace(' kg', ''), n: pcs }) + '</span><b>' + ev.n + ' / ' + pcs + '</b></div>';
   if (l.fi < pcs) {
     const f = l.fishes[l.fi];
     h += '<div class="card glass"><div class="row"><span class="grow"><b style="font-size:18px">' + T.fishNo + ' ' + (l.fi + 1) + ' / ' + pcs + '</b><div class="sub" style="font-size:12px">' + T.flowHint + '</div></span>' + tempButton(f) + '</div>';
@@ -957,7 +983,7 @@ function inspectShrimp(l, ev) {
   const sc = shrimpCfg();
   const R = sc.repeats;
   const need = ev.need;
-  let h = '<div class="sample"><span>' + fmt(T.sample5, { pct: sc.samplePct, kg: kgFmt(shrimpKg(l)) }) + '</span><b>' + ev.n + ' / ' + need + '</b></div>';
+  let h = '<div class="sample"><span>' + fmt(T.sample5, { pct: sc.samplePct, kg: shrimpKgText(l).replace(' kg', '') }) + '</span><b>' + ev.n + ' / ' + need + '</b></div>';
   const truck = '<div class="truck" aria-hidden="true">' + Array.from({ length: sc.points }, (_, i) => {
     const vals = l.fishes.slice(i * R, i * R + R).map((f) => f.t).filter((v) => v !== '' && v !== '-');
     const cls = Math.floor(l.fi / R) === i && l.fi < need ? 'pt-now' : vals.some((v) => Number(v) > st.TEMP_MAX) ? 'pt-bad' : vals.length === R ? 'pt-ok' : '';
@@ -988,7 +1014,7 @@ function inspectProduce(l, ev) {
   const act = (k) => S.pad && S.pad.kind === k && S.pad.line === i;
   const tile = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : l[k] !== '' ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '" data-i="' + i + '">' +
     '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (l[k] !== '' ? esc(wShow(l[k])) : act(k) ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
-  let h = '<div class="sample"><span>' + fmt(T.wholeLot, { max: max }) + '</span><b>' + kgFmt(l.w) + ' kg</b></div>';
+  let h = '<div class="sample"><span>' + fmt(T.wholeLot, { max: max }) + '</span><b>' + esc(rangeText(l)) + '</b></div>';
   h += '<div class="grid2">' + tile('sk', T.sampleKg) + tile('rk', T.rejectKg) + '</div>';
   const over = l.rk !== '' && Number(l.sk) > 0 && Number(l.rk) > Number(l.sk);
   if (over) h += '<div class="err">' + T.rejectOver + '</div>';
@@ -1042,8 +1068,8 @@ function viewSummary() {
     const short = !e.done;
     const shortTxt = e.kind === 'PRODUCE' ? T.needProduce : fmt(e.kind === 'SHRIMP' ? T.needTempsS : T.needTemps, { n: e.need });
     const kv = e.kind === 'PRODUCE'
-      ? '<span>' + T.weight + '<b>' + kgFmt(l.w) + ' kg</b></span><span>' + T.sampleKg + '<b>' + kgFmt(l.sk) + ' kg</b></span><span>' + T.rejectPct + '<b class="' + (e.why.indexOf('reject') >= 0 ? 'bad' : '') + '">' + (e.pct === null ? '—' : e.pct + '%') + '</b></span>'
-      : '<span>' + T.weight + '<b>' + kgFmt(l.w) + ' kg</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + e.need + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span>';
+      ? '<span>' + T.weight + '<b>' + esc(rangeText(l)) + '</b></span><span>' + T.sampleKg + '<b>' + kgFmt(l.sk) + ' kg</b></span><span>' + T.rejectPct + '<b class="' + (e.why.indexOf('reject') >= 0 ? 'bad' : '') + '">' + (e.pct === null ? '—' : e.pct + '%') + '</b></span>'
+      : '<span>' + T.weight + '<b>' + esc(rangeText(l)) + '</b></span><span>' + T.tempsN + '<b>' + e.n + ' / ' + e.need + '</b></span><span>' + T.max + '<b class="' + (e.warm ? 'bad' : '') + '">' + (e.max === null ? '—' : e.max.toFixed(1) + ' °C') + '</b></span>';
     h += '<div class="sl glass' + ((e.needFix && !l.fix) || short ? ' bad' : '') + '"><div class="row"><b class="grow" style="font-size:16px">' + (i + 1) + '. ' + esc(savedName(l)) + '</b>' + pill + '</div>' +
       (short ? '<button class="err" style="text-align:left" data-act="gotoline" data-v="' + i + '">' + shortTxt + ' ›</button>' : '') +
       '<div class="kv">' + kv + '</div>' +
@@ -1082,7 +1108,7 @@ function viewPad() {
   if (!S.pad) return '';
   const T = t();
   const k = S.pad.kind;
-  const special = k === 't' || k === 'rt' ? 'pm' : k === 'lot' ? '/' : k === 'w' || k === 'sk' || k === 'rk' ? '.' : '';
+  const special = k === 't' || k === 'rt' ? 'pm' : k === 'lot' ? '/' : k === 'w' || k === 'sk' || k === 'rk' || k === 'xw' ? '.' : '';
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', special, '0', 'del'];
   let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
     '<button class="' + (x === 'del' || x === 'pm' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x === 'pm' ? 'plus minus' : x) + '">' + (x === 'del' ? '⌫' : x === 'pm' ? '+/−' : x) + '</button>').join('');
@@ -1110,7 +1136,7 @@ function press(key) {
   }
   if (pad.kind === 'size') {
     const l = d.lines[pad.line];
-    if (key === 'ok') S.pad = Number(l.w) > 0 ? null : { kind: 'w', line: pad.line };
+    if (key === 'ok') S.pad = null;
     else if (key === 'del') l.size = l.size.slice(0, -1);
     else if (/^\d$/.test(key) && l.size.length < 5 && !(l.size === '' && key === '0')) l.size += key;
     return render();
@@ -1125,11 +1151,20 @@ function press(key) {
     if (f !== 'w' && !l.time && l[f] !== '') l.time = nowHM();
     return render();
   }
+  if (pad.kind === 'xw') {
+    const l = S.wt.lines[pad.line];
+    const v = String(l.w || '');
+    if (key === 'ok') { const nx = S.wt.lines.findIndex((x, i) => i > pad.line && !(Number(x.w) > 0)); S.pad = nx >= 0 ? { kind: 'xw', line: nx } : null; }
+    else if (key === 'del') l.w = v.slice(0, -1);
+    else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v.split('.')[1] || '').match(/^\d\d$/)) l.w = v + key;
+    S.err = '';
+    return render();
+  }
   if (pad.kind === 'smin' || pad.kind === 'smax') {
     const l = d.lines[pad.line];
     const f = pad.kind;
     const v = String(l[f] || '');
-    if (key === 'ok') S.pad = f === 'smin' && !l.smax ? { kind: 'smax', line: pad.line } : !(Number(l.w) > 0) ? { kind: 'w', line: pad.line } : null;
+    if (key === 'ok') S.pad = f === 'smin' && !l.smax ? { kind: 'smax', line: pad.line } : null;
     else if (key === 'del') l[f] = v.slice(0, -1);
     else if (/^\d$/.test(key) && v.length < 3 && !(v === '' && key === '0')) l[f] = v + key;
     return render();
@@ -1200,6 +1235,23 @@ function tempOf(buf, need) {
 const twoDigit = (buf) => tempOf(buf, 2);
 
 /* ---------------- action bar ---------------- */
+/* ---------------- real weight after RM processing ---------------- */
+function viewWeigh() {
+  const T = t();
+  const w = S.wt;
+  let h = '<div class="stg"><div><h2>' + T.kgT + '</h2><div class="sub">Lot ' + esc(w.lot) + ' · ' + esc(String(w.sup).split(' / ')[0]) + ' — ' + T.kgSub + '</div></div>';
+  w.lines.forEach((l, i) => {
+    const a = S.pad && S.pad.kind === 'xw' && S.pad.line === i;
+    h += '<button class="tile wt ' + (a ? 'f-act' : Number(l.w) > 0 ? 'filled' : 'f-empty') + '" style="height:auto;min-height:84px" data-act="focus" data-v="xw" data-i="' + i + '">' +
+      '<span class="t-l">' + (i + 1) + '. ' + esc(l.name) + ' · ' + esc(l.wr || '') + ' kg</span>' +
+      '<span class="t-v"><b class="' + (a ? 'caret' : '') + '">' + (l.w ? esc(wShow(l.w)) : a ? '' : '—') + '</b><span class="unit u-kg">kg</span></span></button>';
+    const r = String(l.wr || '').split('–').map(Number);
+    if (l.k === 'FISH' && Number(l.w) > 0 && r[1] > 0 && planOf(Number(l.w)).pcs > planOf(r[1]).pcs) h += '<div class="note">⚠ ' + T.kgUnder + '</div>';
+  });
+  if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
+  return h + '</div>';
+}
+
 function viewAction() {
   const T = t();
   const d = S.d;
@@ -1216,6 +1268,7 @@ function viewAction() {
     return '<button class="btn green" data-act="save"' + (ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
   }
   if (scr === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="startrm">' + T.newTruck + '</button>';
+  if (scr === 'weigh') return '<button class="btn green" data-act="saveweights"' + (S.wt && S.wt.lines.every((l) => Number(l.w) > 0) && !S.busy ? '' : ' disabled') + '>⚖ ' + T.saveKg + '</button>';
   return '';
 }
 
@@ -1235,14 +1288,15 @@ function draw() {
   const main = $('main');
   const keepScroll = lastScreen === S.screen ? main.scrollTop : 0;
   $('hdr').innerHTML = renderHeader();
-  const views = { login: viewLogin, home: viewHome, truck: viewTruck, fish: viewFish, inspect: viewInspect, summary: viewSummary, done: viewDone };
-  if (S.screen !== 'login' && S.screen !== 'home' && S.screen !== 'done' && !S.d) S.screen = 'home';
+  const views = { login: viewLogin, home: viewHome, truck: viewTruck, fish: viewFish, inspect: viewInspect, summary: viewSummary, done: viewDone, weigh: viewWeigh };
+  if (S.screen !== 'login' && S.screen !== 'home' && S.screen !== 'done' && !S.d && !(S.screen === 'weigh' && S.wt)) S.screen = 'home';
   main.innerHTML = (views[S.screen] || viewHome)();
   if (lastScreen !== S.screen) {
     main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
     clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
   }
   main.scrollTop = keepScroll;
+  const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;   // a focused field can drag the frame sideways; keep it straight
   const pad = $('pad');
   pad.innerHTML = viewPad();
   if (S.pad && !lastPad) { pad.classList.remove('up'); void pad.offsetWidth; pad.classList.add('up'); }
@@ -1292,11 +1346,11 @@ function saveTruck() {
   const d = S.d;
   if (!canSave(d)) { S.err = t().needFix; return render(); }
   const rec = {
-    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, lot: d.lot, scale: d.scale, thermo: d.thermo,
+    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, supCustom: !!d.supCustom, lot: d.lot, scale: d.scale, thermo: d.thermo,
     device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     lines: d.lines.map((l) => {
       const e = evalLine(l);
-      const base = { type: e.kind, fish: l.fish.trim().toUpperCase(), custom: !!l.custom, proc: l.proc, w: l.w, time: l.time || nowHM(), fix: e.needFix ? l.fix || '' : '',
+      const base = { type: e.kind, fish: l.fish.trim().toUpperCase(), custom: !!l.custom, proc: l.proc, w: Number(l.wTo) > 0 ? '' : l.w, wFrom: l.wFrom, wTo: l.wTo, time: l.time || nowHM(), fix: e.needFix ? l.fix || '' : '',
         _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน' };
       if (e.kind === 'SHRIMP') return Object.assign(base, { sizeMin: l.smin, sizeMax: l.smax, md: l.md, sulfite: l.sulfite, ice: l.ice,
         temps: l.fishes.slice(0, e.need).map((f) => f.t), checks: l.sc.slice(), recheck: e.warm ? l.recheck : '' });
@@ -1321,10 +1375,13 @@ function openTruckSheet(id) {
   const lines = tr ? tr.lines : pend.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status }));
   let h = '<div class="row"><b class="grow" style="font-size:18px">Lot ' + esc(tr ? tr.lot : pend.record.lot) + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
     '<div class="sub">' + esc(tr ? tr.sup : pend.record.supName) + ' · ' + esc(tr ? tr.start : pend.record.start) + (tr && tr.staffName ? ' · ' + T.by + ' ' + esc(tr.staffName) : '') + '</div>' +
-    '<div class="tlist glass">' + lines.map((l) => '<div style="display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' + kgFmt(l.w) + ' kg</div></span>' +
+    '<div class="tlist glass">' + lines.map((l) => '<div style="display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
+      (l.w > 0 ? kgFmt(l.w) + ' kg' : '<span style="color:#8c5520">' + esc(l.wr || '—') + ' kg · ' + T.waitKg + '</span>') + '</div></span>' +
       '<span class="pill ' + (l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok') + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span></div>').join('') + '</div>';
   if (tr && tr.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(tr.voidReason) + '</div>';
-  else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
+  else if (pend) h += '<div class="note">' + T.pendingSub + '<br>' + T.kgNeedSend + '</div>';
+  if (tr && !tr.void) h += '<button class="btn" style="flex:none;height:54px;font-size:17px" data-act="weigh" data-v="' + esc(id) + '">⚖ ' + T.enterKg + '</button>';
+  if (pend || (tr && tr.void)) { /* no cancel */ }
   else if (!canCancel()) h += '<div class="note">🔒 ' + T.gmOnly + '</div>';
   else {
     h += '<span class="lbl" style="color:var(--ink)">' + T.cancelTruck + '</span><div class="fixes">' + T.reasons.map((r, i) => '<button data-act="reason" data-v="' + i + '">' + esc(r) + '</button>').join('') + '</div>' +
@@ -1348,6 +1405,26 @@ const ACT = {
   },
   signout: signOut,
   hidewarn: () => { S.reportWarn = null; render(); },
+  weigh: (el) => {
+    const tr = ((S.today && S.today.trucks) || []).find((x) => x.id === el.dataset.v);
+    if (!tr) return;
+    closeSheet();
+    S.wt = { id: tr.id, lot: tr.lot, sup: tr.sup, lines: tr.lines.map((l) => ({ n: l.n, name: l.name, wr: l.wr, k: l.k, w: l.w > 0 ? String(l.w) : '' })) };
+    S.err = '';
+    const first = S.wt.lines.findIndex((l) => !(Number(l.w) > 0));
+    go('weigh', { pad: { kind: 'xw', line: first >= 0 ? first : 0 } });
+  },
+  saveweights: () => {
+    S.busy = true; S.err = ''; render();
+    api('rmWeight', { staffId: S.staff.id, id: S.wt.id, weights: S.wt.lines.map((l) => ({ n: l.n, w: Number(l.w) })) }, 45000).then((j) => {
+      S.busy = false;
+      if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: S.wt.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
+      else toast('✓ ' + t().kgSaved);
+      S.wt = null;
+      go('home', { pad: null });
+      refreshToday(true);
+    }, (e) => { S.busy = false; S.err = e.net ? t().offline : e.message; render(); });
+  },
   /* hard refresh: newest app version from GitHub + fresh supplier list and today's trucks; drafts and unsent trucks stay on the phone */
   hardrefresh: (el) => {
     el.disabled = true; el.innerHTML = '<span class="spin"></span>';
@@ -1445,11 +1522,20 @@ document.addEventListener('change', (e) => {
   if (!on) return;
   const d = S.d;
   if (on === 'sup') {
+    if (el.value === '__other') { d.supCustom = true; d.supCode = ''; d.supName = ''; render(); const inp = document.querySelector('[data-on="typesup"]'); if (inp) inp.focus(); return; }
     const s = rmCfg().suppliers[Number(el.value)];
-    d.supCode = s ? s.code : ''; d.supName = s ? s.name : '';
+    d.supCustom = false; d.supCode = s ? s.code : ''; d.supName = s ? s.name : '';
     if (s && !d.lot) S.pad = { kind: 'lot' };
     return render();
   }
+  if (on === 'wrange') {
+    const l = d.lines[Number(el.dataset.v)];
+    const m = String(el.value).match(/^([\d.]+)-([\d.]+)$/);
+    l.wFrom = m ? m[1] : ''; l.wTo = m ? m[2] : ''; l.w = '';
+    l.fi = Math.min(l.fi || 0, pcsOf(l));
+    return render();
+  }
+  if (on === 'typesup') { d.supName = el.value.replace(/\s+/g, ' ').trim(); if (d.supName && !d.lot) S.pad = { kind: 'lot' }; return render(); }
   if (on === 'scale') { d.scale = el.value; S.scale = el.value; return render(); }
   if (on === 'thermo') { d.thermo = el.value; S.thermo = el.value; return render(); }
   const l = d.lines[Number(el.dataset.v)];
@@ -1459,7 +1545,7 @@ document.addEventListener('change', (e) => {
     const k = kindOf(l), i = Number(el.dataset.v);
     if (k === 'FISH' && !l.size) { S.pad = { kind: 'size', line: i }; S.buf = ''; }
     else if (k === 'SHRIMP' && !l.smin) { S.pad = { kind: 'smin', line: i }; S.buf = ''; }
-    else if (k === 'PRODUCE' && !l.w) { S.pad = { kind: 'w', line: i }; S.buf = ''; }
+    else S.pad = null;
     return render();
   }
   if (on === 'proc') { l.proc = el.value; return render(); }
@@ -1467,6 +1553,7 @@ document.addEventListener('change', (e) => {
 });
 document.addEventListener('input', (e) => {
   const el = e.target;
+  if (el.dataset && el.dataset.on === 'typesup') { S.d.supName = el.value.replace(/\s+/g, ' ').replace(/^\s/, ''); $('act').innerHTML = viewAction(); persist(); return; }
   if (el.dataset && el.dataset.on === 'typefish') {
     const i = Number(el.dataset.v);
     const l = S.d.lines[i];
