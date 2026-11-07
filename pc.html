@@ -168,6 +168,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
 .u-g{background:var(--teal)}.u-kg{background:var(--accent)}
 .tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}
+.tile.wt.lock{background:rgba(255,255,255,.3);border-style:dashed}.tile .t-s{font-size:11px;font-weight:600;color:var(--ink-3);line-height:1.2}
 .linkbtn{color:var(--accent);font-size:12px;font-weight:700;padding:0}
 .sample{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--accent-soft);border-radius:10px;padding:6px 12px}
 .sample b{font:600 17px var(--mono);color:var(--accent)}
@@ -336,7 +337,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -361,7 +362,7 @@ const L = {
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
-    before: 'น้ำหนักก่อนตัดแต่ง', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
+    before: 'น้ำหนักก่อนตัดแต่ง', bRm: '🔒 จาก RM · ตัวหนักสุดจาก {n} ตัวที่สุ่ม', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', heaviest: 'หนักสุด', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
     remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
     needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าก่อนตัดแต่ง', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
@@ -386,7 +387,7 @@ const L = {
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
-    before: 'Weight before trim', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
+    before: 'Weight before trim', bRm: '🔒 from RM · heaviest of {n} sampled fish', bManual: 'No weight from RM — weigh it here', heaviest: 'heaviest', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
     remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
     needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than before', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
@@ -411,7 +412,7 @@ const L = {
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
-    before: 'ခုတ်ပြင်မီ အလေးချိန်', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
+    before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: '🔒 RM မှ · နမူနာ {n} ကောင်တွင် အလေးဆုံး', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', heaviest: 'အလေးဆုံး', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
     remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
     needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
@@ -487,9 +488,11 @@ function newId() {
   const r = Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, 'X');
   return 'PC-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
 }
+/** after the temperatures: the weight still missing (the before weight is skipped when it came from RM) */
+const nextWeightPad = (c) => (!c.before && !c.bRm ? { kind: 'gb' } : !c.after ? { kind: 'ga' } : null);
 function blankCheck(rmDate) {
   return { id: newId(), date: todayStr(), rmDate: rmDate || todayStr(), lot: '', rmId: '', rmLine: '', sup: '', fish: '', proc: 'WR', size: '', rmStatus: '', manual: false,
-    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', after: '', remark: '', stage: 'lot' };
+    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', bRm: 0, after: '', remark: '', stage: 'lot' };
 }
 const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
 const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
@@ -548,7 +551,7 @@ function demoApi(action, p) {
       const back = daysBetween(p.date, todayStr());
       return res({ ok: true, date: p.date, lots: back > 3 ? [] : [
         { id: 'RM-DEMO-' + p.date + '-1', lot: '1', sup: 'ตัวอย่าง ผู้ขาย A / 01', start: '07:10', lines: [
-          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน' },
+          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน', fw: [980, 1040, 1120, 990, 1010, 1060, 1000, 1030], fwN: 8, fwMax: 1120 },
           { n: 2, name: 'ROHU/WR 800G', fish: 'ROHU', proc: 'WR', size: '800G', kind: 'FISH', wr: '51–150', w: 120, status: 'ผ่าน' }] },
         { id: 'RM-DEMO-' + p.date + '-2', lot: '2', sup: 'ตัวอย่าง ผู้ขาย B / 02', start: '08:30', lines: [
           { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
@@ -734,7 +737,7 @@ function viewLot() {
           const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
           return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
-            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + '</div></span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
+            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwMax) + ' g' : '') + '</div></span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
         }).join('') + '</div>';
     });
   }
@@ -796,7 +799,11 @@ function viewCheck() {
   // weights → %Loss
   const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
     '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
-  h += '<div class="grid2">' + wt('gb', T.before) + wt('ga', T.after) + '</div>';
+  const bTile = c.bRm
+    ? '<div class="tile wt filled lock"><span class="t-l">' + T.before + '</span><span class="t-v"><b>' + esc(wShow(c.before)) + '</b><span class="unit u-g">g</span></span><span class="t-s">' + fmt(T.bRm, { n: c.bRm }) + '</span></div>'
+    : wt('gb', T.before);
+  h += '<div class="grid2">' + bTile + wt('ga', T.after) + '</div>';
+  if (!c.bRm) h += '<div class="sub" style="margin-top:-4px">' + T.bManual + '</div>';
   const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > Number(c.before);
   h += '<div class="lossbox ' + (over || e.high ? 'hi' : e.loss !== null ? 'ok' : '') + '"><span>' + T.loss + '</span><b>' + (e.loss === null ? '—' : e.loss.toFixed(2) + '%') + '</b>' +
     '<small>' + (over ? T.afterBig : e.lim !== null ? (e.high ? '⚠ ' + fmt(T.lossHigh, { max: e.lim }) : fmt(T.lossLim, { max: e.lim })) : '') + '</small></div>';
@@ -857,6 +864,7 @@ function press(key) {
     else if ((/^\d$/.test(key) || key === '/') && c.lot.length < 12) c.lot += key;
     return render();
   }
+  if (pad.kind === 'gb' && c.bRm) { S.pad = { kind: 'ga' }; return render(); }   // from RM = locked
   if (pad.kind === 'gb' || pad.kind === 'ga') {
     const f = pad.kind === 'gb' ? 'before' : 'after';
     const v = String(c[f] || '');
@@ -881,10 +889,10 @@ function press(key) {
     const need = S.wide ? 3 : 2;
     let buf = S.buf;
     // after a reading: next empty optional box, then the weights (temperature 1 is the only required one)
-    const after = () => { S.buf = ''; S.wide = false; const nx = [1, 2].find((k) => k > i && c.temps[k] === ''); S.pad = nx !== undefined ? { kind: 'pt', i: nx } : !c.before ? { kind: 'gb' } : null; };
+    const after = () => { S.buf = ''; S.wide = false; const nx = [1, 2].find((k) => k > i && c.temps[k] === ''); S.pad = nx !== undefined ? { kind: 'pt', i: nx } : nextWeightPad(c); };
     if (key === 'ok') {
       if (buf.replace('-', '')) { c.temps[i] = tempOf(buf, need); after(); }
-      else { S.buf = ''; S.wide = false; S.pad = i === 0 && c.temps[0] === '' ? pad : !c.before ? { kind: 'gb' } : null; }
+      else { S.buf = ''; S.wide = false; S.pad = i === 0 && c.temps[0] === '' ? pad : nextWeightPad(c); }
       return render();
     }
     if (key === 'pm') {
@@ -990,13 +998,13 @@ function saveCheck() {
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, after: c.after, remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
   S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
   S.last = { id: rec.id, lot: c.lot, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
-    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim } };
+    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm } };
   S.c = null;
   go('done');
   flush();
@@ -1053,13 +1061,17 @@ const ACT = {
     const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
     if (!l) return;
     Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
+    // weight before trim = the heaviest fish RM weighed in the AQL sample (Sal, 7 Nov 2026); none from RM → weighed here
+    if (Number(l.fwMax) > 0) { S.c.before = String(l.fwMax); S.c.bRm = Number(l.fwN) || 1; }
+    else if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; }
     go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
   },
-  manual: () => { Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
+  manual: () => { if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; } Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
   usemanual: () => go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null }),
   focus: (el) => {
     const k = el.dataset.v;
     S.buf = ''; S.wide = false;
+    if (k === 'gb' && S.c && S.c.bRm) return;
     S.pad = k === 'pt' ? { kind: 'pt', i: Number(el.dataset.i) } : { kind: k };
     render();
   },
