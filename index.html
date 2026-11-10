@@ -10,7 +10,8 @@
 <title>CK QC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<!-- fonts load in the background: the app shows at once in the phone's own font and switches when they arrive (slow factory Wi-Fi) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
 <style>
 :root{
   --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
@@ -314,7 +315,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.2';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -736,11 +737,13 @@ function refreshToday(force) {
   }, (e) => { if (e.net) { S.online = false; render(); } });
 }
 let cfgAt = 0;
+/** ↻ asks the server for fresh lists (it normally answers from a 10-minute copy) — used once after a hard refresh */
+function wantFresh() { try { const f = sessionStorage.getItem('ckqc.fresh') === '1'; sessionStorage.removeItem('ckqc.fresh'); return f; } catch (e) { return false; } }
 function refreshConfig(force) {
   if (!S.staff || (!force && Date.now() - cfgAt < 5000)) return;
   cfgAt = Date.now();
   S.cfgErr = '';
-  api('getConfig', { staffId: S.staff.id }).then((j) => { S.cfg = j; S.cfgErr = ''; S.online = true; persist(); render(); },
+  api('getConfig', { staffId: S.staff.id, fresh: wantFresh() }).then((j) => { S.cfg = j; S.cfgErr = ''; S.online = true; persist(); render(); },
     (e) => {
       if (e.code === 'STAFF') { signOut(); toast(t().badId); return; }
       if (e.net) S.online = false;
@@ -834,7 +837,8 @@ function viewHome() {
   } else {
     h += '<button class="dept main glass" data-act="startrm"><span class="ic">RM</span><span class="grow"><b style="font-size:18px">' + T.rm + '</b><div class="sub">' + T.rmSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   }
-  const pcOn = S.cfg && (S.cfg.modules || []).some((m) => m.key === 'PC' && m.ready);
+  // PC shows at once; it is hidden only when the server has said PC is not installed
+  const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
   if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">FM-QA-010.10 · %Loss</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   (pcOn ? ['pk', 'cs'] : ['pc', 'pk', 'cs']).forEach((k) => {
     h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
@@ -1367,6 +1371,7 @@ function render() {
   rendering = true;
   try { draw(); } finally { rendering = false; }
   if (renderAgain) { renderAgain = false; render(); }
+  if (updTo) setTimeout(applyUpdate, 0);   // a newer version is waiting: apply it once back on a safe screen
 }
 function draw() {
   document.body.className = 'lang-' + S.lang;
@@ -1396,6 +1401,22 @@ function draw() {
 /* ---------------- actions ---------------- */
 function login() {
   if (S.sid.length !== 7 || S.busy) return;
+  // fast login (Sal, 10 Nov 2026): an ID that has signed in on this phone before goes straight in;
+  // the server check runs in the background and signs the person out again if the ID is no longer valid
+  const k0 = S.known && S.known[S.sid];
+  if (k0 && navigator.onLine) {
+    const id = S.sid;
+    S.staff = { id: id, name: k0.name, dept: k0.dept }; S.err = '';
+    go('home', { pad: null });
+    refreshConfig(true); refreshToday(true);
+    api('validateStaff', { staffId: id }).then((j) => {
+      if (!S.staff || S.staff.id !== id) return;
+      if (!j.valid) { delete S.known[id]; persist(); forceOut(); S.err = t().badId; render(); return; }
+      S.staff.name = j.name || S.staff.name; S.staff.dept = j.department || S.staff.dept;
+      S.known[id] = { name: S.staff.name, dept: S.staff.dept }; persist(); render();
+    }, () => {});
+    return;
+  }
   S.busy = true; S.err = ''; render();
   api('validateStaff', { staffId: S.sid }).then((j) => {
     S.busy = false;
@@ -1419,7 +1440,11 @@ function login() {
 function signOut() {
   if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
   S.confirmOut = false;
-  S.staff = null; S.sid = ''; S.today = null; S.cfg = null; S.d = null; todayAt = 0;
+  forceOut();
+}
+/** back to the login screen. The lists (cfg) stay on the phone: they are the same for everyone, so the next person sees RM and PC at once */
+function forceOut() {
+  S.staff = null; S.sid = ''; S.today = null; S.d = null; todayAt = 0;
   go('login', { pad: { kind: 'sid' } });
 }
 function toast(msg) {
@@ -1526,7 +1551,7 @@ const ACT = {
     el.disabled = true; el.innerHTML = '<span class="spin"></span>';
     persist();
     // stay signed in after a refresh (Sal, 6 Nov): only ออก or opening the website again asks for the ID
-    const go = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
+    const go = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); sessionStorage.setItem('ckqc.fresh', '1'); } catch (e) { /* ignore */ }
       const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
     const done = S.outbox.length && navigator.onLine ? flush() : Promise.resolve();
     Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(go, go);
@@ -1671,11 +1696,38 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
 window.addEventListener('online', () => { S.online = true; flush(); render(); });
 window.addEventListener('offline', () => { S.online = false; render(); });
-document.addEventListener('visibilitychange', () => { if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+
+/* ---------- automatic update (Sal, 7 Nov 2026) ----------
+   Staff never need ↻ for a new version. When the app is opened, and each time it comes back to the front,
+   the phone asks GitHub whether this page changed (a tiny check when it has not; a new copy is stored when it has).
+   If its APP_VERSION differs, the app reloads itself as soon as it is on the login / home / done screen
+   (never in the middle of an inspection). Drafts and unsent records are kept; the signed-in staff stays signed in. */
+var updAt = 0, updTo = '';   // var: render() may run before this line
+function checkUpdate() {
+  if (DEMO || !navigator.onLine || Date.now() - updAt < 60000) return;
+  updAt = Date.now();
+  fetch(location.pathname, { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : '')).then((txt) => {
+    const m = /const APP_VERSION = '([^']+)'/.exec(txt || '');
+    if (!m || m[1] === APP_VERSION) return;
+    try { if (sessionStorage.getItem('ckqc.upd') === m[1]) return; } catch (e) { /* ignore */ }   // tried once already: no reload loop
+    updTo = m[1];
+    applyUpdate();
+  }).catch(() => {});
+}
+function applyUpdate() {
+  if (!updTo || S.busy || ['login', 'home', 'done'].indexOf(S.screen) < 0 || (S.screen === 'login' && (S.sid || S.buf))) return;
+  const v = updTo; updTo = '';
+  try { sessionStorage.setItem('ckqc.upd', v); } catch (e) { /* ignore */ }
+  persist();
+  if (S.staff) { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ } }
+  const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString());
+}
 
 if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href); u.searchParams.delete('r'); history.replaceState(null, '', u.toString()); } catch (e) { /* ignore */ } }
 render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
+checkUpdate();
 </script>
 </body>
 </html>
