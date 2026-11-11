@@ -338,7 +338,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.2';
+const APP_VERSION = '1.1.3';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -348,7 +348,7 @@ const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออ�
 /* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
 const L = {
   th: {
-    pc: 'ตรวจสอบคุณภาพ PC', pcShort: 'แปรรูป (PC)', pcSub: 'FM-QA-010.10 · อุณหภูมิหลังชั่ง · %Loss', branch: 'สาขาสมุทรปราการ', steps: ['ล็อต', 'ตรวจ'],
+    pc: 'ตรวจสอบคุณภาพ PC', pcShort: 'แปรรูป (PC)', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', branch: 'สาขาสมุทรปราการ', steps: ['ล็อต', 'ตรวจ'],
     welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจ…',
     badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'ยังมีการตรวจที่ยังไม่บันทึก — กด ออก อีกครั้งเพื่อทิ้งและออก',
     demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet', offline: 'ออฟไลน์', online: 'ออนไลน์', waiting: 'รอส่ง', inspector: 'ผู้ตรวจ', back: 'กลับ', ok: 'ตกลง',
@@ -373,7 +373,7 @@ const L = {
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ'
   },
   en: {
-    pc: 'PC quality check', pcShort: 'Processing (PC)', pcSub: 'FM-QA-010.10 · temperature after weighing · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'Check'],
+    pc: 'PC quality check', pcShort: 'Processing (PC)', pcSub: 'temperature after weighing · weight before/after trim', branch: 'Samut Prakan', steps: ['Lot', 'Check'],
     welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Sign in', checking: 'Checking…',
     badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved check — tap Sign out again to discard it',
     demo: 'Demo mode — nothing is sent to Google Sheets', offline: 'Offline', online: 'Online', waiting: 'Waiting', inspector: 'Inspector', back: 'Back', ok: 'OK',
@@ -398,7 +398,7 @@ const L = {
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv'
   },
   my: {
-    pc: 'PC အရည်အသွေး စစ်ဆေး', pcShort: 'PC', pcSub: 'FM-QA-010.10 · ချိန်ပြီး အပူချိန် · %Loss', branch: 'Samut Prakan', steps: ['Lot', 'စစ်'],
+    pc: 'PC အရည်အသွေး စစ်ဆေး', pcShort: 'PC', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', branch: 'Samut Prakan', steps: ['Lot', 'စစ်'],
     welcome: 'ကြိုဆိုပါသည်', loginSub: 'ဝန်ထမ်း နံပါတ် ၇ လုံး', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်ရန်', checking: 'စစ်နေသည်…',
     badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမဆုံး ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေး — ထွက်ရန် ထပ်နှိပ်ပါ',
     demo: 'စမ်းသပ်မုဒ်', offline: 'အော့ဖ်လိုင်း', online: 'အွန်လိုင်း', waiting: 'ပို့ရန်', inspector: 'စစ်ဆေးသူ', back: 'နောက်', ok: 'အိုကေ',
@@ -710,7 +710,7 @@ function viewHome() {
     h += '<div class="tlist glass">' + rows.map((r) => {
       const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' : statusPill(r.status);
       return '<button data-act="check" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.time) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>' + esc(r.item) + ' ' + esc(r.size || '') + '</b>' +
-        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + (r.loss !== null && r.loss !== undefined && r.loss !== '' ? ' · ' + numFmt(r.loss) + '%' : '') + '</div>' +
+        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + '</div>' +
         (r.held > 0 && !r.void ? '<div class="sub" style="color:var(--amber);font-weight:700">🧊 ' + fmt(T.heldBadge, { n: r.held }) + '</div>' : '') + '</span>' + pill + '</button>';
     }).join('') + '</div>';
   }
@@ -799,7 +799,7 @@ function viewCheck() {
     h += '<button class="rc glass ' + (ra ? 'f-act' : '') + '" data-act="focus" data-v="prt"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
       '<b class="' + (ra ? 'caret' : '') + '" style="color:' + (rn === null ? 'var(--ink)' : rn > tempMax() ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (ra ? '' : '—')) + ' °C</b></button></div>';
   }
-  // weights → %Loss
+  // weights (the %Loss is worked out by the server and shown only in the Google Sheet — Sal, 11 Nov 2026)
   const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
     '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
   const bTile = c.bRm
@@ -808,8 +808,7 @@ function viewCheck() {
   h += '<div class="grid2">' + bTile + wt('ga', T.after) + '</div>';
   if (!c.bRm) h += '<div class="sub" style="margin-top:-4px">' + T.bManual + '</div>';
   const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > Number(c.before);
-  h += '<div class="lossbox ' + (over || e.high ? 'hi' : e.loss !== null ? 'ok' : '') + '"><span>' + T.loss + '</span><b>' + (e.loss === null ? '—' : e.loss.toFixed(2) + '%') + '</b>' +
-    '<small>' + (over ? T.afterBig : e.lim !== null ? (e.high ? '⚠ ' + fmt(T.lossHigh, { max: e.lim }) : fmt(T.lossLim, { max: e.lim })) : '') + '</small></div>';
+  if (over) h += '<div class="err">' + T.afterBig + '</div>';
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
@@ -821,7 +820,6 @@ function viewDone() {
   return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
     '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) + '</div>' +
-    (last.loss !== null && last.loss !== undefined ? '<div class="lossbox ' + (last.high ? 'hi' : 'ok') + '" style="width:100%"><span>' + T.loss + '</span><b>' + Number(last.loss).toFixed(2) + '%</b><small></small></div>' : '') +
     '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
 }
@@ -1041,8 +1039,7 @@ function openCheckSheet(id) {
   const x = r || { item: pend.record.item, size: pend.record.size, lot: pend.record.lot, rmDate: ddmm(pend.record.rmDate), time: pend.record.time, loss: pend.record._loss, status: pend.record._status, held: Math.max(0, daysBetween(pend.record.rmDate, pend.record.date)) };
   let h = '<div class="row"><b class="grow" style="font-size:18px">' + esc(x.item) + ' ' + esc(x.size || '') + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
     '<div class="sub">Lot ' + esc(x.lot) + ' · ' + T.rcv + ' ' + esc(x.rmDate) + ' · ' + esc(x.time) + (r && r.staffName ? ' · ' + T.by + ' ' + esc(r.staffName) : '') + '</div>' +
-    '<div class="row" style="flex-wrap:wrap;gap:6px">' + statusPill(x.status) + heldPill(x.held) + (r && r.trim ? '<span class="pill p-mute">' + esc(r.trim) + '</span>' : '') + '</div>' +
-    (x.loss !== null && x.loss !== undefined && x.loss !== '' ? '<div class="lossbox ' + (r && /^สูง/.test(r.lossCheck || '') ? 'hi' : 'ok') + '"><span>' + T.loss + '</span><b>' + Number(x.loss).toFixed(2) + '%</b><small></small></div>' : '');
+    '<div class="row" style="flex-wrap:wrap;gap:6px">' + statusPill(x.status) + heldPill(x.held) + (r && r.trim ? '<span class="pill p-mute">' + esc(r.trim) + '</span>' : '') + '</div>';
   if (r && r.void) h += '<div class="note">' + T.cancelled + ' · ' + esc(r.voidReason) + '</div>';
   else if (pend) h += '<div class="note">' + T.pendingSub + '</div>';
   else if (!canCancel()) h += '<div class="note">🔒 ' + T.gmOnly + '</div>';

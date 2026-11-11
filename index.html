@@ -315,7 +315,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.2';
+const APP_VERSION = '1.2.4';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -348,7 +348,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -386,7 +386,7 @@ const L = {
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
     wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
-    sizeS: 'Size (pcs/kg)', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
     point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
     shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
     shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
@@ -424,7 +424,7 @@ const L = {
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
     wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
-    sizeS: 'အရွယ် (ကောင်/kg)', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
     point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
     shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
     shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
@@ -510,9 +510,15 @@ function upgradeLine(l) {
   (l.fishes || []).forEach((f) => { if (f.g === undefined) f.g = ''; });   // weight (g) of each sampled fish, app 1.2
   return l;
 }
+/** TILAPIA/FC (Settings RM_SIZE_RANGE_ITEMS): fish size is a range in grams, two boxes like shrimp (Sal, 11 Nov 2026).
+ *  Off until the server sends the list, so a phone never sends a range to a server that does not know it. */
+const isRangeFish = (l) => kindOf(l) === 'FISH' && ((rmCfg().settings || {}).SIZE_RANGE || []).indexOf((String(l.fish || '') + '/' + String(l.proc || '')).replace(/\s+/g, '').toUpperCase()) >= 0;
 const sizeName = (l) => {
   const k = kindOf(l);
   if (k === 'SHRIMP') return Number(l.smin) > 0 && Number(l.smax) > 0 ? Number(l.smin) + '-' + Number(l.smax) : '';
+  if (k === 'FISH' && isRangeFish(l) && Number(l.smin) > 0 && Number(l.smax) > 0) return Number(l.smin) + '-' + Number(l.smax) + 'G';
+  const rg = String(l.size || '').match(/^(\d+)\s*-\s*(\d+)$/);
+  if (k === 'FISH' && rg) return Number(rg[1]) + '-' + Number(rg[2]) + 'G';
   const n = Number(l.size);
   if (k !== 'FISH' || !(n > 0)) return '';
   return n >= 1000 && n % 100 === 0 ? (n / 1000) + 'KG' : n + 'G';
@@ -531,7 +537,7 @@ const planKg = (l) => (Number(l.wTo) > 0 ? Number(l.wTo) : Number(l.w));
 function lineReady(l) {
   if (!(l.fish && l.fish.length <= 40 && l.proc && hasRange(l))) return false;
   const k = kindOf(l);
-  if (k === 'FISH') return !!(Number(l.size) > 0 && l.md && l.gl && l.ice);
+  if (k === 'FISH') return !!((isRangeFish(l) ? Number(l.smin) > 0 && Number(l.smax) > Number(l.smin) : Number(l.size) > 0) && l.md && l.gl && l.ice);
   if (k === 'SHRIMP') return !!(Number(l.smin) > 0 && Number(l.smax) >= Number(l.smin) && l.md && l.sulfite && l.ice);
   return true;
 }
@@ -608,9 +614,16 @@ function blankLine(fish, proc, size) {
   const p = list.indexOf(proc) >= 0 ? proc : list.indexOf('WR') >= 0 ? 'WR' : list[0];
   const custom = !!fish && !rmCfg().fish.some((x) => x.name === fish);
   const m = String(size || '').match(/^(\d+)\s*-\s*(\d+)$/);
-  return upgradeLine({ type: k, fish: fish || '', custom: custom, proc: p, size: k === 'FISH' && Number(size) > 0 ? String(Number(size)) : '',
-    smin: k === 'SHRIMP' && m ? m[1] : '', smax: k === 'SHRIMP' && m ? m[2] : '', w: '', md: '', gl: '', ice: '', sulfite: '',
+  const rng = k === 'SHRIMP' || (k === 'FISH' && isRangeFish({ type: 'FISH', fish: fish, proc: p }));
+  return upgradeLine({ type: k, fish: fish || '', custom: custom, proc: p, size: k === 'FISH' && !rng && Number(size) > 0 ? String(Number(size)) : '',
+    smin: rng && m ? m[1] : '', smax: rng && m ? m[2] : '', w: '', md: '', gl: '', ice: '', sulfite: '',
     open: true, fishes: Array.from({ length: N_T }, () => ({ t: '', g: '', d: [0, 0, 0, 0, 0, 0, 0, 0] })), extra: [0, 0, 0, 0, 0, 0, 0, 0], fi: 0, fix: '', recheck: '', time: '' });
+}
+/** after the item or processing type changes: keep only the size boxes this line uses */
+function fixSizeFields(l) {
+  const k = kindOf(l);
+  if (k !== 'FISH' || isRangeFish(l)) l.size = '';
+  if (k !== 'SHRIMP' && !isRangeFish(l)) { l.smin = ''; l.smax = ''; }
 }
 /** choose an item from the list: switches the line to that kind of goods */
 function setItem(l, name) {
@@ -619,8 +632,7 @@ function setItem(l, name) {
   upgradeLine(l);
   const pl = k === 'PRODUCE' ? rmCfg().chilliProcs : rmCfg().procs;
   if (pl.indexOf(l.proc) < 0) l.proc = pl.indexOf('WR') >= 0 ? 'WR' : pl[0];
-  if (k !== 'FISH') l.size = '';
-  if (k !== 'SHRIMP') { l.smin = ''; l.smax = ''; }
+  fixSizeFields(l);
   l.fi = Math.min(l.fi || 0, pcsOf(l));
 }
 /** the number pad that should open on the inspect page */
@@ -839,7 +851,7 @@ function viewHome() {
   }
   // PC shows at once; it is hidden only when the server has said PC is not installed
   const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
-  if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">FM-QA-010.10 · %Loss</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">' + T.pcSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   (pcOn ? ['pk', 'cs'] : ['pc', 'pk', 'cs']).forEach((k) => {
     h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
   });
@@ -926,11 +938,12 @@ function viewFish() {
     // processing type
     h += '<label class="tile"><span class="t-l">' + T.proc + '</span><select data-on="proc" data-v="' + i + '">' +
       procs.map((p) => '<option value="' + esc(p) + '"' + (p === l.proc ? ' selected' : '') + '>' + esc(p === 'OTHER' ? T.other : p) + '</option>').join('') + '</select></label>';
-    // size: fish g per fish · shrimp pcs per kg (two boxes 00-00) · chilli/herbs none
-    if (k === 'SHRIMP') {
-      const box = (f) => '<button class="' + (act(f) ? 'f-act' : '') + '" data-act="focus" data-v="' + f + '" data-i="' + i + '"><span class="' + (act(f) ? 'caret' : '') + '">' + esc(l[f] || (act(f) ? '' : '00')) + '</span></button>';
-      const okSize = Number(l.smin) > 0 && Number(l.smax) >= Number(l.smin);
-      h += '<div class="tile size ' + (act('smin') || act('smax') ? 'f-act' : okSize ? 'filled' : 'f-empty') + '"><span class="t-l">' + T.sizeS + '</span><div class="rng">' + box('smin') + '<i>–</i>' + box('smax') + '</div></div>';
+    // size: fish g per fish · TILAPIA/FC g range (two boxes 000-000) · shrimp pcs per kg (two boxes 00-00) · chilli/herbs none
+    const rngF = isRangeFish(l);
+    if (k === 'SHRIMP' || rngF) {
+      const box = (f) => '<button class="' + (act(f) ? 'f-act' : '') + '" data-act="focus" data-v="' + f + '" data-i="' + i + '"><span class="' + (act(f) ? 'caret' : '') + '">' + esc(l[f] || (act(f) ? '' : rngF ? '000' : '00')) + '</span></button>';
+      const okSize = Number(l.smin) > 0 && (rngF ? Number(l.smax) > Number(l.smin) : Number(l.smax) >= Number(l.smin));
+      h += '<div class="tile size ' + (act('smin') || act('smax') ? 'f-act' : okSize ? 'filled' : 'f-empty') + '"><span class="t-l">' + (rngF ? T.sizeR : T.sizeS) + '</span><div class="rng">' + box('smin') + '<i>–</i>' + box('smax') + '</div></div>';
     } else {
       const zA = act('size');
       h += '<button class="tile size ' + (k !== 'FISH' ? 'filled' : zA ? 'f-act' : Number(l.size) > 0 ? 'filled' : 'f-empty') + '" data-act="focus" data-v="size" data-i="' + i + '"' + (k !== 'FISH' ? ' disabled' : '') + '>' +
@@ -1225,7 +1238,7 @@ function press(key) {
     const v = String(l[f] || '');
     if (key === 'ok') S.pad = f === 'smin' && !l.smax ? { kind: 'smax', line: pad.line } : null;
     else if (key === 'del') l[f] = v.slice(0, -1);
-    else if (/^\d$/.test(key) && v.length < 3 && !(v === '' && key === '0')) l[f] = v + key;
+    else if (/^\d$/.test(key) && v.length < (isRangeFish(l) ? 4 : 3) && !(v === '' && key === '0')) l[f] = v + key;
     return render();
   }
   if (pad.kind === 'rt') {
@@ -1466,7 +1479,7 @@ function saveTruck() {
       if (e.kind === 'SHRIMP') return Object.assign(base, { sizeMin: l.smin, sizeMax: l.smax, md: l.md, sulfite: l.sulfite, ice: l.ice,
         temps: l.fishes.slice(0, e.need).map((f) => f.t), checks: l.sc.slice(), recheck: e.warm ? l.recheck : '' });
       if (e.kind === 'PRODUCE') return Object.assign(base, { sampleKg: l.sk, rejectKg: l.rk, checks: l.pc.slice() });
-      return Object.assign(base, { size: l.size, md: l.md, gl: l.gl, ice: l.ice,
+      return Object.assign(base, isRangeFish(l) ? { size: '', sizeMin: l.smin, sizeMax: l.smax } : { size: l.size }, { md: l.md, gl: l.gl, ice: l.ice,
         temps: l.fishes.slice(0, e.need).map((f) => f.t), fw: l.fishes.slice(0, e.need).map((f) => f.g), phys: e.c, recheck: e.warm ? l.recheck : '' });
     })
   };
@@ -1666,13 +1679,18 @@ document.addEventListener('change', (e) => {
     if (el.value === '__other') { l.custom = true; l.fish = ''; l.chilli = false; l.type = 'FISH'; l.smin = ''; l.smax = ''; if (rmCfg().procs.indexOf(l.proc) < 0) l.proc = rmCfg().procs.indexOf('WR') >= 0 ? 'WR' : rmCfg().procs[0]; render(); const inp = document.querySelector('[data-on="typefish"]'); if (inp) inp.focus(); return; }
     setItem(l, el.value);
     const k = kindOf(l), i = Number(el.dataset.v);
-    if (k === 'FISH' && !l.size) { S.pad = { kind: 'size', line: i }; S.buf = ''; }
-    else if (k === 'SHRIMP' && !l.smin) { S.pad = { kind: 'smin', line: i }; S.buf = ''; }
+    if (k === 'FISH' && !isRangeFish(l) && !l.size) { S.pad = { kind: 'size', line: i }; S.buf = ''; }
+    else if ((k === 'SHRIMP' || isRangeFish(l)) && !l.smin) { S.pad = { kind: 'smin', line: i }; S.buf = ''; }
     else S.pad = null;
     return render();
   }
-  if (on === 'proc') { l.proc = el.value; return render(); }
-  if (on === 'typefish') { const v = el.value.toUpperCase().replace(/\s+/g, ' ').trim(); if (v === l.fish) return; l.fish = v; return render(); }
+  if (on === 'proc') {
+    const was = isRangeFish(l);
+    l.proc = el.value; fixSizeFields(l);
+    if (isRangeFish(l) && !was && !l.smin) { S.pad = { kind: 'smin', line: Number(el.dataset.v) }; S.buf = ''; }
+    return render();
+  }
+  if (on === 'typefish') { const v = el.value.toUpperCase().replace(/\s+/g, ' ').trim(); if (v === l.fish) return; l.fish = v; fixSizeFields(l); return render(); }
 });
 document.addEventListener('input', (e) => {
   const el = e.target;
