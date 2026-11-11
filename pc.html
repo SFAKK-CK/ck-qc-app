@@ -339,7 +339,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.5';
+const APP_VERSION = '1.1.7';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -364,10 +364,10 @@ const L = {
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
-    before: 'น้ำหนักก่อนตัดแต่ง', bRm: '🔒 จาก RM · ตัวหนักสุดจาก {n} ตัวที่สุ่ม', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', heaviest: 'หนักสุด', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
+    before: 'น้ำหนักก่อนตัดแต่ง', bRm: '🔒 จาก RM · เฉลี่ยจาก {n} ตัวที่สุ่ม', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', heaviest: 'เฉลี่ย', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
     orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
-    needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าก่อนตัดแต่ง', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
+    needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าปลาตัวที่หนักที่สุด — ชั่งใหม่', needOrder: 'ใส่ Order (หรือ BULK)', watch: '⚠ %Loss ถึงเกณฑ์ {trim} ({lim}%) — บันทึกได้ ระบบเตือนไว้ในรายงาน', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
     doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
@@ -393,10 +393,10 @@ const L = {
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
-    before: 'Weight before trim', bRm: '🔒 from RM · heaviest of {n} sampled fish', bManual: 'No weight from RM — weigh it here', heaviest: 'heaviest', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
+    before: 'Weight before trim', bRm: '🔒 from RM · average of {n} sampled fish', bManual: 'No weight from RM — weigh it here', heaviest: 'average', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
     orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
-    needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than before', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
+    needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than the heaviest fish — weigh again', needOrder: 'Enter the order (or BULK)', watch: '⚠ %Loss at the {trim} limit ({lim}%) — can be saved, flagged in the report', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
     doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
@@ -422,10 +422,10 @@ const L = {
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
-    before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: '🔒 RM မှ · နမူနာ {n} ကောင်တွင် အလေးဆုံး', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', heaviest: 'အလေးဆုံး', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
+    before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: '🔒 RM မှ · နမူနာ {n} ကောင် ပျမ်းမျှ', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', heaviest: 'ပျမ်းမျှ', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
     orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
-    needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
+    needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needOrder: 'Order ထည့်ပါ (သို့ BULK)', watch: '⚠ %Loss စံ အထိ {trim} ({lim}%) — သိမ်းနိုင်', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
     doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
@@ -504,7 +504,9 @@ function newId() {
 /** after the temperatures: the weight still missing (the before weight is skipped when it came from RM) */
 const nextWeightPad = (c) => (!c.before && !c.bRm ? { kind: 'gb' } : !c.after ? { kind: 'ga' } : null);
 /** ORDER as typed: capitals, single spaces, only letters / digits / space / - . (max 30) — same rule as the server */
-const cleanOrder = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9 /._-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 30);
+/** ORDER / CODE: Latin capitals, Thai, digits, spaces and - / . ( ) # & + (max 40) — words such as BULK or ขายส่ง are fine (Sal, 11 Nov 2026). Same rule as the server */
+const orderChars = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9\u0E00-\u0E7F ()#&+\/._-]/g, '').replace(/\s+/g, ' ').slice(0, 40);
+const cleanOrder = (v) => orderChars(v).trim();
 /** the RM line this check is on (from the lots list on the phone), or null */
 function lineOf(c) {
   const got = c && c.rmId && S.lots[c.rmDate];
@@ -556,6 +558,7 @@ function openGmSheet() {
   $('sheet').innerHTML = '<div class="box">' + h + '</div>';
   $('sheet').classList.add('open');
 }
+const lockMargin = () => { const v = S.cfg && S.cfg.pc && S.cfg.pc.settings ? Number(S.cfg.pc.settings.LOCK_MARGIN) : NaN; return isNaN(v) ? 0.6 : v; };
 function evalCheck(c) {
   const vals = c.temps.map((v) => (v === '' || v === '-' || isNaN(Number(v)) ? null : Number(v)));
   const got = vals.filter((v) => v !== null);
@@ -564,18 +567,23 @@ function evalCheck(c) {
   const rc = c.recheck === '' || isNaN(Number(c.recheck)) ? null : Number(c.recheck);
   const tFail = warm && !(rc !== null && rc <= tempMax());
   const b = Number(c.before), a = Number(c.after);
-  const loss = b > 0 && a > 0 && a <= b ? Math.round(((b - a) / b) * 10000) / 100 : null;
+  const top = c.bRm && Number(c.bMax) > 0 ? Number(c.bMax) : b;   // before = RM average: after may pass it, never the heaviest RM fish
+  const loss = b > 0 && a > 0 && a <= top ? Math.round(((b - a) / b) * 10000) / 100 : null;
   const tr = pcCfg().trims.find((x) => x.code === c.trim);
   const lim = tr && tr.maxLoss !== null && tr.maxLoss !== undefined && tr.maxLoss !== '' ? Number(tr.maxLoss) : null;
   const why = [];
   if (!c.lot || !c.fish) why.push('lot');
   if (!c.trim) why.push(t().needTrim);
   if (vals[0] === null) why.push(t().needT1);
-  if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > b) why.push(t().afterBig);
+  if (!cleanOrder(c.order)) why.push(t().needOrder);
+  if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > top) why.push(t().afterBig);
   if (warm && !c.fix) why.push(t().needFix);
-  const high = lim !== null && loss !== null && loss > lim;
+  // reaching the limit = flag; from limit + margin (0.6 → G 17.60 %) = lock until a GM approves (Sal, 11 Nov 2026)
+  const lockAt = lim === null ? null : Math.round((lim + lockMargin()) * 100) / 100;
+  const high = lim !== null && loss !== null && Math.round(loss * 100) >= Math.round(lockAt * 100);
+  const watch = lim !== null && loss !== null && !high && loss >= lim;
   if (high && !c.gm) why.push(t().lockMsg);
-  return { vals, max, warm, tFail, loss, lim, high, held: heldOf(c), ok: !why.length, why,
+  return { vals, max, warm, tFail, loss, lim, lockAt, high, watch, held: heldOf(c), ok: !why.length, why,
     status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
 }
 
@@ -613,7 +621,7 @@ function demoApi(action, p) {
       const back = daysBetween(p.date, todayStr());
       return res({ ok: true, date: p.date, lots: back > 3 ? [] : [
         { id: 'RM-DEMO-' + p.date + '-1', lot: '1', sup: 'ตัวอย่าง ผู้ขาย A / 01', start: '07:10', lines: [
-          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน', fw: [980, 1040, 1120, 990, 1010, 1060, 1000, 1030], fwN: 8, fwMax: 1120 },
+          { n: 1, name: 'ROHU/WR 1KG', fish: 'ROHU', proc: 'WR', size: '1KG', kind: 'FISH', wr: '151–500', w: 0, status: 'ผ่าน', fw: [980, 1040, 1120, 990, 1010, 1060, 1000, 1030], fwN: 8, fwMax: 1120, fwAvg: 1028.8 },
           { n: 2, name: 'ROHU/WR 800G', fish: 'ROHU', proc: 'WR', size: '800G', kind: 'FISH', wr: '51–150', w: 120, status: 'ผ่าน' }] },
         { id: 'RM-DEMO-' + p.date + '-2', lot: '2', sup: 'ตัวอย่าง ผู้ขาย B / 02', start: '08:30', lines: [
           { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
@@ -803,7 +811,7 @@ function viewLot() {
           const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
           return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
-            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwMax) + ' g' : '') + '</div>' +
+            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwAvg > 0 || l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwAvg || l.fwMax) + ' g' : '') + '</div>' +
             ((l.orders || []).length ? '<div class="sub" style="color:var(--accent);font-weight:700">→ ' + l.orders.map(esc).join(' · ') + '</div>' : '') + '</span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
         }).join('') + '</div>';
     });
@@ -848,8 +856,9 @@ function viewCheck() {
   const line = lineOf(c);
   const used = (line && line.orders) || [];
   const recent = (S.orders || []).filter((o) => used.indexOf(o) < 0).slice(0, 8);
-  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.orderL + '</span><input data-on="order" value="' + esc(c.order || '') + '" maxlength="30" placeholder="' + esc(T.orderPh) + '" autocomplete="off" autocapitalize="characters" style="font:700 18px var(--mono);text-transform:uppercase" aria-label="' + T.orderL + '"></label>';
-  if (used.length || recent.length) h += '<div class="fixes" style="align-items:center">' +
+  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.orderL + '</span><input data-on="order" value="' + esc(c.order || '') + '" maxlength="40" placeholder="' + esc(T.orderPh) + '" autocomplete="off" autocapitalize="characters" style="font:700 18px var(--mono);text-transform:uppercase" aria-label="' + T.orderL + '"></label>';
+  // every lot through PC needs an order — BULK when it has none yet (Sal, 11 Nov 2026)
+  h += '<div class="fixes" style="align-items:center">' + (used.indexOf('BULK') < 0 && recent.indexOf('BULK') < 0 ? '<button class="' + (c.order === 'BULK' ? 'on' : '') + '" data-act="pickorder" data-v="BULK">BULK</button>' : '') +
     (used.length ? '<span class="sub">' + T.orderUsed + '</span>' + used.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') +
     (recent.length ? '<span class="sub">' + T.orderRecent + '</span>' + recent.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') + '</div>';
   // trim type
@@ -885,8 +894,11 @@ function viewCheck() {
     : wt('gb', T.before);
   h += '<div class="grid2">' + bTile + wt('ga', T.after) + '</div>';
   if (!c.bRm) h += '<div class="sub" style="margin-top:-4px">' + T.bManual + '</div>';
-  const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > Number(c.before);
+  const top = c.bRm && Number(c.bMax) > 0 ? Number(c.bMax) : Number(c.before);
+  const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > top;
   if (over) h += '<div class="err">' + T.afterBig + '</div>';
+  const ew = evalCheck(c);
+  if (ew.watch) h += '<div class="note">' + fmt(T.watch, { trim: esc(c.trim), lim: ew.lim }) + '</div>';
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
@@ -1020,7 +1032,13 @@ function draw() {
   if (S.screen !== 'login' && !S.staff) S.screen = 'login';
   $('hdr').innerHTML = renderHeader();
   const views = { login: viewLogin, home: viewHome, lot: viewLot, manual: viewManual, check: viewCheck, done: viewDone };
+  // keep the cursor in a text box (order / remark …) when the screen redraws in the background (lots loaded, record sent)
+  const fe = document.activeElement, fon = fe && fe.dataset && fe.dataset.on, fpos = fe && typeof fe.selectionStart === 'number' ? fe.selectionStart : null;
   main.innerHTML = (views[S.screen] || viewHome)();
+  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup'].indexOf(fon) >= 0) {
+    const el = main.querySelector('[data-on="' + fon + '"]');
+    if (el) { if (fon === 'order' && el.value !== fe.value) el.value = fe.value; el.focus(); try { if (fpos !== null) el.setSelectionRange(fpos, fpos); } catch (e) { /* ignore */ } }
+  }
   if (lastScreen !== S.screen) {
     main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
     clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
@@ -1111,7 +1129,7 @@ function saveCheck() {
     if (ln) { ln.orders = ln.orders || []; if (ln.orders.indexOf(rec.order) < 0) ln.orders.unshift(rec.order); }
   }
   S.last = { id: rec.id, lot: c.lot, order: rec.order, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
-    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, order: c.order || '' } };
+    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, bMax: c.bMax || 0, order: c.order || '' } };
   S.c = null;
   go('done');
   flush();
@@ -1190,9 +1208,10 @@ const ACT = {
     const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
     if (!l) return;
     Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
-    // weight before trim = the heaviest fish RM weighed in the AQL sample (Sal, 7 Nov 2026); none from RM → weighed here
-    if (Number(l.fwMax) > 0) { S.c.before = String(l.fwMax); S.c.bRm = Number(l.fwN) || 1; }
-    else if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; }
+    // weight before trim = the AVERAGE of the fish RM weighed in the AQL sample (Sal, 11 Nov 2026 — was the heaviest); none from RM → weighed here
+    const avg = Number(l.fwAvg) > 0 ? Number(l.fwAvg) : (l.fw && l.fw.length ? Math.round((l.fw.reduce((x, y) => x + Number(y), 0) / l.fw.length) * 10) / 10 : 0);
+    if (avg > 0) { S.c.before = String(avg); S.c.bRm = Number(l.fwN) || 1; S.c.bMax = Number(l.fwMax) || 0; }
+    else if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; S.c.bMax = 0; }
     go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
   },
   manual: () => { if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; } Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
@@ -1265,7 +1284,7 @@ document.addEventListener('input', (e) => {
   if (on === 'msize') S.c.size = el.value.toUpperCase().replace(/\s+/g, '');
   if (on === 'msup') S.c.sup = el.value;
   if (on === 'remark') S.c.remark = el.value;
-  if (on === 'order') S.c.order = cleanOrder(el.value);
+  if (on === 'order') S.c.order = orderChars(el.value);
   $('act').innerHTML = viewAction();
   persist();
 });

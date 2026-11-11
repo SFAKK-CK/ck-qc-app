@@ -347,7 +347,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -372,7 +372,7 @@ const L = {
     failedSend: 'ระบบไม่รับ', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งการตรวจที่ทำค้างก่อน',
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
     lotT: 'เลือกล็อตจาก PC', lotSub: 'เฉพาะล็อตที่ PC ใส่ Order แล้ว ({n} วันล่าสุด) · แตะ Order เพื่อเลือกทั้งล็อตและ Order', find: 'ค้นหา Order / ชื่อวัตถุดิบ / Lot', allOrders: 'ทุก Order',
-    loading: 'กำลังโหลดล็อต…', noLots: 'ยังไม่มีล็อตที่ PC ใส่ Order — ให้ PC ตรวจและใส่ Order ก่อน', noMatch: 'ไม่พบล็อตที่ตรงกับคำค้น', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
+    loading: 'กำลังโหลดล็อต…', noLots: 'ยังไม่มีล็อตที่ PC ใส่ Order — ให้ PC ตรวจและใส่ Order ก่อน', noMatch: 'ไม่พบล็อตที่ตรงกับคำค้น', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้',
     noOrder: 'PC ยังไม่ใส่ Order', rcv: 'รับ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตจาก PC ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     rcvDate: 'วันที่รับเข้า', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
@@ -404,7 +404,7 @@ const L = {
     failedSend: 'Refused', reopen: 'Open to fix', finishFirst: 'Save or discard the open check first',
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
     lotT: 'Pick the lot from PC', lotSub: 'Only lots PC has given an order (last {n} days) · tap an order to pick the lot and the order', find: 'Search order / item / lot', allOrders: 'All orders',
-    loading: 'Loading lots…', noLots: 'No lot with an order from PC yet — PC must check it and enter the order first', noMatch: 'No lot matches the search', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
+    loading: 'Loading lots…', noLots: 'No lot with an order from PC yet — PC must check it and enter the order first', noMatch: 'No lot matches the search', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots',
     noOrder: 'PC gave no order', rcv: 'recv', pcAt: 'PC', lotL: 'LOT',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in PC (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     rcvDate: 'Receive date', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
@@ -786,7 +786,7 @@ function viewLot() {
       '<div class="fixes" style="padding:0 14px 10px">' + (l.orders.length ? l.orders.map((o) => '<button class="' + (on && c.order === o ? 'on' : '') + '" data-act="picklot" data-k="' + esc(l.key) + '" data-o="' + esc(o) + '">→ ' + esc(o) + '</button>').join('')
         : '<span class="sub">' + T.noOrder + '</span>') + '</div></div>';
   });
-  h += '<button class="addline" data-act="manual">' + T.manual + '</button>';
+  // no typed lots: only lots PC has checked and given an order (Sal, 11 Nov 2026)
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
 }
