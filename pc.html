@@ -338,7 +338,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.3';
+const APP_VERSION = '1.1.4';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -364,7 +364,7 @@ const L = {
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
     before: 'น้ำหนักก่อนตัดแต่ง', bRm: '🔒 จาก RM · ตัวหนักสุดจาก {n} ตัวที่สุ่ม', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', heaviest: 'หนักสุด', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
-    remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
+    orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
     needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าก่อนตัดแต่ง', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
     doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
@@ -389,7 +389,7 @@ const L = {
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
     before: 'Weight before trim', bRm: '🔒 from RM · heaviest of {n} sampled fish', bManual: 'No weight from RM — weigh it here', heaviest: 'heaviest', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
-    remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
+    orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
     needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than before', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
     doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
@@ -414,7 +414,7 @@ const L = {
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
     before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: '🔒 RM မှ · နမူနာ {n} ကောင်တွင် အလေးဆုံး', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', heaviest: 'အလေးဆုံး', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
-    remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
+    orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
     needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
     doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
@@ -491,9 +491,17 @@ function newId() {
 }
 /** after the temperatures: the weight still missing (the before weight is skipped when it came from RM) */
 const nextWeightPad = (c) => (!c.before && !c.bRm ? { kind: 'gb' } : !c.after ? { kind: 'ga' } : null);
+/** ORDER as typed: capitals, single spaces, only letters / digits / space / - . (max 30) — same rule as the server */
+const cleanOrder = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9 /._-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 30);
+/** the RM line this check is on (from the lots list on the phone), or null */
+function lineOf(c) {
+  const got = c && c.rmId && S.lots[c.rmDate];
+  const lot = got && got.lots.find((x) => x.id === c.rmId);
+  return (lot && lot.lines.find((x) => Number(x.n) === Number(c.rmLine))) || null;
+}
 function blankCheck(rmDate) {
   return { id: newId(), date: todayStr(), rmDate: rmDate || todayStr(), lot: '', rmId: '', rmLine: '', sup: '', fish: '', proc: 'WR', size: '', rmStatus: '', manual: false,
-    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', bRm: 0, after: '', remark: '', stage: 'lot' };
+    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', bRm: 0, after: '', order: '', remark: '', stage: 'lot' };
 }
 const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
 const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
@@ -621,7 +629,7 @@ function loadLots(date, force) {
   if (have && !force && Date.now() - have.at < 60000) return;
   S.lotsBusy = true; render();
   api('pcLots', { staffId: S.staff.id, date: date }).then((j) => {
-    S.lots[date] = { lots: j.lots, at: Date.now() }; S.lotsBusy = false; S.online = true; persist(); render();
+    S.lots[date] = { lots: j.lots, at: Date.now() }; if (Array.isArray(j.orders)) S.orders = j.orders; S.lotsBusy = false; S.online = true; persist(); render();
   }, (e) => { S.lotsBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
 }
 
@@ -673,7 +681,7 @@ function viewHome() {
   const init = (st.name || '').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase() || '··';
   const td = S.today && S.today.date === todayStr() ? S.today : { checks: [], totals: { checks: 0, held: 0, failed: 0 } };
   const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.checks.some((x) => x.id === o.record.id)).map((o) => ({
-    id: o.record.id, time: o.record.time, item: o.record.item, size: o.record.size, lot: o.record.lot, rmDate: ddmm(o.record.rmDate),
+    id: o.record.id, time: o.record.time, item: o.record.item, size: o.record.size, lot: o.record.lot, order: o.record.order || '', rmDate: ddmm(o.record.rmDate),
     held: Math.max(0, daysBetween(o.record.rmDate, o.record.date)), loss: o.record._loss, status: o.record._status, pending: true, err: o.err }));
   const rows = pendRows.concat(td.checks);
   let h = '<div class="stg">';
@@ -710,7 +718,7 @@ function viewHome() {
     h += '<div class="tlist glass">' + rows.map((r) => {
       const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' : statusPill(r.status);
       return '<button data-act="check" data-v="' + esc(r.id) + '"><span class="tm">' + esc(r.time) + '</span><span class="grow' + (r.void ? ' vd' : '') + '"><b>' + esc(r.item) + ' ' + esc(r.size || '') + '</b>' +
-        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + '</div>' +
+        '<div class="sub">Lot ' + esc(r.lot) + ' · ' + T.rcv + ' ' + esc(r.rmDate) + (r.order ? ' → ' + esc(r.order) : '') + '</div>' +
         (r.held > 0 && !r.void ? '<div class="sub" style="color:var(--amber);font-weight:700">🧊 ' + fmt(T.heldBadge, { n: r.held }) + '</div>' : '') + '</span>' + pill + '</button>';
     }).join('') + '</div>';
   }
@@ -740,7 +748,8 @@ function viewLot() {
           const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
           return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
-            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwMax) + ' g' : '') + '</div></span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
+            (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwMax) + ' g' : '') + '</div>' +
+            ((l.orders || []).length ? '<div class="sub" style="color:var(--accent);font-weight:700">→ ' + l.orders.map(esc).join(' · ') + '</div>' : '') + '</span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
         }).join('') + '</div>';
     });
   }
@@ -777,6 +786,14 @@ function viewCheck() {
     '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div></div>' +
     '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
     (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
+  // which order this lot goes to (Sal, 11 Nov 2026) — PK picks lots by it; chips = orders this lot already has, then recent ones
+  const line = lineOf(c);
+  const used = (line && line.orders) || [];
+  const recent = (S.orders || []).filter((o) => used.indexOf(o) < 0).slice(0, 8);
+  h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.orderL + '</span><input data-on="order" value="' + esc(c.order || '') + '" maxlength="30" placeholder="' + esc(T.orderPh) + '" autocomplete="off" autocapitalize="characters" style="font:700 18px var(--mono);text-transform:uppercase" aria-label="' + T.orderL + '"></label>';
+  if (used.length || recent.length) h += '<div class="fixes" style="align-items:center">' +
+    (used.length ? '<span class="sub">' + T.orderUsed + '</span>' + used.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') +
+    (recent.length ? '<span class="sub">' + T.orderRecent + '</span>' + recent.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') + '</div>';
   // trim type
   h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.map((x) =>
     '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '">' + esc(x.code) + (x.name ? ' <small style="font-weight:500;opacity:.75">' + esc(String(x.name).split(' / ')[0]) + '</small>' : '') + '</button>').join('') + '</div>';
@@ -818,7 +835,7 @@ function viewDone() {
   const T = t();
   const last = S.last || { sent: false };
   return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
-    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
+    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + (last.order ? ' → ' + esc(last.order) : '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) + '</div>' +
     '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
@@ -1019,13 +1036,18 @@ function saveCheck() {
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
   S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
-  S.last = { id: rec.id, lot: c.lot, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
-    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm } };
+  if (rec.order) {   // offer it again at once (next check of this lot, other lots) without waiting for the server
+    S.orders = [rec.order].concat((S.orders || []).filter((o) => o !== rec.order)).slice(0, 15);
+    const ln = lineOf(c);
+    if (ln) { ln.orders = ln.orders || []; if (ln.orders.indexOf(rec.order) < 0) ln.orders.unshift(rec.order); }
+  }
+  S.last = { id: rec.id, lot: c.lot, order: rec.order, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
+    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, order: c.order || '' } };
   S.c = null;
   go('done');
   flush();
@@ -1097,6 +1119,7 @@ const ACT = {
   },
   wide: () => { S.wide = !S.wide; S.buf = ''; render(); },
   trim: (el) => { S.c.trim = el.dataset.v; S.err = ''; render(); },
+  pickorder: (el) => { S.c.order = S.c.order === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
   save: saveCheck,
   again: () => {
@@ -1145,6 +1168,7 @@ document.addEventListener('change', (e) => {
   if (on === 'msize') { c.size = el.value.toUpperCase().replace(/\s+/g, '').trim(); return render(); }
   if (on === 'msup') { c.sup = el.value.replace(/\s+/g, ' ').trim(); return render(); }
   if (on === 'remark') { c.remark = el.value.replace(/\s+/g, ' ').trim(); return render(); }
+  if (on === 'order') { c.order = cleanOrder(el.value); return render(); }
 });
 document.addEventListener('input', (e) => {
   const el = e.target;
@@ -1153,6 +1177,7 @@ document.addEventListener('input', (e) => {
   if (on === 'msize') S.c.size = el.value.toUpperCase().replace(/\s+/g, '');
   if (on === 'msup') S.c.sup = el.value;
   if (on === 'remark') S.c.remark = el.value;
+  if (on === 'order') S.c.order = cleanOrder(el.value);
   $('act').innerHTML = viewAction();
   persist();
 });
