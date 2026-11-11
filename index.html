@@ -315,13 +315,14 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.4';
+const APP_VERSION = '1.2.6';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
 const N_T = 20;   // most fish ever sampled (largest AQL sample); each line uses its own number from the AQL table
 const AQL_DEFAULT = [[2, 15, 2, 0, 1], [16, 50, 3, 0, 1], [51, 150, 5, 0, 1], [151, 500, 8, 1, 2], [501, 1200, 13, 2, 3], [1201, 3200, 13, 3, 4], [3201, 10000, 20, 5, 6]];
 const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
+const PK_URL = 'pk.html';        // PK screen: its own file (System Setup / CK QC App PK (SMT)), uploaded next to this one on GitHub
 const PC_URL = 'pc.html';        // PC screen: its own file (System Setup / CK QC App PC (SMT)), uploaded next to this one on GitHub
 const HAND_KEY = 'ckqc.hand';    // one-time hand-over of the signed-in staff between index.html and pc.html (same tab only)
 
@@ -348,7 +349,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -386,7 +387,7 @@ const L = {
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
     wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
-    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', pkSub: 'order · fish size · label · packaging · glazing', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
     point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
     shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
     shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
@@ -424,7 +425,7 @@ const L = {
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
     wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
-    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
     point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
     shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
     shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
@@ -484,7 +485,7 @@ const nowHM = () => { const d = new Date(); return P2(d.getHours()) + ':' + P2(d
 const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + P2(d.getMonth() + 1) + '-' + P2(d.getDate()); };
 const kgFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
 const settings = () => Object.assign({ TEMP_MAX: 2 }, (S.cfg && S.cfg.rm && S.cfg.rm.settings) || {});
-const EMPTY_RM = { suppliers: [], fish: [], procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: [], thermos: [], usual: {}, settings: {} };
+const EMPTY_RM = { suppliers: [], fish: [], procs: ['WR', 'WS', 'G', 'GS', 'GGS', 'CLN', 'FC', 'H/L', 'H/O', 'SO', 'BG', 'TRAY', 'IQF', 'BLK', 'H/L IQF', 'RFC', 'STEAK', 'STEAK WITH SCALE', 'เจาะคอ', 'FILLET', 'FG', 'OTHER'], chilliProcs: ['FRESH'], scales: [], thermos: [], usual: {}, settings: {} };
 const rmCfg = () => (S.cfg && S.cfg.rm) || (DEMO ? DEMO_CFG.rm : EMPTY_RM);
 const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
 
@@ -681,7 +682,7 @@ const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปร
     'RED CHILLI': ['ความยาว 4 cm ขึ้นไป เม็ดอวบ ไม่เรียวเล็ก', 'ฝักตรงยาวหรืองอเล็กน้อย ผิวเรียบ กลิ่นปกติ ไม่คดงอ', 'สีแดงสดเต็มเม็ด ไม่เหี่ยวหรือเน่า ขั้วพริกไม่คล้ำ ไม่มีหนอนเจาะ ไม่มีลักษณะช้ำ', 'สีแดงเข้ม สม่ำเสมอทั้งเม็ด (สีส้มอ่อนคัดแยกไปคละตอนแพ็ค)'],
     'GALANGAL': ['', 'เหง้าสมบูรณ์ ไม่ผิดรูปทรงจนใช้งานไม่ได้ ไม่มีรอยโรคพืชหรือรอยแมลงเจาะ', 'แน่น แข็ง ไม่นิ่มเหลว ไม่เหี่ยวแห้งหรือฝ่อซูบ', ''] },
   shrimp: { points: 5, repeats: 3, samplePct: 5 }, produce: { rejectMax: 5 },
-  procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'], chilliProcs: ['FRESH'], scales: ['SC-01', 'SC-02'], thermos: ['TM-01', 'TM-02'],
+  procs: ['WR', 'WS', 'G', 'GS', 'GGS', 'CLN', 'FC', 'H/L', 'H/O', 'SO', 'BG', 'TRAY', 'IQF', 'BLK', 'H/L IQF', 'RFC', 'STEAK', 'STEAK WITH SCALE', 'เจาะคอ', 'FILLET', 'FG', 'OTHER'], chilliProcs: ['FRESH'], scales: ['SC-01', 'SC-02'], thermos: ['TM-01', 'TM-02'],
   usual: { 'ตัวอย่าง ผู้ขาย A / 01': [['TILAPIA', 'WR', '800'], ['TILAPIA', 'WR', '600']] }, settings: { TEMP_MAX: 2 }, aql: AQL_DEFAULT } };
 function demoApi(action, p) {
   return new Promise((res) => setTimeout(() => {
@@ -852,7 +853,10 @@ function viewHome() {
   // PC shows at once; it is hidden only when the server has said PC is not installed
   const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
   if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">' + T.pcSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
-  (pcOn ? ['pk', 'cs'] : ['pc', 'pk', 'cs']).forEach((k) => {
+  // PK (packing) the same way: shows at once, hidden only when the server has said PK is not installed
+  const pkOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PK' && m.ready);
+  if (pkOn) h += '<button class="dept main glass" data-act="openpk"><span class="ic">PK</span><span class="grow"><b style="font-size:18px">' + T.pk + '</b><div class="sub">' + T.pkSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  (pcOn ? [] : ['pc']).concat(pkOn ? [] : ['pk']).concat(['cs']).forEach((k) => {
     h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
   });
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
@@ -1535,6 +1539,11 @@ const ACT = {
     try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
     persist();
     location.href = PC_URL;
+  },
+  openpk: () => {
+    try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
+    persist();
+    location.href = PK_URL;
   },
   weigh: (el) => {
     const tr = ((S.today && S.today.trucks) || []).find((x) => x.id === el.dataset.v);

@@ -315,6 +315,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .lossbox.ok{background:var(--green-soft);border-color:rgba(46,107,60,.35)}.lossbox.ok b{color:var(--green)}
 .lossbox.hi{background:var(--amber-soft);border-color:var(--amber)}.lossbox.hi b,.lossbox.hi small{color:var(--amber)}
 .fixes button small{font-size:12px}
+.lockc{border:2px solid var(--red);background:var(--red-soft)}
 </style>
 </head>
 <body class="lang-th">
@@ -338,7 +339,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.4';
+const APP_VERSION = '1.1.5';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -370,7 +371,11 @@ const L = {
     doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
-    gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ'
+    gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ',
+    lockT: '🔒 %Loss เกินเกณฑ์ {trim} (≤ {lim}%)', lockSub: 'หยุดการตรวจนี้ไว้ก่อน — บันทึกหรือออกไม่ได้ จนกว่า GM จะมาใส่รหัสเพื่ออนุมัติ หรือสั่งให้ชั่งใหม่ (ระบบแจ้ง GM ทางอีเมลแล้ว)',
+    lockMsg: 'ล็อกอยู่ — ให้ GM อนุมัติก่อน', callGm: '🔒 GM อนุมัติ', gmT: 'GM อนุมัติ %Loss เกินเกณฑ์', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล',
+    gmReasons: ['ปลาตัวเล็ก / ผอม', 'ตัดแต่งตามสเปคลูกค้า', 'ชั่งซ้ำแล้วยังเกิน'], gmApprove: '✓ อนุมัติให้บันทึก', gmReweigh: '↺ ให้ชั่งใหม่', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM อนุมัติ',
+    gmOkT: '✓ GM {name} อนุมัติแล้ว', gmReweighed: 'GM ให้ชั่งใหม่ — ใส่น้ำหนักอีกครั้ง', lim: '≤{n}%'
   },
   en: {
     pc: 'PC quality check', pcShort: 'Processing (PC)', pcSub: 'temperature after weighing · weight before/after trim', branch: 'Samut Prakan', steps: ['Lot', 'Check'],
@@ -395,7 +400,11 @@ const L = {
     doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
-    gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv'
+    gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv',
+    lockT: '🔒 %Loss above the {trim} limit (≤ {lim}%)', lockSub: 'This check is stopped — it cannot be saved or left until a GM enters their ID to approve it or orders a re-weigh (the GM has been e-mailed)',
+    lockMsg: 'Locked — a GM must approve first', callGm: '🔒 GM approval', gmT: 'GM approval — %Loss above the limit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason',
+    gmReasons: ['Small / thin fish', 'Trimmed to customer spec', 'Re-weighed, still above'], gmApprove: '✓ Approve and save', gmReweigh: '↺ Weigh again', gmNeedNet: 'GM approval needs internet',
+    gmOkT: '✓ Approved by GM {name}', gmReweighed: 'GM ordered a re-weigh — enter the weight again', lim: '≤{n}%'
   },
   my: {
     pc: 'PC အရည်အသွေး စစ်ဆေး', pcShort: 'PC', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', branch: 'Samut Prakan', steps: ['Lot', 'စစ်'],
@@ -420,7 +429,10 @@ const L = {
     doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
-    gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ'
+    gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ',
+    lockT: '🔒 %Loss စံထက် များ {trim} (≤ {lim}%)', lockSub: 'GM အတည်ပြုသည်အထိ သိမ်း/ထွက် မရ', lockMsg: 'သော့ခတ်ထား — GM အတည်ပြုရန်', callGm: '🔒 GM အတည်ပြု', gmT: 'GM အတည်ပြု', gmId: 'GM ဝန်ထမ်းနံပါတ်', gmWhy: 'အကြောင်းပြချက်',
+    gmReasons: ['ငါးသေး / ပိန်', 'ဖောက်သည် စံ', 'ပြန်ချိန်လည်း များ'], gmApprove: '✓ အတည်ပြု', gmReweigh: '↺ ပြန်ချိန်', gmNeedNet: 'အင်တာနက် လိုသည်',
+    gmOkT: '✓ GM {name} အတည်ပြုပြီး', gmReweighed: 'ပြန်ချိန်ပါ', lim: '≤{n}%'
   }
 };
 
@@ -505,6 +517,45 @@ function blankCheck(rmDate) {
 }
 const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
 const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
+/** FISH / SHRIMP / PRODUCE of an item name (RM_Lists) — picks the processing types that apply */
+function kindOf(fish) {
+  const f = ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.rm.fish : [])).find((x) => x.name === fish);
+  return (f && f.type) || (/SHRIMP|กุ้ง/i.test(String(fish)) ? 'SHRIMP' : 'FISH');
+}
+const locked = () => !!(S.c && S.c.lock && !S.c.gm);
+/** weights done and %Loss above the limit → lock the check at once and tell the server (Audit + e-mail to the GM) */
+function lockIfHigh() {
+  const c = S.c;
+  if (c && c.lock && !c.lock.sent) sendLock();
+  if (!c || c.lock || S.screen !== 'check' || (S.pad && (S.pad.kind === 'gb' || S.pad.kind === 'ga'))) return;
+  const e = evalCheck(c);
+  if (!e.high) return;
+  c.lock = { loss: e.loss, lim: e.lim, trim: c.trim, at: nowHM(), sent: false };
+  S.pad = null; lockIfHigh.jump = true;   // show the lock card at the top
+  sendLock();
+}
+function sendLock() {
+  const c = S.c;
+  if (!c || !c.lock || c.lock.sent || !S.staff || Date.now() - (sendLock.at || 0) < 20000) return;
+  sendLock.at = Date.now();
+  api('pcLossLock', { staffId: S.staff.id, id: c.id, item: itemOf(c) + ' ' + c.size, lot: c.lot, trim: c.lock.trim, loss: c.lock.loss, lim: c.lock.lim })
+    .then(() => { if (S.c && S.c.lock) { S.c.lock.sent = true; persist(); } }, () => {});
+}
+function openGmSheet() {
+  const T = t();
+  const c = S.c;
+  if (!c || !c.lock) return;
+  const h = '<div class="row"><b class="grow" style="font-size:18px">' + T.gmT + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">' + esc(itemOf(c)) + ' ' + esc(c.size) + ' · Lot ' + esc(c.lot) + ' · ' + esc(S.staff.name) + '</div>' +
+    '<div class="kv"><div>' + T.trimL + '<b>' + esc(c.lock.trim) + '</b></div><div>' + T.loss + '<b class="bad">' + numFmt(c.lock.loss) + '%</b></div><div>max<b>' + c.lock.lim + '%</b></div>' +
+    '<div>' + T.before + '<b>' + esc(wShow(c.before)) + ' g</b></div><div>' + T.after + '<b>' + esc(wShow(c.after)) + ' g</b></div></div>' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmId + '</span><input id="gmid" type="password" inputmode="numeric" maxlength="7" autocomplete="off" style="height:50px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:700 22px var(--mono);letter-spacing:.3em;background:#fff">' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmWhy + '</span><div class="fixes">' + T.gmReasons.map((q, i) => '<button data-act="gmreason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+    '<textarea id="gmwhy" placeholder="' + esc(T.gmWhy) + '"></textarea><div id="gmerr"></div>' +
+    '<div class="row"><button class="btn ghost" style="flex:1" data-act="gmok" data-v="reweigh">' + T.gmReweigh + '</button><button class="btn green" style="flex:1" data-act="gmok" data-v="approve">' + T.gmApprove + '</button></div>';
+  $('sheet').innerHTML = '<div class="box">' + h + '</div>';
+  $('sheet').classList.add('open');
+}
 function evalCheck(c) {
   const vals = c.temps.map((v) => (v === '' || v === '-' || isNaN(Number(v)) ? null : Number(v)));
   const got = vals.filter((v) => v !== null);
@@ -522,7 +573,9 @@ function evalCheck(c) {
   if (vals[0] === null) why.push(t().needT1);
   if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > b) why.push(t().afterBig);
   if (warm && !c.fix) why.push(t().needFix);
-  return { vals, max, warm, tFail, loss, lim, high: lim !== null && loss !== null && loss > lim, held: heldOf(c), ok: !why.length, why,
+  const high = lim !== null && loss !== null && loss > lim;
+  if (high && !c.gm) why.push(t().lockMsg);
+  return { vals, max, warm, tFail, loss, lim, high, held: heldOf(c), ok: !why.length, why,
     status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
 }
 
@@ -566,6 +619,7 @@ function demoApi(action, p) {
           { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
     }
     if (action === 'pcSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'pcGmOk') return res({ ok: true, mode: p.mode, gm: { id: p.staffId, name: 'GM ทดลอง', reason: p.reason } });
     if (action === 'pcVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
     try { localStorage.setItem('ckqc.pc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
     if (action === 'pcToday') {
@@ -646,7 +700,7 @@ function renderHeader() {
   const T = t();
   const steps = { lot: 0, manual: 0, check: 1 };
   const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
-  const backTo = { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
+  const backTo = locked() && S.screen === 'check' ? '' : { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
   const pend = S.outbox.length;
   const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
@@ -708,7 +762,8 @@ function viewHome() {
     const c = S.c;
     h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">PC</span><span class="grow"><b style="font-size:17px">' + T.resume + (c.lot ? ' · Lot ' + esc(c.lot) : '') + '</b>' +
       '<div class="sub">' + esc(itemOf(c) || '—') + (c.size ? ' ' + esc(c.size) : '') + (c.rmDate ? ' · ' + T.rcv + ' ' + ddmm(c.rmDate) : '') + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
-      '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button></div>';
+      (locked() ? '<div class="sub" style="color:var(--red);font-weight:700">' + fmt(T.lockT, { trim: esc(c.lock.trim), lim: c.lock.lim }) + '</div>'
+        : '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button>') + '</div>';
   } else {
     h += '<button class="dept main glass" data-act="start"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.start + '</b><div class="sub">' + T.startSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   }
@@ -786,6 +841,9 @@ function viewCheck() {
     '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div></div>' +
     '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
     (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
+  // %Loss above the limit → locked until a GM approves or orders a re-weigh (Sal, 11 Nov 2026)
+  if (c.lock && !c.gm) h += '<div class="card glass lockc"><b style="color:var(--red);font-size:17px">' + fmt(T.lockT, { trim: esc(c.lock.trim), lim: c.lock.lim }) + '</b><div class="sub" style="color:var(--red-ink)">' + T.lockSub + '</div></div>';
+  if (c.gm) h += '<div class="lsum ls-ok">' + fmt(T.gmOkT, { name: esc(c.gm.name) }) + ' · ' + esc(c.gm.reason) + '</div>';
   // which order this lot goes to (Sal, 11 Nov 2026) — PK picks lots by it; chips = orders this lot already has, then recent ones
   const line = lineOf(c);
   const used = (line && line.orders) || [];
@@ -795,8 +853,11 @@ function viewCheck() {
     (used.length ? '<span class="sub">' + T.orderUsed + '</span>' + used.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') +
     (recent.length ? '<span class="sub">' + T.orderRecent + '</span>' + recent.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') + '</div>';
   // trim type
-  h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.map((x) =>
-    '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '">' + esc(x.code) + (x.name ? ' <small style="font-weight:500;opacity:.75">' + esc(String(x.name).split(' / ')[0]) + '</small>' : '') + '</button>').join('') + '</div>';
+  // processing types of "ข้อมูลลักษณะการผลิต" for this kind of item (fish / shrimp), with the %Loss limit
+  const kind = kindOf(c.fish);
+  h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.filter((x) => !x.kind || x.kind === kind || x.code === c.trim).map((x) =>
+    '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '"' + (c.lock && c.trim !== x.code ? ' disabled style="opacity:.4"' : '') + '>' + esc(x.code) +
+    (x.maxLoss !== null && x.maxLoss !== undefined && x.maxLoss !== '' ? ' <small style="font-weight:500;opacity:.75">' + fmt(T.lim, { n: x.maxLoss }) + '</small>' : '') + '</button>').join('') + '</div>';
   // temperatures: no. 1 required, 2 and 3 optional
   h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
     const a = act('pt', i);
@@ -934,6 +995,7 @@ function viewAction() {
   const T = t();
   const s = S.screen;
   if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
+  if (s === 'check' && S.c.lock && !S.c.gm) return '<button class="btn" style="background:var(--red)" data-act="callgm">' + T.callGm + '</button>';
   if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
   if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
   return '';
@@ -945,7 +1007,7 @@ let rendering = false, renderAgain = false;
 function render() {
   if (rendering) { renderAgain = true; return; }
   rendering = true;
-  try { draw(); } finally { rendering = false; }
+  try { lockIfHigh(); draw(); } finally { rendering = false; }
   if (renderAgain) { renderAgain = false; render(); }
   if (updTo) setTimeout(applyUpdate, 0);   // a newer version is waiting: apply it once back on a safe screen
 }
@@ -963,7 +1025,7 @@ function draw() {
     main.classList.remove('enter'); void main.offsetWidth; main.classList.add('enter');
     clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
   }
-  main.scrollTop = keepScroll;
+  main.scrollTop = lockIfHigh.jump ? 0 : keepScroll; lockIfHigh.jump = false;
   const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;
   const pad = $('pad');
   pad.innerHTML = viewPad();
@@ -1010,6 +1072,7 @@ function login() {
   });
 }
 function signOut() {
+  if (locked()) { toast(t().lockMsg); return; }
   if (S.c && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
   S.confirmOut = false;
   forceOut();
@@ -1032,11 +1095,12 @@ function startCheck() {
 function saveCheck() {
   const c = S.c;
   const e = evalCheck(c);
+  if (e.high && !c.gm) { S.pad = null; lockIfHigh(); return render(); }
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
@@ -1080,7 +1144,30 @@ function closeSheet() { $('sheet').classList.remove('open'); }
 
 const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
-  back: () => go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'),
+  back: () => { if (locked() && S.screen === 'check') return toast(t().lockMsg); go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'); },
+  callgm: openGmSheet,
+  gmreason: (el) => { $('gmwhy').value = t().gmReasons[Number(el.dataset.v)]; },
+  gmok: (el) => {
+    const c = S.c;
+    const gid = ($('gmid').value || '').replace(/\D/g, ''), why = ($('gmwhy').value || '').trim();
+    const err = (m) => { $('gmerr').innerHTML = '<div class="err">' + esc(m) + '</div>'; };
+    if (gid.length !== 7) { $('gmid').focus(); return err(t().gmId); }
+    if (!why) { $('gmwhy').focus(); return err(t().gmWhy); }
+    if (!navigator.onLine) return err(t().gmNeedNet);
+    const mode = el.dataset.v;
+    document.querySelectorAll('[data-act="gmok"]').forEach((b) => (b.disabled = true));
+    el.innerHTML = '<span class="spin"></span>';
+    api('pcGmOk', { staffId: gid, id: c.id, mode: mode, reason: why, item: itemOf(c) + ' ' + c.size, trim: c.lock.trim, loss: c.lock.loss, lim: c.lock.lim, by: S.staff.id }).then((j) => {
+      closeSheet();
+      if (mode === 'approve') { c.gm = j.gm; c.lock.ok = true; toast(fmt(t().gmOkT, { name: j.gm.name })); }
+      else { (c.reweigh = c.reweigh || []).push(j.gm.name + ' ' + nowHM()); c.lock = null; c.after = ''; if (!c.bRm) c.before = ''; S.pad = c.bRm ? { kind: 'ga' } : { kind: 'gb' }; toast(t().gmReweighed); }
+      render();
+    }, (e) => {
+      document.querySelectorAll('[data-act="gmok"]').forEach((b) => (b.disabled = false));
+      el.textContent = mode === 'approve' ? t().gmApprove : t().gmReweigh;
+      err(e.code === 'STAFF' ? t().badId : e.net ? t().gmNeedNet : e.message);
+    });
+  },
   signout: signOut,
   mainmenu: toMainMenu,
   hidewarn: () => { S.reportWarn = null; render(); },
@@ -1094,7 +1181,7 @@ const ACT = {
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   start: startCheck,
   resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); },
-  discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
+  discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
   pickline: (el) => {
@@ -1114,11 +1201,12 @@ const ACT = {
     const k = el.dataset.v;
     S.buf = ''; S.wide = false;
     if (k === 'gb' && S.c && S.c.bRm) return;
+    if ((k === 'gb' || k === 'ga') && S.c && S.c.lock) { toast(t().lockMsg); return; }
     S.pad = k === 'pt' ? { kind: 'pt', i: Number(el.dataset.i) } : { kind: k };
     render();
   },
   wide: () => { S.wide = !S.wide; S.buf = ''; render(); },
-  trim: (el) => { S.c.trim = el.dataset.v; S.err = ''; render(); },
+  trim: (el) => { if (S.c.lock) { toast(t().lockMsg); return; } S.c.trim = el.dataset.v; S.err = ''; render(); },
   pickorder: (el) => { S.c.order = S.c.order === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
   save: saveCheck,
