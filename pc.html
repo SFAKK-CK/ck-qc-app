@@ -169,7 +169,13 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
 .u-g{background:var(--teal)}.u-kg{background:var(--accent)}
 .tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}
-.tile.wt.lock{background:rgba(255,255,255,.3);border-style:dashed}.tile .t-s{font-size:11px;font-weight:600;color:var(--ink-3);line-height:1.2}
+.tile.wt.lock{background:rgba(255,255,255,.3);border-style:dashed}
+.tile .dd{display:inline-block;margin-left:4px;color:var(--accent);transition:transform .25s ease}.tile.dd-open .dd{transform:rotate(180deg)}
+.srcseg{display:grid !important;grid-template-columns:1fr 1fr}.fadein{display:flex;flex-direction:column;gap:12px;animation:ddIn .28s cubic-bezier(.2,.8,.2,1)}
+.ddm{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;border-radius:16px;margin-top:-4px;animation:ddIn .26s cubic-bezier(.2,.8,.2,1);scroll-margin:12px}
+.ddm button{display:flex;align-items:center;gap:6px;text-align:left;padding:10px;border-radius:12px;border:1.5px solid rgba(40,42,50,.1);background:rgba(255,255,255,.7);font:600 15px inherit;transition:background .2s,border-color .2s,transform .12s}
+.ddm button:active{transform:scale(.98)}.ddm button.on{border-color:var(--accent);background:rgba(255,255,255,.95)}.ddm button small{display:block;font-weight:500;color:var(--ink-3);font-size:12px}
+@keyframes ddIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}.tile .t-s{font-size:11px;font-weight:600;color:var(--ink-3);line-height:1.2}
 .linkbtn{color:var(--accent);font-size:12px;font-weight:700;padding:0}
 .sample{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--accent-soft);border-radius:10px;padding:6px 12px}
 .sample b{font:600 17px var(--mono);color:var(--accent)}
@@ -294,7 +300,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
 .dchips .on small{color:rgba(255,255,255,.85)}
 .dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
-.lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}.lotc.on{border:2px solid var(--accent)}
 .lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
 .lotno{font:700 17px var(--mono);color:var(--accent-ink);background:var(--accent-soft);border-radius:8px;padding:3px 9px;flex:none}
 .lline{display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;border-top:1px solid rgba(255,255,255,.55);width:100%}
@@ -339,7 +345,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.7';
+const APP_VERSION = '1.2.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -360,11 +366,11 @@ const L = {
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
     lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (เลขล็อตเริ่ม 1 ใหม่ทุกวัน)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
     loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
-    heldBadge: 'ปลาดอง {n} วัน', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
+    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
-    before: 'น้ำหนักก่อนตัดแต่ง', bRm: '🔒 จาก RM · เฉลี่ยจาก {n} ตัวที่สุ่ม', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', heaviest: 'เฉลี่ย', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
+    before: 'น้ำหนักก่อนตัดแต่ง', bRm: 'ค่าเฉลี่ย RM ({n} ตัว) · ▾ เปลี่ยน', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', bTyped: 'ชั่งเอง · ▾ ใช้ค่าเฉลี่ย RM ได้', bType: '⌨ ชั่งเอง', bTypeSub: 'ชั่งปลาก่อนตัดแต่งที่ PC', bUseRm: '⚖ ใช้ค่าเฉลี่ยจาก RM', bUseRmSub: '{w} g · เฉลี่ยจาก {n} ตัว', heaviest: 'เฉลี่ย', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
     orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
     needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าปลาตัวที่หนักที่สุด — ชั่งใหม่', needOrder: 'ใส่ Order (หรือ BULK)', watch: '⚠ %Loss ถึงเกณฑ์ {trim} ({lim}%) — บันทึกได้ ระบบเตือนไว้ในรายงาน', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
@@ -372,7 +378,7 @@ const L = {
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ',
-    lockT: '🔒 %Loss เกินเกณฑ์ {trim} (≤ {lim}%)', lockSub: 'หยุดการตรวจนี้ไว้ก่อน — บันทึกหรือออกไม่ได้ จนกว่า GM จะมาใส่รหัสเพื่ออนุมัติ หรือสั่งให้ชั่งใหม่ (ระบบแจ้ง GM ทางอีเมลแล้ว)',
+    lockT: '🔒 %Loss เกินเกณฑ์ {trim} (≤ {lim}%)', lockSub: 'หยุดการตรวจนี้ไว้ก่อน — บันทึกหรือออกไม่ได้ จนกว่า GM จะมาใส่รหัสเพื่ออนุมัติ หรือสั่งให้ชั่งใหม่ — เรียก GM มาที่เครื่องนี้',
     lockMsg: 'ล็อกอยู่ — ให้ GM อนุมัติก่อน', callGm: '🔒 GM อนุมัติ', gmT: 'GM อนุมัติ %Loss เกินเกณฑ์', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล',
     gmReasons: ['ปลาตัวเล็ก / ผอม', 'ตัดแต่งตามสเปคลูกค้า', 'ชั่งซ้ำแล้วยังเกิน'], gmApprove: '✓ อนุมัติให้บันทึก', gmReweigh: '↺ ให้ชั่งใหม่', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM อนุมัติ',
     gmOkT: '✓ GM {name} อนุมัติแล้ว', gmReweighed: 'GM ให้ชั่งใหม่ — ใส่น้ำหนักอีกครั้ง', lim: '≤{n}%'
@@ -389,11 +395,11 @@ const L = {
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
     lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (lot numbers restart at 1 every day)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
     loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
-    heldBadge: 'Held {n} day(s)', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
+    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
-    before: 'Weight before trim', bRm: '🔒 from RM · average of {n} sampled fish', bManual: 'No weight from RM — weigh it here', heaviest: 'average', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
+    before: 'Weight before trim', bRm: 'RM average ({n} fish) · ▾ change', bManual: 'No weight from RM — weigh it here', bTyped: 'Weighed here · ▾ RM average', bType: '⌨ Weigh here', bTypeSub: 'Weigh the fish before trimming at PC', bUseRm: '⚖ Use the RM average', bUseRmSub: '{w} g · average of {n} fish', heaviest: 'average', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
     orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
     needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than the heaviest fish — weigh again', needOrder: 'Enter the order (or BULK)', watch: '⚠ %Loss at the {trim} limit ({lim}%) — can be saved, flagged in the report', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
@@ -401,7 +407,7 @@ const L = {
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv',
-    lockT: '🔒 %Loss above the {trim} limit (≤ {lim}%)', lockSub: 'This check is stopped — it cannot be saved or left until a GM enters their ID to approve it or orders a re-weigh (the GM has been e-mailed)',
+    lockT: '🔒 %Loss above the {trim} limit (≤ {lim}%)', lockSub: 'This check is stopped — it cannot be saved or left until a GM enters their ID to approve it or orders a re-weigh — call the GM to this phone',
     lockMsg: 'Locked — a GM must approve first', callGm: '🔒 GM approval', gmT: 'GM approval — %Loss above the limit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason',
     gmReasons: ['Small / thin fish', 'Trimmed to customer spec', 'Re-weighed, still above'], gmApprove: '✓ Approve and save', gmReweigh: '↺ Weigh again', gmNeedNet: 'GM approval needs internet',
     gmOkT: '✓ Approved by GM {name}', gmReweighed: 'GM ordered a re-weigh — enter the weight again', lim: '≤{n}%'
@@ -418,11 +424,11 @@ const L = {
     reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
     lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
     loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
-    heldBadge: '{n} ရက် ထိန်းထား', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
+    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
-    before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: '🔒 RM မှ · နမူနာ {n} ကောင် ပျမ်းမျှ', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', heaviest: 'ပျမ်းမျှ', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
+    before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: 'RM ပျမ်းမျှ ({n} ကောင်) · ပြောင်းရန် နှိပ်', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', bTyped: 'ဒီမှာ ချိန် · RM ပျမ်းမျှ သုံးရန် ▾', bType: '⌨ ဒီမှာ ချိန်', bTypeSub: 'PC တွင် ချိန်', bUseRm: '⚖ RM ပျမ်းမျှ သုံး', bUseRmSub: '{w} g · RM ချိန် {n} ကောင် ပျမ်းမျှ', heaviest: 'ပျမ်းမျှ', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
     orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
     needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needOrder: 'Order ထည့်ပါ (သို့ BULK)', watch: '⚠ %Loss စံ အထိ {trim} ({lim}%) — သိမ်းနိုင်', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
@@ -502,6 +508,8 @@ function newId() {
   return 'PC-' + String(d.getFullYear()).slice(2) + P2(d.getMonth() + 1) + P2(d.getDate()) + '-' + P2(d.getHours()) + P2(d.getMinutes()) + '-' + r;
 }
 /** after the temperatures: the weight still missing (the before weight is skipped when it came from RM) */
+/** the RM average this check may use (also for drafts saved before 1.1.9) */
+const avgOfRm = (c) => Number(c.rmAvg) > 0 ? Number(c.rmAvg) : c.bRm ? Number(c.before) || 0 : 0;
 const nextWeightPad = (c) => (!c.before && !c.bRm ? { kind: 'gb' } : !c.after ? { kind: 'ga' } : null);
 /** ORDER as typed: capitals, single spaces, only letters / digits / space / - . (max 30) — same rule as the server */
 /** ORDER / CODE: Latin capitals, Thai, digits, spaces and - / . ( ) # & + (max 40) — words such as BULK or ขายส่ง are fine (Sal, 11 Nov 2026). Same rule as the server */
@@ -576,6 +584,7 @@ function evalCheck(c) {
   if (!c.trim) why.push(t().needTrim);
   if (vals[0] === null) why.push(t().needT1);
   if (!cleanOrder(c.order)) why.push(t().needOrder);
+  else if (c.bulkFrom && cleanOrder(c.order) === 'BULK') why.push(t().needRealOrder);
   if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > top) why.push(t().afterBig);
   if (warm && !c.fix) why.push(t().needFix);
   // reaching the limit = flag; from limit + margin (0.6 → G 17.60 %) = lock until a GM approves (Sal, 11 Nov 2026)
@@ -697,7 +706,7 @@ function loadLots(date, force) {
 
 /* ---------------- screens ---------------- */
 function go(screen, extra) {
-  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
+  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '', bMenu: false }, extra || {});
   if (!extra || !('pad' in extra)) S.pad = null;
   if (S.c && ['lot', 'manual', 'check'].indexOf(screen) >= 0) S.c.stage = screen;
   render();
@@ -792,7 +801,10 @@ function viewLot() {
   const T = t();
   const c = S.c;
   const today = todayStr();
-  let h = '<div class="stg"><div><h2>' + T.lotT + '</h2><div class="sub">' + T.lotSub + '</div></div>';
+  let h = '<div class="stg"><div><h2>' + (S.lotSrc === 'bulk' ? T.lotTBulk : T.lotT) + '</h2><div class="sub">' + (S.lotSrc === 'bulk' ? fmt(T.bulkSub, { n: bulkDays() }) : T.lotSub) + '</div></div>';
+  // where the fish comes from: received at RM, or a lot processed earlier as BULK (Sal, 15 Nov 2026)
+  h += '<div class="seg srcseg"><button class="' + (S.lotSrc !== 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="rm">' + T.srcRm + '</button><button class="' + (S.lotSrc === 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="bulk">' + T.srcBulk + '</button></div>';
+  if (S.lotSrc === 'bulk') return h + viewBulkList() + '</div>';
   const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
   const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
   h += '<span class="lbl">' + T.rcvDate + '</span><div class="dchips">' + chips +
@@ -821,6 +833,31 @@ function viewLot() {
   return h + '</div>';
 }
 
+function viewBulkList() {
+  const T = t();
+  const b = S.bulk;
+  let h = '<div class="fadein">';
+  if (S.bulkBusy && !b) h += '<div class="sub" style="text-align:center"><span class="spin"></span> ' + T.loading + '</div>';
+  else if (!b && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
+  else if (b && !b.lots.length) h += '<div class="sub" style="text-align:center">' + T.noBulk + '</div>';
+  if (b) b.lots.forEach((l) => {
+    const on = S.c.bulkFrom && S.c.bulkFrom.pcId === l.pcId;
+    h += '<div class="lotc glass' + (on ? ' on' : '') + '"><button class="lline" style="border-top:0" data-act="pickbulk" data-k="' + esc(l.key) + '"><span class="lotno">Lot ' + esc(l.lot) + '</span><span class="grow"><b>' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
+      '<div class="sub">' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + '</div>' +
+      '<div class="sub" style="color:var(--accent);font-weight:700">' + T.bulkAt + ' ' + ddmm(l.pcDate) + ' ' + esc(l.pcTime) + (l.used && l.used.length ? ' · ' + T.bulkUsed + ' ' + l.used.map(esc).join(', ') : '') + '</div></span><span class="go">›</span></button></div>';
+  });
+  return h + '</div>';
+}
+const bulkDays = () => Number(S.cfg && S.cfg.pc && S.cfg.pc.settings && S.cfg.pc.settings.BULK_DAYS) || 60;
+function loadBulk(force) {
+  if (!S.staff) return;
+  if (S.bulk && !force && Date.now() - S.bulk.at < 60000) return;
+  S.bulkBusy = true; render();
+  api('pcBulk', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.bulk = { lots: j.lots || [], at: Date.now() }; S.bulkBusy = false; S.online = true; persist(); render();
+  }, (e) => { S.bulkBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
+}
+
 function viewManual() {
   const T = t();
   const c = S.c;
@@ -846,7 +883,8 @@ function viewCheck() {
   let h = '<div class="stg">';
   // the lot this check belongs to
   h += '<div class="card glass"><div class="row"><span class="ic2">PC</span><div class="grow"><b style="font-size:18px">' + esc(itemOf(c)) + ' ' + esc(c.size) + '</b>' +
-    '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div></div>' +
+    '<div class="sub">Lot ' + esc(c.lot) + ' · ' + T.rcv + ' ' + ddmm(c.rmDate) + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div>' +
+    (c.bulkFrom ? '<div class="sub" style="color:var(--accent);font-weight:700">' + fmt(T.fromBulk, { d: ddmm(c.bulkFrom.pcDate) }) + '</div>' : '') + '</div></div>' +
     '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
     (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
   // %Loss above the limit → locked until a GM approves or orders a re-weigh (Sal, 11 Nov 2026)
@@ -854,11 +892,11 @@ function viewCheck() {
   if (c.gm) h += '<div class="lsum ls-ok">' + fmt(T.gmOkT, { name: esc(c.gm.name) }) + ' · ' + esc(c.gm.reason) + '</div>';
   // which order this lot goes to (Sal, 11 Nov 2026) — PK picks lots by it; chips = orders this lot already has, then recent ones
   const line = lineOf(c);
-  const used = (line && line.orders) || [];
-  const recent = (S.orders || []).filter((o) => used.indexOf(o) < 0).slice(0, 8);
+  const used = ((line && line.orders) || []).filter((o) => !c.bulkFrom || o !== 'BULK');
+  const recent = (S.orders || []).filter((o) => used.indexOf(o) < 0 && (!c.bulkFrom || o !== 'BULK')).slice(0, 8);
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.orderL + '</span><input data-on="order" value="' + esc(c.order || '') + '" maxlength="40" placeholder="' + esc(T.orderPh) + '" autocomplete="off" autocapitalize="characters" style="font:700 18px var(--mono);text-transform:uppercase" aria-label="' + T.orderL + '"></label>';
   // every lot through PC needs an order — BULK when it has none yet (Sal, 11 Nov 2026)
-  h += '<div class="fixes" style="align-items:center">' + (used.indexOf('BULK') < 0 && recent.indexOf('BULK') < 0 ? '<button class="' + (c.order === 'BULK' ? 'on' : '') + '" data-act="pickorder" data-v="BULK">BULK</button>' : '') +
+  h += '<div class="fixes" style="align-items:center">' + (!c.bulkFrom && used.indexOf('BULK') < 0 && recent.indexOf('BULK') < 0 ? '<button class="' + (c.order === 'BULK' ? 'on' : '') + '" data-act="pickorder" data-v="BULK">BULK</button>' : '') +
     (used.length ? '<span class="sub">' + T.orderUsed + '</span>' + used.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') +
     (recent.length ? '<span class="sub">' + T.orderRecent + '</span>' + recent.map((o) => '<button class="' + (c.order === o ? 'on' : '') + '" data-act="pickorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') : '') + '</div>';
   // trim type
@@ -889,11 +927,19 @@ function viewCheck() {
   // weights (the %Loss is worked out by the server and shown only in the Google Sheet — Sal, 11 Nov 2026)
   const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
     '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
-  const bTile = c.bRm
-    ? '<div class="tile wt filled lock"><span class="t-l">' + T.before + '</span><span class="t-v"><b>' + esc(wShow(c.before)) + '</b><span class="unit u-g">g</span></span><span class="t-s">' + fmt(T.bRm, { n: c.bRm }) + '</span></div>'
-    : wt('gb', T.before);
+  // weight before trim: typed at PC, or — like a drop-down — the average of the fish RM weighed (Sal, 15 Nov 2026)
+  const rmAvg = avgOfRm(c);
+  const bTile = !rmAvg ? wt('gb', T.before)
+    : '<button class="tile wt ' + (S.bMenu ? 'f-act dd-open' : act('gb') ? 'f-act' : c.before ? 'filled' : 'f-empty') + '" data-act="bmenu"><span class="t-l">' + T.before + '<span class="dd">▾</span></span>' +
+      '<span class="t-v"><b class="' + (act('gb') ? 'caret' : '') + '">' + (c.before ? esc(wShow(c.before)) : act('gb') ? '' : '—') + '</b><span class="unit u-g">g</span></span>' +
+      '<span class="t-s">' + (c.bRm ? fmt(T.bRm, { n: c.bRm }) : T.bTyped) + '</span></button>';
   h += '<div class="grid2">' + bTile + wt('ga', T.after) + '</div>';
-  if (!c.bRm) h += '<div class="sub" style="margin-top:-4px">' + T.bManual + '</div>';
+  if (S.bMenu && rmAvg) {
+    h += '<div class="ddm glass">' +
+      '<button class="' + (c.bRm ? 'on' : '') + '" data-act="bpick" data-v="rm"><span class="grow">' + T.bUseRm + '<small>' + fmt(T.bUseRmSub, { w: esc(wShow(String(rmAvg))), n: c.rmN || c.bRm || 1 }) + '</small></span></button>' +
+      '<button class="' + (!c.bRm ? 'on' : '') + '" data-act="bpick" data-v="type"><span class="grow">' + T.bType + '<small>' + T.bTypeSub + '</small></span></button></div>';
+  }
+  if (!rmAvg) h += '<div class="sub" style="margin-top:-4px">' + T.bManual + '</div>';
   const top = c.bRm && Number(c.bMax) > 0 ? Number(c.bMax) : Number(c.before);
   const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > top;
   if (over) h += '<div class="err">' + T.afterBig + '</div>';
@@ -959,7 +1005,7 @@ function press(key) {
   if (pad.kind === 'gb' || pad.kind === 'ga') {
     const f = pad.kind === 'gb' ? 'before' : 'after';
     const v = String(c[f] || '');
-    if (key === 'ok') S.pad = pad.kind === 'gb' && !c.after ? { kind: 'ga' } : null;
+    if (key === 'ok') { S.pad = pad.kind === 'gb' && !c.after ? { kind: 'ga' } : null; S.bMenu = false; }
     else if (key === 'del') c[f] = v.slice(0, -1);
     else if (key === '.' ? v && v.indexOf('.') < 0 : /^\d$/.test(key) && v.replace('.', '').length < 7 && !(v === '' && key === '0') && !(v.split('.')[1] || '').match(/^\d$/)) c[f] = v + key;
     S.err = '';
@@ -1044,6 +1090,10 @@ function draw() {
     clearTimeout(render.enterT); render.enterT = setTimeout(() => main.classList.remove('enter'), 700);
   }
   main.scrollTop = lockIfHigh.jump ? 0 : keepScroll; lockIfHigh.jump = false;
+  // the before-weight drop-down just opened: bring it into view above the number pad
+  const ddm = S.bMenu && !draw.ddmShown ? main.querySelector('.ddm') : null;
+  draw.ddmShown = !!S.bMenu;
+  if (ddm) requestAnimationFrame(() => { try { ddm.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* ignore */ } });
   const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;
   const pad = $('pad');
   pad.innerHTML = viewPad();
@@ -1106,6 +1156,7 @@ function toast(msg) {
 }
 function startCheck() {
   S.c = blankCheck(todayStr());
+  S.lotSrc = 'rm';
   go('lot');
   loadLots(S.c.rmDate);
   refreshConfig();
@@ -1118,7 +1169,7 @@ function saveCheck() {
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
@@ -1129,7 +1180,7 @@ function saveCheck() {
     if (ln) { ln.orders = ln.orders || []; if (ln.orders.indexOf(rec.order) < 0) ln.orders.unshift(rec.order); }
   }
   S.last = { id: rec.id, lot: c.lot, order: rec.order, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
-    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, bMax: c.bMax || 0, order: c.order || '' } };
+    again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, bMax: c.bMax || 0, rmAvg: c.rmAvg || 0, rmN: c.rmN || 0, bulkFrom: c.bulkFrom || null, order: c.order || '' } };
   S.c = null;
   go('done');
   flush();
@@ -1164,6 +1215,20 @@ const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
   back: () => { if (locked() && S.screen === 'check') return toast(t().lockMsg); go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'); },
   callgm: openGmSheet,
+  bmenu: () => {
+    if (S.c && S.c.lock) { toast(t().lockMsg); return; }
+    // open: the pad to type (unless the RM average is in use) + the choice under the tile; tap again to close
+    if (S.bMenu) { S.bMenu = false; if (S.pad && S.pad.kind === 'gb') S.pad = null; }
+    else { S.bMenu = true; S.pad = S.c.bRm ? null : { kind: 'gb' }; }
+    S.buf = ''; render();
+  },
+  bpick: (el) => {
+    const c = S.c;
+    S.bMenu = false;
+    if (el.dataset.v === 'rm') { c.before = String(avgOfRm(c)); c.bRm = c.rmN || c.bRm || 1; S.pad = c.after ? null : { kind: 'ga' }; }
+    else { if (c.bRm) c.before = ''; c.bRm = 0; S.pad = { kind: 'gb' }; }
+    S.err = ''; render();
+  },
   gmreason: (el) => { $('gmwhy').value = t().gmReasons[Number(el.dataset.v)]; },
   gmok: (el) => {
     const c = S.c;
@@ -1202,7 +1267,20 @@ const ACT = {
   discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
+  lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(); else loadLots(S.c.rmDate); },
+  pickbulk: (el) => {
+    const l = S.bulk && S.bulk.lots.find((x) => x.key === el.dataset.k);
+    if (!l) return;
+    const fish = String(l.item).split('-')[0], proc = String(l.item).split('-').slice(1).join('-');
+    // same RM truck + line as the BULK check, so the trace back to the supplier stays whole
+    Object.assign(S.c, { rmDate: l.rmDate || S.c.rmDate, lot: l.lot, rmId: l.rmId, rmLine: l.rmLine, sup: l.sup, fish: fish, proc: proc, size: l.size, rmStatus: l.rmStatus, manual: !l.rmId,
+      bulkFrom: { pcId: l.pcId, pcDate: l.pcDate }, rmAvg: 0, rmN: 0, bMax: 0 });
+    if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; }
+    if (cleanOrder(S.c.order) === 'BULK') S.c.order = '';
+    go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
+  },
   pickline: (el) => {
+    S.c.bulkFrom = null;
     const got = S.lots[S.c.rmDate];
     const lot = got && got.lots.find((x) => x.id === el.dataset.v);
     const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
@@ -1210,17 +1288,19 @@ const ACT = {
     Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
     // weight before trim = the AVERAGE of the fish RM weighed in the AQL sample (Sal, 11 Nov 2026 — was the heaviest); none from RM → weighed here
     const avg = Number(l.fwAvg) > 0 ? Number(l.fwAvg) : (l.fw && l.fw.length ? Math.round((l.fw.reduce((x, y) => x + Number(y), 0) / l.fw.length) * 10) / 10 : 0);
-    if (avg > 0) { S.c.before = String(avg); S.c.bRm = Number(l.fwN) || 1; S.c.bMax = Number(l.fwMax) || 0; }
-    else if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; S.c.bMax = 0; }
+    // since 15 Nov 2026 staff weigh before trim themselves; the RM average stays one tap away in the drop-down
+    S.c.rmAvg = avg > 0 ? avg : 0; S.c.rmN = Number(l.fwN) || 0; S.c.bMax = Number(l.fwMax) || 0;
+    if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; }
     go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null });
   },
-  manual: () => { if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; } Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
+  manual: () => { if (S.c.bRm) { S.c.before = ''; S.c.bRm = 0; } S.c.bulkFrom = null; S.c.rmAvg = 0; S.c.rmN = 0; S.c.bMax = 0; Object.assign(S.c, { rmId: '', rmLine: '', rmStatus: '', manual: true, lot: S.c.manual ? S.c.lot : '', fish: S.c.manual ? S.c.fish : '', size: S.c.manual ? S.c.size : '', sup: S.c.manual ? S.c.sup : '' }); go('manual', { pad: S.c.lot ? null : { kind: 'lot' } }); },
   usemanual: () => go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null }),
   focus: (el) => {
     const k = el.dataset.v;
     S.buf = ''; S.wide = false;
-    if (k === 'gb' && S.c && S.c.bRm) return;
     if ((k === 'gb' || k === 'ga') && S.c && S.c.lock) { toast(t().lockMsg); return; }
+    if (k === 'gb' && S.c && S.c.bRm) { S.bMenu = true; S.pad = null; return render(); }
+    S.bMenu = false;
     S.pad = k === 'pt' ? { kind: 'pt', i: Number(el.dataset.i) } : { kind: k };
     render();
   },

@@ -322,6 +322,10 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .g3 .tile{padding:6px 8px}.g3 .tile .t-v b{font-size:18px}
 .lotc.on{border:2px solid var(--accent)}
+.srcseg{display:grid !important;grid-template-columns:1fr 1fr}.fadein{display:flex;flex-direction:column;gap:12px;animation:ddIn .28s cubic-bezier(.2,.8,.2,1)}
+.glfix,.lossbox{animation:ddIn .28s cubic-bezier(.2,.8,.2,1)}
+.lossbox,.glfix{transition:border-color .25s,background .25s}
+@keyframes ddIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
 .tile input[type=date]{font:700 15px var(--mono);border-bottom:2px solid var(--accent)}
 </style>
 </head>
@@ -347,7 +351,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.0.4';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -371,6 +375,7 @@ const L = {
     todayList: 'ตรวจแล้ววันนี้', none: 'ยังไม่มีการตรวจวันนี้', pendingT: 'รอส่ง', pendingSub: 'บันทึกไว้ในเครื่องแล้ว แอปส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้',
     failedSend: 'ระบบไม่รับ', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งการตรวจที่ทำค้างก่อน',
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
+    srcPc: 'ล็อตจาก PC', srcBulk: 'จาก BULK', lotTBulk: 'เลือกล็อต BULK', bulkSub: 'ล็อตที่ PC ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — บรรจุให้ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง',
     lotT: 'เลือกล็อตจาก PC', lotSub: 'เฉพาะล็อตที่ PC ใส่ Order แล้ว ({n} วันล่าสุด) · แตะ Order เพื่อเลือกทั้งล็อตและ Order', find: 'ค้นหา Order / ชื่อวัตถุดิบ / Lot', allOrders: 'ทุก Order',
     loading: 'กำลังโหลดล็อต…', noLots: 'ยังไม่มีล็อตที่ PC ใส่ Order — ให้ PC ตรวจและใส่ Order ก่อน', noMatch: 'ไม่พบล็อตที่ตรงกับคำค้น', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้',
     noOrder: 'PC ยังไม่ใส่ Order', rcv: 'รับ', pcAt: 'PC', lotL: 'LOT',
@@ -384,7 +389,7 @@ const L = {
     fixL: 'การแก้ไข (ต้องเลือก · เลือกได้หลายข้อ)', fixes: ['บรรจุใหม่', 'ซีลใหม่', 'เปลี่ยนถุง / กล่อง', 'ติดสติ๊กเกอร์ใหม่', 'แจ้งหัวหน้า QC'],
     recheck: 'ตรวจซ้ำหลังแก้ไข', rcOk: '✓ ผ่าน', rcBad: '✗ ไม่ผ่าน',
     glT: 'Glazing (ชั่ง 1 แพ็ค)', glOn: 'มี Glazing', glOff: 'ไม่มี', glOrder: 'Order %Glazing', glBefore: 'ก่อน Glazing', glAfter: 'หลัง Glazing', glPct: '% Glazing ที่วัดได้',
-    glOk: 'ตรง Order (± {tol}%)', glLow: 'ต่ำกว่า Order', glHigh: 'สูงกว่า Order', glFixL: 'การแก้ไข Glazing (ต้องเลือก)', glFixes: ['Glazing ใหม่', 'ปรับเวลาชุบ / น้ำ', 'แจ้งหัวหน้า QC'], glFixed: '% Glazing ที่แก้ไขแล้ว',
+    glOk: 'ถึง Order ({lo}–{hi}%)', glLow: 'ไม่ถึง Order — ไม่ผ่าน', glHigh: 'สูงกว่า Order — ต้องแก้ไข', glFixL: 'การแก้ไข Glazing (ต้องเลือก)', glFixes: ['Glazing ใหม่', 'ปรับเวลาชุบ / น้ำ', 'แจ้งหัวหน้า QC'], glFixed: '% Glazing ที่แก้ไขแล้ว', glRe: 'แก้ไขแล้ว ชั่งแพ็คซ้ำ (ถ้าไม่ชั่งซ้ำ = ไม่ผ่าน)', glReOk: 'ชั่งซ้ำ ถึง Order → ผ่านหลังแก้ไข', glReBad: 'ชั่งซ้ำแล้วยังไม่ตรง Order → ไม่ผ่าน', glWillFail: 'บันทึกได้ แต่ผลจะเป็น ไม่ผ่าน', glMin: 'ชั่งทั้งแพ็ค — อย่างน้อย {g} g',
     glFormula: '% = (หลัง − ก่อน) ÷ หลัง × 100', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', save: 'บันทึก',
     needOrder: 'ใส่ Order', needSizes: 'ชั่ง Size ปลาให้ครบ 5 ตัว', needProd: 'ใส่ Production Date', needExp: 'ใส่ Expiry Date', needFix: 'บรรจุภัณฑ์ไม่ผ่าน — เลือกการแก้ไข', needRc: 'ตรวจซ้ำหลังแก้ไข',
     needSeal: 'รอยซีล / สติ๊กเกอร์ ต้องเป็น ✓ หรือ ✗', needG: 'ใส่ Order %Glazing และน้ำหนักก่อน / หลัง', gAfterLow: 'น้ำหนักหลัง Glazing น้อยกว่าก่อน Glazing', needGFix: 'Glazing ไม่ตรง Order — เลือกการแก้ไขและใส่ % ที่แก้ไขแล้ว',
@@ -403,6 +408,7 @@ const L = {
     todayList: 'Checked today', none: 'No checks yet today', pendingT: 'Waiting to send', pendingSub: 'Saved on this phone; sends itself when there is signal', sendNow: 'Send now',
     failedSend: 'Refused', reopen: 'Open to fix', finishFirst: 'Save or discard the open check first',
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
+    srcPc: 'Lots from PC', srcBulk: 'From BULK', lotTBulk: 'Pick a BULK lot', bulkSub: 'Lots PC processed as BULK (last {n} days) — pack them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order',
     lotT: 'Pick the lot from PC', lotSub: 'Only lots PC has given an order (last {n} days) · tap an order to pick the lot and the order', find: 'Search order / item / lot', allOrders: 'All orders',
     loading: 'Loading lots…', noLots: 'No lot with an order from PC yet — PC must check it and enter the order first', noMatch: 'No lot matches the search', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots',
     noOrder: 'PC gave no order', rcv: 'recv', pcAt: 'PC', lotL: 'LOT',
@@ -416,7 +422,7 @@ const L = {
     fixL: 'Correction (required · more than one is fine)', fixes: ['Repack', 'Re-seal', 'Change bag / box', 'New sticker', 'Tell QC lead'],
     recheck: 'Re-check after correction', rcOk: '✓ Pass', rcBad: '✗ Fail',
     glT: 'Glazing (weigh 1 pack)', glOn: 'Glazed', glOff: 'None', glOrder: 'Order %glazing', glBefore: 'Before glazing', glAfter: 'After glazing', glPct: 'Measured % glazing',
-    glOk: 'Matches the order (± {tol}%)', glLow: 'Below the order', glHigh: 'Above the order', glFixL: 'Glazing correction (required)', glFixes: ['Glaze again', 'Adjust dip time / water', 'Tell QC lead'], glFixed: 'Corrected % glazing',
+    glOk: 'Reaches the order ({lo}–{hi}%)', glLow: 'Below the order — fail', glHigh: 'Above the order — correct it', glFixL: 'Glazing correction (required)', glFixes: ['Glaze again', 'Adjust dip time / water', 'Tell QC lead'], glFixed: 'Corrected % glazing', glRe: 'Corrected — weigh the pack again (no re-weigh = fail)', glReOk: 'Re-weigh reaches the order → pass after correction', glReBad: 'Re-weigh still off the order → fail', glWillFail: 'Can be saved, but the result will be FAIL', glMin: 'Weigh the whole pack — at least {g} g',
     glFormula: '% = (after − before) ÷ after × 100', remark: 'Remark (optional)', remarkPh: 'Type a remark…', save: 'Save',
     needOrder: 'Enter the order', needSizes: 'Weigh all 5 sample fish', needProd: 'Enter the production date', needExp: 'Enter the expiry date', needFix: 'Packaging failed — choose a correction', needRc: 'Re-check after correction',
     needSeal: 'Seal / sticker must be ✓ or ✗', needG: 'Enter the order % and the weights before / after', gAfterLow: 'After glazing is lighter than before', needGFix: 'Glazing off the order — choose a correction and enter the corrected %',
@@ -435,6 +441,7 @@ const L = {
     todayList: 'ယနေ့ စစ်ပြီး', none: 'ယနေ့ မစစ်ရသေး', pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းတွင် သိမ်းပြီး', sendNow: 'ယခု ပို့',
     failedSend: 'လက်မခံ', reopen: 'ပြင်ရန် ဖွင့်', finishFirst: 'ဖွင့်ထားသည်ကို အရင် သိမ်း/ဖျက်ပါ',
     reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
+    srcPc: 'PC lot', srcBulk: 'BULK မှ', lotTBulk: 'BULK lot ရွေးပါ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ',
     lotT: 'PC မှ lot ရွေးပါ', lotSub: 'PC Order ထည့်ပြီး lot များသာ ({n} ရက်)', find: 'Order / ကုန်ကြမ်း / Lot ရှာ', allOrders: 'Order အားလုံး',
     loading: 'ဖွင့်နေသည်…', noLots: 'PC Order ထည့်ထားသော lot မရှိသေး', noMatch: 'ရှာမတွေ့', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
     noOrder: 'PC Order မထည့်ရသေး', rcv: 'လက်ခံ', pcAt: 'PC', lotL: 'LOT',
@@ -448,7 +455,7 @@ const L = {
     fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ပြန်ထုပ်', 'ပြန်ဆီး', 'အိတ် / သေတ္တာ လဲ', 'စတစ်ကာ အသစ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်စစ်', rcOk: '✓ အောင်', rcBad: '✗ မအောင်',
     glT: 'Glazing (၁ ထုပ် ချိန်)', glOn: 'Glazing ရှိ', glOff: 'မရှိ', glOrder: 'Order %Glazing', glBefore: 'Glazing မတိုင်မီ', glAfter: 'Glazing ပြီး', glPct: 'တိုင်းရ % Glazing',
-    glOk: 'Order နှင့် ကိုက် (± {tol}%)', glLow: 'Order ထက် နည်း', glHigh: 'Order ထက် များ', glFixL: 'Glazing ပြင်ဆင်ချက်', glFixes: ['ပြန် Glazing', 'နှစ်ချိန် / ရေ ညှိ', 'QC ခေါင်းဆောင်ကို ပြော'], glFixed: 'ပြင်ပြီး % Glazing',
+    glOk: 'Order အထိ ({lo}–{hi}%)', glLow: 'Order မရောက် — မအောင်', glHigh: 'Order ထက် များ — ပြင်ပါ', glFixL: 'Glazing ပြင်ဆင်ချက်', glFixes: ['ပြန် Glazing', 'နှစ်ချိန် / ရေ ညှိ', 'QC ခေါင်းဆောင်ကို ပြော'], glFixed: 'ပြင်ပြီး % Glazing', glRe: 'ပြင်ပြီး ပြန်ချိန်ပါ', glReOk: 'ပြန်ချိန် အောင်', glReBad: 'ပြန်ချိန် မအောင်', glWillFail: 'သိမ်းနိုင် — မအောင်', glMin: 'ထုပ်လုံး ချိန်ပါ — အနည်းဆုံး {g} g',
     glFormula: '% = (ပြီး − မတိုင်မီ) ÷ ပြီး × 100', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', save: 'သိမ်း',
     needOrder: 'Order ထည့်ပါ', needSizes: 'ငါး ၅ ကောင် ချိန်ပါ', needProd: 'Production Date ထည့်ပါ', needExp: 'Expiry Date ထည့်ပါ', needFix: 'ပြင်ဆင်ချက် ရွေးပါ', needRc: 'ပြန်စစ်ပါ',
     needSeal: 'ဆီး / စတစ်ကာ ✓ သို့ ✗', needG: 'Glazing အလေးချိန် ထည့်ပါ', gAfterLow: 'Glazing ပြီး ပေါ့နေ', needGFix: 'Glazing ပြင်ဆင်ချက် ရွေးပါ',
@@ -508,11 +515,13 @@ const ddmmyy = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(
 const plusMonths = (s, m) => { const p = s.split('-').map(Number); const d = new Date(p[0], p[1] - 1 + m, p[2] - 1); return dayStr(d); };   // +12 months − 1 day (11/11/2026 → 10/11/2027)
 const numFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
 const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
-const EMPTY_PK = { checks: [], sizeN: SIZE_N, settings: { GLAZE_TOL: 2, LOT_DAYS: 7 }, cancelDepts: ['general manager'] };
+const EMPTY_PK = { checks: [], sizeN: SIZE_N, settings: { GLAZE_TOL: 2, GLAZE_TOL_LOW: 0, GLAZE_MIN_G: 100, LOT_DAYS: 7 }, cancelDepts: ['general manager'] };
 const pkCfg = () => (S.cfg && S.cfg.pk) || (DEMO ? DEMO_CFG.pk : EMPTY_PK);
 const rmFish = () => ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.rm.fish : [])).map((f) => f.name);
 const rmProcs = () => (S.cfg && S.cfg.rm && S.cfg.rm.procs) || ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'];
 const glTol = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_TOL); return isNaN(v) ? 2 : v; };
+const glTolLow = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_TOL_LOW); return isNaN(v) ? 0 : v; };
+const glMin = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_MIN_G); return isNaN(v) || !v ? 100 : v; };
 const lotDays = () => Number(pkCfg().settings && pkCfg().settings.LOT_DAYS) || 7;
 const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
 
@@ -530,7 +539,7 @@ const allOk = () => ({ std: 'ok', seal: 'ok', bag: 'ok', box: 'ok', strap: 'ok',
 function blankCheck() {
   return { id: newId(), date: todayStr(), key: '', rmId: '', rmLine: '', pcId: '', rmDate: '', lot: '', sup: '', item: '', fish: '', proc: 'WR', size: '', manual: false,
     pcOrders: [], order: '', code: '', sizes: ['', '', '', '', ''], prodDate: todayStr(), expDate: '', checks: allOk(), fixes: [], recheck: '',
-    glazed: true, gOrder: '', gBefore: '', gAfter: '', gFix: '', gFixed: '', remark: '', stage: 'lot' };
+    glazed: true, gOrder: '', gBefore: '', gAfter: '', gFix: '', gBefore2: '', gAfter2: '', remark: '', stage: 'lot' };
 }
 const n = (v) => (v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v));
 function evalCheck(c) {
@@ -541,13 +550,20 @@ function evalCheck(c) {
   const avg = got.length ? Math.round((got.reduce((a, b) => a + b, 0) / got.length) * 10) / 10 : null;
   const gOrder = c.glazed ? n(c.gOrder) : null, gB = n(c.gBefore), gA = n(c.gAfter);
   const glazed = c.glazed && gOrder !== null && gOrder > 0;
-  const gPct = glazed && gA > 0 && gB > 0 && gA >= gB ? Math.round(((gA - gB) / gA) * 10000) / 100 : null;
-  const gOut = glazed && gPct !== null && Math.abs(gPct - gOrder) > glTol();
-  const gFixed = n(c.gFixed);
-  const gFixOk = gOut && gFixed !== null && Math.abs(gFixed - gOrder) <= glTol();
+  // same rule as the server (Sal, 15 Nov 2026): must reach the order; a correction counts only after weighing the pack again
+  const pct = (b, a) => (glazed && a > 0 && b > 0 && a >= b ? Math.round(((a - b) / a) * 10000) / 100 : null);
+  const lo = glazed ? gOrder - glTolLow() : null, hi = glazed ? gOrder + glTol() : null;
+  const within = (p) => p !== null && Math.round(p * 100) >= Math.round(lo * 100) && Math.round(p * 100) <= Math.round(hi * 100);
+  const gPct = pct(gB, gA);
+  const gOut = glazed && gPct !== null && !within(gPct);
+  const g2B = n(c.gBefore2), g2A = n(c.gAfter2);
+  const gFixed = gOut ? pct(g2B, g2A) : null;
+  const gFixOk = gOut && within(gFixed);
+  const small = glazed && ((gB !== null && gB < glMin()) || (gOut && g2B !== null && g2B < glMin()));
   const why = [];
   if (!c.lot || !c.item) why.push('lot');
   if (!cleanOrder(c.order)) why.push(T.needOrder);
+  else if (c.bulkFrom && cleanOrder(c.order) === 'BULK') why.push(T.needRealOrder);
   if (got.length < SIZE_N) why.push(T.needSizes);
   if (!c.prodDate) why.push(T.needProd);
   if (!c.expDate) why.push(T.needExp); else if (c.prodDate && c.expDate <= c.prodDate) why.push(T.expBad);
@@ -557,10 +573,12 @@ function evalCheck(c) {
   if (c.glazed) {
     if (!glazed || !(gB > 0) || !(gA > 0)) why.push(T.needG);
     else if (gA < gB) why.push(T.gAfterLow);
-    else if (gOut && (!c.gFix || gFixed === null)) why.push(T.needGFix);
+    else if (small) why.push(fmt(T.glMin, { g: glMin() }));
+    else if (gOut && !c.gFix) why.push(T.needGFix);
+    else if (gOut && (g2B !== null || g2A !== null) && (gFixed === null)) why.push(T.needG);
   }
   const fail = (bad.length && c.recheck === 'bad') || (gOut && !gFixOk);
-  return { bad, avg, glazed, gPct, gOut, gFixOk, gOrder, ok: !why.length, why, status: fail ? 'fail' : bad.length || gOut ? 'fixed' : 'pass' };
+  return { bad, avg, glazed, gPct, gOut, gFixed, gFixOk, gOrder, lo, hi, ok: !why.length, why, status: fail ? 'fail' : bad.length || gOut ? 'fixed' : 'pass' };
 }
 
 /* ---------------- talking to Apps Script ---------------- */
@@ -585,7 +603,7 @@ function netErr(m) { const e = new Error(m); e.net = true; return e; }
 /* demo mode (no Web app URL yet): try everything, nothing is sent */
 const DEMO_CFG = { ok: true, branch: { code: 'SMT', name: 'สมุทรปราการ' },
   rm: { fish: ['ROHU', 'PANGUSH', 'TILAPIA', 'RED TILAPIA', 'KORAL'].map((x) => ({ name: x, type: 'FISH' })), procs: ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'] },
-  pk: { checks: [], sizeN: 5, settings: { GLAZE_TOL: 2, LOT_DAYS: 7 }, cancelDepts: ['general manager'] } };
+  pk: { checks: [], sizeN: 5, settings: { GLAZE_TOL: 2, GLAZE_TOL_LOW: 0, GLAZE_MIN_G: 100, LOT_DAYS: 7 }, cancelDepts: ['general manager'] } };
 function demoApi(action, p) {
   return new Promise((res) => setTimeout(() => {
     let mem = {}; try { mem = JSON.parse(localStorage.getItem('ckqc.pk.demo') || '{}'); } catch (e) { mem = {}; }
@@ -766,7 +784,11 @@ function lotsShown() {
 function viewLot() {
   const T = t();
   const c = S.c;
-  let h = '<div class="stg"><div><h2>' + T.lotT + '</h2><div class="sub">' + fmt(T.lotSub, { n: lotDays() }) + '</div></div>';
+  const bulk = S.lotSrc === 'bulk';
+  let h = '<div class="stg"><div><h2>' + (bulk ? T.lotTBulk : T.lotT) + '</h2><div class="sub">' + (bulk ? fmt(T.bulkSub, { n: bulkDays() }) : fmt(T.lotSub, { n: lotDays() })) + '</div></div>';
+  // lots with a real order from PC, or lots PC processed as BULK (Sal, 15 Nov 2026 — "จาก BULK" in both PC and PK)
+  h += '<div class="seg srcseg"><button class="' + (!bulk ? 'on' : '') + '" data-act="lotsrc" data-v="pc">' + T.srcPc + '</button><button class="' + (bulk ? 'on' : '') + '" data-act="lotsrc" data-v="bulk">' + T.srcBulk + '</button></div>';
+  if (bulk) return h + viewBulkList() + '</div>';
   h += '<label class="tile" style="height:auto;min-height:60px"><span class="t-l">🔎 ' + T.find + '</span><input data-on="q" value="' + esc(S.q) + '" maxlength="30" autocomplete="off" autocapitalize="characters" style="font:700 17px var(--mono)" aria-label="' + T.find + '"></label>';
   const got = S.lots && S.lots.lots;
   if (got) {   // every order PC gave, as quick filters
@@ -789,6 +811,31 @@ function viewLot() {
   // no typed lots: only lots PC has checked and given an order (Sal, 11 Nov 2026)
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
+}
+
+function viewBulkList() {
+  const T = t();
+  const b = S.bulk;
+  let h = '<div class="fadein">';
+  if (S.bulkBusy && !b) h += '<div class="sub" style="text-align:center"><span class="spin"></span> ' + T.loading + '</div>';
+  else if (!b && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
+  else if (b && !b.lots.length) h += '<div class="sub" style="text-align:center">' + T.noBulk + '</div>';
+  if (b) b.lots.forEach((l) => {
+    const on = S.c.bulkFrom && S.c.bulkFrom.pcId === l.pcId;
+    h += '<div class="lotc glass' + (on ? ' on' : '') + '"><button class="lline" style="border-top:0" data-act="pickbulk" data-k="' + esc(l.key) + '"><span class="lotno">Lot ' + esc(l.lot) + '</span><span class="grow"><b>' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
+      '<div class="sub">' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + '</div>' +
+      '<div class="sub" style="color:var(--accent);font-weight:700">' + T.bulkAt + ' ' + ddmm(l.pcDate) + ' ' + esc(l.pcTime) + (l.used && l.used.length ? ' · ' + T.bulkUsed + ' ' + l.used.map(esc).join(', ') : '') + '</div></span><span class="go">›</span></button></div>';
+  });
+  return h + '</div>';
+}
+const bulkDays = () => Number(S.cfg && S.cfg.pc && S.cfg.pc.settings && S.cfg.pc.settings.BULK_DAYS) || 60;
+function loadBulk(force) {
+  if (!S.staff) return;
+  if (S.bulk && !force && Date.now() - S.bulk.at < 60000) return;
+  S.bulkBusy = true; render();
+  api('pkBulk', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.bulk = { lots: j.lots || [], at: Date.now() }; S.bulkBusy = false; S.online = true; persist(); render();
+  }, (e) => { S.bulkBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
 }
 
 function viewManual() {
@@ -821,7 +868,8 @@ function viewCheck() {
   let h = '<div class="stg">';
   // the lot (from PC) this pack belongs to
   h += '<div class="card glass"><div class="row"><span class="ic2">PK</span><div class="grow"><b style="font-size:18px">' + esc(c.item) + ' ' + esc(c.size) + '</b>' +
-    '<div class="sub">Lot ' + esc(c.lot) + (c.rmDate ? ' · ' + T.rcv + ' ' + ddmm(c.rmDate) : '') + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div></div>' +
+    '<div class="sub">Lot ' + esc(c.lot) + (c.rmDate ? ' · ' + T.rcv + ' ' + ddmm(c.rmDate) : '') + (c.sup ? ' · ' + esc(String(c.sup).split(' / ')[0]) : '') + '</div>' +
+    (c.bulkFrom ? '<div class="sub" style="color:var(--accent);font-weight:700">' + fmt(T.fromBulk, { d: ddmm(c.bulkFrom.pcDate) }) + '</div>' : '') + '</div>' +
     (c.manual ? '<span class="pill p-mute">' + T.manual.replace('+ ', '').split(' — ')[0] + '</span>' : '') + '</div></div>';
   // ORDER (from PC, may be changed here) + code
   const ord = cleanOrder(c.order);
@@ -855,13 +903,18 @@ function viewCheck() {
   h += '<div class="tog"><span>' + T.glT + '</span><div class="seg"><button class="' + (c.glazed ? 'on' : '') + '" data-act="glazed" data-v="1">' + T.glOn + '</button><button class="' + (!c.glazed ? 'on' : '') + '" data-act="glazed" data-v="0">' + T.glOff + '</button></div></div>';
   if (c.glazed) {
     h += '<div class="g3">' + numTile('gor', null, T.glOrder, c.gOrder, '%') + numTile('gbf', null, T.glBefore, c.gBefore, 'g') + numTile('gaf', null, T.glAfter, c.gAfter, 'g') + '</div>';
-    if (e.gPct !== null) h += '<div class="lossbox ' + (e.gOut ? 'hi' : 'ok') + '"><span>' + T.glPct + '</span><b>' + e.gPct.toFixed(2) + '%</b><small>' + (e.gOut ? (e.gPct < e.gOrder ? T.glLow : T.glHigh) + ' (' + numFmt(e.gOrder) + '%)' : fmt(T.glOk, { tol: glTol() })) + ' · ' + T.glFormula + '</small></div>';
+    if (n(c.gBefore) !== null && n(c.gBefore) < glMin()) h += '<div class="err">' + fmt(T.glMin, { g: glMin() }) + '</div>';
+    const band = { lo: numFmt(e.lo), hi: numFmt(e.hi) };
+    if (e.gPct !== null) h += '<div class="lossbox ' + (e.gOut ? 'hi' : 'ok') + '"><span>' + T.glPct + '</span><b>' + e.gPct.toFixed(2) + '%</b><small>' + (e.gOut ? (e.gPct < e.lo ? T.glLow : T.glHigh) + ' (' + band.lo + '–' + band.hi + '%)' : fmt(T.glOk, band)) + ' · ' + T.glFormula + '</small></div>';
     else if (n(c.gAfter) > 0 && n(c.gBefore) > 0 && n(c.gAfter) < n(c.gBefore)) h += '<div class="err">' + T.gAfterLow + '</div>';
     if (e.gOut) {
-      h += '<div class="card glass" style="border:2px solid var(--amber)"><span class="lbl" style="color:var(--ink)">' + T.glFixL + '</span><div class="fixes">' + T.glFixes.map((f, q) =>
+      // correction = weigh the pack again (no typed %); not weighed again or still off → ไม่ผ่าน
+      h += '<div class="card glass glfix" style="border:2px solid ' + (e.gFixOk ? 'var(--amber)' : 'var(--red)') + '"><span class="lbl" style="color:var(--ink)">' + T.glFixL + '</span><div class="fixes">' + T.glFixes.map((f, q) =>
         '<button class="' + (c.gFix === GFIX_TH[q] ? 'on' : '') + '" data-act="gfix" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>' +
-        '<div class="grid2">' + numTile('gfx', null, T.glFixed, c.gFixed, '%') + '</div>' +
-        (n(c.gFixed) !== null && !e.gFixOk ? '<div class="err">✗ ' + (n(c.gFixed) < e.gOrder ? T.glLow : T.glHigh) + '</div>' : '') + '</div>';
+        '<span class="lbl" style="color:var(--ink)">' + T.glRe + '</span>' +
+        '<div class="grid2">' + numTile('gb2', null, T.glBefore, c.gBefore2, 'g') + numTile('ga2', null, T.glAfter, c.gAfter2, 'g') + '</div>' +
+        (e.gFixed !== null ? '<div class="lossbox ' + (e.gFixOk ? 'ok' : 'hi') + '"><span>' + T.glFixed + '</span><b>' + e.gFixed.toFixed(2) + '%</b><small>' + (e.gFixOk ? T.glReOk : T.glReBad) + '</small></div>'
+          : '<div class="note">✗ ' + T.glWillFail + '</div>') + '</div>';
     }
   }
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
@@ -897,7 +950,7 @@ function viewPad() {
 function padField(pad) {
   const c = S.c;
   if (pad.kind === 's') return [() => c.sizes[pad.i], (v) => (c.sizes[pad.i] = v), 6, 1];
-  const f = { gor: ['gOrder', 3, 2], gbf: ['gBefore', 6, 2], gaf: ['gAfter', 6, 2], gfx: ['gFixed', 3, 2] }[pad.kind];
+  const f = { gor: ['gOrder', 3, 2], gbf: ['gBefore', 6, 2], gaf: ['gAfter', 6, 2], gb2: ['gBefore2', 6, 2], ga2: ['gAfter2', 6, 2] }[pad.kind];
   return f ? [() => c[f[0]], (v) => (c[f[0]] = v), f[1], f[2]] : null;
 }
 /** after OK: the next empty number on the screen (5 fish → glazing order % → before → after) */
@@ -905,6 +958,7 @@ function nextPad(pad) {
   const c = S.c;
   if (pad.kind === 's') { const nx = c.sizes.findIndex((v, i) => i > pad.i && v === ''); if (nx >= 0) return { kind: 's', i: nx }; const fst = c.sizes.findIndex((v) => v === ''); return fst >= 0 ? { kind: 's', i: fst } : null; }
   if (!c.glazed) return null;
+  if (pad.kind === 'gb2') return c.gAfter2 === '' ? { kind: 'ga2' } : null;   // re-weigh: before → after
   const order = ['gor', 'gbf', 'gaf'];
   const at = order.indexOf(pad.kind);
   if (at < 0) return null;
@@ -1044,7 +1098,7 @@ function toast(msg) {
   clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2600);
 }
 function startCheck() {
-  S.c = blankCheck(); S.q = '';
+  S.c = blankCheck(); S.q = ''; S.lotSrc = 'pc';
   go('lot');
   loadLots();
   refreshConfig();
@@ -1061,12 +1115,12 @@ function saveCheck() {
   const e = evalCheck(c);
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
   const ord = cleanOrder(c.order);
-  const pcOrder = c.pcOrders.indexOf(ord) >= 0 ? ord : c.pcPick || c.pcOrders.join(' / ');   // changed here → keep the PC order it was picked from
+  const pcOrder = c.bulkFrom ? 'BULK' : c.pcOrders.indexOf(ord) >= 0 ? ord : c.pcPick || c.pcOrders.join(' / ');   // changed here → keep the PC order it was picked from
   const rec = {
-    id: c.id, date: todayStr(), time: nowHM(), order: ord, pcOrder: pcOrder, code: cleanOrder(c.code), item: c.item, size: c.size, rmDate: c.rmDate, lot: c.lot, sup: c.sup,
+    id: c.id, date: todayStr(), time: nowHM(), order: ord, pcOrder: pcOrder, bulkFrom: c.bulkFrom || null, code: cleanOrder(c.code), item: c.item, size: c.size, rmDate: c.rmDate, lot: c.lot, sup: c.sup,
     rmId: c.rmId, rmLine: c.rmLine, pcId: c.pcId, sizes: c.sizes.slice(), prodDate: c.prodDate, expDate: c.expDate, checks: Object.assign({}, c.checks),
     fix: e.bad.length ? c.fixes.join(' · ') : '', recheck: e.bad.length ? c.recheck : '',
-    gOrder: e.glazed ? c.gOrder : '', gBefore: e.glazed ? c.gBefore : '', gAfter: e.glazed ? c.gAfter : '', gFix: e.gOut ? c.gFix : '', gFixed: e.gOut ? c.gFixed : '',
+    gOrder: e.glazed ? c.gOrder : '', gBefore: e.glazed ? c.gBefore : '', gAfter: e.glazed ? c.gAfter : '', gFix: e.gOut ? c.gFix : '', gBefore2: e.gOut ? c.gBefore2 : '', gAfter2: e.gOut ? c.gAfter2 : '',
     remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน'
   };
@@ -1074,7 +1128,7 @@ function saveCheck() {
   S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
   S.last = { id: rec.id, order: ord, lot: c.lot, item: c.item, size: c.size, status: rec._status, gPct: e.gPct, sent: false,
     again: { key: c.key, rmId: c.rmId, rmLine: c.rmLine, pcId: c.pcId, rmDate: c.rmDate, lot: c.lot, sup: c.sup, item: c.item, fish: c.fish, proc: c.proc, size: c.size, manual: c.manual,
-      pcOrders: c.pcOrders.slice(), pcPick: c.pcPick || '', order: c.order, code: c.code, prodDate: c.prodDate, expDate: c.expDate, glazed: c.glazed, gOrder: c.glazed ? c.gOrder : '' } };
+      pcOrders: c.pcOrders.slice(), pcPick: c.pcPick || '', bulkFrom: c.bulkFrom || null, order: c.order, code: c.code, prodDate: c.prodDate, expDate: c.expDate, glazed: c.glazed, gOrder: c.glazed ? c.gOrder : '' } };
   S.c = null;
   go('done');
   flush();
@@ -1125,9 +1179,21 @@ const ACT = {
   discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   qorder: (el) => { S.q = cleanOrder(S.q) === el.dataset.v ? '' : el.dataset.v; render(); },
+  lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(); else loadLots(); },
+  pickbulk: (el) => {
+    const l = S.bulk && S.bulk.lots.find((x) => x.key === el.dataset.k);
+    if (!l) return;
+    const fish = String(l.item).split('-')[0], proc = String(l.item).split('-').slice(1).join('-');
+    // packed from a BULK lot: same RM truck + line, the BULK check as the PC link, a real order to type
+    Object.assign(S.c, { key: 'B|' + l.key, rmId: l.rmId, rmLine: l.rmLine, pcId: l.pcId, rmDate: l.rmDate, lot: l.lot, sup: l.sup, item: l.item, fish: fish, proc: proc, size: l.size, manual: false,
+      pcOrders: [], pcPick: '', bulkFrom: { pcId: l.pcId, pcDate: l.pcDate } });
+    if (cleanOrder(S.c.order) === 'BULK') S.c.order = '';
+    go('check');
+  },
   picklot: (el) => {
     const l = S.lots && S.lots.lots.find((x) => x.key === el.dataset.k);
     if (!l) return;
+    S.c.bulkFrom = null;
     const sameLot = S.c.key === l.key;
     const fish = String(l.item).split('-')[0], proc = String(l.item).split('-').slice(1).join('-');
     Object.assign(S.c, { key: l.key, rmId: l.rmId, rmLine: l.rmLine, pcId: l.pcIds[l.pcIds.length - 1] || '', rmDate: l.rmDate, lot: l.lot, sup: l.sup, item: l.item, fish: fish, proc: proc, size: l.size, manual: false, pcOrders: l.orders.slice() });
