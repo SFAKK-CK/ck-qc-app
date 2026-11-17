@@ -321,6 +321,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .lossbox.ok{background:var(--green-soft);border-color:rgba(46,107,60,.35)}.lossbox.ok b{color:var(--green)}
 .lossbox.hi{background:var(--amber-soft);border-color:var(--amber)}.lossbox.hi b,.lossbox.hi small{color:var(--amber)}
 .fixes button small{font-size:12px}
+.lossw{animation:ddIn .28s cubic-bezier(.2,.8,.2,1);transition:border-color .25s}
 .lockc{border:2px solid var(--red);background:var(--red-soft)}
 </style>
 </head>
@@ -345,7 +346,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.1';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -379,6 +380,7 @@ const L = {
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ',
     lockT: '🔒 %Loss เกินเกณฑ์ {trim} (≤ {lim}%)', lockSub: 'หยุดการตรวจนี้ไว้ก่อน — บันทึกหรือออกไม่ได้ จนกว่า GM จะมาใส่รหัสเพื่ออนุมัติ หรือสั่งให้ชั่งใหม่ — เรียก GM มาที่เครื่องนี้',
+    lossHighT: '⚠ %Loss เกินเกณฑ์ {trim} ({lim}%) — ใส่หมายเหตุว่าทำไม แล้วบันทึกต่อได้', lossWhyL: 'หมายเหตุ %Loss เกิน (ต้องใส่)', lossWhys: ['ปลามีไข่', 'ปลาผอม / ปลาเล็ก', 'ตัดแต่งตามสเปคลูกค้า', 'ปลาช้ำ / ตัดส่วนเสียออก'], lossWhyPh: 'หรือพิมพ์เหตุผล…', needLossWhy: 'ใส่หมายเหตุว่าทำไม %Loss เกินเกณฑ์',
     lockMsg: 'ล็อกอยู่ — ให้ GM อนุมัติก่อน', callGm: '🔒 GM อนุมัติ', gmT: 'GM อนุมัติ %Loss เกินเกณฑ์', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล',
     gmReasons: ['ปลาตัวเล็ก / ผอม', 'ตัดแต่งตามสเปคลูกค้า', 'ชั่งซ้ำแล้วยังเกิน'], gmApprove: '✓ อนุมัติให้บันทึก', gmReweigh: '↺ ให้ชั่งใหม่', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM อนุมัติ',
     gmOkT: '✓ GM {name} อนุมัติแล้ว', gmReweighed: 'GM ให้ชั่งใหม่ — ใส่น้ำหนักอีกครั้ง', lim: '≤{n}%'
@@ -408,6 +410,7 @@ const L = {
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv',
     lockT: '🔒 %Loss above the {trim} limit (≤ {lim}%)', lockSub: 'This check is stopped — it cannot be saved or left until a GM enters their ID to approve it or orders a re-weigh — call the GM to this phone',
+    lossHighT: '⚠ %Loss above the {trim} limit ({lim}%) — write why, then save', lossWhyL: 'Why is %Loss high? (required)', lossWhys: ['Fish with eggs', 'Thin / small fish', 'Trimmed to customer spec', 'Bruised parts cut off'], lossWhyPh: 'or type the reason…', needLossWhy: 'Write why %Loss is above the limit',
     lockMsg: 'Locked — a GM must approve first', callGm: '🔒 GM approval', gmT: 'GM approval — %Loss above the limit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason',
     gmReasons: ['Small / thin fish', 'Trimmed to customer spec', 'Re-weighed, still above'], gmApprove: '✓ Approve and save', gmReweigh: '↺ Weigh again', gmNeedNet: 'GM approval needs internet',
     gmOkT: '✓ Approved by GM {name}', gmReweighed: 'GM ordered a re-weigh — enter the weight again', lim: '≤{n}%'
@@ -436,7 +439,7 @@ const L = {
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
     gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ',
-    lockT: '🔒 %Loss စံထက် များ {trim} (≤ {lim}%)', lockSub: 'GM အတည်ပြုသည်အထိ သိမ်း/ထွက် မရ', lockMsg: 'သော့ခတ်ထား — GM အတည်ပြုရန်', callGm: '🔒 GM အတည်ပြု', gmT: 'GM အတည်ပြု', gmId: 'GM ဝန်ထမ်းနံပါတ်', gmWhy: 'အကြောင်းပြချက်',
+    lockT: '🔒 %Loss စံထက် များ {trim} (≤ {lim}%)', lossHighT: '⚠ %Loss စံထက် များ {trim} ({lim}%) — အကြောင်းရေးပြီး သိမ်းပါ', lossWhyL: 'အကြောင်းပြချက် (လိုအပ်)', lossWhys: ['ငါးဥ ပါ', 'ငါး ပိန် / သေး', 'ဖောက်သည် စံ', 'ပွန်းပဲ့ ဖြတ်'], lossWhyPh: 'ရိုက်ပါ…', needLossWhy: 'အကြောင်းပြချက် ရေးပါ', lockSub: 'GM အတည်ပြုသည်အထိ သိမ်း/ထွက် မရ', lockMsg: 'သော့ခတ်ထား — GM အတည်ပြုရန်', callGm: '🔒 GM အတည်ပြု', gmT: 'GM အတည်ပြု', gmId: 'GM ဝန်ထမ်းနံပါတ်', gmWhy: 'အကြောင်းပြချက်',
     gmReasons: ['ငါးသေး / ပိန်', 'ဖောက်သည် စံ', 'ပြန်ချိန်လည်း များ'], gmApprove: '✓ အတည်ပြု', gmReweigh: '↺ ပြန်ချိန်', gmNeedNet: 'အင်တာနက် လိုသည်',
     gmOkT: '✓ GM {name} အတည်ပြုပြီး', gmReweighed: 'ပြန်ချိန်ပါ', lim: '≤{n}%'
   }
@@ -533,10 +536,15 @@ function kindOf(fish) {
   return (f && f.type) || (/SHRIMP|กุ้ง/i.test(String(fish)) ? 'SHRIMP' : 'FISH');
 }
 const locked = () => !!(S.c && S.c.lock && !S.c.gm);
+/** what goes in the sheet (Thai) when %Loss is above the limit — the inspector picks or types the reason (Sal, 17 Nov 2026) */
+const LOSSWHY_TH = ['ปลามีไข่', 'ปลาผอม / ปลาเล็ก', 'ตัดแต่งตามสเปคลูกค้า', 'ปลาช้ำ / ตัดส่วนเสียออก'];
 /** weights done and %Loss above the limit → lock the check at once and tell the server (Audit + e-mail to the GM) */
 function lockIfHigh() {
+  // Sal, 17 Nov 2026: no more GM lock — %Loss above the limit needs a written reason instead (a draft locked by an older version is released)
   const c = S.c;
-  if (c && c.lock && !c.lock.sent) sendLock();
+  if (c && c.lock && !c.gm) c.lock = null;
+  return;
+  /* eslint-disable no-unreachable */
   if (!c || c.lock || S.screen !== 'check' || (S.pad && (S.pad.kind === 'gb' || S.pad.kind === 'ga'))) return;
   const e = evalCheck(c);
   if (!e.high) return;
@@ -591,7 +599,7 @@ function evalCheck(c) {
   const lockAt = lim === null ? null : Math.round((lim + lockMargin()) * 100) / 100;
   const high = lim !== null && loss !== null && Math.round(loss * 100) >= Math.round(lockAt * 100);
   const watch = lim !== null && loss !== null && !high && loss >= lim;
-  if (high && !c.gm) why.push(t().lockMsg);
+  if (high && !c.gm && !String(c.lossWhy || '').trim()) why.push(t().needLossWhy);
   return { vals, max, warm, tFail, loss, lim, lockAt, high, watch, held: heldOf(c), ok: !why.length, why,
     status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
 }
@@ -945,6 +953,13 @@ function viewCheck() {
   if (over) h += '<div class="err">' + T.afterBig + '</div>';
   const ew = evalCheck(c);
   if (ew.watch) h += '<div class="note">' + fmt(T.watch, { trim: esc(c.trim), lim: ew.lim }) + '</div>';
+  if (ew.high && !c.gm) {   // above the limit (e.g. G with eggs): say why, then save — no GM needed (Sal, 17 Nov 2026)
+    const w = String(c.lossWhy || '');
+    h += '<div class="card glass lossw" style="border:2px solid ' + (w.trim() ? 'var(--amber)' : 'var(--red)') + '"><b style="color:var(--red)">' + fmt(T.lossHighT, { trim: esc(c.trim), lim: ew.lim }) + '</b>' +
+      '<span class="lbl" style="color:var(--ink)">' + T.lossWhyL + '</span><div class="fixes">' + T.lossWhys.map((x, q) =>
+        '<button class="' + (w.indexOf(LOSSWHY_TH[q]) >= 0 ? 'on' : '') + '" data-act="losswhy" data-x="' + q + '">' + esc(x) + '</button>').join('') + '</div>' +
+      '<input data-on="losswhy" value="' + esc(w) + '" maxlength="200" placeholder="' + esc(T.lossWhyPh) + '" autocomplete="off" style="height:46px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:600 15px inherit;background:#fff;text-transform:none"></div>';
+  }
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
@@ -1081,7 +1096,7 @@ function draw() {
   // keep the cursor in a text box (order / remark …) when the screen redraws in the background (lots loaded, record sent)
   const fe = document.activeElement, fon = fe && fe.dataset && fe.dataset.on, fpos = fe && typeof fe.selectionStart === 'number' ? fe.selectionStart : null;
   main.innerHTML = (views[S.screen] || viewHome)();
-  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup'].indexOf(fon) >= 0) {
+  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup', 'losswhy'].indexOf(fon) >= 0) {
     const el = main.querySelector('[data-on="' + fon + '"]');
     if (el) { if (fon === 'order' && el.value !== fe.value) el.value = fe.value; el.focus(); try { if (fpos !== null) el.setSelectionRange(fpos, fpos); } catch (e) { /* ignore */ } }
   }
@@ -1164,12 +1179,11 @@ function startCheck() {
 function saveCheck() {
   const c = S.c;
   const e = evalCheck(c);
-  if (e.high && !c.gm) { S.pad = null; lockIfHigh(); return render(); }
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
-    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, lossWhy: e.high ? String(c.lossWhy || '').trim() : '', gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
@@ -1215,6 +1229,13 @@ const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
   back: () => { if (locked() && S.screen === 'check') return toast(t().lockMsg); go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'); },
   callgm: openGmSheet,
+  losswhy: (el) => {
+    const v = LOSSWHY_TH[Number(el.dataset.x)], c = S.c;
+    const parts = String(c.lossWhy || '').split(' · ').map((x) => x.trim()).filter(Boolean);
+    const i = parts.indexOf(v);
+    if (i >= 0) parts.splice(i, 1); else parts.unshift(v);
+    c.lossWhy = parts.join(' · '); S.err = ''; render();
+  },
   bmenu: () => {
     if (S.c && S.c.lock) { toast(t().lockMsg); return; }
     // open: the pad to type (unless the RM average is in use) + the choice under the tile; tap again to close
@@ -1355,6 +1376,7 @@ document.addEventListener('change', (e) => {
   if (on === 'msize') { c.size = el.value.toUpperCase().replace(/\s+/g, '').trim(); return render(); }
   if (on === 'msup') { c.sup = el.value.replace(/\s+/g, ' ').trim(); return render(); }
   if (on === 'remark') { c.remark = el.value.replace(/\s+/g, ' ').trim(); return render(); }
+  if (on === 'losswhy') { c.lossWhy = el.value.replace(/\s+/g, ' ').trim(); return render(); }
   if (on === 'order') { c.order = cleanOrder(el.value); return render(); }
 });
 document.addEventListener('input', (e) => {
@@ -1364,6 +1386,7 @@ document.addEventListener('input', (e) => {
   if (on === 'msize') S.c.size = el.value.toUpperCase().replace(/\s+/g, '');
   if (on === 'msup') S.c.sup = el.value;
   if (on === 'remark') S.c.remark = el.value;
+  if (on === 'losswhy') S.c.lossWhy = el.value;
   if (on === 'order') S.c.order = orderChars(el.value);
   $('act').innerHTML = viewAction();
   persist();
