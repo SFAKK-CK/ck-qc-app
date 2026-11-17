@@ -228,7 +228,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .sl{border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .sl.bad{border:2px solid var(--red)}
 .repin{animation:repIn .3s cubic-bezier(.2,.8,.2,1)}@keyframes repIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.reprow{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid rgba(40,42,50,.07);text-align:left}.reprow:first-child{border-top:0}.reprow .tm{flex:0 0 66px;width:66px;font-size:12px;line-height:1.3}.reprow .grow{min-width:0}
+.reprow{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid rgba(40,42,50,.07);text-align:left}.reprow:first-child{border-top:0}.repdl{animation:repIn .3s cubic-bezier(.2,.8,.2,1);height:48px}.reprow .tm{flex:0 0 66px;width:66px;font-size:12px;line-height:1.3}.reprow .grow{min-width:0}
 .kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-size:13px;color:var(--ink-3)}
 .kv b{display:block;font:600 16px var(--mono);color:var(--ink)}
 .kv b.bad{color:var(--red)}
@@ -317,7 +317,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.7';
+const APP_VERSION = '1.2.8';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -351,7 +351,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', rep: 'รายงานตาม Order', repSub: '%Loss (PC) + Glazing (PK) ของแต่ละ Order', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repRecent: 'Order 30 วันล่าสุด — แตะเพื่อดู', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', rep: 'รายงานตาม Order', repSub: '%Loss (PC) + Glazing (PK) ของแต่ละ Order', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repRecent: 'Order 30 วันล่าสุด — แตะเพื่อดู', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -389,7 +389,7 @@ const L = {
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
     wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
-    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', pkSub: 'order · fish size · label · packaging · glazing', rep: 'Report by order', repSub: '%Loss (PC) + glazing (PK) of each order', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repRecent: 'Orders of the last 30 days — tap one', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', pkSub: 'order · fish size · label · packaging · glazing', repSec: 'Reports', repDl: '⬇ Download Excel', repDlAll: '⬇ Download all orders (Excel)', repDlBusy: 'Building the file…', repDlDone: 'Downloaded — see Downloads / Files', repDlCsv: 'Could not load the Excel maker — downloaded as CSV instead', rep: 'Report by order', repSub: '%Loss (PC) + glazing (PK) of each order', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repRecent: 'Orders of the last 30 days — tap one', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
     point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
     shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
     shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
@@ -427,7 +427,7 @@ const L = {
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
     wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
-    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: '%Loss (PC) + Glazing (PK)', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repRecent: 'ရက် 30 Order များ', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', repSec: 'အစီရင်ခံစာ', repDl: '⬇ Excel ဒေါင်းလုဒ်', repDlAll: '⬇ Order အားလုံး (Excel)', repDlBusy: 'ဖိုင် ပြင်ဆင်နေသည်…', repDlDone: 'ဒေါင်းလုဒ် ပြီး', repDlCsv: 'CSV ဖြင့် ဒေါင်းလုဒ်', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: '%Loss (PC) + Glazing (PK)', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repRecent: 'ရက် 30 Order များ', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
     point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
     shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
     shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
@@ -825,6 +825,66 @@ function loadReport(q) {
     const m = $('main'); if (m) m.scrollTop = 0;
   }, (e) => { S.repBusy = false; S.repErr = e.net ? t().repOffline : e.message; render(); });
 }
+/** the report as a real Excel file made on the phone (SheetJS, loaded only when needed); offline → CSV (Sal, 17 Nov 2026) */
+const XLSX_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+function loadXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = XLSX_URL; sc.async = true;
+    const tm = setTimeout(() => rej(new Error('timeout')), 15000);
+    sc.onload = () => { clearTimeout(tm); window.XLSX ? res(window.XLSX) : rej(new Error('no XLSX')); };
+    sc.onerror = () => { clearTimeout(tm); rej(new Error('load')); };
+    document.head.appendChild(sc);
+  });
+}
+function reportTables(r) {
+  const thd = (iso) => (iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + (Number(iso.slice(0, 4)) + 543) : '');
+  const v = (x) => (x === null || x === undefined ? '' : x);
+  const sum = [['Order', 'ตั้งแต่', 'ถึง', 'ล็อต', 'PC ตรวจ (ครั้ง)', 'Processing type', '%Loss เฉลี่ย', '%Loss รวม', '%Loss ต่ำสุด', '%Loss สูงสุด', 'เกินเกณฑ์ (ครั้ง)', 'เหตุผลที่เกิน',
+    'PK ตรวจ (ครั้ง)', 'Order %Glazing', '% Glazing เฉลี่ย', '% Glazing ต่ำสุด', 'Glazing ไม่ผ่าน (ครั้ง)', 'PK ไม่ผ่าน (ครั้ง)']]
+    .concat(r.orders.map((o) => [o.order, thd(o.from), thd(o.to), o.lots, o.pcN, o.trims, v(o.lossAvg), v(o.lossW), v(o.lossMin), v(o.lossMax), o.over, o.whys, o.pkN, o.gOrder, v(o.gAvg), v(o.gMin), o.gFail, o.pkFail]));
+  const out = [['สรุปตาม Order', sum]];
+  if (r.term && r.detail) {
+    out.push(['PC %Loss', [['วันที่', 'เวลา', 'LOT', 'วันที่รับเข้า', 'Item / Size', 'Processing type', 'ก่อนตัดแต่ง (g)', 'หลังตัดแต่ง (g)', '%Loss', 'เกณฑ์', 'ตรวจ %Loss', 'เหตุผล', 'ที่มา BULK', 'สถานะ']]
+      .concat(r.detail.pc.map((x) => [thd(x.day), x.time, x.lot, x.rmDate, x.item, x.trim, v(x.b), v(x.a), v(x.loss), v(x.lim), x.check, x.why, x.bulk, x.status]))]);
+    out.push(['PK Glazing', [['วันที่', 'เวลา', 'LOT', 'วันที่รับเข้า', 'Item / Size', 'Size เฉลี่ย (g)', 'Order %Glazing', '% Glazing ที่วัดได้', '% Glazing (หลังชั่งซ้ำ)', 'ผล Glazing', 'ที่มา BULK', 'สถานะ']]
+      .concat(r.detail.pk.map((x) => [thd(x.day), x.time, x.lot, x.rmDate, x.item, v(x.avg), v(x.gOrder), v(x.meas), v(x.final), x.gRes, x.bulk, x.status]))]);
+  }
+  return out;
+}
+function saveFile(blob, fname) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+}
+function downloadReport() {
+  const r = S.rep;
+  if (!r || S.dlBusy) return;
+  const T = t();
+  // English-letter file name: some phones drop Thai letters from a downloaded file's name
+  const tag = r.term ? (r.term.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'Order') : 'ALL';
+  const name = 'CKQC-Order-' + tag + '-' + todayStr();
+  const tables = reportTables(r);
+  S.dlBusy = true; render();
+  const done = (msg) => { S.dlBusy = false; render(); toast(msg); };
+  loadXlsx().then((X) => {
+    const wb = X.utils.book_new();
+    tables.forEach((tb) => {
+      const ws = X.utils.aoa_to_sheet(tb[1]);
+      ws['!cols'] = tb[1][0].map((h, i) => ({ wch: Math.min(40, Math.max(String(h).length + 2, ...tb[1].slice(1).map((row) => String(row[i] === undefined ? '' : row[i]).length + 1))) }));
+      X.utils.book_append_sheet(wb, ws, tb[0]);
+    });
+    saveFile(new Blob([X.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), name + '.xlsx');
+    done(T.repDlDone);
+  }).catch(() => {   // no Excel maker (offline / blocked) → one CSV with every table, opens in Excel with Thai
+    const csv = '\ufeff' + tables.map((tb) => tb[0] + '\n' + tb[1].map((row) => row.map((c) => '"' + String(c === null || c === undefined ? '' : c).replace(/"/g, '""') + '"').join(',')).join('\n')).join('\n\n');
+    saveFile(new Blob([csv], { type: 'text/csv;charset=utf-8' }), name + '.csv');
+    done(T.repDlCsv);
+  });
+}
 function viewReport() {
   const T = t();
   const r = S.rep;
@@ -839,6 +899,7 @@ function viewReport() {
   if (!r.term) {   // overview: every order of the last 30 days
     h += '<span class="lbl" style="color:var(--ink)">' + T.repRecent + '</span>';
     if (!r.orders.length) h += '<div class="sub">' + T.repNoData + '</div>';
+    else h += '<button class="btn ghost repdl" data-act="repdl"' + (S.dlBusy ? ' disabled' : '') + '>' + (S.dlBusy ? '<span class="spin"></span> ' + T.repDlBusy : T.repDlAll) + '</button>';
     h += '<div class="tlist glass repin">' + r.orders.map((o) => '<button data-act="reporder" data-v="' + esc(o.order) + '"><span class="grow"><b class="mono">' + esc(o.order) + '</b>' +
       '<div class="sub">' + dm(o.from) + (o.to !== o.from ? ' – ' + dm(o.to) : '') + ' · ' + o.lots + ' ' + T.repLots + ' · PC ' + o.pcN + ' · PK ' + o.pkN + '</div></span>' +
       '<span style="text-align:right;font-size:13px"><b>' + n2(o.lossAvg) + '%</b> loss' + (o.over ? ' <span class="pill p-warn">' + o.over + '</span>' : '') + '<br><span class="sub">' + (o.gAvg !== '' ? 'glaze ' + n2(o.gAvg) + '%' : '') + '</span></span></button>').join('') + '</div>';
@@ -853,6 +914,7 @@ function viewReport() {
     (o.whys ? '<div class="sub">' + T.repWhy + ': ' + esc(o.whys) + '</div>' : '') +
     '<span class="lbl" style="color:var(--ink)">' + T.repPk + ' · ' + o.pkN + ' ' + T.repChecks + '</span>' +
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">' + box(T.repOrderG, o.gOrder ? esc(o.gOrder) + '%' : '—') + box(T.repAvg, n2(o.gAvg) + (o.gAvg !== '' ? '%' : '')) + box(T.repGFail, o.gFail, o.gFail > 0) + box(T.repPkFail, o.pkFail, o.pkFail > 0) + '</div></div>';
+  h += '<button class="btn repdl" data-act="repdl"' + (S.dlBusy ? ' disabled' : '') + '>' + (S.dlBusy ? '<span class="spin"></span> ' + T.repDlBusy : T.repDl) + '</button>';
   h += '<span class="lbl" style="color:var(--ink)">' + T.repPcList + ' (' + d.pc.length + ')</span>';
   h += d.pc.length ? '<div class="tlist glass repin">' + d.pc.slice().reverse().map((x) => '<div class="reprow"><span class="tm">' + dm(x.day) + '<br>' + esc(x.time) + '</span><span class="grow"><b>' + esc(x.item) + '</b> · Lot ' + esc(x.lot) +
     '<div class="sub">' + esc(x.trim) + ' · ' + n2(x.b) + ' → ' + n2(x.a) + ' g' + (x.why ? ' · ' + esc(x.why) : '') + (x.bulk ? ' · BULK' : '') + '</div></span>' +
@@ -911,10 +973,11 @@ function viewHome() {
   // report by order — %Loss from PC + glazing from PK (Sal, 17 Nov 2026)
   const repTile = !pkOn ? '' : '<button class="dept main glass" data-act="openrep"><span class="ic" style="font-size:20px">📊</span><span class="grow"><b style="font-size:18px">' + T.rep + '</b><div class="sub">' + T.repSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   if (pkOn) h += '<button class="dept main glass" data-act="openpk"><span class="ic">PK</span><span class="grow"><b style="font-size:18px">' + T.pk + '</b><div class="sub">' + T.pkSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
-  h += repTile;
   (pcOn ? [] : ['pc']).concat(pkOn ? [] : ['pk']).concat(['cs']).forEach((k) => {
     h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
   });
+  // reports: their own section, apart from the departments (Sal, 17 Nov 2026)
+  if (repTile) h += '<span class="lbl" style="font-size:15px;color:var(--ink);margin-top:6px">' + T.repSec + '</span>' + repTile;
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
   if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
   else {
@@ -1600,6 +1663,7 @@ const ACT = {
   openrep: () => { S.rq = ''; go('report'); loadReport(''); },
   repgo: () => { const q = String(S.rq || '').trim(); loadReport(q); },
   reporder: (el) => { S.rq = el.dataset.v; loadReport(el.dataset.v); },
+  repdl: () => downloadReport(),
   openpk: () => {
     try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ }
     persist();
