@@ -259,7 +259,11 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tick{width:120px;height:120px;border-radius:50%;background:rgba(219,233,213,.8);display:grid;place-items:center;animation:popc 520ms var(--ease) both,ring 1.6s ease-out 520ms 2}
 .tick div{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:46px;font-weight:700;animation:popc 520ms var(--ease) 160ms both}
 .tick.wait{background:rgba(245,233,212,.85);animation:popc 520ms var(--ease) both}
-.tick.wait div{background:var(--amber)}
+.tick.wait div{background:var(--amber)}.tick.wait div .spin{width:40px;height:40px;border-width:4px;border-color:rgba(255,255,255,.35);border-top-color:#fff}
+.tick.fail{background:rgba(243,214,210,.85);animation:popc 520ms var(--ease) both}.tick.fail div{background:var(--red)}
+.lossc{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:2px solid rgba(40,42,50,.08);background:rgba(255,255,255,.55);animation:ddIn .3s cubic-bezier(.2,.8,.2,1)}.lossc b.n{font:800 34px/1 var(--mono);letter-spacing:-.5px}.lossc.ok{border-color:var(--green)}.lossc.watch{border-color:var(--amber)}.lossc.high{border-color:var(--red)}.lossc.high b.n{color:var(--red)}.lossc.watch b.n{color:var(--amber)}.lossc.ok b.n{color:var(--green)}
+.ddm.list{grid-template-columns:1fr;max-height:46vh;overflow:auto}.ddm input.q{grid-column:1/-1;height:44px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:600 16px inherit;background:#fff;text-transform:none}
+.net.bad{background:rgba(179,38,30,.12);color:var(--red);font-weight:800}
 @keyframes popc{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes ring{0%{box-shadow:0 0 0 0 rgba(46,107,60,.35)}100%{box-shadow:0 0 0 22px rgba(46,107,60,0)}}
 
@@ -346,7 +350,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.3.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -375,7 +379,7 @@ const L = {
     orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
     needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าปลาตัวที่หนักที่สุด — ชั่งใหม่', needOrder: 'ใส่ Order (หรือ BULK)', watch: '⚠ %Loss ถึงเกณฑ์ {trim} ({lim}%) — บันทึกได้ ระบบเตือนไว้ในรายงาน', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
-    doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
+    doneT: 'บันทึกแล้ว', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — เริ่มล็อตถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง แตะ "เปิดแก้ไข" แล้วส่งใหม่', lossL: '%Loss', lossOk: 'ปกติ', lossWatch: 'ถึงเกณฑ์ (เฝ้าระวัง)', lossHigh: 'สูงกว่าเกณฑ์ — ต้องใส่หมายเหตุ', lossNoLim: 'ไม่มีเกณฑ์', lossWait: 'ใส่น้ำหนักก่อน/หลัง', trimPick: 'เลือกประเภทการตัดแต่ง', trimSearch: 'พิมพ์ค้นหา เช่น G, H/L, fillet', trimNone: 'ไม่พบ', refusedN: 'ส่งไม่สำเร็จ', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิดล็อต', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g', rcv: 'รับ',
@@ -405,7 +409,7 @@ const L = {
     orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
     needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than the heaviest fish — weigh again', needOrder: 'Enter the order (or BULK)', watch: '⚠ %Loss at the {trim} limit ({lim}%) — can be saved, flagged in the report', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
-    doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
+    doneT: 'Saved', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — you can start the next lot', refusedT: 'Not accepted', refusedSub: 'The server refused this check — it is still on the phone; tap "Open to fix" and send again', lossL: '%Loss', lossOk: 'normal', lossWatch: 'at the limit (watch)', lossHigh: 'over the limit — reason needed', lossNoLim: 'no limit', lossWait: 'enter the weights', trimPick: 'Choose the trim type', trimSearch: 'Search, e.g. G, H/L, fillet', trimNone: 'No match', refusedN: 'refused', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong lot', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g', rcv: 'recv',
@@ -435,7 +439,7 @@ const L = {
     orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
     needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needOrder: 'Order ထည့်ပါ (သို့ BULK)', watch: '⚠ %Loss စံ အထိ {trim} ({lim}%) — သိမ်းနိုင်', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
-    doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
+    doneT: 'သိမ်းပြီး', sendingT: 'ပို့နေသည်…', sendingSub: 'ဖုန်းတွင် သိမ်းပြီး · နောက် lot စနိုင်သည်', refusedT: 'ပို့မရ', refusedSub: 'ဆာဗာ လက်မခံ — "ပြင်ရန် ဖွင့်" နှိပ်ပြီး ပြန်ပို့ပါ', lossL: '%Loss', lossOk: 'ပုံမှန်', lossWatch: 'စံရောက်', lossHigh: 'စံကျော် — မှတ်ချက် လိုသည်', lossNoLim: 'စံ မရှိ', lossWait: 'အလေးချိန် ထည့်ပါ', trimPick: 'ခုတ်ပြင်မှု ရွေးပါ', trimSearch: 'ရှာရန် ရိုက်ပါ', trimNone: 'မတွေ့', refusedN: 'ပို့မရ', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
     gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ',
@@ -464,6 +468,7 @@ function takeHandover() {
   if (h && h.staff && h.staff.id && Date.now() - (h.at || 0) < 120000) {
     S.staff = h.staff; if (h.lang) S.lang = h.lang;
     S.screen = 'home'; S.pad = null;
+    S.autoStart = !h.fromPc;   // from the main menu → straight to "pick the RM lot" (Sal, 18 Nov 2026); a draft in progress is resumed instead
   }
 }
 function toMainMenu() {
@@ -676,7 +681,7 @@ function flush() {
       persist(); render();
       return next();
     }, (e) => {
-      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.err = e.message; persist(); render(); return next(); }
+      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.heldAt = Date.now(); item.err = e.message; persist(); render(); toast(t().failedSend + ': ' + e.message); return next(); }
       throw e;
     });
   };
@@ -714,7 +719,7 @@ function loadLots(date, force) {
 
 /* ---------------- screens ---------------- */
 function go(screen, extra) {
-  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '', bMenu: false }, extra || {});
+  Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '', bMenu: false, trimMenu: false, trimQ: '' }, extra || {});
   if (!extra || !('pad' in extra)) S.pad = null;
   if (S.c && ['lot', 'manual', 'check'].indexOf(screen) >= 0) S.c.stage = screen;
   render();
@@ -726,8 +731,9 @@ function renderHeader() {
   const steps = { lot: 0, manual: 0, check: 1 };
   const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
   const backTo = locked() && S.screen === 'check' ? '' : { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
-  const pend = S.outbox.length;
-  const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
+  const pend = S.outbox.length, bad = S.outbox.filter((o) => o.err).length;
+  const net = bad ? '<button class="net bad" data-act="home" style="border:0;font:inherit;font-weight:800">⚠ ' + T.refusedN + ' ' + bad + '</button>'
+    : !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
   let h = '<div class="hrow"><div class="htitle">' +
     (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
@@ -910,9 +916,18 @@ function viewCheck() {
   // trim type
   // processing types of "ข้อมูลลักษณะการผลิต" for this kind of item (fish / shrimp), with the %Loss limit
   const kind = kindOf(c.fish);
-  h += '<span class="lbl" style="color:var(--ink)">' + T.trimL + '</span><div class="fixes">' + pcCfg().trims.filter((x) => !x.kind || x.kind === kind || x.code === c.trim).map((x) =>
-    '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '"' + (c.lock && c.trim !== x.code ? ' disabled style="opacity:.4"' : '') + '>' + esc(x.code) +
-    (x.maxLoss !== null && x.maxLoss !== undefined && x.maxLoss !== '' ? ' <small style="font-weight:500;opacity:.75">' + fmt(T.lim, { n: x.maxLoss }) + '</small>' : '') + '</button>').join('') + '</div>';
+  const trims = pcCfg().trims.filter((x) => !x.kind || x.kind === kind || x.code === c.trim);
+  const cur = trims.find((x) => x.code === c.trim) || (c.trim ? { code: c.trim, name: '', maxLoss: null } : null);
+  const limTxt = (x) => (x && x.maxLoss !== null && x.maxLoss !== undefined && x.maxLoss !== '' ? fmt(T.lim, { n: x.maxLoss }) : T.lossNoLim);
+  h += '<button class="tile ' + (S.trimMenu ? 'f-act dd-open' : cur ? 'filled' : 'f-empty') + '" style="height:auto;min-height:72px" data-act="trimmenu"><span class="t-l">' + T.trimL + '<span class="dd">▾</span></span>' +
+    '<span class="t-v"><b style="font-size:22px">' + (cur ? esc(cur.code) : T.trimPick) + '</b></span>' + (cur ? '<span class="t-s">' + esc(cur.name || '') + ' · ' + limTxt(cur) + '</span>' : '') + '</button>';
+  if (S.trimMenu) {
+    const q = String(S.trimQ || '').trim().toLowerCase();
+    const hit = trims.filter((x) => !q || (x.code + ' ' + (x.name || '')).toLowerCase().indexOf(q) >= 0);
+    h += '<div class="ddm list glass"><input class="q" data-on="trimq" value="' + esc(S.trimQ || '') + '" placeholder="' + esc(T.trimSearch) + '" autocomplete="off" aria-label="' + esc(T.trimL) + '">' +
+      (hit.length ? hit.map((x) => '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '"><span class="grow"><b>' + esc(x.code) + '</b><small>' + esc(x.name || '') + '</small></span><span class="pill p-mute">' + limTxt(x) + '</span></button>').join('')
+        : '<div class="sub" style="padding:8px">' + T.trimNone + '</div>') + '</div>';
+  }
   // temperatures: no. 1 required, 2 and 3 optional
   h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
     const a = act('pt', i);
@@ -952,7 +967,11 @@ function viewCheck() {
   const over = Number(c.after) > 0 && Number(c.before) > 0 && Number(c.after) > top;
   if (over) h += '<div class="err">' + T.afterBig + '</div>';
   const ew = evalCheck(c);
-  if (ew.watch) h += '<div class="note">' + fmt(T.watch, { trim: esc(c.trim), lim: ew.lim }) + '</div>';
+  // %Loss shown at once, no need to open the report (Sal, 18 Nov 2026)
+  if (ew.loss !== null && !over) {
+    const st = ew.high ? 'high' : ew.watch ? 'watch' : 'ok';
+    h += '<div class="lossc ' + st + '"><span class="grow"><span class="t-l">' + T.lossL + (c.trim ? ' · ' + esc(c.trim) : '') + '</span><div class="sub">' + (ew.lim === null ? T.lossNoLim : fmt(T.lim, { n: ew.lim }) + ' · ' + (ew.high ? T.lossHigh : ew.watch ? T.lossWatch : T.lossOk)) + '</div></span><b class="n">' + ew.loss.toFixed(2) + '%</b></div>';
+  } else if (!over && Number(c.before) > 0 !== Number(c.after) > 0) h += '<div class="sub" style="margin-top:-4px">' + T.lossL + ': ' + T.lossWait + '</div>';
   if (ew.high && !c.gm) {   // above the limit (e.g. G with eggs): say why, then save — no GM needed (Sal, 17 Nov 2026)
     const w = String(c.lossWhy || '');
     h += '<div class="card glass lossw" style="border:2px solid ' + (w.trim() ? 'var(--amber)' : 'var(--red)') + '"><b style="color:var(--red)">' + fmt(T.lossHighT, { trim: esc(c.trim), lim: ew.lim }) + '</b>' +
@@ -968,10 +987,18 @@ function viewCheck() {
 function viewDone() {
   const T = t();
   const last = S.last || { sent: false };
-  return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
+  const item = !last.sent && last.id ? S.outbox.find((o) => o.record.id === last.id) : null;
+  const refused = !!(item && item.err);
+  const st = last.sent ? 'sent' : refused ? 'fail' : 'wait';
+  return '<div class="done"><div class="tick' + (st === 'sent' ? '' : ' ' + st) + '"><div>' + (st === 'sent' ? '✓' : st === 'fail' ? '✕' : '<span class="spin"></span>') + '</div></div>' +
+    '<h2 style="font-size:26px' + (st === 'fail' ? ';color:var(--red)' : '') + '">' + (st === 'sent' ? T.doneT : st === 'fail' ? T.refusedT : T.sendingT) + '</h2>' +
     '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + (last.order ? ' → ' + esc(last.order) : '') + '</div>' +
-    '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) + '</div>' +
-    '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) +
+    (last.loss !== null && last.loss !== undefined ? '<span class="pill ' + (last.high ? 'p-bad' : 'p-mute') + '">' + T.lossL + ' ' + Number(last.loss).toFixed(2) + '%</span>' : '') + '</div>' +
+    (st === 'sent' ? '<span class="pill p-ok" style="font-size:13px;padding:5px 12px">✓ ' + T.sentOk + '</span>'
+      : st === 'fail' ? '<div class="card glass" style="border:2px solid var(--red);width:100%;text-align:left"><b style="color:var(--red)">' + T.failedSend + ': ' + esc(item.err) + '</b><div class="sub">' + T.refusedSub + '</div>' +
+        '<div class="row"><button class="btn" style="height:44px;font-size:15px" data-act="reopen" data-v="' + esc(last.id) + '">' + T.reopen + '</button><button class="btn ghost" style="height:44px;font-size:15px" data-act="sendnow">' + T.sendNow + '</button></div></div>'
+      : '<span class="pill p-warn" style="font-size:13px;padding:5px 12px">' + T.savedLocal + '</span><div class="sub">' + T.sendingSub + '</div>') +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
 }
 
@@ -1096,7 +1123,7 @@ function draw() {
   // keep the cursor in a text box (order / remark …) when the screen redraws in the background (lots loaded, record sent)
   const fe = document.activeElement, fon = fe && fe.dataset && fe.dataset.on, fpos = fe && typeof fe.selectionStart === 'number' ? fe.selectionStart : null;
   main.innerHTML = (views[S.screen] || viewHome)();
-  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup', 'losswhy'].indexOf(fon) >= 0) {
+  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup', 'losswhy', 'trimq'].indexOf(fon) >= 0) {
     const el = main.querySelector('[data-on="' + fon + '"]');
     if (el) { if (fon === 'order' && el.value !== fe.value) el.value = fe.value; el.focus(); try { if (fpos !== null) el.setSelectionRange(fpos, fpos); } catch (e) { /* ignore */ } }
   }
@@ -1106,8 +1133,8 @@ function draw() {
   }
   main.scrollTop = lockIfHigh.jump ? 0 : keepScroll; lockIfHigh.jump = false;
   // the before-weight drop-down just opened: bring it into view above the number pad
-  const ddm = S.bMenu && !draw.ddmShown ? main.querySelector('.ddm') : null;
-  draw.ddmShown = !!S.bMenu;
+  const ddm = (S.bMenu || S.trimMenu) && !draw.ddmShown ? main.querySelector('.ddm') : null;
+  draw.ddmShown = !!(S.bMenu || S.trimMenu);
   if (ddm) requestAnimationFrame(() => { try { ddm.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* ignore */ } });
   const ph = document.querySelector('.phone'); if (ph && ph.scrollLeft) ph.scrollLeft = 0;
   const pad = $('pad');
@@ -1227,7 +1254,11 @@ function closeSheet() { $('sheet').classList.remove('open'); }
 
 const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
-  back: () => { if (locked() && S.screen === 'check') return toast(t().lockMsg); go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home'); },
+  back: () => {
+    if (locked() && S.screen === 'check') return toast(t().lockMsg);
+    if (S.screen === 'lot' && S.c && !S.c.lot && !S.c.bulkFrom) S.c = null;   // nothing picked yet → no "continue" draft left behind
+    go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home');
+  },
   callgm: openGmSheet,
   losswhy: (el) => {
     const v = LOSSWHY_TH[Number(el.dataset.x)], c = S.c;
@@ -1278,7 +1309,7 @@ const ACT = {
   hardrefresh: (el) => {
     el.disabled = true; el.innerHTML = '<span class="spin"></span>';
     persist();
-    const reload = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); sessionStorage.setItem('ckqc.fresh', '1'); } catch (e) { /* ignore */ } const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
+    const reload = () => { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now(), fromPc: true })); sessionStorage.setItem('ckqc.fresh', '1'); } catch (e) { /* ignore */ } const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); };
     const done = S.outbox.length && navigator.onLine ? flush() : Promise.resolve();
     Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(reload, reload);
   },
@@ -1326,7 +1357,10 @@ const ACT = {
     render();
   },
   wide: () => { S.wide = !S.wide; S.buf = ''; render(); },
-  trim: (el) => { if (S.c.lock) { toast(t().lockMsg); return; } S.c.trim = el.dataset.v; S.err = ''; render(); },
+  trim: (el) => { if (S.c.lock) { toast(t().lockMsg); return; } S.c.trim = el.dataset.v; S.trimMenu = false; S.trimQ = ''; S.err = ''; S.buf = '';
+    if (S.c.temps[0] === '') S.pad = { kind: 'pt', i: 0 }; else if (!S.c.before && !S.c.bRm) S.pad = { kind: 'gb' }; else if (!S.c.after) S.pad = { kind: 'ga' };   // on to the next empty field
+    render(); },
+  trimmenu: () => { if (S.c && S.c.lock) { toast(t().lockMsg); return; } S.trimMenu = !S.trimMenu; S.trimQ = ''; if (S.trimMenu) { S.pad = null; S.bMenu = false; } S.buf = ''; render(); if (S.trimMenu) setTimeout(() => { const i = document.querySelector('[data-on="trimq"]'); if (i) i.focus(); }, 60); },
   pickorder: (el) => { S.c.order = S.c.order === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
   save: saveCheck,
@@ -1388,6 +1422,7 @@ document.addEventListener('input', (e) => {
   if (on === 'remark') S.c.remark = el.value;
   if (on === 'losswhy') S.c.lossWhy = el.value;
   if (on === 'order') S.c.order = orderChars(el.value);
+  if (on === 'trimq') { S.trimQ = el.value; render(); return; }
   $('act').innerHTML = viewAction();
   persist();
 });
@@ -1400,7 +1435,14 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
 window.addEventListener('online', () => { S.online = true; flush(); render(); });
 window.addEventListener('offline', () => { S.online = false; render(); });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { retryRefused(); flush(); refreshToday(); } });
+/** a refused check is tried again every 10 minutes (the server logs + e-mails every refusal, so nothing stays silent — Sal, 18 Nov 2026) */
+function retryRefused() {
+  const now = Date.now(); let any = false;
+  S.outbox.forEach((o) => { if (o.hold && now - (o.heldAt || 0) > 600000) { o.hold = false; any = true; } });
+  if (any) flush();
+}
+setInterval(() => { if (S.staff && navigator.onLine) retryRefused(); }, 60000);
 
 /* ---------- automatic update (Sal, 7 Nov 2026) ----------
    Staff never need ↻ for a new version. When the app is opened, and each time it comes back to the front,
@@ -1424,13 +1466,14 @@ function applyUpdate() {
   const v = updTo; updTo = '';
   try { sessionStorage.setItem('ckqc.upd', v); } catch (e) { /* ignore */ }
   persist();
-  if (S.staff) { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now() })); } catch (e) { /* ignore */ } }
+  if (S.staff) { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now(), fromPc: true })); } catch (e) { /* ignore */ } }
   const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString());
 }
 
 if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href); u.searchParams.delete('r'); history.replaceState(null, '', u.toString()); } catch (e) { /* ignore */ } }
 render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
+if (S.autoStart) { S.autoStart = false; if (S.c) go(S.c.stage || 'lot'); else startCheck(); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); }
 checkUpdate();
 </script>
 </body>
