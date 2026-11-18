@@ -261,7 +261,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tick{width:120px;height:120px;border-radius:50%;background:rgba(219,233,213,.8);display:grid;place-items:center;animation:popc 520ms var(--ease) both,ring 1.6s ease-out 520ms 2}
 .tick div{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:46px;font-weight:700;animation:popc 520ms var(--ease) 160ms both}
 .tick.wait{background:rgba(245,233,212,.85);animation:popc 520ms var(--ease) both}
-.tick.wait div{background:var(--amber)}
+.tick.wait div{background:var(--amber)}.tick.wait div .spin{width:40px;height:40px;border-width:4px;border-color:rgba(255,255,255,.35);border-top-color:#fff}
+.tick.fail{background:rgba(243,214,210,.85)}.tick.fail div{background:var(--red)}
+.net.bad{background:rgba(179,38,30,.12);color:var(--red);font-weight:800;border:0;font:inherit;font-weight:800}
 @keyframes popc{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes ring{0%{box-shadow:0 0 0 0 rgba(46,107,60,.35)}100%{box-shadow:0 0 0 22px rgba(46,107,60,0)}}
 
@@ -317,7 +319,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.9';
+const APP_VERSION = '1.3.1';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -351,7 +353,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repRecent: 'Order 30 วันล่าสุด — แตะเพื่อดู', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repHint: 'พิมพ์ Order แล้วกด ดูรายงาน — ได้ทุกล็อตและทุกการตรวจของ Order นั้น', repMatch: 'พบ {n} Order ที่มี "{q}" — แตะเพื่อดู', repLast: 'ตรวจล่าสุด', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -363,7 +365,7 @@ const L = {
     sumT: 'ตรวจทานก่อนบันทึก', fix: 'การแก้ไข (แตะเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
     tooWarm: 'อุณหภูมิเกิน {t} °C', physBad: 'กายภาพไม่ผ่าน', physNone: 'กายภาพ: ไม่พบปัญหา',
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'แตะเพื่อใส่ค่า (ไม่บังคับ)', needFix: 'ยังไม่ครบ: เลือกการแก้ไข / วัดอุณหภูมิให้ครบก่อนบันทึก', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งเที่ยวที่ทำค้างก่อน',
-    next: 'ถัดไป', save: 'บันทึก', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', wRange: 'ช่วงน้ำหนัก (ประมาณ)', pickRange: '— เลือกช่วง —', waitKg: 'รอชั่ง', waitKgN: 'รอน้ำหนักจริง', enterKg: 'ใส่น้ำหนักจริง (หลังผ่าน RM)', kgT: 'น้ำหนักจริงหลังผ่าน RM', kgSub: 'ใส่น้ำหนักของแต่ละรายการ แล้วกดบันทึก', saveKg: 'บันทึกน้ำหนัก', kgSaved: 'บันทึกน้ำหนักแล้ว', kgNeedSend: 'รอส่งเข้าระบบก่อน จึงใส่น้ำหนักจริงได้', kgUnder: 'น้ำหนักจริงเกินช่วงที่เลือก — สุ่มน้อยกว่าเกณฑ์ แจ้งหัวหน้า QC', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
+    next: 'ถัดไป', save: 'บันทึก', refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง แตะ "เปิดแก้ไข" แล้วส่งใหม่ (ส่งอีเมลแจ้งหัวหน้า QC แล้ว)', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — เริ่มรายการถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedN: 'ส่งไม่สำเร็จ', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', reportOkNow: 'ซ่อน', refresh: 'รีเฟรช', wRange: 'ช่วงน้ำหนัก (ประมาณ)', pickRange: '— เลือกช่วง —', waitKg: 'รอชั่ง', waitKgN: 'รอน้ำหนักจริง', enterKg: 'ใส่น้ำหนักจริง (หลังผ่าน RM)', kgT: 'น้ำหนักจริงหลังผ่าน RM', kgSub: 'ใส่น้ำหนักของแต่ละรายการ แล้วกดบันทึก', saveKg: 'บันทึกน้ำหนัก', kgSaved: 'บันทึกน้ำหนักแล้ว', kgNeedSend: 'รอส่งเข้าระบบก่อน จึงใส่น้ำหนักจริงได้', kgUnder: 'น้ำหนักจริงเกินช่วงที่เลือก — สุ่มน้อยกว่าเกณฑ์ แจ้งหัวหน้า QC', gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', savedLocal: 'บันทึกในเครื่องแล้ว · จะส่งเองเมื่อมีสัญญาณ',
     newTruck: 'เริ่มเที่ยวถัดไป', home: 'หน้าหลัก', lines: 'รายการ',
     cancelTruck: 'ยกเลิกเที่ยวนี้', cancelWhy: 'เหตุผลที่ยกเลิก (จำเป็น)', reasons: ['บันทึกผิด', 'บันทึกซ้ำ', 'รถไม่ได้รับเข้า'], confirmCancel: 'ยืนยันยกเลิก', close: 'ปิด',
     cancelled: 'ยกเลิกแล้ว', failedSend: 'ส่งไม่สำเร็จ', start: 'เริ่ม', end: 'จบ', by: 'โดย'
@@ -389,7 +391,7 @@ const L = {
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
     wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
-    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', pkSub: 'order · fish size · label · packaging · glazing', repSec: 'Reports', repDl: '⬇ Download Excel', repDlAll: '⬇ Download all orders (Excel)', repDlBusy: 'Building the file…', repDlDone: 'Downloaded — see Downloads / Files', repDlCsv: 'Could not load the Excel maker — downloaded as CSV instead', repRm: 'RM raw material', repPcT: 'PC %Loss', repPkT: 'PK glazing', repRemarks: 'remarks', repSum: 'total', repLimit: 'limit', rep: 'Report by order', repSub: 'RM → PC %Loss → PK glazing of each order, every lot and every check', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repRecent: 'Orders of the last 30 days — tap one', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', pkSub: 'order · fish size · label · packaging · glazing', repSec: 'Reports', repDl: '⬇ Download Excel', repDlAll: '⬇ Download all orders (Excel)', repDlBusy: 'Building the file…', repDlDone: 'Downloaded — see Downloads / Files', repDlCsv: 'Could not load the Excel maker — downloaded as CSV instead', repRm: 'RM raw material', repPcT: 'PC %Loss', repPkT: 'PK glazing', repRemarks: 'remarks', repSum: 'total', repLimit: 'limit', rep: 'Report by order', repSub: 'RM → PC %Loss → PK glazing of each order, every lot and every check', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repHint: 'Type the order and tap Show report — every lot and every check of that order', repMatch: '{n} orders contain "{q}" — tap one', repLast: 'last check', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
     point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
     shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
     shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
@@ -401,7 +403,7 @@ const L = {
     sumT: 'Review before saving', fix: 'Correction (tap to choose)', fixes: ['Added ice', 'Sorted out', 'Told QC lead'],
     tooWarm: 'Above {t} °C', physBad: 'Physical check failed', physNone: 'Physical: no problems',
     recheck: 'Re-check after correction', recheckHint: 'tap to enter (optional)', needFix: 'Not complete: corrections / temperatures missing', reopen: 'Open to fix', finishFirst: 'Save or discard the unfinished truck first',
-    next: 'Next', save: 'Save', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', wRange: 'Weight range (estimate)', pickRange: '— choose range —', waitKg: 'to weigh', waitKgN: 'waiting for real weight', enterKg: 'Enter real weight (after RM)', kgT: 'Real weight after RM processing', kgSub: 'Enter the weight of each line, then save', saveKg: 'Save weight', kgSaved: 'Weight saved', kgNeedSend: 'Send the truck first, then enter the real weight', kgUnder: 'Real weight is above the range chosen — fewer fish were checked than the rule needs; tell the QC lead', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
+    next: 'Next', save: 'Save', refusedSub: 'The server refused this truck — it is still on the phone; tap "Open to fix" and send again (the QC lead has been e-mailed)', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — you can start the next one', refusedT: 'Not accepted', refusedN: 'refused', doneT: 'Saved', sentOk: 'Sent to Google Sheets', reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', reportOkNow: 'Hide', refresh: 'Refresh', wRange: 'Weight range (estimate)', pickRange: '— choose range —', waitKg: 'to weigh', waitKgN: 'waiting for real weight', enterKg: 'Enter real weight (after RM)', kgT: 'Real weight after RM processing', kgSub: 'Enter the weight of each line, then save', saveKg: 'Save weight', kgSaved: 'Weight saved', kgNeedSend: 'Send the truck first, then enter the real weight', kgUnder: 'Real weight is above the range chosen — fewer fish were checked than the rule needs; tell the QC lead', gmOnly: 'Only a GM can cancel — the GM signs in with their own ID to cancel', savedLocal: 'Saved on this phone · sends when there is signal',
     newTruck: 'Start next truck', home: 'Home', lines: 'lines',
     cancelTruck: 'Cancel this truck', cancelWhy: 'Reason (required)', reasons: ['Entered wrongly', 'Entered twice', 'Truck not received'], confirmCancel: 'Confirm cancel', close: 'Close',
     cancelled: 'Cancelled', failedSend: 'Not sent', start: 'start', end: 'end', by: 'by'
@@ -427,7 +429,7 @@ const L = {
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
     wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
-    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', repSec: 'အစီရင်ခံစာ', repDl: '⬇ Excel ဒေါင်းလုဒ်', repDlAll: '⬇ Order အားလုံး (Excel)', repDlBusy: 'ဖိုင် ပြင်ဆင်နေသည်…', repDlDone: 'ဒေါင်းလုဒ် ပြီး', repDlCsv: 'CSV ဖြင့် ဒေါင်းလုဒ်', repRm: 'RM ကုန်ကြမ်း', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'မှတ်ချက်', repSum: 'စုစုပေါင်း', repLimit: 'စံ', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: 'RM → PC %Loss → PK Glazing', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repRecent: 'ရက် 30 Order များ', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', repSec: 'အစီရင်ခံစာ', repDl: '⬇ Excel ဒေါင်းလုဒ်', repDlAll: '⬇ Order အားလုံး (Excel)', repDlBusy: 'ဖိုင် ပြင်ဆင်နေသည်…', repDlDone: 'ဒေါင်းလုဒ် ပြီး', repDlCsv: 'CSV ဖြင့် ဒေါင်းလုဒ်', repRm: 'RM ကုန်ကြမ်း', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'မှတ်ချက်', repSum: 'စုစုပေါင်း', repLimit: 'စံ', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: 'RM → PC %Loss → PK Glazing', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repHint: 'Order ရိုက်ပြီး ကြည့်ရန် နှိပ်ပါ', repMatch: '"{q}" ပါသော Order {n} ခု', repLast: 'နောက်ဆုံး', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
     point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
     shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
     shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
@@ -439,7 +441,7 @@ const L = {
     sumT: 'မသိမ်းမီ စစ်ဆေးပါ', fix: 'ပြင်ဆင်ချက် (နှိပ်ရွေး)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     tooWarm: '{t} °C ထက် ပူ', physBad: 'ရုပ်ပိုင်း မအောင်', physNone: 'ရုပ်ပိုင်း: ပြဿနာ မတွေ့',
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ထည့်ရန် နှိပ်ပါ (မဖြစ်မနေ မဟုတ်)', needFix: 'မပြည့်စုံ: ပြင်ဆင်ချက် / အပူချိန် ဖြည့်ပါ', reopen: 'ဖွင့်ပြင်', finishFirst: 'မပြီးသေးသောကားကို အရင် သိမ်း/ဖျက်ပါ',
-    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', wRange: 'အလေးချိန် အပိုင်းအခြား (ခန့်မှန်း)', pickRange: '— ရွေးပါ —', waitKg: 'ချိန်ရန်', waitKgN: 'အမှန် အလေးချိန် စောင့်', enterKg: 'အမှန် အလေးချိန် ထည့် (RM ပြီး)', kgT: 'RM ပြီးနောက် အမှန် အလေးချိန်', kgSub: 'စာရင်းတိုင်း အလေးချိန် ထည့်ပြီး သိမ်းပါ', saveKg: 'အလေးချိန် သိမ်း', kgSaved: 'သိမ်းပြီး', kgNeedSend: 'ကားကို အရင်ပို့ပါ', kgUnder: 'အမှန်အလေးချိန် အပိုင်းအခြားထက် များ — QC ခေါင်းဆောင်ကို ပြောပါ', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
+    next: 'ရှေ့ဆက်', save: 'သိမ်းမည်', refusedSub: 'ဆာဗာ လက်မခံ — ဖုန်းတွင် ရှိနေသည်', sendingT: 'ပို့နေသည်…', sendingSub: 'ဖုန်းတွင် သိမ်းပြီး · နောက်တစ်ခု စနိုင်သည်', refusedT: 'ပို့မရ', refusedN: 'ပို့မရ', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ သို့သော် နေ့စဉ်အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', reportOkNow: 'ဝှက်', refresh: 'ပြန်ဖွင့်', wRange: 'အလေးချိန် အပိုင်းအခြား (ခန့်မှန်း)', pickRange: '— ရွေးပါ —', waitKg: 'ချိန်ရန်', waitKgN: 'အမှန် အလေးချိန် စောင့်', enterKg: 'အမှန် အလေးချိန် ထည့် (RM ပြီး)', kgT: 'RM ပြီးနောက် အမှန် အလေးချိန်', kgSub: 'စာရင်းတိုင်း အလေးချိန် ထည့်ပြီး သိမ်းပါ', saveKg: 'အလေးချိန် သိမ်း', kgSaved: 'သိမ်းပြီး', kgNeedSend: 'ကားကို အရင်ပို့ပါ', kgUnder: 'အမှန်အလေးချိန် အပိုင်းအခြားထက် များ — QC ခေါင်းဆောင်ကို ပြောပါ', gmOnly: 'GM သာ ပယ်ဖျက်နိုင် — GM ကိုယ်တိုင် ဝင်ပါ', savedLocal: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် ပို့မည်',
     newTruck: 'နောက်ကား စတင်', home: 'ပင်မ', lines: 'စာရင်း',
     cancelTruck: 'ဒီကားကို ပယ်ဖျက်', cancelWhy: 'အကြောင်းပြချက် (လိုအပ်)', reasons: ['မှားထည့်', 'နှစ်ခါထည့်', 'ကား လက်မခံ'], confirmCancel: 'ပယ်ဖျက်မည်', close: 'ပိတ်',
     cancelled: 'ပယ်ဖျက်ပြီး', failedSend: 'မပို့ရသေး', start: 'စ', end: 'ဆုံး', by: 'by'
@@ -734,7 +736,7 @@ function flush() {
       persist(); render();
       return next();
     }, (e) => {
-      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.err = e.message; persist(); render(); return next(); }
+      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.heldAt = Date.now(); item.err = e.message; persist(); render(); toast(t().refusedT + ': ' + e.message); return next(); }
       throw e;
     });
   };
@@ -788,8 +790,9 @@ function renderHeader() {
   const steps = ['truck', 'fish', 'inspect', 'summary'];
   const at = steps.indexOf(S.screen);
   const backTo = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home', weigh: 'home', report: 'home' }[S.screen];
-  const pend = S.outbox.length;
-  const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
+  const pend = S.outbox.length, bad = S.outbox.filter((o) => o.err).length;
+  const net = bad ? '<button class="net bad" data-act="home">⚠ ' + T.refusedN + ' ' + bad + '</button>'
+    : !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
   let h = '<div class="hrow"><div class="htitle">' +
     (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
@@ -885,14 +888,11 @@ function viewReport() {
     '<button class="btn" style="flex:0 0 auto;height:60px;padding:0 16px" data-act="repgo">' + T.repGo + '</button></div>';
   if (S.repErr) h += '<div class="err">' + esc(S.repErr) + '</div>';
   if (S.repBusy) return h + '<div class="sub" style="text-align:center;padding:24px"><span class="spin"></span> ' + T.repLoading + '</div></div>';
-  if (!r) return h + '</div>';
-  if (!r.term) {   // index: every order of the last 30 days
-    h += '<span class="lbl" style="color:var(--ink)">' + T.repRecent + '</span>';
-    if (!r.orders.length) h += '<div class="sub">' + T.repNoData + '</div>';
-    else h += dlBtn(true, T.repDlAll);
-    h += '<div class="tlist glass repin">' + r.orders.map((o) => '<button data-act="reporder" data-v="' + esc(o.order) + '"><span class="grow"><b class="mono">' + esc(o.order) + '</b>' +
-      '<div class="sub">' + dm(o.from) + (o.to !== o.from ? ' – ' + dm(o.to) : '') + ' · ' + o.lots + ' ' + T.repLots + ' · PC ' + o.pcN + ' · PK ' + o.pkN + (o.trims ? ' · ' + esc(o.trims) : '') + '</div></span>' +
-      (o.remarks ? '<span class="pill p-bad">⚠ ' + o.remarks + '</span>' : '<span class="pill p-ok">✓</span>') + '</button>').join('') + '</div>';
+  if (!r) return h + '<div class="sub" style="text-align:center;padding:18px 8px">' + T.repHint + '</div></div>';
+  if (!r.term) {   // nothing exactly that name → the orders whose name contains it, one tap each
+    if (!r.matches || !r.matches.length) return h + '<div class="note">' + T.repNone + ': ' + esc(r.find || '') + '</div></div>';
+    h += '<span class="lbl" style="color:var(--ink)">' + T.repMatch.replace('{n}', r.matches.length).replace('{q}', esc(r.find || '')) + '</span>';
+    h += '<div class="tlist glass repin">' + r.matches.map((o) => '<button data-act="reporder" data-v="' + esc(o.order) + '"><span class="grow"><b class="mono">' + esc(o.order) + '</b><div class="sub">' + T.repLast + ' ' + dm(o.to) + '</div></span><span style="font-size:22px;color:var(--accent)">›</span></button>').join('') + '</div>';
     return h + '</div>';
   }
   if (!r.orders.length) return h + '<div class="note">' + T.repNone + ': ' + esc(r.term) + '</div></div>';
@@ -1277,9 +1277,15 @@ function viewDone() {
   const T = t();
   const last = S.last || { lines: 0, sent: false };
   const td = S.today && S.today.date === todayStr() ? S.today.totals : null;
-  return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
+  const item = !last.sent && last.id ? S.outbox.find((o) => o.record.id === last.id) : null;
+  const st = last.sent ? 'sent' : item && item.err ? 'fail' : 'wait';   // honest: ✓ only when the server has it (Sal, 18 Nov 2026)
+  return '<div class="done"><div class="tick' + (st === 'sent' ? '' : ' ' + st) + '"><div>' + (st === 'sent' ? '✓' : st === 'fail' ? '✕' : '<span class="spin"></span>') + '</div></div>' +
+    '<h2 style="font-size:26px' + (st === 'fail' ? ';color:var(--red)' : '') + '">' + (st === 'sent' ? T.doneT : st === 'fail' ? T.refusedT : T.sendingT) + '</h2>' +
     '<div class="sub" style="font-size:15px">Lot ' + esc(last.lot || '') + ' · ' + last.lines + ' ' + T.lines + '</div>' +
-    '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    (st === 'sent' ? '<span class="pill p-ok" style="font-size:13px;padding:5px 12px">✓ ' + T.sentOk + '</span>'
+      : st === 'fail' ? '<div class="card glass" style="border:2px solid var(--red);width:100%;text-align:left"><b style="color:var(--red)">' + T.failedSend + ': ' + esc(item.err) + '</b><div class="sub">' + T.refusedSub + '</div>' +
+        '<div class="row"><button class="btn" style="height:44px;font-size:15px" data-act="reopen" data-v="' + esc(last.id) + '">' + T.reopen + '</button><button class="btn ghost" style="height:44px;font-size:15px" data-act="sendnow">' + T.sendNow + '</button></div></div>'
+      : '<span class="pill p-warn" style="font-size:13px;padding:5px 12px">' + T.savedLocal + '</span><div class="sub">' + T.sendingSub + '</div>') +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') +
     (td ? '<div class="card glass" style="width:100%"><div class="sum"><div><b>' + td.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.kg) + '</b><span>kg</span></div><hr><div><b>' + td.failed + '</b><span>' + T.failShort + '</span></div></div></div>' : '') + '</div>';
 }
@@ -1645,7 +1651,7 @@ const ACT = {
   lang: (el) => { S.lang = el.dataset.v; render(); },
   back: () => {
     const to = { truck: 'home', fish: 'truck', inspect: 'fish', summary: 'inspect', done: 'home', report: (S.rep && S.rep.term ? 'report' : 'home') }[S.screen] || 'home';
-    if (S.screen === 'report' && S.rep && S.rep.term) { S.rq = ''; return loadReport(''); }   // back from one order → the order list
+    if (S.screen === 'report' && S.rep) { S.rq = ''; S.rep = null; S.repErr = ''; render(); setTimeout(() => { const i = document.querySelector('[data-on="repq"]'); if (i) i.focus(); }, 50); return; }   // back from a report → the search box
     go(to);
   },
   signout: signOut,
@@ -1655,8 +1661,8 @@ const ACT = {
     persist();
     location.href = PC_URL;
   },
-  openrep: () => { S.rq = ''; go('report'); loadReport(''); },
-  repgo: () => { const q = String(S.rq || '').trim(); loadReport(q); },
+  openrep: () => { S.rq = ''; S.rep = null; S.repErr = ''; S.repBusy = false; go('report'); setTimeout(() => { const i = document.querySelector('[data-on="repq"]'); if (i) i.focus(); }, 350); },
+  repgo: () => { const q = String(S.rq || '').trim(); if (!q) { S.repErr = t().repFind; render(); return; } loadReport(q); },
   reporder: (el) => { S.rq = el.dataset.v; loadReport(el.dataset.v); },
   repdl: () => downloadReport(),
   openpk: () => {
@@ -1846,7 +1852,14 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
 window.addEventListener('online', () => { S.online = true; flush(); render(); });
 window.addEventListener('offline', () => { S.online = false; render(); });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { retryRefused(); flush(); refreshToday(); } });
+/** a refused record is tried again every 10 minutes (the server logs + e-mails every refusal, so nothing stays silent — Sal, 18 Nov 2026) */
+function retryRefused() {
+  const now = Date.now(); let any = false;
+  S.outbox.forEach((o) => { if (o.hold && now - (o.heldAt || 0) > 600000) { o.hold = false; any = true; } });
+  if (any) flush();
+}
+setInterval(() => { if (S.staff && navigator.onLine) retryRefused(); }, 60000);
 
 /* ---------- automatic update (Sal, 7 Nov 2026) ----------
    Staff never need ↻ for a new version. When the app is opened, and each time it comes back to the front,

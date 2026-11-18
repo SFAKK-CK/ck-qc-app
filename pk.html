@@ -253,7 +253,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tick{width:120px;height:120px;border-radius:50%;background:rgba(219,233,213,.8);display:grid;place-items:center;animation:popc 520ms var(--ease) both,ring 1.6s ease-out 520ms 2}
 .tick div{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:46px;font-weight:700;animation:popc 520ms var(--ease) 160ms both}
 .tick.wait{background:rgba(245,233,212,.85);animation:popc 520ms var(--ease) both}
-.tick.wait div{background:var(--amber)}
+.tick.wait div{background:var(--amber)}.tick.wait div .spin{width:40px;height:40px;border-width:4px;border-color:rgba(255,255,255,.35);border-top-color:#fff}
+.tick.fail{background:rgba(243,214,210,.85)}.tick.fail div{background:var(--red)}
+.net.bad{background:rgba(179,38,30,.12);color:var(--red);font-weight:800;border:0;font:inherit;font-weight:800}
 @keyframes popc{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes ring{0%{box-shadow:0 0 0 0 rgba(46,107,60,.35)}100%{box-shadow:0 0 0 22px rgba(46,107,60,0)}}
 
@@ -351,7 +353,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.4';
+const APP_VERSION = '1.0.5';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -393,7 +395,7 @@ const L = {
     glFormula: '% = (หลัง − ก่อน) ÷ หลัง × 100', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', save: 'บันทึก',
     needOrder: 'ใส่ Order', needSizes: 'ชั่ง Size ปลาให้ครบ 5 ตัว', needProd: 'ใส่ Production Date', needExp: 'ใส่ Expiry Date', needFix: 'บรรจุภัณฑ์ไม่ผ่าน — เลือกการแก้ไข', needRc: 'ตรวจซ้ำหลังแก้ไข',
     needSeal: 'รอยซีล / สติ๊กเกอร์ ต้องเป็น ✓ หรือ ✗', needG: 'ใส่ Order %Glazing และน้ำหนักก่อน / หลัง', gAfterLow: 'น้ำหนักหลัง Glazing น้อยกว่าก่อน Glazing', needGFix: 'Glazing ไม่ตรง Order — เลือกการแก้ไขและใส่ % ที่แก้ไขแล้ว',
-    doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจ Order นี้อีกครั้ง', home: 'หน้าหลัก',
+    refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง แตะ "เปิดแก้ไข" แล้วส่งใหม่ (ส่งอีเมลแจ้งหัวหน้า QC แล้ว)', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — เริ่มรายการถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedN: 'ส่งไม่สำเร็จ', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจ Order นี้อีกครั้ง', home: 'หน้าหลัก',
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิด Order', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g'
@@ -426,7 +428,7 @@ const L = {
     glFormula: '% = (after − before) ÷ after × 100', remark: 'Remark (optional)', remarkPh: 'Type a remark…', save: 'Save',
     needOrder: 'Enter the order', needSizes: 'Weigh all 5 sample fish', needProd: 'Enter the production date', needExp: 'Enter the expiry date', needFix: 'Packaging failed — choose a correction', needRc: 'Re-check after correction',
     needSeal: 'Seal / sticker must be ✓ or ✗', needG: 'Enter the order % and the weights before / after', gAfterLow: 'After glazing is lighter than before', needGFix: 'Glazing off the order — choose a correction and enter the corrected %',
-    doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this order again', home: 'Home',
+    refusedSub: 'The server refused this check — it is still on the phone; tap "Open to fix" and send again (the QC lead has been e-mailed)', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — you can start the next one', refusedT: 'Not accepted', refusedN: 'refused', doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this order again', home: 'Home',
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong order', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g'
@@ -459,7 +461,7 @@ const L = {
     glFormula: '% = (ပြီး − မတိုင်မီ) ÷ ပြီး × 100', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', save: 'သိမ်း',
     needOrder: 'Order ထည့်ပါ', needSizes: 'ငါး ၅ ကောင် ချိန်ပါ', needProd: 'Production Date ထည့်ပါ', needExp: 'Expiry Date ထည့်ပါ', needFix: 'ပြင်ဆင်ချက် ရွေးပါ', needRc: 'ပြန်စစ်ပါ',
     needSeal: 'ဆီး / စတစ်ကာ ✓ သို့ ✗', needG: 'Glazing အလေးချိန် ထည့်ပါ', gAfterLow: 'Glazing ပြီး ပေါ့နေ', needGFix: 'Glazing ပြင်ဆင်ချက် ရွေးပါ',
-    doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ Order ထပ်စစ်', home: 'ပင်မ',
+    refusedSub: 'ဆာဗာ လက်မခံ — "ပြင်ရန် ဖွင့်" နှိပ်ပြီး ပြန်ပို့ပါ', sendingT: 'ပို့နေသည်…', sendingSub: 'ဖုန်းတွင် သိမ်းပြီး · နောက်တစ်ခု စနိုင်သည်', refusedT: 'ပို့မရ', refusedN: 'ပို့မရ', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ Order ထပ်စစ်', home: 'ပင်မ',
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['Order မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
     gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g'
@@ -648,7 +650,7 @@ function flush() {
       persist(); render();
       return next();
     }, (e) => {
-      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.err = e.message; persist(); render(); return next(); }
+      if (e.code === 'INVALID' || e.code === 'STAFF') { item.hold = true; item.heldAt = Date.now(); item.err = e.message; persist(); render(); toast(t().refusedT + ': ' + e.message); return next(); }
       throw e;
     });
   };
@@ -698,8 +700,9 @@ function renderHeader() {
   const steps = { lot: 0, manual: 0, check: 1 };
   const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
   const backTo = { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
-  const pend = S.outbox.length;
-  const net = !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
+  const pend = S.outbox.length, bad = S.outbox.filter((o) => o.err).length;
+  const net = bad ? '<button class="net bad" data-act="home">⚠ ' + T.refusedN + ' ' + bad + '</button>'
+    : !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
     : pend ? '<span class="net wait">' + T.waiting + ' ' + pend + '</span>' : '<span class="net on">' + T.online + '</span>';
   let h = '<div class="hrow"><div class="htitle">' +
     (backTo ? '<button class="back" data-act="back" aria-label="' + T.back + '">‹</button>' : '') +
@@ -925,11 +928,17 @@ function viewCheck() {
 function viewDone() {
   const T = t();
   const last = S.last || { sent: false };
-  return '<div class="done"><div class="tick' + (last.sent ? '' : ' wait') + '"><div>' + (last.sent ? '✓' : '⇡') + '</div></div><h2 style="font-size:26px">' + T.doneT + '</h2>' +
+  const item = !last.sent && last.id ? S.outbox.find((o) => o.record.id === last.id) : null;
+  const st = last.sent ? 'sent' : item && item.err ? 'fail' : 'wait';   // honest: ✓ only when the server has it (Sal, 18 Nov 2026)
+  return '<div class="done"><div class="tick' + (st === 'sent' ? '' : ' ' + st) + '"><div>' + (st === 'sent' ? '✓' : st === 'fail' ? '✕' : '<span class="spin"></span>') + '</div></div>' +
+    '<h2 style="font-size:26px' + (st === 'fail' ? ';color:var(--red)' : '') + '">' + (st === 'sent' ? T.doneT : st === 'fail' ? T.refusedT : T.sendingT) + '</h2>' +
     '<div class="sub mono" style="font-size:17px;font-weight:700;color:var(--ink)">' + esc(last.order || '') + '</div>' +
     '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + (last.gPct !== null && last.gPct !== undefined ? '<span class="pill p-mute">Glazing ' + numFmt(last.gPct) + '%</span>' : '') + '</div>' +
-    '<span class="pill ' + (last.sent ? 'p-ok' : 'p-warn') + '" style="font-size:13px;padding:5px 12px">' + (last.sent ? '✓ ' + T.sentOk : T.savedLocal) + '</span>' +
+    (st === 'sent' ? '<span class="pill p-ok" style="font-size:13px;padding:5px 12px">✓ ' + T.sentOk + '</span>'
+      : st === 'fail' ? '<div class="card glass" style="border:2px solid var(--red);width:100%;text-align:left"><b style="color:var(--red)">' + T.failedSend + ': ' + esc(item.err) + '</b><div class="sub">' + T.refusedSub + '</div>' +
+        '<div class="row"><button class="btn" style="height:44px;font-size:15px" data-act="reopen" data-v="' + esc(last.id) + '">' + T.reopen + '</button><button class="btn ghost" style="height:44px;font-size:15px" data-act="sendnow">' + T.sendNow + '</button></div></div>'
+      : '<span class="pill p-warn" style="font-size:13px;padding:5px 12px">' + T.savedLocal + '</span><div class="sub">' + T.sendingSub + '</div>') +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
 }
 
@@ -1299,7 +1308,14 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('storage', (e) => { if (e.key === STORE_KEY) { persist(); render(); } });
 window.addEventListener('online', () => { S.online = true; flush(); render(); });
 window.addEventListener('offline', () => { S.online = false; render(); });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { flush(); refreshToday(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); if (!document.hidden && S.staff) { retryRefused(); flush(); refreshToday(); } });
+/** a refused record is tried again every 10 minutes (the server logs + e-mails every refusal, so nothing stays silent — Sal, 18 Nov 2026) */
+function retryRefused() {
+  const now = Date.now(); let any = false;
+  S.outbox.forEach((o) => { if (o.hold && now - (o.heldAt || 0) > 600000) { o.hold = false; any = true; } });
+  if (any) flush();
+}
+setInterval(() => { if (S.staff && navigator.onLine) retryRefused(); }, 60000);
 
 /* ---------- automatic update (same as RM / PC) ----------
    Staff never need ↻ for a new version: when the app opens or comes back to the front it asks GitHub whether this page changed,
