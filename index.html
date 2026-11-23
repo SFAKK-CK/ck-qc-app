@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#dff4f9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,6 +13,10 @@
 <!-- fonts load in the background: the app shows at once in the phone's own font and switches when they arrive (slow factory Wi-Fi) -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
 <style>
+/* feel like an app, not a web page (Sal, 23 Nov 2026): a quick double tap on the number pad (e.g. 2260 1 4 5 → "5 5") must not zoom the page */
+html,body{touch-action:manipulation}
+button,[data-act],[data-key]{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+
 :root{
   --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
   --accent:#2d5a87; --accent-soft:#dfe9f3; --accent-ink:#1c3d5e;
@@ -319,7 +323,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -354,7 +358,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', fz: 'แช่แข็ง', fzSub: 'เข้าฟรีซ + อุณหภูมิห้อง · ออกฟรีซ + ใจกลางสินค้า', repFzT: 'แช่แข็ง', repArch: 'จากคลังเก็บ', repCart: 'รถ', repTrays: 'ถาด', repRoomT: 'ห้อง', repCore: 'ใจกลาง', repStillIn: 'ในฟรีซ', repHrs: 'ชม.', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repHint: 'พิมพ์ Order แล้วกด ดูรายงาน — ได้ทุกล็อตและทุกการตรวจของ Order นั้น', repMatch: 'พบ {n} Order ที่มี "{q}" — แตะเพื่อดู', repLast: 'ตรวจล่าสุด', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pendT: 'รอ RM กำลังไป PC', lotsU: 'ล็อต', pendWarn: 'ดองเกิน {n} วัน · {m}', pendSub: 'ล็อตที่รับแล้ว แต่ PC ยังไม่ปิดล็อต · ใส่น้ำหนักจริงแล้วหรือยังก็ยังอยู่ในรายการ', pendHeld: 'ดอง {n} วัน', pendToday: 'รับวันนี้', pendMore: 'อีก {n} ล็อต — ดูในหน้า PC', pendNone: '✓ ไม่มีล็อตค้าง — PC ปิดครบทุกล็อตแล้ว', pcPend: 'ค้าง {n} ล็อต', pcPendWarn: 'ดองเกิน {d} วัน {m}', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', fz: 'แช่แข็ง', fzSub: 'เข้าฟรีซ + อุณหภูมิห้อง · ออกฟรีซ + ใจกลางสินค้า', repFzT: 'แช่แข็ง', repArch: 'จากคลังเก็บ', repCart: 'รถ', repTrays: 'ถาด', repRoomT: 'ห้อง', repCore: 'ใจกลาง', repStillIn: 'ในฟรีซ', repHrs: 'ชม.', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repHint: 'พิมพ์ Order แล้วกด ดูรายงาน — ได้ทุกล็อตและทุกการตรวจของ Order นั้น', repMatch: 'พบ {n} Order ที่มี "{q}" — แตะเพื่อดู', repLast: 'ตรวจล่าสุด', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -392,7 +396,7 @@ const L = {
     rest: 'Rest', restT: 'Rest of the sample', restSub: 'Fish not temperature-checked · count only the ones with a problem', rule10: 'Up to {n} fish = pass', rule0: '1 fish = fail',
     allOk: '✓ No problems found', found: 'Found', pass: 'Pass', fail: 'Fail', passFix: 'Pass after correction', nextFish: 'Next fish ›', ok: 'OK',
     wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · type 3 digits', needTemps: 'Measure all {n} fish', samplePcs: '{n} fish · accept ≤ {ac}', planLine: '{kg} kg → check {n} fish (AQL S-3)', allDone: 'All {n} fish checked', tapToEdit: 'Tap a fish in the strip below to change it', ruleAql: 'Accept ≤ {ac} · {re} fish = fail',
-    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pcSub: 'temperature after weighing · weight before/after trim', fz: 'Freezing', fzSub: 'into the freezer + room temperature · out + core temperature', repFzT: 'Freezing', repArch: 'from the archive', repCart: 'trolley', repTrays: 'trays', repRoomT: 'room', repCore: 'core', repStillIn: 'in freezer', repHrs: 'h', pkSub: 'order · fish size · label · packaging · glazing', repSec: 'Reports', repDl: '⬇ Download Excel', repDlAll: '⬇ Download all orders (Excel)', repDlBusy: 'Building the file…', repDlDone: 'Downloaded — see Downloads / Files', repDlCsv: 'Could not load the Excel maker — downloaded as CSV instead', repRm: 'RM raw material', repPcT: 'PC %Loss', repPkT: 'PK glazing', repRemarks: 'remarks', repSum: 'total', repLimit: 'limit', rep: 'Report by order', repSub: 'RM → PC %Loss → PK glazing of each order, every lot and every check', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repHint: 'Type the order and tap Show report — every lot and every check of that order', repMatch: '{n} orders contain "{q}" — tap one', repLast: 'last check', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
+    sizeS: 'Size (pcs/kg)', sizeR: 'Size range (g/fish)', pendT: 'RM lots waiting for PC', lotsU: 'lots', pendWarn: 'held over {n} days · {m}', pendSub: 'Received, but PC has not closed the lot yet', pendHeld: 'held {n} d', pendToday: 'received today', pendMore: '{n} more — see PC', pendNone: '✓ Nothing waiting — PC closed every lot', pcPend: '{n} lots open', pcPendWarn: 'held over {d} days {m}', pcSub: 'temperature after weighing · weight before/after trim', fz: 'Freezing', fzSub: 'into the freezer + room temperature · out + core temperature', repFzT: 'Freezing', repArch: 'from the archive', repCart: 'trolley', repTrays: 'trays', repRoomT: 'room', repCore: 'core', repStillIn: 'in freezer', repHrs: 'h', pkSub: 'order · fish size · label · packaging · glazing', repSec: 'Reports', repDl: '⬇ Download Excel', repDlAll: '⬇ Download all orders (Excel)', repDlBusy: 'Building the file…', repDlDone: 'Downloaded — see Downloads / Files', repDlCsv: 'Could not load the Excel maker — downloaded as CSV instead', repRm: 'RM raw material', repPcT: 'PC %Loss', repPkT: 'PK glazing', repRemarks: 'remarks', repSum: 'total', repLimit: 'limit', rep: 'Report by order', repSub: 'RM → PC %Loss → PK glazing of each order, every lot and every check', repFind: 'Type the order, e.g. SCK, KOL12/L', repGo: 'Show report', repHint: 'Type the order and tap Show report — every lot and every check of that order', repMatch: '{n} orders contain "{q}" — tap one', repLast: 'last check', repNone: 'Order not found', repLoading: 'Building the report…', repLots: 'lots', repPc: 'PC — %Loss', repPk: 'PK — glazing', repChecks: 'checks', repAvg: 'average', repAll: 'overall', repMin: 'lowest', repMax: 'highest', repOver: 'over limit', repWhy: 'reasons', repOrderG: 'Order %glazing', repGFail: 'glazing failed', repPkFail: 'PK failed', repPcList: 'Every PC check', repPkList: 'Every PK check', repNoData: 'none yet', repOffline: 'The report needs internet', appd: 'APPD/MD', sulfite: 'Sulfite', sPass: '1 Pass', sFail: '2 Fail', sample5: 'Sample {pct}% of weight = {kg} kg',
     point: 'Point {p} · reading {r}', pointHint: '4 corners + middle · 3 readings each · moves on by itself', allPoints: 'All {n} readings done', needTempsS: 'Take all {n} readings',
     shrimpChecksT: 'Physical check (whole sample) — tap any that fails',
     shrimpChecks: ['Head and body normal, not soft, grey to clear, no red', 'Normal smell, no mud / off smell', 'Head firmly attached, no yellow head or white spots', 'Shell hard and firm, no sticky slime',
@@ -430,7 +434,7 @@ const L = {
     rest: 'ကျန်', restT: 'နမူနာ ကျန်ငါးများ', restSub: 'အပူချိန် မတိုင်းသောငါး · ပြဿနာရှိသည်ကိုသာ ရေတွက်', rule10: '{n} ကောင်အထိ = အောင်', rule0: '1 ကောင်တွေ့ = မအောင်',
     allOk: '✓ ပြဿနာ မတွေ့သေး', found: 'တွေ့', pass: 'အောင်', fail: 'မအောင်', passFix: 'ပြင်ပြီး အောင်', nextFish: 'နောက်တစ်ကောင် ›', ok: 'အိုကေ',
     wideHint: 'နှိပ် = ≥10 °C', wideOn: '≥10 °C · ၃ လုံး', needTemps: '{n} ကောင်လုံး တိုင်းပါ', samplePcs: '{n} ကောင် · လက်ခံ ≤ {ac}', planLine: '{kg} kg → {n} ကောင် စစ် (AQL S-3)', allDone: '{n} ကောင် စစ်ပြီး', tapToEdit: 'ပြင်ရန် အောက်ပါ ငါးကို နှိပ်ပါ', ruleAql: 'လက်ခံ ≤ {ac} · {re} ကောင် = မအောင်',
-    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', fz: 'အအေးခဲ', fzSub: 'အအေးခဲခန်း ဝင် · ထွက်', repFzT: 'အအေးခဲ', repArch: 'from the archive', repCart: 'trolley', repTrays: 'trays', repRoomT: 'room', repCore: 'core', repStillIn: 'in freezer', repHrs: 'h', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', repSec: 'အစီရင်ခံစာ', repDl: '⬇ Excel ဒေါင်းလုဒ်', repDlAll: '⬇ Order အားလုံး (Excel)', repDlBusy: 'ဖိုင် ပြင်ဆင်နေသည်…', repDlDone: 'ဒေါင်းလုဒ် ပြီး', repDlCsv: 'CSV ဖြင့် ဒေါင်းလုဒ်', repRm: 'RM ကုန်ကြမ်း', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'မှတ်ချက်', repSum: 'စုစုပေါင်း', repLimit: 'စံ', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: 'RM → PC %Loss → PK Glazing', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repHint: 'Order ရိုက်ပြီး ကြည့်ရန် နှိပ်ပါ', repMatch: '"{q}" ပါသော Order {n} ခု', repLast: 'နောက်ဆုံး', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
+    sizeS: 'အရွယ် (ကောင်/kg)', sizeR: 'အရွယ် အပိုင်းအခြား (g/ကောင်)', pendT: 'RM → PC စောင့်', lotsU: 'lot', pendWarn: '{n} ရက်ကျော် · {m}', pendSub: 'လက်ခံပြီး PC မပိတ်ရသေး', pendHeld: '{n} ရက်', pendToday: 'ယနေ့', pendMore: 'နောက်ထပ် {n} lot', pendNone: '✓ စောင့်ဆိုင်းမှု မရှိ', pcPend: '{n} lot ကျန်', pcPendWarn: '{d} ရက်ကျော် {m}', pcSub: 'ချိန်ပြီး အပူချိန် · ခုတ်ပြင် အလေးချိန်', fz: 'အအေးခဲ', fzSub: 'အအေးခဲခန်း ဝင် · ထွက်', repFzT: 'အအေးခဲ', repArch: 'from the archive', repCart: 'trolley', repTrays: 'trays', repRoomT: 'room', repCore: 'core', repStillIn: 'in freezer', repHrs: 'h', pkSub: 'Order · ငါးအရွယ် · တံဆိပ် · ထုပ်ပိုး · Glazing', repSec: 'အစီရင်ခံစာ', repDl: '⬇ Excel ဒေါင်းလုဒ်', repDlAll: '⬇ Order အားလုံး (Excel)', repDlBusy: 'ဖိုင် ပြင်ဆင်နေသည်…', repDlDone: 'ဒေါင်းလုဒ် ပြီး', repDlCsv: 'CSV ဖြင့် ဒေါင်းလုဒ်', repRm: 'RM ကုန်ကြမ်း', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'မှတ်ချက်', repSum: 'စုစုပေါင်း', repLimit: 'စံ', rep: 'Order အလိုက် အစီရင်ခံစာ', repSub: 'RM → PC %Loss → PK Glazing', repFind: 'Order ရိုက်ပါ', repGo: 'ကြည့်ရန်', repHint: 'Order ရိုက်ပြီး ကြည့်ရန် နှိပ်ပါ', repMatch: '"{q}" ပါသော Order {n} ခု', repLast: 'နောက်ဆုံး', repNone: 'Order မတွေ့', repLoading: 'ပြင်ဆင်နေသည်…', repLots: 'lot', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ကြိမ်', repAvg: 'ပျမ်းမျှ', repAll: 'စုစုပေါင်း', repMin: 'အနည်း', repMax: 'အများ', repOver: 'စံကျော်', repWhy: 'အကြောင်း', repOrderG: 'Order %Glazing', repGFail: 'Glazing မအောင်', repPkFail: 'PK မအောင်', repPcList: 'PC စစ်ချက်များ', repPkList: 'PK စစ်ချက်များ', repNoData: 'မရှိသေး', repOffline: 'အင်တာနက် လိုသည်', appd: 'APPD/MD', sulfite: 'ဆာလ်ဖိုက်', sPass: '1 အောင်', sFail: '2 မအောင်', sample5: 'အလေးချိန် {pct}% နမူနာ = {kg} kg',
     point: 'နေရာ {p} · အကြိမ် {r}', pointHint: 'ထောင့် ၄ + အလယ် · နေရာတိုင်း ၃ ကြိမ်', allPoints: '{n} ကြိမ် တိုင်းပြီး', needTempsS: '{n} ကြိမ်လုံး တိုင်းပါ',
     shrimpChecksT: 'ရုပ်ပိုင်း (နမူနာလုံး) — မအောင်သည်ကို နှိပ်ပါ',
     shrimpChecks: ['ခေါင်းနှင့်ကိုယ် ပုံမှန်၊ မပျော့၊ မီးခိုး/ကြည်၊ အနီမရှိ', 'အနံ့ ပုံမှန်၊ ရွှံ့နံ့ မရှိ', 'ခေါင်း ခိုင်မြဲ၊ အဝါ/အဖြူစက် မရှိ', 'အခွံ မာ၊ ချွဲ မရှိ',
@@ -465,7 +469,7 @@ let lastScreen = null, lastPad = false;
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null, known: {} }, s);
+  const out = Object.assign({ lang: 'th', staff: null, cfg: null, today: null, d: null, outbox: [], scale: '', thermo: '', last: null, reportWarn: null, known: {}, pend: null }, s);
   // drafts from an older version had 12 fish slots — grow them to the current maximum
   const grow = (d) => d && (d.lines || []).forEach((l) => { while (l.fishes.length < N_T) l.fishes.push({ t: '', d: [0, 0, 0, 0, 0, 0, 0, 0] }); upgradeLine(l); });
   grow(out.d);
@@ -479,7 +483,7 @@ function persist() {
     stored.forEach((o) => { if (o && o.record && !sentIds[o.record.id] && !S.outbox.some((x) => x.record.id === o.record.id)) S.outbox.push(o); });
   } catch (e) { /* ignore */ }
   // staff is NOT kept: every time the app is opened it asks for the ID again (Sal, 5 Nov). Drafts and unsent trucks stay.
-  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn, known: S.known };
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, d: S.d, outbox: S.outbox, scale: S.scale, thermo: S.thermo, last: S.last, reportWarn: S.reportWarn, known: S.known, pend: S.pend };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 const t = () => L[S.lang] || L.th;
@@ -753,6 +757,26 @@ function refreshToday(force) {
   api('rmToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
     S.today = { date: todayStr(), trucks: j.trucks, totals: j.totals }; S.online = true; persist(); render();
   }, (e) => { if (e.net) { S.online = false; render(); } });
+  loadPending();
+}
+/** ดองปลา (Sal, 23 Nov 2026): RM lots PC has not closed yet — the same answer the PC screen uses (server cache 60 s) */
+function loadPending() {
+  const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
+  if (!pcOn || !S.staff) return;
+  api('pcPending', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.pend = { at: Date.now(), date: j.date, open: j.open || [], n: j.n || 0, warnN: j.warnN || 0, holdWarn: j.holdWarn || 2 }; persist(); render();
+  }, () => {});
+}
+const ddmmOf = (iso) => (iso && /^\d{4}-\d{2}-\d{2}$/.test(iso) ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : esc(iso || ''));
+function viewPendCard() {
+  const T = t(), p = S.pend;
+  if (!p || p.date !== todayStr()) return '';
+  if (!p.n) return '<div class="card glass"><span class="sub" style="color:var(--green);font-weight:700">' + T.pendNone + '</span></div>';
+  const rows = p.open.slice(0, 6).map((l) => '<div class="row" style="gap:8px;padding:6px 0;border-top:1px solid rgba(40,42,50,.08);font-size:13px"><span class="grow"><b>' + ddmmOf(l.date) + ' Lot ' + esc(l.lot) + '</b> · ' + esc(l.name) +
+    ' · ' + (l.w > 0 ? kgFmt(l.w) + ' kg' : '⚖ ' + T.waitKg) + '</span><span style="font-weight:800;color:' + (l.warn ? 'var(--red)' : l.held ? 'var(--amber)' : 'var(--ink-3)') + '">' + (l.held ? fmt(T.pendHeld, { n: l.held }) : T.pendToday) + '</span></div>').join('');
+  return '<div class="card glass" style="border:2px solid ' + (p.warnN ? 'var(--red)' : 'var(--amber)') + ';gap:4px"><div class="row" style="gap:8px"><b class="grow" style="font-size:17px">' + T.pendT + ' · ' + p.n + ' ' + T.lotsU + '</b>' +
+    (p.warnN ? '<span class="pill p-bad">' + fmt(T.pendWarn, { n: p.holdWarn, m: p.warnN }) + '</span>' : '') + '</div><div class="sub">' + T.pendSub + '</div>' + rows +
+    (p.n > 6 ? '<div class="sub">' + fmt(T.pendMore, { n: p.n - 6 }) + '</div>' : '') + '</div>';
 }
 let cfgAt = 0;
 /** ↻ asks the server for fresh lists (it normally answers from a 10-minute copy) — used once after a hard refresh */
@@ -973,7 +997,7 @@ function viewHome() {
   }
   // PC shows at once; it is hidden only when the server has said PC is not installed
   const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
-  if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">' + T.pcSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+  if (pcOn) h += '<button class="dept main glass" data-act="openpc"><span class="ic">PC</span><span class="grow"><b style="font-size:18px">' + T.pc + '</b><div class="sub">' + (S.pend && S.pend.date === todayStr() && S.pend.n ? '<b style="color:var(--amber)">' + fmt(T.pcPend, { n: S.pend.n }) + '</b>' + (S.pend.warnN ? ' · <b style="color:var(--red)">' + fmt(T.pcPendWarn, { d: S.pend.holdWarn, m: S.pend.warnN }) + '</b>' : '') : T.pcSub) + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   // แช่แข็ง (freezing): shown only when the server says it is installed (a new step — never shown by guess)
   const fzOn = !!(S.cfg && S.cfg.modules && S.cfg.modules.some((m) => m.key === 'FZ' && m.ready));
   if (fzOn) h += '<button class="dept main glass" data-act="openfz"><span class="ic" style="font-size:24px">❄</span><span class="grow"><b style="font-size:18px">' + T.fz + '</b><div class="sub">' + T.fzSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
@@ -987,6 +1011,7 @@ function viewHome() {
   });
   // reports: their own section, apart from the departments (Sal, 17 Nov 2026)
   if (repTile) h += '<span class="lbl" style="font-size:15px;color:var(--ink);margin-top:6px">' + T.repSec + '</span>' + repTile;
+  if (pcOn) h += viewPendCard();
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
   if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
   else {

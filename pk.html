@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#dff4f9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,6 +13,10 @@
 <!-- fonts load in the background: the app shows at once in the phone's own font and switches when they arrive (slow factory Wi-Fi) -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
 <style>
+/* feel like an app, not a web page (Sal, 23 Nov 2026): a quick double tap on the number pad (e.g. 2260 1 4 5 → "5 5") must not zoom the page */
+html,body{touch-action:manipulation}
+button,[data-act],[data-key]{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+
 :root{
   --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
   --accent:#2d5a87; --accent-soft:#dfe9f3; --accent-ink:#1c3d5e;
@@ -353,7 +357,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -1350,6 +1354,12 @@ if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href);
 render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
 checkUpdate();
+
+/* the date box opens the calendar on a computer too (Sal, 23 Nov 2026) — phones already do; desktop Chrome only opens it on the small icon */
+document.addEventListener('click', (e) => {
+  const el = e.target && e.target.closest ? e.target.closest('input[type="date"]') : null;
+  if (el && typeof el.showPicker === 'function') { try { el.showPicker(); } catch (err) { /* already open, or not allowed here */ } }
+}, true);
 </script>
 </body>
 </html>

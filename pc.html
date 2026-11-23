@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#dff4f9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,6 +13,10 @@
 <!-- fonts load in the background: the app shows at once in the phone's own font and switches when they arrive (slow factory Wi-Fi) -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
 <style>
+/* feel like an app, not a web page (Sal, 23 Nov 2026): a quick double tap on the number pad (e.g. 2260 1 4 5 → "5 5") must not zoom the page */
+html,body{touch-action:manipulation}
+button,[data-act],[data-key]{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+
 :root{
   --ink:#1b1c1a; --ink-2:#3a3b39; --ink-3:#6b6e69; --ink-4:#9a9d97;
   --accent:#2d5a87; --accent-soft:#dfe9f3; --accent-ink:#1c3d5e;
@@ -303,6 +307,10 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dchips small{font:600 12px var(--mono);color:var(--ink-3)}
 .dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
 .dchips .on small{color:rgba(255,255,255,.85)}
+.dchips>.pend{border-color:var(--red);background:#fbe9e7}
+.dchips>.on.pend{background:var(--accent);border:2px solid var(--red)}
+.pendbar{display:flex;align-items:center;gap:8px;background:#f3dada;color:#8a2c2c;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700}
+.pendbar button{font:inherit;font-size:12px;text-decoration:underline;color:#8a2c2c;background:none;border:0;padding:4px 0;flex:none}
 .dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
 .lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}.lotc.on{border:2px solid var(--accent)}
 .lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
@@ -350,7 +358,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.4.1';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -371,7 +379,7 @@ const L = {
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
     lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (เลขล็อตเริ่ม 1 ใหม่ทุกวัน)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
     loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
-    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
+    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', pendLegend: 'แดง = ยังมีล็อตไม่ปิด', pendOld: '⚠ {d} Lot {lot} ดอง {n} วัน ยังไม่ปิด — ทำก่อน (FIFO)', pendGo: 'ไปวันนั้น ›', notStarted: 'ยังไม่ตรวจเลย', checkedTypes: 'ตรวจแล้ว:', againType: '+ ตรวจอีกแบบ', againTypeSub: 'ล็อตเดิม · เลือกประเภทใหม่', againSame: 'ตรวจซ้ำ', againSameSub: 'แบบเดิม {t}', lotChecked: 'ล็อตนี้ตรวจแล้ว', lotCheckedSub: 'จากบันทึก PC ที่มีจริง — ทุกแบบตัดแต่งของล็อตต้องมีปลาอย่างน้อย 1 ตัวถูกตรวจ', bulkSearch: 'ค้นหา BULK — Lot, ปลา, ขนาด, ผู้ขาย หรือวันที่ (เช่น 20/11)', bulkHint: 'พิมพ์เพื่อค้นหา ({n} ล็อต BULK ใน {d} วันล่าสุด)', bulkNone: 'ไม่พบ BULK ที่ตรงกับ "{q}"', bulkFound: 'พบ {n} ล็อต', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
@@ -401,7 +409,7 @@ const L = {
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
     lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (lot numbers restart at 1 every day)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
     loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
-    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
+    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', pendLegend: 'red = lots not closed yet', pendOld: '⚠ {d} Lot {lot} held {n} days, not closed — do it first (FIFO)', pendGo: 'go to that day ›', notStarted: 'not checked yet', checkedTypes: 'checked:', againType: '+ Another type', againTypeSub: 'same lot · pick the type', againSame: 'Check again', againSameSub: 'same type {t}', lotChecked: 'This lot so far', lotCheckedSub: 'From real PC records — every processing type of a lot needs at least one fish checked', bulkSearch: 'Search BULK — lot, fish, size, supplier or date (e.g. 20/11)', bulkHint: 'Type to search ({n} BULK lots in the last {d} days)', bulkNone: 'No BULK lot matches "{q}"', bulkFound: '{n} lots found', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
@@ -431,7 +439,7 @@ const L = {
     reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
     lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
     loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
-    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
+    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', pendLegend: 'အနီ = lot မပိတ်ရသေး', pendOld: '⚠ {d} Lot {lot} {n} ရက် — အရင်လုပ်ပါ (FIFO)', pendGo: 'ထိုနေ့ ›', notStarted: 'မစစ်ရသေး', checkedTypes: 'စစ်ပြီး:', againType: '+ အခြားအမျိုးအစား', againTypeSub: 'lot အတူတူ', againSame: 'ထပ်စစ်', againSameSub: '{t}', lotChecked: 'ဒီ lot', lotCheckedSub: 'PC မှတ်တမ်းအစစ်မှ', bulkSearch: 'BULK ရှာရန် — Lot, ငါး, အရွယ်, ရက်စွဲ', bulkHint: 'ရှာရန် ရိုက်ပါ ({n} lot · {d} ရက်)', bulkNone: '"{q}" မတွေ့ပါ', bulkFound: '{n} lot တွေ့သည်', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
@@ -459,7 +467,7 @@ let lastScreen = null, lastPad = false;
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, lots: {}, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
+  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, lots: {}, pend: null, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
 }
 /** came from the main menu in this tab (index.html) → already signed in there; the hand-over is used once */
 function takeHandover() {
@@ -485,7 +493,7 @@ function persist() {
   // keep only the last 7 receive dates of lots (offline use)
   const days = Object.keys(S.lots || {}).sort().slice(-7);
   const lots = {}; days.forEach((d) => (lots[d] = S.lots[d]));
-  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, lots: lots, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, lots: lots, pend: S.pend, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 
@@ -685,7 +693,7 @@ function flush() {
       throw e;
     });
   };
-  return next().then(() => { flushing = false; refreshToday(true); }, (e) => {
+  return next().then(() => { flushing = false; refreshToday(true); loadPending(true); Object.keys(S.lots || {}).forEach((d) => { S.lots[d].at = 0; }); if (S.screen === 'lot' && S.c && S.c.rmDate) loadLots(S.c.rmDate); }, (e) => {
     flushing = false; if (e && e.net) S.online = false; render();
     clearTimeout(retryTimer); retryTimer = setTimeout(flush, 20000);
   });
@@ -709,12 +717,38 @@ function refreshConfig(force) {
 }
 function loadLots(date, force) {
   if (!S.staff || !date) return;
+  loadPending();
   const have = S.lots[date];
   if (have && !force && Date.now() - have.at < 60000) return;
   S.lotsBusy = true; render();
   api('pcLots', { staffId: S.staff.id, date: date }).then((j) => {
     S.lots[date] = { lots: j.lots, at: Date.now() }; if (Array.isArray(j.orders)) S.orders = j.orders; S.lotsBusy = false; S.online = true; persist(); render();
   }, (e) => { S.lotsBusy = false; if (e.net) S.online = false; else S.err = e.message; render(); });
+}
+
+/** ดองปลา (Sal, 23 Nov 2026): RM lots PC has not closed yet, last PC_PENDING_DAYS days — red date buttons + oldest-lot warning.
+ * The copy on the phone is shown at once; this refreshes it (the server answers from a 60-second cache). */
+let pendAt = 0;
+function loadPending(force) {
+  if (!S.staff || (!force && Date.now() - pendAt < 30000)) return;
+  pendAt = Date.now();
+  api('pcPending', { staffId: S.staff.id, date: todayStr() }).then((j) => {
+    S.pend = { at: Date.now(), date: j.date, open: j.open || [], byDay: j.byDay || {}, n: j.n || 0, warnN: j.warnN || 0 }; S.online = true; persist(); render();
+  }, (e) => { if (e.net) S.online = false; });
+}
+const pendOf = (d) => (S.pend && S.pend.byDay && S.pend.byDay[d]) || null;
+/** after a check is saved: the lot leaves the pending list and its line shows the type, before the server answers */
+function applyCheck(key, rmDate, trim) {
+  if (S.pend) {
+    S.pend.open = S.pend.open.filter((l) => l.key !== key);
+    S.pend.byDay = {}; S.pend.open.forEach((l) => { const e = (S.pend.byDay[l.date] = S.pend.byDay[l.date] || { n: 0, warn: 0 }); e.n++; if (l.warn) e.warn++; });
+    S.pend.n = S.pend.open.length; S.pend.warnN = S.pend.open.filter((l) => l.warn).length;
+  }
+  const got = S.lots && S.lots[rmDate];
+  if (got) got.lots.forEach((t) => t.lines.forEach((l) => { if (t.id + '#' + l.n === key) {
+    l.open = false; l.checks = (l.checks || 0) + 1; l.types = l.types || [];
+    const ty = l.types.find((x) => x.code === trim); if (ty) ty.n++; else l.types.push({ code: trim, n: 1, last: todayStr() + ' ' + nowHM() });
+  } }));
 }
 
 /* ---------------- screens ---------------- */
@@ -786,7 +820,7 @@ function viewHome() {
     const bad = S.outbox.find((o) => o.err);
     h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
       (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
-        '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') + '</div>' +
+        (bad.draft ? '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') : '') + '</div>' +
       '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
   }
   if (S.c) {
@@ -819,10 +853,13 @@ function viewLot() {
   // where the fish comes from: received at RM, or a lot processed earlier as BULK (Sal, 15 Nov 2026)
   h += '<div class="seg srcseg"><button class="' + (S.lotSrc !== 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="rm">' + T.srcRm + '</button><button class="' + (S.lotSrc === 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="bulk">' + T.srcBulk + '</button></div>';
   if (S.lotSrc === 'bulk') return h + viewBulkList() + '</div>';
-  const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
+  const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + (pendOf(d) ? ' pend' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
   const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
-  h += '<span class="lbl">' + T.rcvDate + '</span><div class="dchips">' + chips +
-    '<label class="' + (other ? 'on' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
+  const olderPend = !!(S.pend && S.pend.open.some((l) => l.date < addDays(today, -3)));
+  h += '<div class="row"><span class="lbl grow">' + T.rcvDate + '</span>' + (S.pend && S.pend.n ? '<span class="sub" style="color:var(--red);font-weight:700">' + T.pendLegend + '</span>' : '') + '</div><div class="dchips">' + chips +
+    '<label class="' + (other ? 'on' : '') + (olderPend || (other && pendOf(c.rmDate)) ? ' pend' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
+  const oldest = S.pend && S.pend.open.find((l) => l.warn);
+  if (oldest) h += '<div class="pendbar"><span class="grow">' + fmt(T.pendOld, { d: ddmm(oldest.date), lot: esc(oldest.lot), n: oldest.held }) + '</span>' + (oldest.date !== c.rmDate ? '<button data-act="rmdate" data-v="' + oldest.date + '">' + T.pendGo + '</button>' : '') + '</div>';
   const held = heldOf(c);
   if (held > 0) h += '<div class="note">🧊 ' + fmt(T.heldBadge, { n: held }) + (held >= holdWarn() ? ' — ' + T.heldLong : '') + '</div>';
   const got = S.lots[c.rmDate];
@@ -836,9 +873,12 @@ function viewLot() {
         lot.lines.map((l) => {
           const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
+          const lst = l.open ? '<div class="sub" style="font-weight:700;color:var(--amber)">' + T.notStarted + '</div>'
+            : (l.types || []).length ? '<div class="sub" style="font-weight:700;color:var(--green)">' + T.checkedTypes + ' ' + l.types.map((x) => esc(x.code) + ' ✓' + (x.n > 1 ? '×' + x.n : '')).join(' · ') + '</div>' : '';
+          const reop = '';
           return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
             (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwAvg > 0 || l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwAvg || l.fwMax) + ' g' : '') + '</div>' +
-            ((l.orders || []).length ? '<div class="sub" style="color:var(--accent);font-weight:700">→ ' + l.orders.map(esc).join(' · ') + '</div>' : '') + '</span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>';
+            ((l.orders || []).length ? '<div class="sub" style="color:var(--accent);font-weight:700">→ ' + l.orders.map(esc).join(' · ') + '</div>' : '') + lst + '</span><span class="pill ' + st + '">' + esc(l.status === 'ไม่ผ่าน' ? T.fail : l.status === 'ผ่านหลังแก้ไข' ? T.passFix : T.pass) + '</span><span class="go">›</span></button>' + reop;
         }).join('') + '</div>';
     });
   }
@@ -854,7 +894,15 @@ function viewBulkList() {
   if (S.bulkBusy && !b) h += '<div class="sub" style="text-align:center"><span class="spin"></span> ' + T.loading + '</div>';
   else if (!b && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
   else if (b && !b.lots.length) h += '<div class="sub" style="text-align:center">' + T.noBulk + '</div>';
-  if (b) b.lots.forEach((l) => {
+  // search only (Sal, 23 Nov 2026): no list until something is typed — lot, fish, size, supplier or date
+  const q = String(S.bulkQ || '').trim().toUpperCase();
+  h += '<label class="tile" style="height:auto;min-height:56px"><input data-on="bulkq" value="' + esc(S.bulkQ || '') + '" placeholder="' + esc(T.bulkSearch) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + esc(T.bulkSearch) + '"></label>';
+  const hay = (l) => [l.lot, 'LOT ' + l.lot, l.item, l.size, l.item + ' ' + l.size, String(l.sup || ''), ddmm(l.rmDate), ddmm(l.pcDate), l.rmDate, l.pcDate].concat(l.used || []).join(' | ').toUpperCase();
+  const hits = b && q ? b.lots.filter((l) => q.split(/\s+/).every((w) => hay(l).indexOf(w) >= 0)) : [];
+  if (b && !q && b.lots.length) h += '<div class="sub" style="text-align:center">' + fmt(T.bulkHint, { n: b.lots.length, d: bulkDays() }) + '</div>';
+  else if (b && q && !hits.length) h += '<div class="sub" style="text-align:center">' + fmt(T.bulkNone, { q: esc(S.bulkQ.trim()) }) + '</div>';
+  else if (hits.length) h += '<div class="sub">' + fmt(T.bulkFound, { n: hits.length }) + '</div>';
+  hits.forEach((l) => {
     const on = S.c.bulkFrom && S.c.bulkFrom.pcId === l.pcId;
     h += '<div class="lotc glass' + (on ? ' on' : '') + '"><button class="lline" style="border-top:0" data-act="pickbulk" data-k="' + esc(l.key) + '"><span class="lotno">Lot ' + esc(l.lot) + '</span><span class="grow"><b>' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
       '<div class="sub">' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + '</div>' +
@@ -995,11 +1043,20 @@ function viewDone() {
     '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + (last.order ? ' → ' + esc(last.order) : '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) +
     (last.loss !== null && last.loss !== undefined ? '<span class="pill ' + (last.high ? 'p-bad' : 'p-mute') + '">' + T.lossL + ' ' + Number(last.loss).toFixed(2) + '%</span>' : '') + '</div>' +
+    typesCard(last) +
     (st === 'sent' ? '<span class="pill p-ok" style="font-size:13px;padding:5px 12px">✓ ' + T.sentOk + '</span>'
       : st === 'fail' ? '<div class="card glass" style="border:2px solid var(--red);width:100%;text-align:left"><b style="color:var(--red)">' + T.failedSend + ': ' + esc(item.err) + '</b><div class="sub">' + T.refusedSub + '</div>' +
         '<div class="row"><button class="btn" style="height:44px;font-size:15px" data-act="reopen" data-v="' + esc(last.id) + '">' + T.reopen + '</button><button class="btn ghost" style="height:44px;font-size:15px" data-act="sendnow">' + T.sendNow + '</button></div></div>'
       : '<span class="pill p-warn" style="font-size:13px;padding:5px 12px">' + T.savedLocal + '</span><div class="sub">' + T.sendingSub + '</div>') +
     (last.sent && last.report && last.report !== 'ok' ? '<div class="note" style="width:100%">⚠ ' + T.reportBad + '</div>' : '') + '</div>';
+}
+
+/** after a check of an RM lot: which processing types of this lot have a check (from real PC records) */
+function typesCard(last) {
+  const T = t();
+  if (!last.types || !last.types.length) return '';
+  return '<div class="card glass" style="width:100%;text-align:left;gap:6px"><span class="lbl" style="color:var(--ink-3)">' + T.lotChecked + '</span><div class="row" style="flex-wrap:wrap;gap:6px">' +
+    last.types.map((x) => '<span class="pill p-ok mono">' + esc(x.code) + ' ✓' + (x.n > 1 ? ' ×' + x.n : '') + '</span>').join('') + '</div><div class="sub">' + T.lotCheckedSub + '</div></div>';
 }
 
 /* ---------------- number pad ---------------- */
@@ -1097,7 +1154,13 @@ function viewAction() {
   if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
   if (s === 'check' && S.c.lock && !S.c.gm) return '<button class="btn" style="background:var(--red)" data-act="callgm">' + T.callGm + '</button>';
   if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
-  if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+  if (s === 'done') {
+    const a = S.last && S.last.again;
+    if (!a || !a.rmId) return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+    // a lot cut into several processing types: one fish per type — "+ ตรวจอีกแบบ" opens a blank card for the same lot and asks the type first (Sal, 23 Nov 2026)
+    return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" style="flex:1.4;line-height:1.1" data-act="againtype">' + T.againType + '<br><small style="font-size:11px;font-weight:700;opacity:.85">' + T.againTypeSub + '</small></button>' +
+      '<button class="btn ghost" style="flex:1.1;line-height:1.1" data-act="again">' + T.againSame + '<br><small style="font-size:11px;font-weight:700">' + fmt(T.againSameSub, { t: esc(a.trim || '') }) + '</small></button>';
+  }
   return '';
 }
 
@@ -1123,7 +1186,7 @@ function draw() {
   // keep the cursor in a text box (order / remark …) when the screen redraws in the background (lots loaded, record sent)
   const fe = document.activeElement, fon = fe && fe.dataset && fe.dataset.on, fpos = fe && typeof fe.selectionStart === 'number' ? fe.selectionStart : null;
   main.innerHTML = (views[S.screen] || viewHome)();
-  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup', 'losswhy', 'trimq'].indexOf(fon) >= 0) {
+  if (fon && lastScreen === S.screen && ['order', 'remark', 'msize', 'msup', 'losswhy', 'trimq', 'bulkq'].indexOf(fon) >= 0) {
     const el = main.querySelector('[data-on="' + fon + '"]');
     if (el) { if (fon === 'order' && el.value !== fe.value) el.value = fe.value; el.focus(); try { if (fpos !== null) el.setSelectionRange(fpos, fpos); } catch (e) { /* ignore */ } }
   }
@@ -1222,6 +1285,7 @@ function saveCheck() {
   }
   S.last = { id: rec.id, lot: c.lot, order: rec.order, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
     again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, bMax: c.bMax || 0, rmAvg: c.rmAvg || 0, rmN: c.rmN || 0, bulkFrom: c.bulkFrom || null, order: c.order || '' } };
+  if (c.rmId) { applyCheck(c.rmId + '#' + c.rmLine, c.rmDate, c.trim); const ln0 = lineOf(c); S.last.types = ln0 ? (ln0.types || []).map((x) => ({ code: x.code, n: x.n })) : [{ code: c.trim, n: 1 }]; }
   S.c = null;
   go('done');
   flush();
@@ -1319,6 +1383,13 @@ const ACT = {
   discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
+  againtype: () => {   // same lot, blank card, processing type asked first
+    const a = S.last && S.last.again;
+    if (!a) return go('home');
+    S.c = Object.assign(blankCheck(a.rmDate), a, { trim: '' });
+    go('check', { pad: null });
+    ACT.trimmenu();
+  },
   lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(); else loadLots(S.c.rmDate); },
   pickbulk: (el) => {
     const l = S.bulk && S.bulk.lots.find((x) => x.key === el.dataset.k);
@@ -1423,6 +1494,7 @@ document.addEventListener('input', (e) => {
   if (on === 'losswhy') S.c.lossWhy = el.value;
   if (on === 'order') S.c.order = orderChars(el.value);
   if (on === 'trimq') { S.trimQ = el.value; render(); return; }
+  if (on === 'bulkq') { S.bulkQ = el.value; render(); return; }
   $('act').innerHTML = viewAction();
   persist();
 });
@@ -1475,6 +1547,12 @@ render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
 if (S.autoStart) { S.autoStart = false; if (S.c) go(S.c.stage || 'lot'); else startCheck(); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); }
 checkUpdate();
+
+/* the date box opens the calendar on a computer too (Sal, 23 Nov 2026) — phones already do; desktop Chrome only opens it on the small icon */
+document.addEventListener('click', (e) => {
+  const el = e.target && e.target.closest ? e.target.closest('input[type="date"]') : null;
+  if (el && typeof el.showPicker === 'function') { try { el.showPicker(); } catch (err) { /* already open, or not allowed here */ } }
+}, true);
 </script>
 </body>
 </html>
