@@ -357,7 +357,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.2.2';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -387,7 +387,7 @@ const L = {
     noOrder: 'PC ยังไม่ใส่ Order', rcv: 'รับ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตจาก PC ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     rcvDate: 'วันที่รับเข้า', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
-    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code (ถ้ามี)', codePh: 'รหัสสินค้า',
+    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', fromRm: 'รับเข้าเป็น', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code (ถ้ามี)', codePh: 'รหัสสินค้า',
     sizeT: 'สุ่ม Size ปลา (ชั่งทีละตัว · g)', avg: 'เฉลี่ย', labelT: 'ฉลากสินค้า', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 ปี', '+18 เดือน', '+2 ปี'], expBad: 'Expiry ต้องหลัง Production',
     packT: 'ตรวจสอบบรรจุภัณฑ์', packHint: 'แตะเพื่อเปลี่ยน ✓ ผ่าน → ✗ ไม่ผ่าน → – ไม่ใช้',
     ck: { std: 'ตรงมาตรฐานการบรรจุ', seal: 'รอยซีล', bag: 'ถุง', box: 'กล่อง', strap: 'สายรัด', sack: 'กระสอบ', stk: 'สติ๊กเกอร์ถูกต้อง', stick: 'สติ๊กเกอร์ติดแน่น ไม่ลอก' },
@@ -420,7 +420,7 @@ const L = {
     noOrder: 'PC gave no order', rcv: 'recv', pcAt: 'PC', lotL: 'LOT',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in PC (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     rcvDate: 'Receive date', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
-    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code (if any)', codePh: 'Product code',
+    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', fromRm: 'received as', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code (if any)', codePh: 'Product code',
     sizeT: 'Fish size sample (weigh one by one · g)', avg: 'average', labelT: 'Label', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 year', '+18 months', '+2 years'], expBad: 'Expiry must be after production',
     packT: 'Packaging check', packHint: 'Tap to change ✓ pass → ✗ fail → – not used',
     ck: { std: 'As the packing standard', seal: 'Seal', bag: 'Bag', box: 'Box', strap: 'Strap', sack: 'Sack', stk: 'Sticker correct', stick: 'Sticker stays on' },
@@ -453,7 +453,7 @@ const L = {
     noOrder: 'PC Order မထည့်ရသေး', rcv: 'လက်ခံ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'PC တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     rcvDate: 'လက်ခံရက်', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
-    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code', codePh: 'ကုန်ပစ္စည်း ကုဒ်',
+    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', fromRm: 'လက်ခံ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code', codePh: 'ကုန်ပစ္စည်း ကုဒ်',
     sizeT: 'ငါးအရွယ် နမူနာ (တစ်ကောင်ချင်း · g)', avg: 'ပျမ်းမျှ', labelT: 'တံဆိပ်', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 နှစ်', '+18 လ', '+2 နှစ်'], expBad: 'Expiry သည် Production နောက်မှ ဖြစ်ရမည်',
     packT: 'ထုပ်ပိုးပစ္စည်း စစ်ဆေး', packHint: 'နှိပ်ပါ ✓ → ✗ → –',
     ck: { std: 'ထုပ်ပိုး စံနှုန်းအတိုင်း', seal: 'ဆီး', bag: 'အိတ်', box: 'သေတ္တာ', strap: 'ကြိုး', sack: 'အိတ်ကြီး', stk: 'စတစ်ကာ မှန်', stick: 'စတစ်ကာ မကွာ' },
@@ -815,9 +815,8 @@ function viewLot() {
   if (got && got.length && !shown.length) h += '<div class="sub" style="text-align:center">' + T.noMatch + '</div>';
   shown.forEach((l) => {
     const on = c.key === l.key;
-    h += '<div class="lotc glass' + (on ? ' on' : '') + '"' + (l.late ? ' style="border:2px solid var(--red)"' : '') + '><button class="lline" style="border-top:0" data-act="picklot" data-k="' + esc(l.key) + '"><span class="lotno">Lot ' + esc(l.lot) + '</span><span class="grow"><b>' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
-      '<div class="sub">' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + ' · ' + T.pcAt + ' ' + ddmm(l.pcDate) + ' ' + esc(l.pcTime) + '</div>' +
-      ((l.types || []).length ? '<div class="sub" style="color:var(--green);font-weight:700">' + T.trimPc + ' ' + l.types.map((x) => esc(x.code) + ' ✓').join(' · ') + '</div>' : '') +
+    h += '<div class="lotc glass' + (on ? ' on' : '') + '"' + (l.late ? ' style="border:2px solid var(--red)"' : '') + '><button class="lline" style="border-top:0" data-act="picklot" data-k="' + esc(l.key) + '"><span class="grow"><span class="lotno" style="display:inline-block;margin-bottom:4px;font-size:15px">Lot ' + esc(l.lot) + '</span><br><b style="font-size:17px">' + lotTitle(l) + '</b>' +
+      '<div class="sub">' + T.fromRm + ' ' + esc(l.item) + ' ' + esc(l.size) + ' · ' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + ' · ' + T.pcAt + ' ' + ddmm(l.pcDate) + ' ' + esc(l.pcTime) + '</div>' +
       (l.late ? '<div class="sub" style="color:var(--red);font-weight:800">' + fmt(T.late, { n: l.late }) + '</div>' : '') +
       (l.fz ? '<div class="sub" style="color:var(--green);font-weight:600">❄ ' + T.fzOut + ' ' + ddmm(l.fz.outDate) + ' ' + esc(l.fz.outTime) + ' · ' + esc((l.fz.rooms || []).join(', ')) + (l.fz.hours !== null && l.fz.hours !== undefined && l.fz.hours !== '' ? ' · ' + l.fz.hours + ' ' + T.fzH : '') +
         (l.fz.core && l.fz.core.length ? ' · ' + T.fzCore + ' ' + l.fz.core.map((x) => String(x).replace('-', '−')).join(' / ') + ' °C' : '') + '</div>' : '') + '</span><span class="go">›</span></button>' +
@@ -839,11 +838,17 @@ function viewBulkList() {
   else if (b && !b.lots.length) h += '<div class="sub" style="text-align:center">' + T.noBulk + '</div>';
   if (b) b.lots.forEach((l) => {
     const on = S.c.bulkFrom && S.c.bulkFrom.pcId === l.pcId;
-    h += '<div class="lotc glass' + (on ? ' on' : '') + '"><button class="lline" style="border-top:0" data-act="pickbulk" data-k="' + esc(l.key) + '"><span class="lotno">Lot ' + esc(l.lot) + '</span><span class="grow"><b>' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
-      '<div class="sub">' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + '</div>' +
+    h += '<div class="lotc glass' + (on ? ' on' : '') + '"><button class="lline" style="border-top:0" data-act="pickbulk" data-k="' + esc(l.key) + '"><span class="grow"><span class="lotno" style="display:inline-block;margin-bottom:4px;font-size:15px">Lot ' + esc(l.lot) + '</span><br><b style="font-size:17px">' + lotTitle(l) + '</b>' +
+      '<div class="sub">' + T.fromRm + ' ' + esc(l.item) + ' ' + esc(l.size) + ' · ' + T.rcv + ' ' + ddmm(l.rmDate) + ' · ' + esc(String(l.sup || '').split(' / ')[0]) + '</div>' +
       '<div class="sub" style="color:var(--accent);font-weight:700">' + T.bulkAt + ' ' + ddmm(l.pcDate) + ' ' + esc(l.pcTime) + (l.used && l.used.length ? ' · ' + T.bulkUsed + ' ' + l.used.map(esc).join(', ') : '') + '</div></span><span class="go">›</span></button></div>';
   });
   return h + '</div>';
+}
+/** title = fish · processing type(s) still to pack (blue) → order(s) — the RM item moves to the sub-line (Sal, 25 Nov 2026) */
+function lotTitle(l) {
+  const tr = (l.pend && l.pend.length ? l.pend.map((p) => p.trim) : (l.types || []).map((x) => x.code)).filter((x, i, a) => x && a.indexOf(x) === i);
+  const ords = l.orders && l.orders.length ? l.orders : (l.used && l.used.length ? l.used : ['BULK']);
+  return esc(String(l.item || '').split('-')[0]) + (tr.length ? ' <span style="color:var(--accent)">' + esc(tr.join(' + ')) + '</span>' : '') + ' → ' + esc(ords.join(', '));
 }
 const bulkDays = () => Number(S.cfg && S.cfg.pc && S.cfg.pc.settings && S.cfg.pc.settings.BULK_DAYS) || 60;
 function loadBulk(force) {

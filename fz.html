@@ -365,7 +365,7 @@ div.lline{border-top:1px solid rgba(255,255,255,.55)}div.lline:first-child{borde
  * Replaces paper FM-PD-001.2 · FM-PD-001.03 · FM-QA-010.5 · FM-QA-010.3 (page 4) — numbers come from the server (Form_Register).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.3';
 const HOME_URL = 'index.html';
 const HAND_KEY = 'ckqc.hand';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -382,7 +382,7 @@ const L = {
     jobIn: '1 · เข้าฟรีซ', jobInSub: 'เลือกล็อตจาก PC → ห้อง + อุณหภูมิห้อง → บันทึก', jobOut: '2 · ออกฟรีซ', jobOutSub: 'เลือกล็อตที่จะออก → วัดใจกลางสินค้า → ส่ง PK',
     waitN: 'รอ {n} ล็อต', readyN: 'พร้อม {n} ล็อต', inNow: 'อยู่ในเครื่องตอนนี้ (ค้างข้ามวันได้)', noneIn: 'ไม่มีสินค้าในเครื่อง', homeFoot: 'รถที่เข้าแล้วจะอยู่ในรายการนี้จนกว่าจะบันทึกออก',
     lotsT: 'เลือกล็อตเข้าฟรีซ', lotsSub: 'ล็อตที่ผ่าน PC แล้ว · {n} วันล่าสุด', mustAll: 'ทุกล็อตต้องมีบันทึกเข้าฟรีซ — ยังเหลือ {n} ล็อต', allIn: 'ทุกล็อตมีบันทึกเข้าฟรีซแล้ว',
-    notIn: 'ยังไม่เข้าฟรีซ', notInTag: 'ยังไม่เข้า ›', inToday: 'เข้าแล้ว — แตะเพื่อเพิ่มรถของล็อตเดิม', nTro: '✓ {n} รถ ›', lotsFoot: 'ล็อตที่ผ่าน PC แต่ไม่มีบันทึกเข้าฟรีซ จะแจ้งในอีเมลตรวจระบบ 06:00', loading: 'กำลังโหลด…', noLots: 'ยังไม่มีล็อตที่ผ่าน PC',
+    notIn: 'ยังไม่เข้าฟรีซ', fromRm: 'รับเข้าเป็น', rcvOn: 'รับ', notInTag: 'ยังไม่เข้า ›', inToday: 'เข้าแล้ว — แตะเพื่อเพิ่มรถของล็อตเดิม', nTro: '✓ {n} รถ ›', lotsFoot: 'ล็อตที่ผ่าน PC แต่ไม่มีบันทึกเข้าฟรีซ จะแจ้งในอีเมลตรวจระบบ 06:00', loading: 'กำลังโหลด…', noLots: 'ยังไม่มีล็อตที่ผ่าน PC',
     inT: 'เข้าฟรีซ', rmL: 'RM', pcL: 'PC', received: 'รับเข้า', trimmed: 'ตัดแต่ง', lim: 'เกณฑ์ ≤', noRm: 'ล็อตพิมพ์เอง — ไม่มีใบรับ RM',
     trays: 'จำนวนถาด', traysHint: '1 รถ = 10–13', trolley: 'เบอร์รถ (Trolley)', foreign: 'สิ่งแปลกปลอม (เศษหิน พลาสติก พยาธิ)', notFound: '✓ ไม่พบ', found: '✕ พบ', fixL: 'การแก้ไข (ต้องเลือก)',
     arr: 'เวลาเรียง (≤ {n} นาที/รถ)', arrS: 'เริ่ม', arrE: 'จบ', nowBtn: 'ตอนนี้', mins: '{n} นาที', arrSlow: '{n} นาที — เกิน {m} นาที/รถ · ต้องใส่หมายเหตุ',
@@ -404,7 +404,7 @@ const L = {
     jobIn: '1 · Into the freezer', jobInSub: 'pick a lot from PC → room + room temperature → save', jobOut: '2 · Out of the freezer', jobOutSub: 'pick the lot → core temperature → send to PK',
     waitN: '{n} lots waiting', readyN: '{n} lots ready', inNow: 'In the freezers now (kept across days)', noneIn: 'Nothing in the freezers', homeFoot: 'A trolley stays on this list until it is recorded out',
     lotsT: 'Pick the lot to freeze', lotsSub: 'Lots that finished PC · last {n} days', mustAll: 'Every lot needs a freezer record — {n} left', allIn: 'Every lot has a freezer record',
-    notIn: 'Not in the freezer yet', notInTag: 'not in ›', inToday: 'Already in — tap to add another trolley', nTro: '✓ {n} trolleys ›', lotsFoot: 'A lot that passed PC with no freezer record is e-mailed in the 06:00 check', loading: 'Loading…', noLots: 'No lot has finished PC yet',
+    notIn: 'Not in the freezer yet', fromRm: 'received as', rcvOn: 'on', notInTag: 'not in ›', inToday: 'Already in — tap to add another trolley', nTro: '✓ {n} trolleys ›', lotsFoot: 'A lot that passed PC with no freezer record is e-mailed in the 06:00 check', loading: 'Loading…', noLots: 'No lot has finished PC yet',
     inT: 'Into the freezer', rmL: 'RM', pcL: 'PC', received: 'received', trimmed: 'trim', lim: 'limit ≤', noRm: 'Typed lot — no RM record',
     trays: 'Trays', traysHint: '1 trolley = 10–13', trolley: 'Trolley no.', foreign: 'Foreign matter (stones, plastic, parasites)', notFound: '✓ None', found: '✕ Found', fixL: 'Correction (required)',
     arr: 'Arranging time (≤ {n} min / trolley)', arrS: 'Start', arrE: 'End', nowBtn: 'Now', mins: '{n} min', arrSlow: '{n} min — over {m} min / trolley · a remark is needed',
@@ -688,18 +688,22 @@ function canCancel() {
 }
 const kindName = (k) => ({ in: t().kIn, out: t().kOut, temp: t().kTemp, core: t().kCore }[k] || k);
 
-function lotLine(l) { return (l.pc && l.pc.trim ? esc(l.pc.trim) + ' · ' : '') + '→ ' + esc((l.orders || []).join(', ')) + ' · PC ' + esc(since(l.pcDate, l.pcTime)); }
+/** title = Lot · fish · PC processing type(s) · size — what the staff see on the trolley (Sal, 25 Nov 2026); the RM item moves to the sub-line */
+function lotTrims(l) { return (l.trims && l.trims.length ? l.trims : l.pc && l.pc.trim ? [l.pc.trim] : []); }
+function lotTitle(l) { const tr = lotTrims(l); return 'Lot ' + esc(l.lot) + ' · ' + esc(String(l.item || '').split('-')[0]) + (tr.length ? ' <span style="color:var(--accent)">' + esc(tr.join(' + ')) + '</span>' : '') + ((l.orders || []).length ? ' → ' + esc(l.orders.join(', ')) : ''); }
+function lotLine(l) { return T0().fromRm + ' ' + esc(l.item) + ' ' + esc(l.size || '') + (l.rmDate ? ' · ' + T0().rcvOn + ' ' + ddmm(l.rmDate) : '') + (l.sup ? ' · ' + esc(String(l.sup).split(' / ')[0]) : '') + ' · PC ' + esc(since(l.pcDate, l.pcTime)); }
+const T0 = () => t();
 function viewLots() {
   const T = t(), st = state();
   let h = '<div class="stg"><div class="sub">' + fmt(T.lotsSub, { n: lim().LOT_DAYS }) + '</div>';
   if (S.stBusy && !S.st) return h + '<div class="sub" style="text-align:center;padding:24px"><span class="spin"></span> ' + T.loading + '</div></div>';
   h += st.waiting.length ? '<div class="note">' + fmt(T.mustAll, { n: st.waiting.length }) + '</div>' : (st.entered.length ? '<div class="card glass" style="color:var(--green);font-weight:700">✓ ' + T.allIn + '</div>' : '<div class="sub">' + T.noLots + '</div>');
   if (st.waiting.length) h += '<span class="lbl" style="color:var(--ink)">' + T.notIn + '</span><div class="tlist glass">' + st.waiting.map((l) =>
-    '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">Lot ' + esc(l.lot) + ' · ' + esc(l.item) + ' ' + esc(l.size) + '</b><div class="sub">' + lotLine(l) + '</div></span>' +
+    '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">' + lotTitle(l) + '</b><div class="sub">' + lotLine(l) + '</div></span>' +
     '<span class="pill p-warn">' + T.notInTag + '</span></button>').join('') + '</div>';
   if (st.entered.length) h += '<span class="lbl" style="color:var(--ink)">' + T.inToday + '</span><div class="tlist glass">' + st.entered.map((l) =>
-    '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">Lot ' + esc(l.lot) + ' · ' + esc(l.item) + ' ' + esc(l.size) + '</b>' +
-    '<div class="sub">→ ' + esc((l.orders || []).join(', ')) + ' · ' + esc((l.trolleys || []).map((x) => x.room + ' ' + T.cart + ' ' + x.no).join(' · ')) + '</div></span>' +
+    '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">' + lotTitle(l) + '</b>' +
+    '<div class="sub">' + lotLine(l) + '<br>' + esc((l.trolleys || []).map((x) => x.room + ' ' + T.cart + ' ' + x.no).join(' · ')) + '</div></span>' +
     '<span class="pill p-ok">' + fmt(T.nTro, { n: (l.trolleys || []).length }) + '</span></button>').join('') + '</div>';
   return h + '<div class="sub" style="text-align:center">' + T.lotsFoot + '</div></div>';
 }
