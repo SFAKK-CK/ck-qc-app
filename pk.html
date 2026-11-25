@@ -299,6 +299,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dchips small{font:600 12px var(--mono);color:var(--ink-3)}
 .dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
 .dchips .on small{color:rgba(255,255,255,.85)}
+.dchips>.pend{border-color:var(--red);background:#fbe9e7}
+.dchips>.on.pend{background:var(--accent);border:2px solid var(--red)}
+.dchips>.dot::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff}
 .dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
 .lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
 .lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
@@ -357,7 +360,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.3';
+const APP_VERSION = '1.3.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -387,7 +390,7 @@ const L = {
     noOrder: 'PC ยังไม่ใส่ Order', rcv: 'รับ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตจาก PC ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     rcvDate: 'วันที่รับเข้า', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
-    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', fromRm: 'รับเข้าเป็น', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code (ถ้ามี)', codePh: 'รหัสสินค้า',
+    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', dayL: 'วันที่ออกฟรีซ', dayLPc: 'วันที่ PC ตรวจ', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', dayLegend: 'แดง = วันนั้นยังมีล็อตค้างบรรจุ', dayNone: '✓ วันนี้ไม่มีล็อตค้างบรรจุ', fromRm: 'รับเข้าเป็น', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code (ถ้ามี)', codePh: 'รหัสสินค้า',
     sizeT: 'สุ่ม Size ปลา (ชั่งทีละตัว · g)', avg: 'เฉลี่ย', labelT: 'ฉลากสินค้า', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 ปี', '+18 เดือน', '+2 ปี'], expBad: 'Expiry ต้องหลัง Production',
     packT: 'ตรวจสอบบรรจุภัณฑ์', packHint: 'แตะเพื่อเปลี่ยน ✓ ผ่าน → ✗ ไม่ผ่าน → – ไม่ใช้',
     ck: { std: 'ตรงมาตรฐานการบรรจุ', seal: 'รอยซีล', bag: 'ถุง', box: 'กล่อง', strap: 'สายรัด', sack: 'กระสอบ', stk: 'สติ๊กเกอร์ถูกต้อง', stick: 'สติ๊กเกอร์ติดแน่น ไม่ลอก' },
@@ -420,7 +423,7 @@ const L = {
     noOrder: 'PC gave no order', rcv: 'recv', pcAt: 'PC', lotL: 'LOT',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in PC (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     rcvDate: 'Receive date', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
-    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', fromRm: 'received as', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code (if any)', codePh: 'Product code',
+    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', dayL: 'Day out of the freezer', dayLPc: 'Day checked by PC', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', dayLegend: 'red = lots of that day still to pack', dayNone: '✓ nothing left to pack on this day', fromRm: 'received as', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code (if any)', codePh: 'Product code',
     sizeT: 'Fish size sample (weigh one by one · g)', avg: 'average', labelT: 'Label', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 year', '+18 months', '+2 years'], expBad: 'Expiry must be after production',
     packT: 'Packaging check', packHint: 'Tap to change ✓ pass → ✗ fail → – not used',
     ck: { std: 'As the packing standard', seal: 'Seal', bag: 'Bag', box: 'Box', strap: 'Strap', sack: 'Sack', stk: 'Sticker correct', stick: 'Sticker stays on' },
@@ -453,7 +456,7 @@ const L = {
     noOrder: 'PC Order မထည့်ရသေး', rcv: 'လက်ခံ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'PC တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     rcvDate: 'လက်ခံရက်', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
-    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', fromRm: 'လက်ခံ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code', codePh: 'ကုန်ပစ္စည်း ကုဒ်',
+    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', dayL: 'အအေးခဲမှ ထွက်သည့်နေ့', dayLPc: 'PC စစ်သည့်နေ့', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်', dayLegend: 'အနီ = ထိုနေ့ ထုပ်ပိုးရန် ကျန်', dayNone: '✓ ယနေ့ ကျန်မရှိ', fromRm: 'လက်ခံ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code', codePh: 'ကုန်ပစ္စည်း ကုဒ်',
     sizeT: 'ငါးအရွယ် နမူနာ (တစ်ကောင်ချင်း · g)', avg: 'ပျမ်းမျှ', labelT: 'တံဆိပ်', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 နှစ်', '+18 လ', '+2 နှစ်'], expBad: 'Expiry သည် Production နောက်မှ ဖြစ်ရမည်',
     packT: 'ထုပ်ပိုးပစ္စည်း စစ်ဆေး', packHint: 'နှိပ်ပါ ✓ → ✗ → –',
     ck: { std: 'ထုပ်ပိုး စံနှုန်းအတိုင်း', seal: 'ဆီး', bag: 'အိတ်', box: 'သေတ္တာ', strap: 'ကြိုး', sack: 'အိတ်ကြီး', stk: 'စတစ်ကာ မှန်', stick: 'စတစ်ကာ မကွာ' },
@@ -783,10 +786,22 @@ function viewHome() {
 }
 
 /** lots that match the search box (order, item, size, lot) */
+const lotDay = (l) => (l.fz ? l.fz.outDate : l.pcDate);   // the day the lot became ready for PK
+const addD = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+/** date buttons like PC / RM (Sal, 25 Nov 2026): red = that day still has a lot to pack; "วันอื่น" red + dot when an older lot is waiting */
+function viewDayChips(all) {
+  const T = t(), today = todayStr(), sel = S.pkDate || today;
+  const byDay = {}; all.forEach((l) => { byDay[lotDay(l)] = (byDay[lotDay(l)] || 0) + 1; });
+  const chips = [0, 1, 2, 3].map((n) => { const d = addD(today, -n); return '<button class="' + (sel === d ? 'on' : '') + (byDay[d] ? ' pend' : '') + '" data-act="pkdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
+  const other = [0, 1, 2, 3].every((n) => addD(today, -n) !== sel);
+  const olderPend = Object.keys(byDay).some((d) => d < addD(today, -3));
+  return '<div class="row"><span class="lbl grow">' + (S.lots && S.lots.frozenOnly ? T.dayL : T.dayLPc) + '</span>' + (all.length ? '<span class="sub" style="color:var(--red);font-weight:700">' + T.dayLegend + '</span>' : '') + '</div><div class="dchips">' + chips +
+    '<label class="' + (other ? 'on' : '') + (olderPend || (other && byDay[sel]) ? ' pend' : '') + (olderPend ? ' dot' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(sel) : '··/··') + '</small><input type="date" data-on="pkdate" max="' + today + '" value="' + esc(sel) + '" aria-label="' + T.otherDay + '"></label></div>';
+}
 function lotsShown() {
   const got = S.lots && S.lots.lots ? S.lots.lots : [];
   const q = cleanOrder(S.q).replace(/\s/g, '');
-  if (!q) return got;
+  if (!q) return got.filter((l) => lotDay(l) === (S.pkDate || todayStr()));   // a search looks across every day
   return got.filter((l) => (l.orders.join(' ') + ' ' + l.item + ' ' + l.size + ' LOT' + l.lot).toUpperCase().replace(/\s/g, '').indexOf(q) >= 0);
 }
 function viewLot() {
@@ -801,6 +816,7 @@ function viewLot() {
   const got = S.lots && S.lots.lots;
   const fzOnly = !!(S.lots && S.lots.frozenOnly);   // the freezing step is live: PK sees only lots recorded out of the freezer (Sal, 20 Nov 2026)
   if (fzOnly) h += '<div class="sub" style="font-weight:700;color:var(--accent-ink)">❄ ' + T.fzOnly + '</div>';
+  if (got) h += viewDayChips(got);
   if (got) {   // every order PC gave, as quick filters
     const ords = []; got.forEach((l) => l.orders.forEach((o) => { if (ords.indexOf(o) < 0) ords.push(o); }));
     if (ords.length) h += '<div class="fixes">' + ords.slice(0, 20).map((o) => '<button class="' + (cleanOrder(S.q) === o ? 'on' : '') + '" data-act="qorder" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') + '</div>';
@@ -812,7 +828,7 @@ function viewLot() {
   const shown = lotsShown();
   const lateN = (got || []).filter((l) => l.late).length;
   if (lateN) h += '<div class="note" style="color:var(--red);font-weight:800">' + fmt(T.lateN, { n: lateN }) + '</div>';
-  if (got && got.length && !shown.length) h += '<div class="sub" style="text-align:center">' + T.noMatch + '</div>';
+  if (got && got.length && !shown.length) h += '<div class="sub" style="text-align:center;color:var(--green);font-weight:700">' + (cleanOrder(S.q) ? T.noMatch : T.dayNone) + '</div>';
   shown.forEach((l) => {
     const on = c.key === l.key;
     h += '<div class="lotc glass' + (on ? ' on' : '') + '"' + (l.late ? ' style="border:2px solid var(--red)"' : '') + '><button class="lline" style="border-top:0" data-act="picklot" data-k="' + esc(l.key) + '"><span class="grow"><span class="lotno" style="display:inline-block;margin-bottom:4px;font-size:15px">Lot ' + esc(l.lot) + '</span><br><b style="font-size:17px">' + lotTitle(l) + '</b>' +
@@ -1235,6 +1251,7 @@ const ACT = {
   resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(true); },
   discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
+  pkdate: (el) => { S.pkDate = el.dataset.v; S.err = ''; render(); },
   picktrim: (el) => { S.c.trim = S.c.trim === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   qorder: (el) => { S.q = cleanOrder(S.q) === el.dataset.v ? '' : el.dataset.v; render(); },
   lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(true); else loadLots(true); },
@@ -1332,6 +1349,7 @@ document.addEventListener('change', (e) => {
   if (on === 'mfish') { c.fish = el.value; return render(); }
   if (on === 'mproc') { c.proc = el.value; return render(); }
   if (on === 'trim') { c.trim = el.value; return render(); }
+  if (on === 'pkdate') { if (/^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value <= todayStr()) { S.pkDate = el.value; render(); } return; }
   if (on === 'msize') { c.size = el.value.toUpperCase().replace(/\s+/g, '').trim(); return render(); }
   if (on === 'msup') { c.sup = el.value.replace(/\s+/g, ' ').trim(); return render(); }
   if (on === 'remark') { c.remark = el.value.replace(/\s+/g, ' ').trim(); return render(); }

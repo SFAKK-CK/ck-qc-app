@@ -195,6 +195,17 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .temp{min-width:124px;line-height:1.1;text-align:center;padding:10px 12px;border-radius:14px;font:600 28px var(--mono);border:2.5px solid var(--accent);background:var(--glass)}
 .temp.ok{background:var(--green-soft);color:var(--green);border:2px solid var(--green)}
 .temp.bad{background:var(--red-soft);color:var(--red);border:2px solid var(--red)}
+@keyframes chipIn{from{transform:scale(.92)}to{transform:none}}
+.dchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.dchips>*{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;border-radius:12px;background:var(--glass);border:1.5px solid var(--glass-line);font:inherit;color:var(--ink);cursor:pointer;text-align:center;overflow:hidden}
+.dchips b{font-size:13px;font-weight:700;line-height:1.15}
+.dchips small{font:600 12px var(--mono);color:var(--ink-3)}
+.dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
+.dchips .on small{color:rgba(255,255,255,.85)}
+.dchips>.pend{border-color:var(--red);background:#fbe9e7}
+.dchips>.on.pend{background:var(--accent);border:2px solid var(--red)}
+.dchips>.dot::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff}
+.dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
 .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .chips button{min-height:42px;padding:6px 8px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;background:rgba(255,255,255,.35);border:1.5px solid var(--glass-line)}
 .chips button.zero{color:var(--red-ink);border:1.5px dashed #e0a5a7;background:var(--glass)}
@@ -365,7 +376,7 @@ div.lline{border-top:1px solid rgba(255,255,255,.55)}div.lline:first-child{borde
  * Replaces paper FM-PD-001.2 · FM-PD-001.03 · FM-QA-010.5 · FM-QA-010.3 (page 4) — numbers come from the server (Form_Register).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.0.3';
+const APP_VERSION = '1.1.0';
 const HOME_URL = 'index.html';
 const HAND_KEY = 'ckqc.hand';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -382,7 +393,7 @@ const L = {
     jobIn: '1 · เข้าฟรีซ', jobInSub: 'เลือกล็อตจาก PC → ห้อง + อุณหภูมิห้อง → บันทึก', jobOut: '2 · ออกฟรีซ', jobOutSub: 'เลือกล็อตที่จะออก → วัดใจกลางสินค้า → ส่ง PK',
     waitN: 'รอ {n} ล็อต', readyN: 'พร้อม {n} ล็อต', inNow: 'อยู่ในเครื่องตอนนี้ (ค้างข้ามวันได้)', noneIn: 'ไม่มีสินค้าในเครื่อง', homeFoot: 'รถที่เข้าแล้วจะอยู่ในรายการนี้จนกว่าจะบันทึกออก',
     lotsT: 'เลือกล็อตเข้าฟรีซ', lotsSub: 'ล็อตที่ผ่าน PC แล้ว · {n} วันล่าสุด', mustAll: 'ทุกล็อตต้องมีบันทึกเข้าฟรีซ — ยังเหลือ {n} ล็อต', allIn: 'ทุกล็อตมีบันทึกเข้าฟรีซแล้ว',
-    notIn: 'ยังไม่เข้าฟรีซ', fromRm: 'รับเข้าเป็น', rcvOn: 'รับ', notInTag: 'ยังไม่เข้า ›', inToday: 'เข้าแล้ว — แตะเพื่อเพิ่มรถของล็อตเดิม', nTro: '✓ {n} รถ ›', lotsFoot: 'ล็อตที่ผ่าน PC แต่ไม่มีบันทึกเข้าฟรีซ จะแจ้งในอีเมลตรวจระบบ 06:00', loading: 'กำลังโหลด…', noLots: 'ยังไม่มีล็อตที่ผ่าน PC',
+    notIn: 'ยังไม่เข้าฟรีซ', fromRm: 'รับเข้าเป็น', rcvOn: 'รับ', dayL: 'วันที่ PC ตรวจ', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', dayLegend: 'แดง = วันนั้นยังมีล็อตไม่เข้าฟรีซ', dayNone: '✓ วันนี้ไม่มีล็อตค้างเข้าฟรีซ', notInTag: 'ยังไม่เข้า ›', inToday: 'เข้าแล้ว — แตะเพื่อเพิ่มรถของล็อตเดิม', nTro: '✓ {n} รถ ›', lotsFoot: 'ล็อตที่ผ่าน PC แต่ไม่มีบันทึกเข้าฟรีซ จะแจ้งในอีเมลตรวจระบบ 06:00', loading: 'กำลังโหลด…', noLots: 'ยังไม่มีล็อตที่ผ่าน PC',
     inT: 'เข้าฟรีซ', rmL: 'RM', pcL: 'PC', received: 'รับเข้า', trimmed: 'ตัดแต่ง', lim: 'เกณฑ์ ≤', noRm: 'ล็อตพิมพ์เอง — ไม่มีใบรับ RM',
     trays: 'จำนวนถาด', traysHint: '1 รถ = 10–13', trolley: 'เบอร์รถ (Trolley)', foreign: 'สิ่งแปลกปลอม (เศษหิน พลาสติก พยาธิ)', notFound: '✓ ไม่พบ', found: '✕ พบ', fixL: 'การแก้ไข (ต้องเลือก)',
     arr: 'เวลาเรียง (≤ {n} นาที/รถ)', arrS: 'เริ่ม', arrE: 'จบ', nowBtn: 'ตอนนี้', mins: '{n} นาที', arrSlow: '{n} นาที — เกิน {m} นาที/รถ · ต้องใส่หมายเหตุ',
@@ -404,7 +415,7 @@ const L = {
     jobIn: '1 · Into the freezer', jobInSub: 'pick a lot from PC → room + room temperature → save', jobOut: '2 · Out of the freezer', jobOutSub: 'pick the lot → core temperature → send to PK',
     waitN: '{n} lots waiting', readyN: '{n} lots ready', inNow: 'In the freezers now (kept across days)', noneIn: 'Nothing in the freezers', homeFoot: 'A trolley stays on this list until it is recorded out',
     lotsT: 'Pick the lot to freeze', lotsSub: 'Lots that finished PC · last {n} days', mustAll: 'Every lot needs a freezer record — {n} left', allIn: 'Every lot has a freezer record',
-    notIn: 'Not in the freezer yet', fromRm: 'received as', rcvOn: 'on', notInTag: 'not in ›', inToday: 'Already in — tap to add another trolley', nTro: '✓ {n} trolleys ›', lotsFoot: 'A lot that passed PC with no freezer record is e-mailed in the 06:00 check', loading: 'Loading…', noLots: 'No lot has finished PC yet',
+    notIn: 'Not in the freezer yet', fromRm: 'received as', rcvOn: 'on', dayL: 'Day checked by PC', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', dayLegend: 'red = lots of that day not in the freezer yet', dayNone: '✓ nothing waiting on this day', notInTag: 'not in ›', inToday: 'Already in — tap to add another trolley', nTro: '✓ {n} trolleys ›', lotsFoot: 'A lot that passed PC with no freezer record is e-mailed in the 06:00 check', loading: 'Loading…', noLots: 'No lot has finished PC yet',
     inT: 'Into the freezer', rmL: 'RM', pcL: 'PC', received: 'received', trimmed: 'trim', lim: 'limit ≤', noRm: 'Typed lot — no RM record',
     trays: 'Trays', traysHint: '1 trolley = 10–13', trolley: 'Trolley no.', foreign: 'Foreign matter (stones, plastic, parasites)', notFound: '✓ None', found: '✕ Found', fixL: 'Correction (required)',
     arr: 'Arranging time (≤ {n} min / trolley)', arrS: 'Start', arrE: 'End', nowBtn: 'Now', mins: '{n} min', arrSlow: '{n} min — over {m} min / trolley · a remark is needed',
@@ -698,7 +709,17 @@ function viewLots() {
   let h = '<div class="stg"><div class="sub">' + fmt(T.lotsSub, { n: lim().LOT_DAYS }) + '</div>';
   if (S.stBusy && !S.st) return h + '<div class="sub" style="text-align:center;padding:24px"><span class="spin"></span> ' + T.loading + '</div></div>';
   h += st.waiting.length ? '<div class="note">' + fmt(T.mustAll, { n: st.waiting.length }) + '</div>' : (st.entered.length ? '<div class="card glass" style="color:var(--green);font-weight:700">✓ ' + T.allIn + '</div>' : '<div class="sub">' + T.noLots + '</div>');
-  if (st.waiting.length) h += '<span class="lbl" style="color:var(--ink)">' + T.notIn + '</span><div class="tlist glass">' + st.waiting.map((l) =>
+  // date buttons like PC / RM / PK (Sal, 25 Nov 2026): red = that day still has a lot not in the freezer; "วันอื่น" red + dot when an older one waits
+  const today = todayStr(), sel = S.fzDate || today;
+  const addD = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  const byDay = {}; st.waiting.forEach((l) => { byDay[l.pcDate] = (byDay[l.pcDate] || 0) + 1; });
+  const other = [0, 1, 2, 3].every((n) => addD(today, -n) !== sel), olderPend = Object.keys(byDay).some((d) => d < addD(today, -3));
+  h += '<div class="row"><span class="lbl grow">' + T.dayL + '</span>' + (st.waiting.length ? '<span class="sub" style="color:var(--red);font-weight:700">' + T.dayLegend + '</span>' : '') + '</div><div class="dchips">' +
+    [0, 1, 2, 3].map((n) => { const d = addD(today, -n); return '<button class="' + (sel === d ? 'on' : '') + (byDay[d] ? ' pend' : '') + '" data-act="fzdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('') +
+    '<label class="' + (other ? 'on' : '') + (olderPend || (other && byDay[sel]) ? ' pend' : '') + (olderPend ? ' dot' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(sel) : '··/··') + '</small><input type="date" data-on="fzdate" max="' + today + '" value="' + esc(sel) + '" aria-label="' + T.otherDay + '"></label></div>';
+  const waitDay = st.waiting.filter((l) => l.pcDate === sel);
+  if (st.waiting.length && !waitDay.length) h += '<div class="sub" style="color:var(--green);font-weight:700">' + T.dayNone + '</div>';
+  if (waitDay.length) h += '<span class="lbl" style="color:var(--ink)">' + T.notIn + '</span><div class="tlist glass">' + waitDay.map((l) =>
     '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">' + lotTitle(l) + '</b><div class="sub">' + lotLine(l) + '</div></span>' +
     '<span class="pill p-warn">' + T.notInTag + '</span></button>').join('') + '</div>';
   if (st.entered.length) h += '<span class="lbl" style="color:var(--ink)">' + T.inToday + '</span><div class="tlist glass">' + st.entered.map((l) =>
@@ -1001,6 +1022,7 @@ const ACT = {
   mainmenu: () => toMainMenu(),
   hardrefresh: () => { stAt = 0; refreshConfig(true); refreshState(true); flush(); checkUpdate(); },
   home: () => go('home'),
+  fzdate: (el) => { S.fzDate = el.dataset.v; render(); },
   back: () => {
     if (S.screen === 'out' && S.o) { S.o = null; return go('out'); }
     if (S.screen === 'in') { S.c = null; return go('lots'); }
@@ -1059,6 +1081,7 @@ const TXT = { vreason: (v) => (S.vd.reason = v), remark: (v) => (S.c.remark = v)
 document.addEventListener('change', (e) => {
   const el = e.target, on = el.dataset && el.dataset.on;
   if (!on) return;
+  if (on === 'fzdate') { if (/^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value <= todayStr()) { S.fzDate = el.value; render(); } return; }
   if ((on === 'arrStart' || on === 'arrEnd') && S.c) { S.c[on] = /^\d{2}:\d{2}$/.test(el.value) ? el.value : ''; return render(); }
   if (TXT[on]) { TXT[on](el.value.replace(/\s+/g, ' ').trim()); persist(); }   // no redraw here: a redraw while the finger is going down on the save button would lose that tap
 });
@@ -1109,6 +1132,11 @@ if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href);
 render();
 if (S.staff) { refreshConfig(true); refreshState(true); flush(); }
 checkUpdate();
+/* the date box opens the calendar on a computer too */
+document.addEventListener('click', (e) => {
+  const el = e.target && e.target.closest ? e.target.closest('input[type="date"]') : null;
+  if (el && typeof el.showPicker === 'function') { try { el.showPicker(); } catch (err) { /* already open */ } }
+}, true);
 </script>
 </body>
 </html>
