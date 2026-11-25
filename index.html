@@ -323,7 +323,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.6.0';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -343,11 +343,11 @@ const L = {
     badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
     today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
     rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลา · กุ้ง · พริก/สมุนไพร', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
-    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', noTrucks: 'ยังไม่มีรถวันนี้',
+    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', backT: '⚖ รอน้ำหนักจริง · วันก่อน', backSub: 'รับไปแล้วแต่ยังไม่ใส่น้ำหนักจริง (ย้อนหลัง {n} วัน) — แตะเพื่อใส่น้ำหนัก · หายเองเมื่อใส่ครบ', rmWaitTile: '⚖ รอน้ำหนักจริง {n} เที่ยว', noTrucks: 'ยังไม่มีรถวันนี้',
     pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
     steps: ['รถ', 'วัตถุดิบ', 'ตรวจ', 'สรุป'],
     truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', otherSup: '+ อื่นๆ (พิมพ์ชื่อเอง)…', typeSup: 'ชื่อผู้ขาย', supCodeL: 'รหัสผู้ขาย (2 หลัก)', needSupBoth: 'ใส่ทั้งชื่อผู้ขายและรหัส 2 หลัก', supCustomTag: 'ผู้ขายพิมพ์เอง — แจ้งหัวหน้าให้เพิ่มในรายชื่อ', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
-    fishNext: 'ชนิดวัตถุดิบเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
+    fishNext: 'ชนิดวัตถุดิบเลือกในหน้าถัดไป', lot: 'Lot No', lotHint: 'แตะแล้วกดตัวเลข', lotAutoHint: 'ระบบตั้งให้ (สาขา-ปีเดือนวัน-ลำดับ) · เขียนเลขนี้บนป้าย', lotMoved: 'Lot {a} มีคนใช้แล้ว — ระบบเปลี่ยนเป็น {b} · แก้ป้ายตามนี้', auto: 'ระบบใส่ให้แล้ว', time: 'เวลารับ', scale: 'เครื่องชั่ง', thermo: 'เทอร์โมมิเตอร์', none: '—',
     fishT: 'วัตถุดิบในรถ', fishSub: 'ปลา · กุ้ง · พริก/สมุนไพร — ชื่อ / Processing type / ขนาด ต่างกัน = คนละรายการ', fishName: 'ชื่อวัตถุดิบ', proc: 'Processing type',
     typeOwn: '+ พิมพ์ชื่อเอง…', fromList: 'เลือกจากรายการ', manualTag: 'พิมพ์ชื่อเอง', newLine: 'รายการใหม่', incomplete: 'ยังไม่ครบ',
     sizeL: 'ขนาด (ต่อตัว)', weightL: 'น้ำหนักรับเข้า (รวม)', pickOne: '— เลือก —', noSize: 'ไม่มีขนาด', sample: 'ต้องสุ่ม', other: 'อื่นๆ',
@@ -358,7 +358,7 @@ const L = {
     rest: 'ที่เหลือ', restT: 'ปลาที่เหลือในตัวอย่าง', restSub: 'ตัวที่ไม่ได้วัดอุณหภูมิ · นับเฉพาะที่พบปัญหา', rule10: 'พบไม่เกิน {n} ตัว = ผ่าน', rule0: 'พบ 1 ตัว = ไม่ผ่าน',
     allOk: '✓ ยังไม่พบปัญหา', found: 'พบ', pass: 'ผ่าน', fail: 'ไม่ผ่าน', passFix: 'ผ่านหลังแก้ไข', nextFish: 'ตัวถัดไป ›', ok: 'ตกลง',
     wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว', needTemps: 'วัดอุณหภูมิให้ครบ {n} ตัว', samplePcs: 'สุ่ม {n} ตัว · ยอมรับ ≤ {ac}', planLine: 'น้ำหนัก {kg} kg → สุ่ม {n} ตัว (AQL S-3)', allDone: 'ตรวจครบ {n} ตัวแล้ว', tapToEdit: 'แตะตัวปลาในแถบด้านล่างเพื่อแก้', ruleAql: 'ยอมรับ ≤ {ac} ตัว · พบ {re} ตัว = ไม่ผ่าน',
-    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pendT: 'รอ RM กำลังไป PC', lotsU: 'ล็อต', pendWarn: 'ดองเกิน {n} วัน · {m}', pendSub: 'ล็อตที่รับแล้ว แต่ PC ยังไม่ปิดล็อต · ใส่น้ำหนักจริงแล้วหรือยังก็ยังอยู่ในรายการ', pendHeld: 'ดอง {n} วัน', pendToday: 'รับวันนี้', pendMore: 'อีก {n} ล็อต — ดูในหน้า PC', pendNone: '✓ ไม่มีล็อตค้าง — PC ปิดครบทุกล็อตแล้ว', pcPend: 'ค้าง {n} ล็อต', pcPendWarn: 'ดองเกิน {d} วัน {m}', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', fz: 'แช่แข็ง', fzSub: 'เข้าฟรีซ + อุณหภูมิห้อง · ออกฟรีซ + ใจกลางสินค้า', repFzT: 'แช่แข็ง', repArch: 'จากคลังเก็บ', repCart: 'รถ', repTrays: 'ถาด', repRoomT: 'ห้อง', repCore: 'ใจกลาง', repStillIn: 'ในฟรีซ', repHrs: 'ชม.', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repHint: 'พิมพ์ Order แล้วกด ดูรายงาน — ได้ทุกล็อตและทุกการตรวจของ Order นั้น', repMatch: 'พบ {n} Order ที่มี "{q}" — แตะเพื่อดู', repLast: 'ตรวจล่าสุด', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
+    sizeS: 'ขนาด (ตัว/kg)', sizeR: 'ขนาด (g/ตัว) ช่วง', pendT: 'รอ RM กำลังไป PC', lotsU: 'ล็อต', pendWarn: 'ดองเกิน {n} วัน · {m}', pendSub: 'ล็อตที่รับแล้ว แต่ PC ยังไม่ได้ตรวจเลย · ใส่น้ำหนักจริงแล้วหรือยังก็ยังอยู่ในรายการ', pendHeld: 'ดอง {n} วัน', pendToday: 'รับวันนี้', pendMore: 'อีก {n} ล็อต — ดูในหน้า PC', pendNone: '✓ ไม่มีล็อตค้าง — PC ตรวจแล้วทุกล็อต', pcPend: 'ค้าง {n} ล็อต', pcPendWarn: 'ดองเกิน {d} วัน {m}', pcSub: 'อุณหภูมิหลังชั่ง · น้ำหนักก่อน/หลังตัดแต่ง', fz: 'แช่แข็ง', fzSub: 'เข้าฟรีซ + อุณหภูมิห้อง · ออกฟรีซ + ใจกลางสินค้า', repFzT: 'แช่แข็ง', repArch: 'จากคลังเก็บ', repCart: 'รถ', repTrays: 'ถาด', repRoomT: 'ห้อง', repCore: 'ใจกลาง', repStillIn: 'ในฟรีซ', repHrs: 'ชม.', pkSub: 'Order · Size ปลา · ฉลาก · บรรจุภัณฑ์ · Glazing', repSec: 'รายงาน', repDl: '⬇ ดาวน์โหลด Excel', repDlAll: '⬇ ดาวน์โหลดทุก Order (Excel)', repDlBusy: 'กำลังสร้างไฟล์…', repDlDone: 'ดาวน์โหลดแล้ว — ดูในโฟลเดอร์ Downloads / ไฟล์', repDlCsv: 'ไม่มีสัญญาณโหลดตัวสร้าง Excel — ดาวน์โหลดเป็น CSV แทน', repRm: 'RM วัตถุดิบ', repPcT: 'PC %Loss', repPkT: 'PK Glazing', repRemarks: 'หมายเหตุ', repSum: 'รวม', repLimit: 'เกณฑ์', rep: 'รายงานตาม Order', repSub: 'RM → PC %Loss → PK Glazing ของแต่ละ Order แยกทุกล็อต ทุกครั้งที่ตรวจ', repFind: 'พิมพ์ Order เช่น SCK, KOL12/L', repGo: 'ดูรายงาน', repHint: 'พิมพ์ Order แล้วกด ดูรายงาน — ได้ทุกล็อตและทุกการตรวจของ Order นั้น', repMatch: 'พบ {n} Order ที่มี "{q}" — แตะเพื่อดู', repLast: 'ตรวจล่าสุด', repNone: 'ไม่พบ Order นี้', repLoading: 'กำลังสร้างรายงาน…', repLots: 'ล็อต', repPc: 'PC — %Loss', repPk: 'PK — Glazing', repChecks: 'ครั้ง', repAvg: 'เฉลี่ย', repAll: 'รวม', repMin: 'ต่ำสุด', repMax: 'สูงสุด', repOver: 'เกินเกณฑ์', repWhy: 'เหตุผล', repOrderG: 'Order %Glazing', repGFail: 'Glazing ไม่ผ่าน', repPkFail: 'PK ไม่ผ่าน', repPcList: 'ทุกการตรวจ PC', repPkList: 'ทุกการตรวจ PK', repNoData: 'ยังไม่มี', repOffline: 'ต้องต่ออินเทอร์เน็ตเพื่อดูรายงาน', appd: 'APPD/MD', sulfite: 'ซัลไฟต์', sPass: '1 ผ่าน', sFail: '2 ไม่ผ่าน', sample5: 'สุ่ม {pct}% ของน้ำหนัก = {kg} kg',
     point: 'จุด {p} · ครั้งที่ {r}', pointHint: 'มุม 4 จุด + ตรงกลาง · จุดละ 3 ครั้ง · ไปค่าถัดไปเอง', allPoints: 'วัดครบ {n} ค่าแล้ว', needTempsS: 'วัดอุณหภูมิให้ครบ {n} ค่า',
     shrimpChecksT: 'ลักษณะทางกายภาพ (ทั้งตัวอย่าง) — แตะข้อที่ไม่ผ่าน',
     shrimpChecks: ['หัวและลำตัวปกติ ไม่นิ่ม มีสีเทาถึงสีใส ตัวไม่มีสีแดง', 'กลิ่นปกติ ไม่มีกลิ่นโคลน/คาว', 'หัวติดแน่นกับลำตัว หัวไม่มีสีเหลืองและจุดขาว', 'เปลือกแข็ง แน่น ไม่มีเหมือกเหนียว',
@@ -381,11 +381,11 @@ const L = {
     badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
     today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
     rm: 'Raw material receiving', rmSub: 'Fish · shrimp · chilli/herbs', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
-    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', noTrucks: 'No trucks yet today',
+    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', backT: '⚖ Waiting for real weight · earlier days', backSub: 'Received but the real weight is not entered yet (last {n} days) — tap to enter · leaves the list once entered', rmWaitTile: '⚖ {n} trucks waiting for real weight', noTrucks: 'No trucks yet today',
     pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
     steps: ['Truck', 'Items', 'Inspect', 'Review'],
     truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', otherSup: '+ Other (type a name)…', typeSup: 'Supplier name', supCodeL: 'Supplier code (2 digits)', needSupBoth: 'Enter both the supplier name and the 2-digit code', supCustomTag: 'Typed by hand — ask the lead to add it to the list', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
-    fishNext: 'Items are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
+    fishNext: 'Items are chosen on the next page', lot: 'Lot No', lotHint: 'tap, then type the number', lotAutoHint: 'set by the app (branch-yyMMdd-number) · write this on the tag', lotMoved: 'Lot {a} was already taken — the system changed it to {b} · correct the tag', auto: 'Filled in for you', time: 'Received', scale: 'Scale', thermo: 'Thermometer', none: '—',
     fishT: 'Items on this truck', fishSub: 'Fish · shrimp · chilli/herbs — different name / processing type / size = separate line', fishName: 'Item', proc: 'Processing type',
     typeOwn: '+ Type a name…', fromList: 'Pick from list', manualTag: 'Typed by hand', newLine: 'New line', incomplete: 'Incomplete',
     sizeL: 'Size (per fish)', weightL: 'Weight received (total)', pickOne: '— Choose —', noSize: 'No size', sample: 'Sample', other: 'Other',
@@ -419,11 +419,11 @@ const L = {
     badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေးသောကား ရှိ — ဖျက်ပြီးထွက်ရန် ထပ်နှိပ်ပါ', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
     today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
     rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ငါး · ပုစွန် · ငရုတ်/ဟင်းခတ်', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
-    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', noTrucks: 'ယနေ့ ကား မရှိသေး',
+    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', backT: '⚖ အမှန်အလေးချိန် စောင့် · ယခင်ရက်', backSub: 'လက်ခံပြီး အမှန်အလေးချိန် မထည့်ရသေး (ရက် {n} ရက်) — နှိပ်၍ ထည့်ပါ', rmWaitTile: '⚖ အလေးချိန် စောင့် {n} ကား', noTrucks: 'ယနေ့ ကား မရှိသေး',
     pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
     steps: ['ကား', 'ကုန်', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
     truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', otherSup: '+ အခြား (အမည် ရိုက်)…', typeSup: 'ပေးသွင်းသူ အမည်', supCodeL: 'ကုဒ် (၂ လုံး)', needSupBoth: 'အမည်နှင့် ကုဒ် ၂ လုံး ထည့်ပါ', supCustomTag: 'ကိုယ်တိုင်ရိုက် — စာရင်းထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
-    fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
+    fishNext: 'ငါးကို နောက်စာမျက်နှာတွင် ရွေးပါ', lot: 'Lot No', lotHint: 'နှိပ်ပြီး နံပါတ်ရိုက်ပါ', lotAutoHint: 'စနစ်က သတ်မှတ်ပြီး · တံဆိပ်တွင် ရေးပါ', lotMoved: 'Lot {a} သုံးပြီးသား — {b} သို့ ပြောင်းပြီး', auto: 'စနစ်က ဖြည့်ပြီး', time: 'လက်ခံချိန်', scale: 'ချိန်ခွင်', thermo: 'သာမိုမီတာ', none: '—',
     fishT: 'ကားပေါ်ရှိ ကုန်ကြမ်း', fishSub: 'ငါး/Processing type/အရွယ် မတူ = သီးခြားစာရင်း', fishName: 'ငါးအမည်', proc: 'Processing type',
     typeOwn: '+ အမည် ကိုယ်တိုင်ရိုက်…', fromList: 'စာရင်းမှ ရွေး', manualTag: 'ကိုယ်တိုင်ရိုက်', newLine: 'စာရင်းသစ်', incomplete: 'မပြည့်စုံ',
     sizeL: 'အရွယ် (တစ်ကောင်)', weightL: 'လက်ခံအလေးချိန် (စုစုပေါင်း)', pickOne: '— ရွေးပါ —', noSize: 'အရွယ်မရှိ', sample: 'နမူနာ', other: 'အခြား',
@@ -714,9 +714,13 @@ function demoApi(action, p) {
       const live = trucks.filter((x) => !x.void);
       let kg = 0, failed = 0, waitKg = 0;
       live.forEach((x) => { x.lines.forEach((l) => { kg += l.w; if (l.status === 'ไม่ผ่าน') failed++; }); x.waitKg = x.lines.filter((l) => !l.w).length; if (x.waitKg) waitKg++; });
-      return res({ ok: true, trucks: trucks, totals: { trucks: live.length, kg: Math.round(kg), failed: failed, waitKg: waitKg } });
+      const d0 = p.date || todayStr(), since = (() => { const d = new Date(d0 + 'T00:00:00'); d.setDate(d.getDate() - 5); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })();
+      const back = mem.recs.filter((r) => r.date >= since && r.date < d0 && !r.void && r.lines.some((l) => !(Number(l.w) > 0))).map((r) => ({ id: r.id, date: r.date, start: r.start, lot: r.lot, sup: r.supName + ' / ' + r.supCode, staffName: 'ผู้ทดลอง', void: false,
+        lines: r.lines.map((l, i) => ({ n: i + 1, name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', k: l.type || 'FISH', status: l._status })) }));
+      back.forEach((x) => { x.waitKg = x.lines.filter((l) => !l.w).length; });
+      return res({ ok: true, trucks: trucks, back: back, backDays: 5, totals: { trucks: live.length, kg: Math.round(kg), failed: failed, waitKg: waitKg, waitKgBack: back.length } });
     }
-    res({ ok: true, id: p.record && p.record.id });
+    res({ ok: true, id: p.record && p.record.id, lot: p.record && p.record.lot });
   }, 350));
 }
 
@@ -734,6 +738,7 @@ function flush() {
       if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: item.record.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
       else if (j && j.report === 'ok') S.reportWarn = null;
       if (S.last && S.last.id === item.record.id) S.last.report = j && j.report;
+      if (j && j.lot && j.lot !== item.record.lot) { toast(fmt(t().lotMoved, { a: item.record.lot, b: j.lot })); item.record.lot = j.lot; if (S.last && S.last.id === item.record.id) S.last.lot = j.lot; }
       S.outbox = S.outbox.filter((o) => o !== item);
       sentIds[item.record.id] = true;
       S.online = true;
@@ -755,7 +760,7 @@ function refreshToday(force) {
   if (!S.staff || (!force && Date.now() - todayAt < 30000)) return;
   todayAt = Date.now();
   api('rmToday', { staffId: S.staff.id, date: todayStr() }).then((j) => {
-    S.today = { date: todayStr(), trucks: j.trucks, totals: j.totals }; S.online = true; persist(); render();
+    S.today = { date: todayStr(), trucks: j.trucks, back: j.back || [], backDays: j.backDays || 5, totals: j.totals }; S.online = true; persist(); render();
   }, (e) => { if (e.net) { S.online = false; render(); } });
   loadPending();
 }
@@ -804,8 +809,19 @@ function go(screen, extra) {
 }
 const curLine = () => S.d && S.d.lines[S.d.cur];
 
+/** Lot code made by the app (Sal, 25 Nov 2026): S-251126-01 = branch · date · running number; the server confirms it */
+function lotPrefix(date) { const b = String((S.cfg && S.cfg.branch && S.cfg.branch.code) || 'SMT'); return b.charAt(0).toUpperCase() + '-' + date.slice(2, 4) + date.slice(5, 7) + date.slice(8, 10) + '-'; }
+function autoLot(date, exceptId) {
+  const pre = lotPrefix(date);
+  let max = 0;
+  const see = (id, lot) => { if (id !== exceptId && String(lot || '').indexOf(pre) === 0) max = Math.max(max, Number(String(lot).slice(pre.length)) || 0); };
+  if (S.today && S.today.date === date) (S.today.trucks || []).forEach((x) => see(x.id, x.lot));
+  S.outbox.forEach((o) => see(o.record.id, o.record.lot));
+  return pre + ('0' + (max + 1)).slice(-Math.max(2, String(max + 1).length));
+}
 function startTruck() {
-  S.d = { id: newId(), date: todayStr(), start: nowHM(), supCode: '', supName: '', lot: '', scale: S.scale || '', thermo: S.thermo || '', lines: [], cur: 0 };
+  S.d = { id: newId(), date: todayStr(), start: nowHM(), supCode: '', supName: '', lot: '', lotAuto: true, scale: S.scale || '', thermo: S.thermo || '', lines: [], cur: 0 };
+  S.d.lot = autoLot(S.d.date, S.d.id);
   go('truck');
   refreshConfig();
 }
@@ -967,6 +983,8 @@ function viewHome() {
     id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
     lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', status: l._status })) }));
   const rows = pendRows.concat(td.trucks);
+  const back = S.today && S.today.date === todayStr() ? S.today.back || [] : [];
+  const nWait = (td.totals.waitKg || 0) + back.length;
   let h = '<div class="stg">';
   h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
     '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="hardrefresh">↻ ' + T.refresh + '</button></div>';
@@ -993,7 +1011,7 @@ function viewHome() {
       '<div class="sub">' + esc(S.d.supName || '—') + ' · ' + S.d.lines.length + ' ' + T.lines + ' · ' + esc(S.d.start) + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>' +
       '<button class="linkbtn" style="align-self:flex-start;color:' + (S.confirm === 'discard' ? 'var(--red)' : 'var(--ink-3)') + '" data-act="discard">' + (S.confirm === 'discard' ? T.discardQ : T.discard) + '</button></div>';
   } else {
-    h += '<button class="dept main glass" data-act="startrm"><span class="ic">RM</span><span class="grow"><b style="font-size:18px">' + T.rm + '</b><div class="sub">' + T.rmSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
+    h += '<button class="dept main glass" data-act="startrm"><span class="ic">RM</span><span class="grow"><b style="font-size:18px">' + T.rm + '</b><div class="sub">' + (nWait ? '<b style="color:var(--red)">' + fmt(T.rmWaitTile, { n: nWait }) + '</b>' : T.rmSub) + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   }
   // PC shows at once; it is hidden only when the server has said PC is not installed
   const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
@@ -1012,6 +1030,11 @@ function viewHome() {
   // reports: their own section, apart from the departments (Sal, 17 Nov 2026)
   if (repTile) h += '<span class="lbl" style="font-size:15px;color:var(--ink);margin-top:6px">' + T.repSec + '</span>' + repTile;
   if (pcOn) h += viewPendCard();
+  if (back.length) {
+    h += '<span class="lbl" style="font-size:15px;color:var(--red)">' + T.backT + ' · ' + back.length + ' ' + T.trucks + '</span><div class="sub">' + fmt(T.backSub, { n: S.today.backDays || 5 }) + '</div>' +
+      '<div class="tlist glass">' + back.map((r) => '<button class="nokg" data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + ddmmOf(r.date) + '<br>' + esc(r.start) + '</span><span class="grow"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
+        '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div><div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKg + ' ' + r.waitKg + '/' + r.lines.length + '</div></span></button>').join('') + '</div>';
+  }
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
   if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
   else {
@@ -1027,6 +1050,8 @@ function viewHome() {
   }
   return h + '</div>';
 }
+/** today's trucks + earlier trucks still waiting for a real weight (Sal, 25 Nov 2026) */
+function rmKnownTrucks() { return S.today ? (S.today.trucks || []).concat(S.today.date === todayStr() ? S.today.back || [] : []) : []; }
 /** name of a line in a saved record (as sent to the server) */
 function savedNameOf(l) { return savedName({ type: l.type || (l.chilli ? 'PRODUCE' : 'FISH'), fish: l.fish, proc: l.proc, size: l.size, smin: l.sizeMin, smax: l.sizeMax }); }
 
@@ -1053,7 +1078,9 @@ function viewTruck() {
       '<div class="sub" style="font-size:12px">' + (d.supName && /^\d{2}$/.test(d.supCode || '') ? T.supCustomTag : '<span style="color:var(--red);font-weight:700">' + T.needSupBoth + '</span>') + '</div>';
   }
   else if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
-  h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
+  if (d.lotAuto) h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400;color:var(--green)">· ✓ ' + T.lotAutoHint + '</span></span>' +
+    '<div class="tap glass f-ok" style="font-size:22px;letter-spacing:.5px" data-lot="auto"><b class="mono">' + esc(d.lot) + '</b></div></div>';
+  else h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
     '<button class="tap glass ' + (lotActive ? 'f-act' : d.lot ? 'f-ok' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="' + (lotActive ? 'caret' : '') + '">' + esc(d.lot || (lotActive ? '' : '—')) + '</span></button></div>';
   const opt = (list, v) => '<option value="">' + T.none + '</option>' + list.map((x) => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('');
   h += '<div class="card glass"><span class="lbl" style="color:var(--green)">✓ ' + T.auto + '</span><div class="auto"><span>' + T.time + '</span><b>' + esc(d.start) + '</b>' +
@@ -1632,8 +1659,9 @@ function toast(msg) {
 function saveTruck() {
   const d = S.d;
   if (!canSave(d)) { S.err = t().needFix; return render(); }
+  if (d.lotAuto) d.lot = autoLot(d.date, d.id);   // other trucks may have been sent since this one started
   const rec = {
-    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, supCustom: !!d.supCustom, lot: d.lot, scale: d.scale, thermo: d.thermo,
+    id: d.id, date: d.date, start: d.start, end: nowHM(), supCode: d.supCode, supName: d.supName, supCustom: !!d.supCustom, lot: d.lot, lotAuto: !!d.lotAuto, scale: d.scale, thermo: d.thermo,
     device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     lines: d.lines.map((l) => {
       const e = evalLine(l);
@@ -1655,12 +1683,12 @@ function saveTruck() {
 
 function openTruckSheet(id) {
   const T = t();
-  const td = (S.today && S.today.trucks) || [];
+  const td = rmKnownTrucks();
   const tr = td.find((x) => x.id === id);
   const pend = S.outbox.find((o) => o.record.id === id);
   if (!tr && !pend) return;
   const lines = tr ? tr.lines : pend.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w), status: l._status }));
-  let h = '<div class="row"><b class="grow" style="font-size:18px">Lot ' + esc(tr ? tr.lot : pend.record.lot) + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+  let h = '<div class="row"><b class="grow" style="font-size:18px">' + (tr && tr.date && tr.date !== todayStr() ? ddmmOf(tr.date) + ' · ' : '') + 'Lot ' + esc(tr ? tr.lot : pend.record.lot) + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
     '<div class="sub">' + esc(tr ? tr.sup : pend.record.supName) + ' · ' + esc(tr ? tr.start : pend.record.start) + (tr && tr.staffName ? ' · ' + T.by + ' ' + esc(tr.staffName) : '') + '</div>' +
     '<div class="tlist glass">' + lines.map((l) => '<div style="display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
       (l.w > 0 ? kgFmt(l.w) + ' kg' : '<span style="color:var(--red);font-weight:700">' + esc(l.wr || '—') + ' kg · ' + T.waitKg + '</span>') + '</div></span>' +
@@ -1715,7 +1743,7 @@ const ACT = {
     location.href = PK_URL;
   },
   weigh: (el) => {
-    const tr = ((S.today && S.today.trucks) || []).find((x) => x.id === el.dataset.v);
+    const tr = rmKnownTrucks().find((x) => x.id === el.dataset.v);
     if (!tr) return;
     closeSheet();
     if (!tr.lines.some((l) => !(l.w > 0))) return;   // all weighed already = locked
