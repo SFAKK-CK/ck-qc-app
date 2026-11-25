@@ -201,6 +201,16 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .chips button.zero{color:var(--red-ink);border:1.5px dashed #e0a5a7;background:var(--glass)}
 .chips button.on{background:var(--red);color:#fff;border-color:var(--red);animation:chipIn 280ms var(--ease)}
 @keyframes chipIn{from{transform:scale(.92)}to{transform:none}}
+.dchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.dchips>*{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;border-radius:12px;background:var(--glass);border:1.5px solid var(--glass-line);font:inherit;color:var(--ink);cursor:pointer}
+.dchips b{font-size:13px;font-weight:700;line-height:1.15}
+.dchips small{font:600 12px var(--mono);color:var(--ink-3)}
+.dchips .on{background:var(--accent);border-color:var(--accent);color:#fff;animation:chipIn 280ms var(--ease)}
+.dchips .on small{color:rgba(255,255,255,.85)}
+.dchips>.pend{border-color:var(--red);background:#fbe9e7}
+.dchips>.on.pend{background:var(--accent);border:2px solid var(--red)}
+.dchips>.dot::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff}
+.dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
 .fwb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:8px 12px;border-radius:14px;border:2px solid var(--glass-line);background:var(--glass);font-size:14px;font-weight:600;color:var(--ink-2)}
 .fwb b{font:600 26px var(--mono);color:var(--ink)}
 .fwb.f-act{border:2.5px solid var(--accent)}
@@ -323,7 +333,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.6.2';
+const APP_VERSION = '1.6.3';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -343,7 +353,7 @@ const L = {
     badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'มีเที่ยวที่ยังไม่บันทึก — กดออกอีกครั้งเพื่อทิ้งและออก', demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet',
     today: 'วันนี้ (ทั้งสาขา)', trucks: 'เที่ยว', failShort: 'ไม่ผ่าน', pickDept: 'เลือกแผนก', soon: 'เร็วๆ นี้',
     rm: 'ตรวจรับวัตถุดิบ', rmSub: 'ปลา · กุ้ง · พริก/สมุนไพร', pc: 'แปรรูป', pk: 'บรรจุ', cs: 'ห้องเย็น',
-    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', todayShort: 'วันนี้', backSub: 'วันนี้ + ย้อนหลัง {n} วัน — แตะเพื่อใส่น้ำหนัก · หายเองเมื่อใส่ครบ', rmWaitTile: '⚖ รอน้ำหนักจริง {n} เที่ยว', noTrucks: 'ยังไม่มีรถวันนี้',
+    resume: 'ทำต่อ', discard: 'ทิ้งรายการที่ค้าง', discardQ: 'แตะอีกครั้งเพื่อทิ้ง', todayList: 'รถวันนี้', todayShort: 'วันนี้', backSub: 'แดง = วันนั้นยังมีเที่ยวที่ไม่ได้ใส่น้ำหนักจริง (ย้อนหลัง {n} วัน) · แตะเที่ยวเพื่อใส่', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', allKg: '✓ วันนี้ใส่น้ำหนักจริงครบแล้ว', rmWaitTile: '⚖ รอน้ำหนักจริง {n} เที่ยว', noTrucks: 'ยังไม่มีรถวันนี้',
     pendingT: 'รอส่ง', pendingSub: 'บันทึกในเครื่องแล้ว จะส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้', voided: 'ยกเลิกแล้ว',
     steps: ['รถ', 'วัตถุดิบ', 'ตรวจ', 'สรุป'],
     truckT: 'รถเที่ยวนี้', supplier: 'ผู้ขาย / รหัสผู้ขาย', pickSup: '— เลือกผู้ขาย —', otherSup: '+ อื่นๆ (พิมพ์ชื่อเอง)…', typeSup: 'ชื่อผู้ขาย', supCodeL: 'รหัสผู้ขาย (2 หลัก)', needSupBoth: 'ใส่ทั้งชื่อผู้ขายและรหัส 2 หลัก', supCustomTag: 'ผู้ขายพิมพ์เอง — แจ้งหัวหน้าให้เพิ่มในรายชื่อ', noSup: 'ยังไม่มีรายชื่อผู้ขาย — ให้หัวหน้าเพิ่มในแท็บ RM_Suppliers', loadingSup: 'กำลังโหลดรายชื่อผู้ขายจาก Google Sheet…', cfgFail: 'โหลดรายชื่อผู้ขายไม่ได้', reload: 'โหลดใหม่',
@@ -381,7 +391,7 @@ const L = {
     badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved truck — tap Sign out again to discard it and sign out', demo: 'Demo mode — nothing is sent to Google Sheets',
     today: 'Today (whole branch)', trucks: 'trucks', failShort: 'failed', pickDept: 'Choose a department', soon: 'Coming soon',
     rm: 'Raw material receiving', rmSub: 'Fish · shrimp · chilli/herbs', pc: 'Processing', pk: 'Packing', cs: 'Cold storage',
-    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', todayShort: 'today', backSub: 'Today + the last {n} days — tap to enter · leaves the list once entered', rmWaitTile: '⚖ {n} trucks waiting for real weight', noTrucks: 'No trucks yet today',
+    resume: 'Continue', discard: 'Discard unfinished truck', discardQ: 'Tap again to discard', todayList: 'Trucks today', todayShort: 'today', backSub: 'red = that day still has a truck without its real weight (last {n} days) · tap the truck to enter it', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', allKg: '✓ every truck of this day has its real weight', rmWaitTile: '⚖ {n} trucks waiting for real weight', noTrucks: 'No trucks yet today',
     pendingT: 'To send', pendingSub: 'Saved on this phone — sends by itself when there is signal', sendNow: 'Send now', voided: 'Cancelled',
     steps: ['Truck', 'Items', 'Inspect', 'Review'],
     truckT: 'This truck', supplier: 'Supplier / code', pickSup: '— Choose supplier —', otherSup: '+ Other (type a name)…', typeSup: 'Supplier name', supCodeL: 'Supplier code (2 digits)', needSupBoth: 'Enter both the supplier name and the 2-digit code', supCustomTag: 'Typed by hand — ask the lead to add it to the list', noSup: 'No suppliers yet — ask the lead to add them in the RM_Suppliers tab', loadingSup: 'Loading suppliers from Google Sheets…', cfgFail: 'Could not load suppliers', reload: 'Reload',
@@ -419,7 +429,7 @@ const L = {
     badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမအကြိမ် ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေးသောကား ရှိ — ဖျက်ပြီးထွက်ရန် ထပ်နှိပ်ပါ', demo: 'စမ်းသပ်မုဒ် — Google Sheet သို့ မပို့ပါ',
     today: 'ယနေ့ (ဌာနခွဲလုံး)', trucks: 'ကား', failShort: 'မအောင်', pickDept: 'ဌာန ရွေးပါ', soon: 'မကြာမီ',
     rm: 'ကုန်ကြမ်း လက်ခံစစ်ဆေးခြင်း', rmSub: 'ငါး · ပုစွန် · ငရုတ်/ဟင်းခတ်', pc: 'ပြုပြင်ထုတ်လုပ်', pk: 'ထုပ်ပိုး', cs: 'အေးခန်း',
-    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', todayShort: 'ယနေ့', backSub: 'ယနေ့ + ရက် {n} ရက် — နှိပ်၍ ထည့်ပါ', rmWaitTile: '⚖ အလေးချိန် စောင့် {n} ကား', noTrucks: 'ယနေ့ ကား မရှိသေး',
+    resume: 'ဆက်လုပ်', discard: 'မပြီးသေးသည်ကို ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ', todayList: 'ယနေ့ ကားများ', todayShort: 'ယနေ့', backSub: 'အနီ = ထိုနေ့တွင် အလေးချိန် မထည့်ရသေးသော ကား ရှိ (ရက် {n} ရက်) · ကားကို နှိပ်ပါ', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်', allKg: '✓ ဤနေ့ အလေးချိန် အားလုံး ထည့်ပြီး', rmWaitTile: '⚖ အလေးချိန် စောင့် {n} ကား', noTrucks: 'ယနေ့ ကား မရှိသေး',
     pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းထဲ သိမ်းပြီး · လိုင်းရလျှင် အလိုအလျောက် ပို့မည်', sendNow: 'ယခု ပို့', voided: 'ပယ်ဖျက်ပြီး',
     steps: ['ကား', 'ကုန်', 'စစ်ဆေး', 'အနှစ်ချုပ်'],
     truckT: 'ဒီကား', supplier: 'ပေးသွင်းသူ / ကုဒ်', pickSup: '— ပေးသွင်းသူ ရွေးပါ —', otherSup: '+ အခြား (အမည် ရိုက်)…', typeSup: 'ပေးသွင်းသူ အမည်', supCodeL: 'ကုဒ် (၂ လုံး)', needSupBoth: 'အမည်နှင့် ကုဒ် ၂ လုံး ထည့်ပါ', supCustomTag: 'ကိုယ်တိုင်ရိုက် — စာရင်းထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', noSup: 'ပေးသွင်းသူစာရင်း မရှိသေး — RM_Suppliers တွင် ထည့်ရန် ခေါင်းဆောင်ကို ပြောပါ', loadingSup: 'ပေးသွင်းသူစာရင်း ဖွင့်နေသည်…', cfgFail: 'ပေးသွင်းသူစာရင်း မဖွင့်နိုင်', reload: 'ပြန်ဖွင့်',
@@ -1037,8 +1047,6 @@ function viewRmLists() {
   const waitIds = {};
   if (S.today && S.today.date === todayStr()) (S.today.back || []).concat(td.trucks).forEach((r) => { if (!r.void && r.lines.some((l) => !(l.w > 0))) waitIds[r.id] = true; });
   let h = viewWaitKg();
-  const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
-  if (pcOn) h += viewPendCard();
   h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
@@ -1064,18 +1072,39 @@ function viewRmLists() {
 function viewWaitKg() {
   const T = t();
   if (!S.today || S.today.date !== todayStr()) return '';
-  const today = (S.today.trucks || []).filter((r) => !r.void && r.lines.some((l) => !(l.w > 0)));
-  const list = (S.today.back || []).concat(today);
-  if (!list.length) return '';
-  return '<span class="lbl" style="font-size:15px;color:var(--red);margin-top:4px">⚖ ' + T.waitKgN + ' · ' + list.length + ' ' + T.trucks + '</span><div class="sub">' + fmt(T.backSub, { n: S.today.backDays || 5 }) + '</div>' +
-    '<div class="tlist glass">' + list.map((r) => {
+  const today = todayStr();
+  const addD = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  const waiting = (r) => !r.void && !r.pending && r.lines.some((l) => !(l.w > 0));
+  const all = (S.today.back || []).concat((S.today.trucks || []).filter(waiting).map((r) => Object.assign({ date: today }, r)));
+  if (S.wtOther && S.wtOther.date) S.wtOther.trucks.filter(waiting).forEach((r) => { if (!all.some((x) => x.id === r.id)) all.push(Object.assign({ date: S.wtOther.date }, r)); });
+  const byDay = {};
+  all.forEach((r) => { byDay[r.date] = (byDay[r.date] || 0) + 1; });
+  const sel = S.wtDate || today;
+  const chips = [0, 1, 2, 3].map((n) => { const d = addD(today, -n); return '<button class="' + (sel === d ? 'on' : '') + (byDay[d] ? ' pend' : '') + '" data-act="wtdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmmOf(d) + '</small></button>'; }).join('');
+  const other = [0, 1, 2, 3].every((n) => addD(today, -n) !== sel);
+  const olderPend = Object.keys(byDay).some((d) => d < addD(today, -3));
+  const list = all.filter((r) => r.date === sel).sort((a, b) => (a.start < b.start ? -1 : 1));
+  let h = '<span class="lbl" style="font-size:15px;color:' + (all.length ? 'var(--red)' : 'var(--ink)') + ';margin-top:4px">⚖ ' + T.waitKgN + (all.length ? ' · ' + all.length + ' ' + T.trucks : '') + '</span><div class="sub">' + fmt(T.backSub, { n: S.today.backDays || 5 }) + '</div>' +
+    '<div class="dchips">' + chips + '<label class="' + (other ? 'on' : '') + (olderPend || (other && byDay[sel]) ? ' pend' : '') + (olderPend ? ' dot' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmmOf(sel) : '··/··') + '</small><input type="date" data-on="wtdate" max="' + today + '" value="' + esc(sel) + '" aria-label="' + T.otherDay + '"></label></div>';
+  if (S.wtBusy) h += '<div class="sub" style="text-align:center"><span class="spin"></span></div>';
+  else if (!list.length) h += '<div class="sub" style="color:var(--green);font-weight:700">' + T.allKg + '</div>';
+  else h += '<div class="tlist glass">' + list.map((r) => {
       const n = r.lines.filter((l) => !(l.w > 0)).length;
-      return '<button class="nokg" data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + (r.date && r.date !== todayStr() ? ddmmOf(r.date) : T.todayShort) + '<br>' + esc(r.start) + '</span><span class="grow"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
+      return '<button class="nokg" data-act="truck" data-v="' + esc(r.id) + '"><span class="tm">' + (r.date !== today ? ddmmOf(r.date) : T.todayShort) + '<br>' + esc(r.start) + '</span><span class="grow"><b>Lot ' + esc(r.lot) + '</b> · ' + esc(String(r.sup).split(' / ')[0]) +
         '<div class="sub">' + esc(r.lines.map((l) => l.name).join(', ')) + '</div><div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKg + ' ' + n + '/' + r.lines.length + '</div></span></button>';
     }).join('') + '</div>';
+  return h;
+}
+/** a day older than the 5-day window: ask the server for that day's trucks (Sal, 25 Nov 2026) */
+function pickWtDate(d) {
+  S.wtDate = d; S.err = '';
+  const known = (S.today && S.today.date === todayStr()) ? [todayStr()].concat((S.today.back || []).map((r) => r.date)) : [];
+  if (known.indexOf(d) >= 0 || !S.staff || (S.wtOther && S.wtOther.date === d)) { render(); return; }
+  S.wtBusy = true; render();
+  api('rmToday', { staffId: S.staff.id, date: d }).then((j) => { S.wtBusy = false; S.wtOther = { date: d, trucks: j.trucks || [] }; render(); }, () => { S.wtBusy = false; render(); });
 }
 /** today's trucks + earlier trucks still waiting for a real weight (Sal, 25 Nov 2026) */
-function rmKnownTrucks() { return S.today ? (S.today.trucks || []).concat(S.today.date === todayStr() ? S.today.back || [] : []) : []; }
+function rmKnownTrucks() { return (S.today ? (S.today.trucks || []).concat(S.today.date === todayStr() ? S.today.back || [] : []) : []).concat(S.wtOther ? S.wtOther.trucks.map((r) => Object.assign({ date: S.wtOther.date }, r)) : []); }
 /** name of a line in a saved record (as sent to the server) */
 function savedNameOf(l) { return savedName({ type: l.type || (l.chilli ? 'PRODUCE' : 'FISH'), fish: l.fish, proc: l.proc, size: l.size, smin: l.sizeMin, smax: l.sizeMax }); }
 
@@ -1790,6 +1819,7 @@ const ACT = {
       if (j && j.report && j.report !== 'ok') { S.reportWarn = { lot: S.wt.lot, at: nowHM(), msg: String(j.report).slice(0, 160) }; toast(t().reportBad); }
       else toast('✓ ' + t().kgSaved);
       const back = S.wt.from === 'truck' && S.d ? 'truck' : 'home';
+      if (S.wtOther && S.wtOther.trucks.some((r) => r.id === S.wt.id)) { const d = S.wtOther.date; S.wtOther = null; S.wt = null; go(back, { pad: null }); refreshToday(true); pickWtDate(d); return; }
       S.wt = null;
       go(back, { pad: null });
       refreshToday(true);
@@ -1806,6 +1836,7 @@ const ACT = {
     Promise.race([done, new Promise((r) => setTimeout(r, 8000))]).then(go, go);
   },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
+  wtdate: (el) => pickWtDate(el.dataset.v),
   startrm: () => { if (S.d) { go('truck'); refreshToday(); } else startTruck(); },
   resume: () => go(S.d.stage || (S.d.supName ? 'fish' : 'truck')),
   discard: () => { if (S.confirm === 'discard') { S.d = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
@@ -1893,6 +1924,7 @@ document.addEventListener('change', (e) => {
   const on = el.dataset && el.dataset.on;
   if (!on) return;
   if (on === 'repq') { S.rq = el.value; return; }   // report search box (no truck open)
+  if (on === 'wtdate') { if (/^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value <= todayStr()) pickWtDate(el.value); return; }
   const d = S.d;
   if (!d) return;
   if (on === 'sup') {
@@ -1993,6 +2025,11 @@ if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href);
 render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
 checkUpdate();
+/* the date box opens the calendar on a computer too (Sal, 23 Nov 2026) */
+document.addEventListener('click', (e) => {
+  const el = e.target && e.target.closest ? e.target.closest('input[type="date"]') : null;
+  if (el && typeof el.showPicker === 'function') { try { el.showPicker(); } catch (err) { /* already open */ } }
+}, true);
 </script>
 </body>
 </html>

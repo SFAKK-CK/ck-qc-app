@@ -311,6 +311,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dchips>.on.pend{background:var(--accent);border:2px solid var(--red)}
 .pendbar{display:flex;align-items:center;gap:8px;background:#f3dada;color:#8a2c2c;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700}
 .pendbar button{font:inherit;font-size:12px;text-decoration:underline;color:#8a2c2c;background:none;border:0;padding:4px 0;flex:none}
+.dchips>.dot::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff}
 .dchips input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
 .lotc{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}.lotc.on{border:2px solid var(--accent)}
 .lotc .lh{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
@@ -358,7 +359,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.4.3';
+const APP_VERSION = '1.4.4';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -857,7 +858,7 @@ function viewLot() {
   const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
   const olderPend = !!(S.pend && S.pend.open.some((l) => l.date < addDays(today, -3)));
   h += '<div class="row"><span class="lbl grow">' + T.rcvDate + '</span>' + (S.pend && S.pend.n ? '<span class="sub" style="color:var(--red);font-weight:700">' + T.pendLegend + '</span>' : '') + '</div><div class="dchips">' + chips +
-    '<label class="' + (other ? 'on' : '') + (olderPend || (other && pendOf(c.rmDate)) ? ' pend' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
+    '<label class="' + (other ? 'on' : '') + (olderPend || (other && pendOf(c.rmDate)) ? ' pend' : '') + (olderPend ? ' dot' : '') + '"><b>' + T.otherDay + '</b><small>' + (other ? ddmm(c.rmDate) : '··/··') + '</small><input type="date" data-on="rmdate" max="' + today + '" value="' + esc(c.rmDate) + '" aria-label="' + T.otherDay + '"></label></div>';
   const oldest = S.pend && S.pend.open.find((l) => l.warn);
   if (oldest) h += '<div class="pendbar"><span class="grow">' + fmt(T.pendOld, { d: ddmm(oldest.date), lot: esc(oldest.lot), n: oldest.held }) + '</span>' + (oldest.date !== c.rmDate ? '<button data-act="rmdate" data-v="' + oldest.date + '">' + T.pendGo + '</button>' : '') + '</div>';
   const held = heldOf(c);
