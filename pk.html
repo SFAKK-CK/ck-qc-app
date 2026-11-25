@@ -357,7 +357,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.2';
+const APP_VERSION = '1.2.3';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -1137,7 +1137,7 @@ function toast(msg) {
 function startCheck() {
   S.c = blankCheck(); S.q = ''; S.lotSrc = 'pc';
   go('lot');
-  loadLots();
+  loadLots(true);   // always fresh when the lot screen opens — a lot that just left the freezer must show at once (Sal, 25 Nov 2026)
   refreshConfig();
 }
 /** an order that has been checked before brings back its %glazing (less typing) */
@@ -1232,12 +1232,12 @@ const ACT = {
   },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   start: startCheck,
-  resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(); },
+  resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(true); },
   discard: () => { if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   picktrim: (el) => { S.c.trim = S.c.trim === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   qorder: (el) => { S.q = cleanOrder(S.q) === el.dataset.v ? '' : el.dataset.v; render(); },
-  lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(); else loadLots(); },
+  lotsrc: (el) => { S.lotSrc = el.dataset.v; S.err = ''; render(); if (S.lotSrc === 'bulk') loadBulk(true); else loadLots(true); },
   pickbulk: (el) => {
     const l = S.bulk && S.bulk.lots.find((x) => x.key === el.dataset.k);
     if (!l) return;
