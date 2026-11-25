@@ -323,7 +323,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.6.1';
+const APP_VERSION = '1.6.2';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -801,6 +801,7 @@ function refreshConfig(force) {
 
 /* ---------------- screens ---------------- */
 function go(screen, extra) {
+  if (screen === 'home' && draftEmpty(S.d)) S.d = null;   // RM opened only to enter a weight → nothing left behind
   Object.assign(S, { screen: screen, buf: '', wide: false, confirm: null, err: '' }, extra || {});
   if (!extra || !('pad' in extra)) S.pad = screen === 'inspect' ? inspectPad(curLine()) : null;
   if (S.d && ['truck', 'fish', 'inspect', 'summary'].indexOf(screen) >= 0) S.d.stage = screen;   // "continue" reopens the same page
@@ -978,22 +979,12 @@ function viewHome() {
   const st = S.staff;
   const init = (st.name || '').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase() || '··';
   const td = S.today && S.today.date === todayStr() ? S.today : { trucks: [], totals: { trucks: 0, kg: 0, failed: 0 } };
-  const pendIds = {};
-  S.outbox.forEach((o) => (pendIds[o.record.id] = o));
-  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.trucks.some((x) => x.id === o.record.id)).map((o) => ({
-    id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
-    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', status: l._status })) }));
-  const rows = pendRows.concat(td.trucks);
   const back = S.today && S.today.date === todayStr() ? S.today.back || [] : [];
   const nWait = (td.totals.waitKg || 0) + back.length;
   let h = '<div class="stg">';
-  h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div></div>' +
-    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="hardrefresh">↻ ' + T.refresh + '</button></div>';
-  h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
+  h += '<div class="greet"><div class="avatar">' + esc(init) + '</div><div class="grow"><b style="font-size:18px">' + esc(st.name || '—') + '</b><div class="sub">ID ' + esc(st.id) + (st.dept ? ' · ' + esc(st.dept) : '') + '</div>' +
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
-    '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
-    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div>' +
-    (td.totals.waitKg ? '<div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKgN + ' ' + td.totals.waitKg + ' ' + T.trucks + '</div>' : '') + '</div>';
+    '<button class="btn ghost" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="hardrefresh">↻ ' + T.refresh + '</button></div>';
   if (S.reportWarn) {
     h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
       '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
@@ -1025,16 +1016,39 @@ function viewHome() {
   // report by order — %Loss from PC + glazing from PK (Sal, 17 Nov 2026)
   const repTile = !pkOn ? '' : '<button class="dept main glass" data-act="openrep"><span class="ic" style="font-size:20px">📊</span><span class="grow"><b style="font-size:18px">' + T.rep + '</b><div class="sub">' + T.repSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
   if (pkOn) h += '<button class="dept main glass" data-act="openpk"><span class="ic">PK</span><span class="grow"><b style="font-size:18px">' + T.pk + '</b><div class="sub">' + T.pkSub + '</div></span><span style="font-size:26px;color:var(--accent)">›</span></button>';
-  (pcOn ? [] : ['pc']).concat(pkOn ? [] : ['pk']).concat(['cs']).forEach((k) => {
+  (pcOn ? [] : ['pc']).concat(pkOn ? [] : ['pk']).forEach((k) => {   // CS (ห้องเย็น) removed (Sal, 25 Nov 2026)
     h += '<div class="dept soon"><span class="ic">' + k.toUpperCase() + '</span><span class="grow" style="font-weight:600">' + T[k] + '</span><span class="pill p-mute">' + T.soon + '</span></div>';
   });
   // reports: their own section, apart from the departments (Sal, 17 Nov 2026)
   if (repTile) h += '<span class="lbl" style="font-size:15px;color:var(--ink);margin-top:6px">' + T.repSec + '</span>' + repTile;
+  return h + '</div>';
+}
+
+/** RM page, under "✓ ระบบใส่ให้แล้ว" (Sal, 25 Nov 2026): the main page has only the department cards; every RM list lives here, each truck once */
+function viewRmLists() {
+  const T = t();
+  const td = S.today && S.today.date === todayStr() ? S.today : { trucks: [], totals: { trucks: 0, kg: 0, failed: 0 } };
+  const pendIds = {};
+  S.outbox.forEach((o) => (pendIds[o.record.id] = o));
+  const pendRows = S.outbox.filter((o) => o.record.date === todayStr() && !td.trucks.some((x) => x.id === o.record.id)).map((o) => ({
+    id: o.record.id, start: o.record.start, lot: o.record.lot, sup: o.record.supName, pending: true, err: o.err,
+    lines: o.record.lines.map((l) => ({ name: savedNameOf(l), w: Number(l.w) || 0, wr: l.wTo ? l.wFrom + '–' + l.wTo : '', status: l._status })) }));
+  const rows = pendRows.concat(td.trucks);
+  const waitIds = {};
+  if (S.today && S.today.date === todayStr()) (S.today.back || []).concat(td.trucks).forEach((r) => { if (!r.void && r.lines.some((l) => !(l.w > 0))) waitIds[r.id] = true; });
+  let h = viewWaitKg();
+  const pcOn = !S.cfg || !S.cfg.modules || S.cfg.modules.some((m) => m.key === 'PC' && m.ready);
   if (pcOn) h += viewPendCard();
+  h += '<div class="card glass"><div class="row"><span class="lbl grow">' + T.today + '</span>' +
+    (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
+    '<div class="sum"><div><b>' + td.totals.trucks + '</b><span>' + T.trucks + '</span></div><hr><div><b>' + kgFmt(td.totals.kg) + '</b><span>kg</span></div><hr>' +
+    '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div>' +
+    (td.totals.waitKg ? '<div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKgN + ' ' + td.totals.waitKg + ' ' + T.trucks + '</div>' : '') + '</div>';
   h += '<span class="lbl" style="font-size:15px;color:var(--ink)">' + T.todayList + '</span>';
+  const shown = rows.filter((r) => !waitIds[r.id]);   // a truck already in the weight list above is not repeated
   if (!rows.length) h += '<div class="sub">' + T.noTrucks + '</div>';
-  else {
-    h += '<div class="tlist glass">' + rows.map((r) => {
+  else if (shown.length) {
+    h += '<div class="tlist glass">' + shown.map((r) => {
       const anyFail = r.lines.some((l) => l.status === 'ไม่ผ่าน' || l.status === 'fail');
       const pill = r.pending ? '<span class="pill p-warn">' + T.waiting + '</span>' : r.void ? '<span class="pill p-mute">' + T.cancelled + '</span>' :
         anyFail ? '<span class="pill p-bad">✗ ' + T.fail + '</span>' : '<span class="pill p-ok">✓ ' + T.pass + '</span>';
@@ -1044,7 +1058,7 @@ function viewHome() {
         (noKg ? '<div class="sub" style="color:var(--red);font-weight:700">⚖ ' + T.waitKg + '</div>' : '') + '</span>' + pill + '</button>';
     }).join('') + '</div>';
   }
-  return h + '</div>';
+  return h;
 }
 /** RM screen, under "✓ ระบบใส่ให้แล้ว" (Sal, 25 Nov 2026): every truck still waiting for its real weight — today and the last days — tap → enter the weight */
 function viewWaitKg() {
@@ -1096,7 +1110,7 @@ function viewTruck() {
   h += '<div class="card glass"><span class="lbl" style="color:var(--green)">✓ ' + T.auto + '</span><div class="auto"><span>' + T.time + '</span><b>' + esc(d.start) + '</b>' +
     (c.scales.length ? '<span>' + T.scale + '</span><select data-on="scale">' + opt(c.scales, d.scale) + '</select>' : '') +
     (c.thermos.length ? '<span>' + T.thermo + '</span><select data-on="thermo">' + opt(c.thermos, d.thermo) + '</select>' : '') + '</div></div>';
-  h += viewWaitKg();
+  h += viewRmLists();
   return h + '</div>';
 }
 
@@ -1651,7 +1665,10 @@ function login() {
     S.err = e.net ? t().needNet : e.message; render();
   });
 }
+/** a new truck nobody has filled in yet (RM opened only to look or to enter a weight) */
+function draftEmpty(d) { return !!d && !d.supName && !d.supCode && !d.lines.length; }
 function signOut() {
+  if (draftEmpty(S.d)) S.d = null;
   if (S.d && !S.confirmOut) { S.confirmOut = true; toast(t().outDraft); clearTimeout(signOut.t); signOut.t = setTimeout(() => (S.confirmOut = false), 4000); return; }
   S.confirmOut = false;
   forceOut();
