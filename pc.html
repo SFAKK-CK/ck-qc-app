@@ -359,7 +359,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.4.5';
+const APP_VERSION = '1.5.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -380,7 +380,7 @@ const L = {
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
     lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (ล็อตใหม่ระบบตั้งให้ เช่น S-251126-01)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
     loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
-    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', pendLegend: 'แดง = ยังมีล็อตไม่ปิด', pendOld: '⚠ {d} Lot {lot} ดอง {n} วัน ยังไม่ปิด — ทำก่อน (FIFO)', pendGo: 'ไปวันนั้น ›', notStarted: 'ยังไม่ตรวจเลย', checkedTypes: 'ตรวจแล้ว:', againType: '+ ตรวจอีกแบบ', againTypeSub: 'ล็อตเดิม · เลือกประเภทใหม่', againTypeIn: '+ ตรวจอีกแบบของล็อตนี้', againTypeHint: 'บันทึกการ์ดนี้ แล้วเปิดการ์ดใหม่ (ล็อตเดิม) ถามประเภทก่อน', againTypeFill: 'กรอกการ์ดนี้ให้ครบก่อน — กด + แล้วระบบจะบันทึกให้ และเปิดการ์ดใหม่', againSame: 'ตรวจซ้ำ', againSameSub: 'แบบเดิม {t}', lotChecked: 'ล็อตนี้ตรวจแล้ว', lotCheckedSub: 'จากบันทึก PC ที่มีจริง — ทุกแบบตัดแต่งของล็อตต้องมีปลาอย่างน้อย 1 ตัวถูกตรวจ', bulkSearch: 'ค้นหา BULK — Lot, ปลา, ขนาด, ผู้ขาย หรือวันที่ (เช่น 20/11)', bulkHint: 'พิมพ์เพื่อค้นหา ({n} ล็อต BULK ใน {d} วันล่าสุด)', bulkNone: 'ไม่พบ BULK ที่ตรงกับ "{q}"', bulkFound: 'พบ {n} ล็อต', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
+    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', pendLegend: 'แดง = ยังมีล็อตไม่ปิด', pendOld: '⚠ {d} Lot {lot} ดอง {n} วัน ยังไม่ปิด — ทำก่อน (FIFO)', pendGo: 'ไปวันนั้น ›', notStarted: 'ยังไม่ตรวจเลย', checkedTypes: 'ตรวจแล้ว:', againType: '+ ตรวจอีกแบบ', againTypeSub: 'ล็อตเดิม · เลือกประเภทใหม่', againTypeIn: '+ ตรวจอีกแบบของล็อตนี้', stackT: 'การตรวจของล็อตนี้ (ยังไม่ส่ง)', stackOpen: 'แตะเพื่อเปิดแก้ไข', stackInc: 'ยังไม่ครบ', stackNow: 'กำลังกรอก', saveAll: 'บันทึกทั้งหมด ({n})', savedN: 'บันทึก {n} รายการ', stackDel: 'ลบ', stackDelQ: 'ลบ?', againTypeHint: 'พับการ์ดนี้เก็บไว้ แล้วเปิดการ์ดใหม่ของล็อตเดิม (ถามประเภทก่อน) · กดบันทึกครั้งเดียวตอนท้าย', againTypeFill: 'กรอกการ์ดนี้ให้ครบก่อน แล้วค่อยกด +', againSame: 'ตรวจซ้ำ', againSameSub: 'แบบเดิม {t}', lotChecked: 'ล็อตนี้ตรวจแล้ว', lotCheckedSub: 'จากบันทึก PC ที่มีจริง — ทุกแบบตัดแต่งของล็อตต้องมีปลาอย่างน้อย 1 ตัวถูกตรวจ', bulkSearch: 'ค้นหา BULK — Lot, ปลา, ขนาด, ผู้ขาย หรือวันที่ (เช่น 20/11)', bulkHint: 'พิมพ์เพื่อค้นหา ({n} ล็อต BULK ใน {d} วันล่าสุด)', bulkNone: 'ไม่พบ BULK ที่ตรงกับ "{q}"', bulkFound: 'พบ {n} ล็อต', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
@@ -410,7 +410,7 @@ const L = {
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
     lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (new lots are set by the app, e.g. S-251126-01)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
     loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
-    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', pendLegend: 'red = lots not closed yet', pendOld: '⚠ {d} Lot {lot} held {n} days, not closed — do it first (FIFO)', pendGo: 'go to that day ›', notStarted: 'not checked yet', checkedTypes: 'checked:', againType: '+ Another type', againTypeSub: 'same lot · pick the type', againTypeIn: '+ Another type of this lot', againTypeHint: 'saves this card, then opens a new one (same lot) asking the type first', againTypeFill: 'finish this card first — + then saves it and opens the new card', againSame: 'Check again', againSameSub: 'same type {t}', lotChecked: 'This lot so far', lotCheckedSub: 'From real PC records — every processing type of a lot needs at least one fish checked', bulkSearch: 'Search BULK — lot, fish, size, supplier or date (e.g. 20/11)', bulkHint: 'Type to search ({n} BULK lots in the last {d} days)', bulkNone: 'No BULK lot matches "{q}"', bulkFound: '{n} lots found', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
+    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', pendLegend: 'red = lots not closed yet', pendOld: '⚠ {d} Lot {lot} held {n} days, not closed — do it first (FIFO)', pendGo: 'go to that day ›', notStarted: 'not checked yet', checkedTypes: 'checked:', againType: '+ Another type', againTypeSub: 'same lot · pick the type', againTypeIn: '+ Another type of this lot', stackT: 'checks of this lot (not sent yet)', stackOpen: 'tap to open and edit', stackInc: 'incomplete', stackNow: 'filling in', saveAll: 'Save all ({n})', savedN: '{n} records saved', stackDel: 'delete', stackDelQ: 'delete?', againTypeHint: 'folds this card away and opens a new one for the same lot (type first) · one save at the end', againTypeFill: 'finish this card first, then tap +', againSame: 'Check again', againSameSub: 'same type {t}', lotChecked: 'This lot so far', lotCheckedSub: 'From real PC records — every processing type of a lot needs at least one fish checked', bulkSearch: 'Search BULK — lot, fish, size, supplier or date (e.g. 20/11)', bulkHint: 'Type to search ({n} BULK lots in the last {d} days)', bulkNone: 'No BULK lot matches "{q}"', bulkFound: '{n} lots found', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
@@ -440,7 +440,7 @@ const L = {
     reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
     lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
     loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
-    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', pendLegend: 'အနီ = lot မပိတ်ရသေး', pendOld: '⚠ {d} Lot {lot} {n} ရက် — အရင်လုပ်ပါ (FIFO)', pendGo: 'ထိုနေ့ ›', notStarted: 'မစစ်ရသေး', checkedTypes: 'စစ်ပြီး:', againType: '+ အခြားအမျိုးအစား', againTypeSub: 'lot အတူတူ', againTypeIn: '+ ဤ lot ၏ အခြားအမျိုးအစား', againTypeHint: 'ဤကဒ်ကို သိမ်းပြီး ကဒ်အသစ် ဖွင့်', againTypeFill: 'ဤကဒ်ကို အရင် ဖြည့်ပါ', againSame: 'ထပ်စစ်', againSameSub: '{t}', lotChecked: 'ဒီ lot', lotCheckedSub: 'PC မှတ်တမ်းအစစ်မှ', bulkSearch: 'BULK ရှာရန် — Lot, ငါး, အရွယ်, ရက်စွဲ', bulkHint: 'ရှာရန် ရိုက်ပါ ({n} lot · {d} ရက်)', bulkNone: '"{q}" မတွေ့ပါ', bulkFound: '{n} lot တွေ့သည်', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
+    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', pendLegend: 'အနီ = lot မပိတ်ရသေး', pendOld: '⚠ {d} Lot {lot} {n} ရက် — အရင်လုပ်ပါ (FIFO)', pendGo: 'ထိုနေ့ ›', notStarted: 'မစစ်ရသေး', checkedTypes: 'စစ်ပြီး:', againType: '+ အခြားအမျိုးအစား', againTypeSub: 'lot အတူတူ', againTypeIn: '+ ဤ lot ၏ အခြားအမျိုးအစား', stackT: 'ဤ lot ၏ စစ်ဆေးမှုများ (မပို့ရသေး)', stackOpen: 'နှိပ်၍ ပြင်', stackInc: 'မပြည့်စုံ', stackNow: 'ဖြည့်နေ', saveAll: 'အားလုံး သိမ်း ({n})', savedN: '{n} ခု သိမ်းပြီး', stackDel: 'ဖျက်', stackDelQ: 'ဖျက်?', againTypeHint: 'ဤကဒ်ကို သိမ်းပြီး ကဒ်အသစ် ဖွင့်', againTypeFill: 'ဤကဒ်ကို အရင် ဖြည့်ပါ', againSame: 'ထပ်စစ်', againSameSub: '{t}', lotChecked: 'ဒီ lot', lotCheckedSub: 'PC မှတ်တမ်းအစစ်မှ', bulkSearch: 'BULK ရှာရန် — Lot, ငါး, အရွယ်, ရက်စွဲ', bulkHint: 'ရှာရန် ရိုက်ပါ ({n} lot · {d} ရက်)', bulkNone: '"{q}" မတွေ့ပါ', bulkFound: '{n} lot တွေ့သည်', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
@@ -468,7 +468,7 @@ let lastScreen = null, lastPad = false;
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch (e) { s = {}; }
-  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, lots: {}, pend: null, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
+  return Object.assign({ lang: 'th', staff: null, cfg: null, today: null, c: null, stack: [], lots: {}, pend: null, outbox: [], last: null, reportWarn: null, known: {}, trimLast: '' }, s);
 }
 /** came from the main menu in this tab (index.html) → already signed in there; the hand-over is used once */
 function takeHandover() {
@@ -494,7 +494,7 @@ function persist() {
   // keep only the last 7 receive dates of lots (offline use)
   const days = Object.keys(S.lots || {}).sort().slice(-7);
   const lots = {}; days.forEach((d) => (lots[d] = S.lots[d]));
-  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, lots: lots, pend: S.pend, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
+  const keep = { lang: S.lang, staff: null, cfg: S.cfg, today: S.today, c: S.c, stack: S.stack || [], lots: lots, pend: S.pend, outbox: S.outbox, last: S.last, reportWarn: S.reportWarn, known: S.known, trimLast: S.trimLast };
   try { localStorage.setItem(STORE_KEY, JSON.stringify(keep)); } catch (e) { /* storage full or blocked — app keeps working */ }
 }
 
@@ -951,6 +951,20 @@ function viewCheck() {
     (c.bulkFrom ? '<div class="sub" style="color:var(--accent);font-weight:700">' + fmt(T.fromBulk, { d: ddmm(c.bulkFrom.pcDate) }) + '</div>' : '') + '</div></div>' +
     '<div class="row" style="flex-wrap:wrap;gap:6px">' + heldPill(e.held) + (c.manual ? '<span class="pill p-mute">' + T.notInRm + '</span>' : c.rmStatus ? '<span class="sub">' + T.rmIs + '</span> ' + statusPill(c.rmStatus) : '') + '</div>' +
     (e.held >= holdWarn() ? '<div class="note">🧊 ' + T.heldLong + '</div>' : '') + '</div>';
+  // the other checks of this lot, folded (Sal, 25 Nov 2026): tap one to open and edit it; the one being filled in is marked
+  const stack = S.stack || [];
+  if (stack.length) {
+    h += '<span class="lbl" style="color:var(--ink)">' + T.stackT + ' · ' + (stack.length + 1) + '</span><div class="tlist glass">' +
+      stack.map((x, i) => {
+        const ex = evalCheck(x), inc = !ex.ok;
+        return '<button class="' + (inc ? 'nokg' : '') + '" data-act="stackopen" data-v="' + i + '" style="display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 14px">' +
+          '<span class="pill ' + (inc ? 'p-bad' : 'p-ok') + ' mono" style="flex:none;font-size:15px">' + esc(x.trim || '?') + '</span><span class="grow"><b>' + (x.temps[0] !== '' ? esc(x.temps.filter((t0) => t0 !== '').join(' / ')) + ' °C' : '— °C') +
+          ' · ' + (x.before ? numFmt(x.before) : '—') + ' → ' + (x.after ? numFmt(x.after) : '—') + ' g' + (ex.loss !== null && ex.loss !== undefined ? ' · ' + Number(ex.loss).toFixed(2) + '%' : '') + '</b>' +
+          '<div class="sub">' + (cleanOrder(x.order) ? '→ ' + esc(cleanOrder(x.order)) + ' · ' : '') + (inc ? '<span style="color:var(--red);font-weight:700">' + T.stackInc + '</span>' : statusPill(ex.status === 'fail' ? 'ไม่ผ่าน' : ex.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน')) + ' · ' + T.stackOpen + '</div></span>' +
+          '<span class="linkbtn" data-act="stackdel" data-v="' + i + '" style="color:' + (S.confirm === 'stackdel' + i ? 'var(--red)' : 'var(--ink-3)') + ';padding:6px">' + (S.confirm === 'stackdel' + i ? T.stackDelQ : '✕') + '</span></button>';
+      }).join('') +
+      '<div style="display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.55)"><span class="pill p-warn mono" style="flex:none;font-size:15px">' + esc(c.trim || '?') + '</span><span class="grow"><b>' + T.stackNow + '</b></span></div></div>';
+  }
   // %Loss above the limit → locked until a GM approves or orders a re-weigh (Sal, 11 Nov 2026)
   if (c.lock && !c.gm) h += '<div class="card glass lockc"><b style="color:var(--red);font-size:17px">' + fmt(T.lockT, { trim: esc(c.lock.trim), lim: c.lock.lim }) + '</b><div class="sub" style="color:var(--red-ink)">' + T.lockSub + '</div></div>';
   if (c.gm) h += '<div class="lsum ls-ok">' + fmt(T.gmOkT, { name: esc(c.gm.name) }) + ' · ' + esc(c.gm.reason) + '</div>';
@@ -981,9 +995,9 @@ function viewCheck() {
   // position A (Sal, 25 Nov 2026): chips of the types this lot already has + "+ ตรวจอีกแบบของล็อตนี้" — saves this card, then a new card for the same lot asks the type
   if (c.rmId && !c.manual) {
     const ln = lineOf(c), ty = (ln && ln.types) || [];
-    h += '<div class="row" style="flex-wrap:wrap;gap:6px;align-items:center">' + (ty.length ? '<span class="sub">' + T.lotChecked + ':</span>' + ty.map((x) => '<span class="pill p-ok mono">' + esc(x.code) + ' ✓' + (x.n > 1 ? ' ×' + x.n : '') + '</span>').join('') : '') +
-      '<button class="linkbtn" style="margin-left:auto;font-weight:800;color:var(--accent)" data-act="againtypein">' + T.againTypeIn + '</button></div>' +
-      '<div class="sub" style="margin-top:-4px">' + T.againTypeHint + '</div>';
+    h += '<button class="btn ghost" style="flex:none;height:56px;border:2px dashed var(--accent);color:var(--accent);font-weight:800;font-size:16px;gap:10px" data-act="againtypein">' +
+      '<span style="font-size:30px;line-height:1;font-weight:900">+</span><span style="text-align:left;line-height:1.15">' + T.againTypeIn.replace(/^\+\s*/, '') + '<br><small style="font-size:12px;font-weight:600;opacity:.85">' + T.againTypeHint + '</small></span></button>' +
+      (ty.length ? '<div class="row" style="flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px"><span class="sub">' + T.lotChecked + ':</span>' + ty.map((x) => '<span class="pill p-ok mono">' + esc(x.code) + ' ✓' + (x.n > 1 ? ' ×' + x.n : '') + '</span>').join('') + '</div>' : '');
   }
   // temperatures: no. 1 required, 2 and 3 optional
   h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
@@ -1049,7 +1063,7 @@ function viewDone() {
   const st = last.sent ? 'sent' : refused ? 'fail' : 'wait';
   return '<div class="done"><div class="tick' + (st === 'sent' ? '' : ' ' + st) + '"><div>' + (st === 'sent' ? '✓' : st === 'fail' ? '✕' : '<span class="spin"></span>') + '</div></div>' +
     '<h2 style="font-size:26px' + (st === 'fail' ? ';color:var(--red)' : '') + '">' + (st === 'sent' ? T.doneT : st === 'fail' ? T.refusedT : T.sendingT) + '</h2>' +
-    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + (last.order ? ' → ' + esc(last.order) : '') + '</div>' +
+    '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + (last.order ? ' → ' + esc(last.order) : '') + (last.n > 1 ? ' · <b>' + fmt(T.savedN, { n: last.n }) + '</b>' : '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + heldPill(last.held || 0) +
     (last.loss !== null && last.loss !== undefined ? '<span class="pill ' + (last.high ? 'p-bad' : 'p-mute') + '">' + T.lossL + ' ' + Number(last.loss).toFixed(2) + '%</span>' : '') + '</div>' +
     typesCard(last) +
@@ -1162,7 +1176,7 @@ function viewAction() {
   const s = S.screen;
   if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
   if (s === 'check' && S.c.lock && !S.c.gm) return '<button class="btn" style="background:var(--red)" data-act="callgm">' + T.callGm + '</button>';
-  if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
+  if (s === 'check') { const n = (S.stack || []).length + 1; return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + (n > 1 ? fmt(T.saveAll, { n: n }) : T.save) + '</button>'; }
   if (s === 'done') {
     const a = S.last && S.last.again;
     if (!a || !a.rmId) return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
@@ -1275,10 +1289,31 @@ function startCheck() {
   loadLots(S.c.rmDate);
   refreshConfig();
 }
+/** บันทึก: every folded card of this lot + the one open — one PC record each (Sal, 25 Nov 2026) */
 function saveCheck() {
-  const c = S.c;
-  const e = evalCheck(c);
+  const stack = S.stack || [];
+  for (let i = 0; i < stack.length; i++) { if (!evalCheck(stack[i]).ok) { stackSwap(i); S.err = evalCheck(S.c).why.join(' · '); toast(t().stackInc + ': ' + S.c.trim); return render(); } }
+  const e = evalCheck(S.c);
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
+  const all = stack.concat([S.c]);
+  S.stack = [];
+  all.forEach((x) => saveOne(x));
+  S.last.n = all.length;
+  if (all.length > 1) { const ln0 = lineOf(S.c || all[0]); S.last.types = ln0 ? (ln0.types || []).map((x) => ({ code: x.code, n: x.n })) : S.last.types; }
+  S.c = null;
+  go('done');
+  flush();
+}
+/** swap the open card with folded card i (an untouched open card is dropped) */
+function stackSwap(i) {
+  const stack = S.stack || [], c = S.c;
+  const untouched = c && c.temps.every((x) => x === '') && !c.after && !(c.before && !c.bRm);   // the order is carried over, so it does not count as typing
+  const open = stack[i];
+  if (untouched) stack.splice(i, 1); else stack[i] = c;
+  S.c = open; S.pad = null; S.trimMenu = false; S.bMenu = false; S.err = ''; S.confirm = null;
+}
+function saveOne(c) {
+  const e = evalCheck(c);
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
@@ -1295,9 +1330,6 @@ function saveCheck() {
   S.last = { id: rec.id, lot: c.lot, order: rec.order, item: rec.item, size: c.size, status: rec._status, held: e.held, loss: e.loss, high: e.high, sent: false,
     again: { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, trim: c.trim, before: c.bRm ? c.before : '', bRm: c.bRm, bMax: c.bMax || 0, rmAvg: c.rmAvg || 0, rmN: c.rmN || 0, bulkFrom: c.bulkFrom || null, order: c.order || '' } };
   if (c.rmId) { applyCheck(c.rmId + '#' + c.rmLine, c.rmDate, c.trim); const ln0 = lineOf(c); S.last.types = ln0 ? (ln0.types || []).map((x) => ({ code: x.code, n: x.n })) : [{ code: c.trim, n: 1 }]; }
-  S.c = null;
-  go('done');
-  flush();
 }
 function openCheckSheet(id) {
   const T = t();
@@ -1389,7 +1421,7 @@ const ACT = {
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   start: startCheck,
   resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); },
-  discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
+  discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.stack = []; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
   againtypein: () => {   // position A: on the check screen — save this card (if complete), then "+ ตรวจอีกแบบ"
@@ -1397,8 +1429,19 @@ const ACT = {
     const untouched = c.temps.every((x) => x === '') && !c.after && !(c.before && !c.bRm);
     if (untouched) { c.trim = ''; S.pad = null; ACT.trimmenu(); return; }
     if (!evalCheck(c).ok) { toast(t().againTypeFill); S.err = evalCheck(c).why.join(' · '); render(); return; }
-    saveCheck();
-    if (S.screen === 'done') ACT.againtype();
+    S.stack = (S.stack || []).concat([c]);
+    S.trimLast = c.trim;
+    const a = { rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup, fish: c.fish, proc: c.proc, size: c.size, rmStatus: c.rmStatus, manual: c.manual, bMax: c.bMax || 0, rmAvg: c.rmAvg || 0, rmN: c.rmN || 0, bulkFrom: c.bulkFrom || null, order: c.order };
+    S.c = Object.assign(blankCheck(c.rmDate), a, { trim: '' });
+    persist();
+    go('check', { pad: null });
+    ACT.trimmenu();
+  },
+  stackopen: (el) => { stackSwap(Number(el.dataset.v)); persist(); go('check', { pad: S.c.temps[0] === '' ? { kind: 'pt', i: 0 } : null }); },
+  stackdel: (el) => {
+    const i = Number(el.dataset.v);
+    if (S.confirm === 'stackdel' + i) { S.stack.splice(i, 1); S.confirm = null; persist(); } else S.confirm = 'stackdel' + i;
+    render();
   },
   againtype: () => {   // same lot, blank card, processing type asked first
     const a = S.last && S.last.again;
