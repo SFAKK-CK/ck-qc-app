@@ -359,7 +359,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.4.4';
+const APP_VERSION = '1.4.5';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -380,7 +380,7 @@ const L = {
     reportBad: 'ข้อมูลเข้าระบบแล้ว แต่ไฟล์รายงานรายวันอัปเดตไม่ได้ — แจ้งหัวหน้า QC (ระบบส่งอีเมลแจ้งแล้ว)', reportBadT: 'ไฟล์รายงานมีปัญหา', hide: 'ซ่อน',
     lotT: 'เลือกล็อตจาก RM', lotSub: 'วันที่รับเข้า + LOT (ล็อตใหม่ระบบตั้งให้ เช่น S-251126-01)', rcvDate: 'วันที่รับเข้า', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น',
     loading: 'กำลังโหลดล็อต…', noLots: 'ไม่พบรถที่รับเข้าวันนี้ในระบบ RM', manual: '+ ไม่พบในระบบ — กรอกเอง', lotsOffline: 'ไม่มีสัญญาณ — แสดงรายการที่โหลดไว้ หรือกรอกเอง',
-    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', pendLegend: 'แดง = ยังมีล็อตไม่ปิด', pendOld: '⚠ {d} Lot {lot} ดอง {n} วัน ยังไม่ปิด — ทำก่อน (FIFO)', pendGo: 'ไปวันนั้น ›', notStarted: 'ยังไม่ตรวจเลย', checkedTypes: 'ตรวจแล้ว:', againType: '+ ตรวจอีกแบบ', againTypeSub: 'ล็อตเดิม · เลือกประเภทใหม่', againSame: 'ตรวจซ้ำ', againSameSub: 'แบบเดิม {t}', lotChecked: 'ล็อตนี้ตรวจแล้ว', lotCheckedSub: 'จากบันทึก PC ที่มีจริง — ทุกแบบตัดแต่งของล็อตต้องมีปลาอย่างน้อย 1 ตัวถูกตรวจ', bulkSearch: 'ค้นหา BULK — Lot, ปลา, ขนาด, ผู้ขาย หรือวันที่ (เช่น 20/11)', bulkHint: 'พิมพ์เพื่อค้นหา ({n} ล็อต BULK ใน {d} วันล่าสุด)', bulkNone: 'ไม่พบ BULK ที่ตรงกับ "{q}"', bulkFound: 'พบ {n} ล็อต', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
+    lotTBulk: 'เลือกล็อต BULK', srcRm: 'รับเข้าจาก RM', srcBulk: 'จาก BULK', bulkSub: 'ล็อตที่ตัดแต่งเป็น BULK ไว้ ({n} วันล่าสุด) — นำมาใช้กับ Order จริง', noBulk: 'ไม่มีล็อต BULK', bulkAt: 'BULK เมื่อ', bulkUsed: 'ใช้แล้วกับ', fromBulk: 'จาก BULK · PC {d}', needRealOrder: 'ล็อตจาก BULK — ใส่ Order จริง', heldBadge: 'ปลาดอง {n} วัน', pendLegend: 'แดง = ยังมีล็อตไม่ปิด', pendOld: '⚠ {d} Lot {lot} ดอง {n} วัน ยังไม่ปิด — ทำก่อน (FIFO)', pendGo: 'ไปวันนั้น ›', notStarted: 'ยังไม่ตรวจเลย', checkedTypes: 'ตรวจแล้ว:', againType: '+ ตรวจอีกแบบ', againTypeSub: 'ล็อตเดิม · เลือกประเภทใหม่', againTypeIn: '+ ตรวจอีกแบบของล็อตนี้', againTypeHint: 'บันทึกการ์ดนี้ แล้วเปิดการ์ดใหม่ (ล็อตเดิม) ถามประเภทก่อน', againTypeFill: 'กรอกการ์ดนี้ให้ครบก่อน — กด + แล้วระบบจะบันทึกให้ และเปิดการ์ดใหม่', againSame: 'ตรวจซ้ำ', againSameSub: 'แบบเดิม {t}', lotChecked: 'ล็อตนี้ตรวจแล้ว', lotCheckedSub: 'จากบันทึก PC ที่มีจริง — ทุกแบบตัดแต่งของล็อตต้องมีปลาอย่างน้อย 1 ตัวถูกตรวจ', bulkSearch: 'ค้นหา BULK — Lot, ปลา, ขนาด, ผู้ขาย หรือวันที่ (เช่น 20/11)', bulkHint: 'พิมพ์เพื่อค้นหา ({n} ล็อต BULK ใน {d} วันล่าสุด)', bulkNone: 'ไม่พบ BULK ที่ตรงกับ "{q}"', bulkFound: 'พบ {n} ล็อต', heldLong: 'ดองนาน — ตรวจให้ละเอียด', rmIs: 'ผล RM', notInRm: 'ไม่พบใน RM', waitKg: 'รอชั่ง',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตในระบบ RM ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
@@ -410,7 +410,7 @@ const L = {
     reportBad: 'Saved in the system, but the daily report file could not be updated — tell the QC lead (an email alert was sent)', reportBadT: 'Report file problem', hide: 'Hide',
     lotT: 'Pick the RM lot', lotSub: 'Receive date + LOT (new lots are set by the app, e.g. S-251126-01)', rcvDate: 'Receive date', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day',
     loading: 'Loading lots…', noLots: 'No trucks received on this day in RM', manual: '+ Not in the system — enter by hand', lotsOffline: 'No signal — showing saved lots, or enter by hand',
-    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', pendLegend: 'red = lots not closed yet', pendOld: '⚠ {d} Lot {lot} held {n} days, not closed — do it first (FIFO)', pendGo: 'go to that day ›', notStarted: 'not checked yet', checkedTypes: 'checked:', againType: '+ Another type', againTypeSub: 'same lot · pick the type', againSame: 'Check again', againSameSub: 'same type {t}', lotChecked: 'This lot so far', lotCheckedSub: 'From real PC records — every processing type of a lot needs at least one fish checked', bulkSearch: 'Search BULK — lot, fish, size, supplier or date (e.g. 20/11)', bulkHint: 'Type to search ({n} BULK lots in the last {d} days)', bulkNone: 'No BULK lot matches "{q}"', bulkFound: '{n} lots found', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
+    lotTBulk: 'Pick a BULK lot', srcRm: 'Received at RM', srcBulk: 'From BULK', bulkSub: 'Lots processed as BULK (last {n} days) — use them for a real order', noBulk: 'No BULK lots', bulkAt: 'BULK on', bulkUsed: 'already used for', fromBulk: 'From BULK · PC {d}', needRealOrder: 'Lot from BULK — enter the real order', heldBadge: 'Held {n} day(s)', pendLegend: 'red = lots not closed yet', pendOld: '⚠ {d} Lot {lot} held {n} days, not closed — do it first (FIFO)', pendGo: 'go to that day ›', notStarted: 'not checked yet', checkedTypes: 'checked:', againType: '+ Another type', againTypeSub: 'same lot · pick the type', againTypeIn: '+ Another type of this lot', againTypeHint: 'saves this card, then opens a new one (same lot) asking the type first', againTypeFill: 'finish this card first — + then saves it and opens the new card', againSame: 'Check again', againSameSub: 'same type {t}', lotChecked: 'This lot so far', lotCheckedSub: 'From real PC records — every processing type of a lot needs at least one fish checked', bulkSearch: 'Search BULK — lot, fish, size, supplier or date (e.g. 20/11)', bulkHint: 'Type to search ({n} BULK lots in the last {d} days)', bulkNone: 'No BULK lot matches "{q}"', bulkFound: '{n} lots found', heldLong: 'Held long — check carefully', rmIs: 'RM result', notInRm: 'not in RM', waitKg: 'to weigh',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in RM (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
@@ -440,7 +440,7 @@ const L = {
     reportBad: 'စနစ်ထဲ သိမ်းပြီး၊ အစီရင်ခံစာ မပြင်နိုင် — QC ခေါင်းဆောင်ကို ပြောပါ', reportBadT: 'အစီရင်ခံစာ ပြဿနာ', hide: 'ဝှက်',
     lotT: 'RM lot ရွေးပါ', lotSub: 'လက်ခံရက် + LOT', rcvDate: 'လက်ခံရက်', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်',
     loading: 'ဖွင့်နေသည်…', noLots: 'ဤရက် RM တွင် ကား မရှိ', manual: '+ စနစ်တွင် မရှိ — ကိုယ်တိုင်ထည့်', lotsOffline: 'လိုင်းမရှိ — သိမ်းထားသည်ကို ပြသည်',
-    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', pendLegend: 'အနီ = lot မပိတ်ရသေး', pendOld: '⚠ {d} Lot {lot} {n} ရက် — အရင်လုပ်ပါ (FIFO)', pendGo: 'ထိုနေ့ ›', notStarted: 'မစစ်ရသေး', checkedTypes: 'စစ်ပြီး:', againType: '+ အခြားအမျိုးအစား', againTypeSub: 'lot အတူတူ', againSame: 'ထပ်စစ်', againSameSub: '{t}', lotChecked: 'ဒီ lot', lotCheckedSub: 'PC မှတ်တမ်းအစစ်မှ', bulkSearch: 'BULK ရှာရန် — Lot, ငါး, အရွယ်, ရက်စွဲ', bulkHint: 'ရှာရန် ရိုက်ပါ ({n} lot · {d} ရက်)', bulkNone: '"{q}" မတွေ့ပါ', bulkFound: '{n} lot တွေ့သည်', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
+    lotTBulk: 'BULK lot ရွေးပါ', srcRm: 'RM မှ', srcBulk: 'BULK မှ', bulkSub: 'BULK lot များ ({n} ရက်)', noBulk: 'BULK မရှိ', bulkAt: 'BULK', bulkUsed: 'သုံးပြီး', fromBulk: 'BULK မှ · PC {d}', needRealOrder: 'BULK lot — Order အစစ် ထည့်ပါ', heldBadge: '{n} ရက် ထိန်းထား', pendLegend: 'အနီ = lot မပိတ်ရသေး', pendOld: '⚠ {d} Lot {lot} {n} ရက် — အရင်လုပ်ပါ (FIFO)', pendGo: 'ထိုနေ့ ›', notStarted: 'မစစ်ရသေး', checkedTypes: 'စစ်ပြီး:', againType: '+ အခြားအမျိုးအစား', againTypeSub: 'lot အတူတူ', againTypeIn: '+ ဤ lot ၏ အခြားအမျိုးအစား', againTypeHint: 'ဤကဒ်ကို သိမ်းပြီး ကဒ်အသစ် ဖွင့်', againTypeFill: 'ဤကဒ်ကို အရင် ဖြည့်ပါ', againSame: 'ထပ်စစ်', againSameSub: '{t}', lotChecked: 'ဒီ lot', lotCheckedSub: 'PC မှတ်တမ်းအစစ်မှ', bulkSearch: 'BULK ရှာရန် — Lot, ငါး, အရွယ်, ရက်စွဲ', bulkHint: 'ရှာရန် ရိုက်ပါ ({n} lot · {d} ရက်)', bulkNone: '"{q}" မတွေ့ပါ', bulkFound: '{n} lot တွေ့သည်', heldLong: 'ကြာကြာ ထိန်းထား — သေချာစစ်ပါ', rmIs: 'RM ရလဒ်', notInRm: 'RM တွင် မရှိ', waitKg: 'ချိန်ရန်',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'RM တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
@@ -876,7 +876,7 @@ function viewLot() {
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
           const lst = l.open ? '<div class="sub" style="font-weight:700;color:var(--amber)">' + T.notStarted + '</div>'
             : (l.types || []).length ? '<div class="sub" style="font-weight:700;color:var(--green)">' + T.checkedTypes + ' ' + l.types.map((x) => esc(x.code) + ' ✓' + (x.n > 1 ? '×' + x.n : '')).join(' · ') +
-              '<span class="pill" style="margin-left:6px;background:var(--accent);color:#fff;font-weight:800">' + T.againType + '</span></div>' : '';   // a checked line says how to add another type (Sal, 25 Nov 2026)
+              '</div>' : '';
           const reop = '';
           return '<button class="lline' + (on ? ' on' : '') + '" data-act="pickline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>' + esc(l.name) + '</b><div class="sub mono">' +
             (l.w > 0 ? numFmt(l.w) + ' kg' : esc(l.wr || '—') + ' kg · ' + T.waitKg) + (l.fwAvg > 0 || l.fwMax > 0 ? ' · ' + T.heaviest + ' ' + numFmt(l.fwAvg || l.fwMax) + ' g' : '') + '</div>' +
@@ -977,6 +977,13 @@ function viewCheck() {
     h += '<div class="ddm list glass"><input class="q" data-on="trimq" value="' + esc(S.trimQ || '') + '" placeholder="' + esc(T.trimSearch) + '" autocomplete="off" aria-label="' + esc(T.trimL) + '">' +
       (hit.length ? hit.map((x) => '<button class="' + (c.trim === x.code ? 'on' : '') + '" data-act="trim" data-v="' + esc(x.code) + '"><span class="grow"><b>' + esc(x.code) + '</b><small>' + esc(x.name || '') + '</small></span><span class="pill p-mute">' + limTxt(x) + '</span></button>').join('')
         : '<div class="sub" style="padding:8px">' + T.trimNone + '</div>') + '</div>';
+  }
+  // position A (Sal, 25 Nov 2026): chips of the types this lot already has + "+ ตรวจอีกแบบของล็อตนี้" — saves this card, then a new card for the same lot asks the type
+  if (c.rmId && !c.manual) {
+    const ln = lineOf(c), ty = (ln && ln.types) || [];
+    h += '<div class="row" style="flex-wrap:wrap;gap:6px;align-items:center">' + (ty.length ? '<span class="sub">' + T.lotChecked + ':</span>' + ty.map((x) => '<span class="pill p-ok mono">' + esc(x.code) + ' ✓' + (x.n > 1 ? ' ×' + x.n : '') + '</span>').join('') : '') +
+      '<button class="linkbtn" style="margin-left:auto;font-weight:800;color:var(--accent)" data-act="againtypein">' + T.againTypeIn + '</button></div>' +
+      '<div class="sub" style="margin-top:-4px">' + T.againTypeHint + '</div>';
   }
   // temperatures: no. 1 required, 2 and 3 optional
   h += '<span class="lbl" style="color:var(--ink)">' + T.tempL + '</span><div class="t3">' + [0, 1, 2].map((i) => {
@@ -1385,6 +1392,14 @@ const ACT = {
   discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.confirm = null; } else S.confirm = 'discard'; render(); },
   home: () => go('home'),
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
+  againtypein: () => {   // position A: on the check screen — save this card (if complete), then "+ ตรวจอีกแบบ"
+    const c = S.c; if (!c) return;
+    const untouched = c.temps.every((x) => x === '') && !c.after && !(c.before && !c.bRm);
+    if (untouched) { c.trim = ''; S.pad = null; ACT.trimmenu(); return; }
+    if (!evalCheck(c).ok) { toast(t().againTypeFill); S.err = evalCheck(c).why.join(' · '); render(); return; }
+    saveCheck();
+    if (S.screen === 'done') ACT.againtype();
+  },
   againtype: () => {   // same lot, blank card, processing type asked first
     const a = S.last && S.last.again;
     if (!a) return go('home');
