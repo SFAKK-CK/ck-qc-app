@@ -360,7 +360,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.5.1';
+const APP_VERSION = '1.5.2';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -390,7 +390,7 @@ const L = {
     noOrder: 'PC ยังไม่ใส่ Order', rcv: 'รับ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'กรอกล็อตเอง', manualSub: 'ใช้เมื่อหาล็อตจาก PC ไม่เจอ (ระบบจะบันทึกว่า "ล็อตพิมพ์เอง")', item: 'ชื่อวัตถุดิบ', proc: 'Processing type', size: 'Size (เช่น 1KG, 800G)',
     rcvDate: 'วันที่รับเข้า', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
-    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', dayL: 'วันที่ออกฟรีซ', dayLPc: 'วันที่ PC ตรวจ', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', dayLegend: 'แดง = วันนั้นยังมีล็อตค้างบรรจุ', dayNone: '✓ วันนี้ไม่มีล็อตค้างบรรจุ', fromRm: 'รับเข้าเป็น', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code / รหัสฉลาก (ถ้ามี)', codePh: 'เช่น SCK, 2901232411…', codeHint: 'รหัสบนฉลาก (เช่น SCK) ใส่ในช่อง Code ด้านล่าง — ไม่ใช่ Order', orderOther: '+ ออเดอร์อื่น (ย้ายล็อต)…', orderNew: 'ออเดอร์ใหม่', moveQ: 'ย้ายล็อตไปออเดอร์ {o}?', moveWhat: 'PC ตรวจล็อตนี้ให้ {o} — ระบบจะบันทึกการย้ายไว้ใน Audit (ใคร เมื่อไร เพราะอะไร) และใส่ "Order ปัจจุบัน" ให้ PC / แช่แข็ง', moveWhy: 'เหตุผลที่ย้าย', moveWhyPh: 'เช่น ลูกค้าเปลี่ยนออเดอร์', moveWhyNeed: 'ใส่เหตุผลที่ย้ายออเดอร์', moveYes: 'ยืนยันย้าย', moveNo: 'ไม่ย้าย — ใช้ Order จาก PC', moved: 'ย้ายจาก {a} → {b}', moveUndo: 'ยกเลิกการย้าย', needMove: 'ยืนยันการย้ายออเดอร์ (หรือเลือก Order จาก PC)', movedT: 'บันทึกการย้ายออเดอร์ {a} → {b} แล้ว', stockS: 'bulk / สต็อก', stockNote: '📦 บรรจุเป็น {o} (bulk / สต็อก) — PC ตรวจล็อตนี้ให้ {p} · ระบบบันทึก "Order ปัจจุบัน" ให้เอง',
+    orderL: 'Order', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderPc: 'จาก PC:', dayL: 'วันที่ออกฟรีซ', dayLPc: 'วันที่ PC ตรวจ', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', dayLegend: 'แดง = วันนั้นยังมีล็อตค้างบรรจุ', dayNone: '✓ วันนี้ไม่มีล็อตค้างบรรจุ', fromRm: 'รับเข้าเป็น', late: '⚠ ค้างบรรจุ {n} วัน — ต้องบรรจุภายในวันที่ออกฟรีซ', lateN: 'ค้างบรรจุ {n} ล็อต', trimL: 'ประเภทการตัดแต่งที่บรรจุ', trimPc: 'PC ตรวจแล้ว:', trimOther: 'ประเภทอื่น…', trimNeed: 'เลือกประเภทการตัดแต่งที่บรรจุ', trimNoPc: 'PC ยังไม่ได้ตรวจประเภท {t} ของล็อตนี้ — ให้ PC ตรวจก่อน (+ ตรวจอีกแบบ) จึงบรรจุได้', orderEdited: 'แก้ Order — PC ใส่ไว้ {o}', codeL: 'Code / รหัสฉลาก (ถ้ามี)', codePh: 'เช่น SCK, 2901232411…', codeHint: 'รหัสบนฉลาก (เช่น SCK) ใส่ในช่อง Code ด้านล่าง — ไม่ใช่ Order', orderOther: '+ ออเดอร์อื่น (ย้ายล็อต)…', orderNew: 'ออเดอร์ใหม่', moveQ: 'ย้ายล็อตไปออเดอร์ {o}?', moveWhat: 'PC ตรวจล็อตนี้ให้ {o} — ระบบจะบันทึกการย้ายไว้ใน Audit (ใคร เมื่อไร เพราะอะไร) และใส่ "Order ปัจจุบัน" ให้ PC / แช่แข็ง', moveWhy: 'เหตุผลที่ย้าย', moveWhyPh: 'เช่น ลูกค้าเปลี่ยนออเดอร์', moveWhyNeed: 'ใส่เหตุผลที่ย้ายออเดอร์', moveYes: 'ยืนยันย้าย', moveNo: 'ไม่ย้าย — ใช้ Order จาก PC', moved: 'ย้ายจาก {a} → {b}', moveUndo: 'ยกเลิกการย้าย', needMove: 'ยืนยันการย้ายออเดอร์ (หรือเลือก Order จาก PC)', movedT: 'บันทึกการย้ายออเดอร์ {a} → {b} แล้ว', stockS: 'bulk / สต็อก', stockCodeT: 'รหัสกล่องสต็อก — เขียน/พิมพ์ติดข้างกล่อง', stockCodeSub: 'ระบบออกรหัสให้เอง = SCK + ล็อต · ค้นหารหัสนี้จะเจอล็อตนี้เท่านั้น', printCode: 'พิมพ์ป้าย', printBlocked: 'เปิดหน้าพิมพ์ไม่ได้ — อนุญาต pop-up ในเบราว์เซอร์', stockNote: '📦 บรรจุเป็น {o} (bulk / สต็อก) — PC ตรวจล็อตนี้ให้ {p} · ระบบบันทึก "Order ปัจจุบัน" ให้เอง',
     sizeT: 'สุ่ม Size ปลา (ชั่งทีละตัว · g)', avg: 'เฉลี่ย', labelT: 'ฉลากสินค้า', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 ปี', '+18 เดือน', '+2 ปี'], expBad: 'Expiry ต้องหลัง Production',
     packT: 'ตรวจสอบบรรจุภัณฑ์', packHint: 'แตะเพื่อเปลี่ยน ✓ ผ่าน → ✗ ไม่ผ่าน → – ไม่ใช้',
     ck: { std: 'ตรงมาตรฐานการบรรจุ', seal: 'รอยซีล', bag: 'ถุง', box: 'กล่อง', strap: 'สายรัด', sack: 'กระสอบ', stk: 'สติ๊กเกอร์ถูกต้อง', stick: 'สติ๊กเกอร์ติดแน่น ไม่ลอก' },
@@ -423,7 +423,7 @@ const L = {
     noOrder: 'PC gave no order', rcv: 'recv', pcAt: 'PC', lotL: 'LOT',
     manualT: 'Enter the lot by hand', manualSub: 'Only when the lot cannot be found in PC (saved as "typed lot")', item: 'Item', proc: 'Processing type', size: 'Size (e.g. 1KG, 800G)',
     rcvDate: 'Receive date', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
-    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', dayL: 'Day out of the freezer', dayLPc: 'Day checked by PC', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', dayLegend: 'red = lots of that day still to pack', dayNone: '✓ nothing left to pack on this day', fromRm: 'received as', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code / label code (if any)', codePh: 'e.g. SCK, 2901232411…', codeHint: 'The label code (e.g. SCK) goes in the Code box below — it is not the order', orderOther: '+ another order (move the lot)…', orderNew: 'New order', moveQ: 'Move the lot to order {o}?', moveWhat: 'PC checked this lot for {o} — the move is written to the Audit (who, when, why) and PC / freezing get "current order"', moveWhy: 'Reason for the move', moveWhyPh: 'e.g. customer changed the order', moveWhyNeed: 'Give the reason for moving the order', moveYes: 'Confirm move', moveNo: 'Don\'t move — use the PC order', moved: 'moved {a} → {b}', moveUndo: 'undo', needMove: 'Confirm the order move (or pick the PC order)', movedT: 'Order move {a} → {b} recorded', stockS: 'bulk / stock', stockNote: '📦 Packed as {o} (bulk / stock) — PC checked this lot for {p} · "current order" is recorded by itself',
+    orderL: 'Order', orderPh: 'Type the order, e.g. ABT-2/D', orderPc: 'From PC:', dayL: 'Day out of the freezer', dayLPc: 'Day checked by PC', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', dayLegend: 'red = lots of that day still to pack', dayNone: '✓ nothing left to pack on this day', fromRm: 'received as', late: '⚠ {n} day(s) overdue — pack on the day it leaves the freezer', lateN: '{n} lots overdue', trimL: 'Processing type packed', trimPc: 'checked by PC:', trimOther: 'other type…', trimNeed: 'choose the processing type packed', trimNoPc: 'PC has not checked type {t} of this lot — PC must check it first (+ ตรวจอีกแบบ) before it can be packed', orderEdited: 'Order changed — PC had {o}', codeL: 'Code / label code (if any)', codePh: 'e.g. SCK, 2901232411…', codeHint: 'The label code (e.g. SCK) goes in the Code box below — it is not the order', orderOther: '+ another order (move the lot)…', orderNew: 'New order', moveQ: 'Move the lot to order {o}?', moveWhat: 'PC checked this lot for {o} — the move is written to the Audit (who, when, why) and PC / freezing get "current order"', moveWhy: 'Reason for the move', moveWhyPh: 'e.g. customer changed the order', moveWhyNeed: 'Give the reason for moving the order', moveYes: 'Confirm move', moveNo: 'Don\'t move — use the PC order', moved: 'moved {a} → {b}', moveUndo: 'undo', needMove: 'Confirm the order move (or pick the PC order)', movedT: 'Order move {a} → {b} recorded', stockS: 'bulk / stock', stockCodeT: 'Stock carton code — write / print it on the carton', stockCodeSub: 'Made by the system = SCK + lot · searching this code finds this lot only', printCode: 'Print label', printBlocked: 'Could not open the print page — allow pop-ups in the browser', stockNote: '📦 Packed as {o} (bulk / stock) — PC checked this lot for {p} · "current order" is recorded by itself',
     sizeT: 'Fish size sample (weigh one by one · g)', avg: 'average', labelT: 'Label', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 year', '+18 months', '+2 years'], expBad: 'Expiry must be after production',
     packT: 'Packaging check', packHint: 'Tap to change ✓ pass → ✗ fail → – not used',
     ck: { std: 'As the packing standard', seal: 'Seal', bag: 'Bag', box: 'Box', strap: 'Strap', sack: 'Sack', stk: 'Sticker correct', stick: 'Sticker stays on' },
@@ -456,7 +456,7 @@ const L = {
     noOrder: 'PC Order မထည့်ရသေး', rcv: 'လက်ခံ', pcAt: 'PC', lotL: 'LOT',
     manualT: 'lot ကိုယ်တိုင်ထည့်', manualSub: 'PC တွင် ရှာမတွေ့မှသာ', item: 'ကုန်ကြမ်း', proc: 'Processing type', size: 'Size',
     rcvDate: 'လက်ခံရက်', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
-    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', dayL: 'အအေးခဲမှ ထွက်သည့်နေ့', dayLPc: 'PC စစ်သည့်နေ့', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်', dayLegend: 'အနီ = ထိုနေ့ ထုပ်ပိုးရန် ကျန်', dayNone: '✓ ယနေ့ ကျန်မရှိ', fromRm: 'လက်ခံ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code / တံဆိပ် ကုဒ်', codePh: 'ဥပမာ SCK', codeHint: 'တံဆိပ်ပေါ်က ကုဒ် (SCK) ကို အောက်က Code တွင် ထည့်ပါ — Order မဟုတ်', orderOther: '+ အခြား Order (lot ရွှေ့)…', orderNew: 'Order အသစ်', moveQ: 'lot ကို Order {o} သို့ ရွှေ့မလား?', moveWhat: 'PC က {o} အတွက် စစ်ထား — Audit တွင် မှတ်တမ်းတင်မည်', moveWhy: 'ရွှေ့ရသည့် အကြောင်း', moveWhyPh: 'ဥပမာ ဖောက်သည် Order ပြောင်း', moveWhyNeed: 'အကြောင်းပြချက် ထည့်ပါ', moveYes: 'ရွှေ့မည်', moveNo: 'မရွှေ့ — PC Order သုံး', moved: '{a} → {b} ရွှေ့ပြီး', moveUndo: 'ပြန်ဖျက်', needMove: 'Order ရွှေ့ခြင်း အတည်ပြုပါ', movedT: 'Order ရွှေ့ {a} → {b} မှတ်ပြီး', stockS: 'bulk / စတော့', stockNote: '📦 {o} (bulk / စတော့) အဖြစ် ထုပ်ပိုး — PC က {p} အတွက် စစ်ထား',
+    orderL: 'Order', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderPc: 'PC မှ:', dayL: 'အအေးခဲမှ ထွက်သည့်နေ့', dayLPc: 'PC စစ်သည့်နေ့', d0: 'ယနေ့', d1: 'မနေ့', dN: '{n} ရက်အရင်', otherDay: 'အခြားရက်', dayLegend: 'အနီ = ထိုနေ့ ထုပ်ပိုးရန် ကျန်', dayNone: '✓ ယနေ့ ကျန်မရှိ', fromRm: 'လက်ခံ:', late: '⚠ {n} ရက် ကျော်', lateN: '{n} lot ကျော်', trimL: 'ထုပ်ပိုးသော အမျိုးအစား', trimPc: 'PC စစ်ပြီး:', trimOther: 'အခြား…', trimNeed: 'အမျိုးအစား ရွေးပါ', trimNoPc: 'PC က {t} ကို မစစ်ရသေး — PC အရင် စစ်ပါ', orderEdited: 'Order ပြင်ပြီး — PC: {o}', codeL: 'Code / တံဆိပ် ကုဒ်', codePh: 'ဥပမာ SCK', codeHint: 'တံဆိပ်ပေါ်က ကုဒ် (SCK) ကို အောက်က Code တွင် ထည့်ပါ — Order မဟုတ်', orderOther: '+ အခြား Order (lot ရွှေ့)…', orderNew: 'Order အသစ်', moveQ: 'lot ကို Order {o} သို့ ရွှေ့မလား?', moveWhat: 'PC က {o} အတွက် စစ်ထား — Audit တွင် မှတ်တမ်းတင်မည်', moveWhy: 'ရွှေ့ရသည့် အကြောင်း', moveWhyPh: 'ဥပမာ ဖောက်သည် Order ပြောင်း', moveWhyNeed: 'အကြောင်းပြချက် ထည့်ပါ', moveYes: 'ရွှေ့မည်', moveNo: 'မရွှေ့ — PC Order သုံး', moved: '{a} → {b} ရွှေ့ပြီး', moveUndo: 'ပြန်ဖျက်', needMove: 'Order ရွှေ့ခြင်း အတည်ပြုပါ', movedT: 'Order ရွှေ့ {a} → {b} မှတ်ပြီး', stockS: 'bulk / စတော့', stockCodeT: 'စတော့ ကုဒ် — ကတ်ထူပေါ် ရေး/ပုံနှိပ်ပါ', stockCodeSub: 'စနစ်က ထုတ်ပေး = SCK + lot', printCode: 'ပုံနှိပ်', printBlocked: 'ပုံနှိပ်စာမျက်နှာ ဖွင့်မရ', stockNote: '📦 {o} (bulk / စတော့) အဖြစ် ထုပ်ပိုး — PC က {p} အတွက် စစ်ထား',
     sizeT: 'ငါးအရွယ် နမူနာ (တစ်ကောင်ချင်း · g)', avg: 'ပျမ်းမျှ', labelT: 'တံဆိပ်', prod: 'Production Date', exp: 'Expiry Date', expPlus: ['+1 နှစ်', '+18 လ', '+2 နှစ်'], expBad: 'Expiry သည် Production နောက်မှ ဖြစ်ရမည်',
     packT: 'ထုပ်ပိုးပစ္စည်း စစ်ဆေး', packHint: 'နှိပ်ပါ ✓ → ✗ → –',
     ck: { std: 'ထုပ်ပိုး စံနှုန်းအတိုင်း', seal: 'ဆီး', bag: 'အိတ်', box: 'သေတ္တာ', strap: 'ကြိုး', sack: 'အိတ်ကြီး', stk: 'စတစ်ကာ မှန်', stick: 'စတစ်ကာ မကွာ' },
@@ -527,7 +527,11 @@ const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).
 const EMPTY_PK = { checks: [], sizeN: SIZE_N, settings: { GLAZE_TOL: 2, GLAZE_TOL_LOW: 0, GLAZE_MIN_G: 100, LOT_DAYS: 7 }, stock: ['SCK'], cancelDepts: ['general manager'] };
 /** SCK = packed as bulk / stock, not a customer order (Sal, 26 Nov 2026) — a standing chip beside the PC orders, no move reason needed */
 const stockCodes = () => (pkCfg().stock || ['SCK']).map(cleanOrder);
-const isStock = (o) => stockCodes().indexOf(cleanOrder(o)) >= 0;
+/** bare code (SCK) or a carton code with the lot behind it (SCK-S-261126-03) */
+const isStock = (o) => { o = cleanOrder(o); return !!o && stockCodes().some((c) => o === c || o.indexOf(c + '-') === 0); };
+const isBulk = (o) => cleanOrder(o) === 'BULK' || isStock(o);
+/** the carton code the server will store: SCK + lot — written / printed on the sticker beside the carton (Sal, 26 Nov 2026) */
+const stockCode = (o, lot) => (stockCodes().indexOf(cleanOrder(o)) >= 0 && String(lot || '').trim() ? cleanOrder(o) + '-' + String(lot).trim() : cleanOrder(o));
 const pkCfg = () => (S.cfg && S.cfg.pk) || (DEMO ? DEMO_CFG.pk : EMPTY_PK);
 const rmFish = () => ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.rm.fish : [])).map((f) => f.name);
 const rmProcs = () => (S.cfg && S.cfg.rm && S.cfg.rm.procs) || ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'];
@@ -555,6 +559,19 @@ function blankCheck() {
 }
 const n = (v) => (v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v));
 /** the order typed differs from every order PC gave the lot (not for BULK / typed lots — they have no PC order) */
+
+/** stock carton code (SCK-<lot>) as a label: opens a print page (AirPrint / Wi-Fi printer) — Sal, 26 Nov 2026 */
+function printCode(code, lines) {
+  const w = window.open('', '_blank');
+  if (!w) { toast(t().printBlocked); return; }
+  const E = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + E(code) + '</title><style>body{margin:0;padding:18px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;text-align:center}' +
+    '.c{font:900 44px/1.1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:1px;word-break:break-all;border:3px solid #000;border-radius:14px;padding:16px 10px;margin:8px 0 14px}' +
+    '.l{font-size:20px;font-weight:700;margin:4px 0}.s{font-size:15px;color:#333}@media print{button{display:none}}</style></head><body>' +
+    '<div class="s">CK QC · bulk / สต็อก</div><div class="c">' + E(code) + '</div>' + (lines || []).map((x) => '<div class="l">' + E(x) + '</div>').join('') +
+    '<p><button onclick="window.print()" style="font-size:18px;padding:10px 22px;border-radius:10px">🖨 พิมพ์ / Print</button></p><script>setTimeout(function(){window.print()},300)<\/script></body></html>');
+  w.document.close();
+}
 function orderDiffers(c) { const o = cleanOrder(c.order); return !!(o && !c.bulkFrom && c.pcOrders.length && c.pcOrders.indexOf(o) < 0); }
 function evalCheck(c) {
   const T = t();
@@ -577,7 +594,7 @@ function evalCheck(c) {
   const why = [];
   if (!c.lot || !c.item) why.push('lot');
   if (!cleanOrder(c.order)) why.push(T.needOrder);
-  else if (c.bulkFrom && cleanOrder(c.order) === 'BULK') why.push(T.needRealOrder);
+  else if (c.bulkFrom && (cleanOrder(c.order) === 'BULK' || isStock(c.order))) why.push(T.needRealOrder);
   else if (orderDiffers(c) && !c.orderMoved) why.push(T.needMove);   // PK is the final order (Sal, 26 Nov 2026): a lot packed to another order than PC's is a deliberate move — confirmed with a reason
   if (got.length < SIZE_N) why.push(T.needSizes);
   if (!c.prodDate) why.push(T.needProd);
@@ -882,7 +899,7 @@ function viewBulkList() {
 /** title = fish · processing type(s) still to pack (blue) → order(s) — the RM item moves to the sub-line (Sal, 25 Nov 2026) */
 function lotTitle(l) {
   const tr = (l.pend && l.pend.length ? l.pend.map((p) => p.trim) : (l.types || []).map((x) => x.code)).filter((x, i, a) => x && a.indexOf(x) === i);
-  const ords = l.orders && l.orders.length ? l.orders : (l.used && l.used.length ? l.used : ['BULK']);
+  const ords = l.orders && l.orders.length ? l.orders : (l.used && l.used.length ? l.used : [l.code || 'BULK']);   // a stock lot shows its carton code (SCK-<lot>)
   return esc(String(l.item || '').split('-')[0]) + (tr.length ? ' <span style="color:var(--accent)">' + esc(tr.join(' + ')) + '</span>' : '') + ' → ' + esc(ords.join(', '));
 }
 const bulkDays = () => Number(S.cfg && S.cfg.pc && S.cfg.pc.settings && S.cfg.pc.settings.BULK_DAYS) || 60;
@@ -947,7 +964,8 @@ function viewCheck() {
       stockCodes().filter((o) => c.pcOrders.indexOf(o) < 0).map((o) => '<button class="' + (ord === o ? 'on' : '') + '" style="font:700 19px var(--mono);padding:12px 18px" data-act="pickstock" data-v="' + esc(o) + '">' + esc(o) + ' <small>· ' + T.stockS + '</small></button>').join('') +
       (c.orderOther || (diff && !isStock(ord)) ? '' : '<button data-act="orderother" style="border-style:dashed;font-size:14px">' + T.orderOther + '</button>') + '</div>';
     if (diff && isStock(ord)) {
-      h += '<div class="note" style="margin-top:8px">' + fmt(T.stockNote, { o: esc(ord), p: esc(c.pcPick || c.pcOrders.join(' / ')) }) + '</div>';
+      h += '<div class="note" style="margin-top:8px">' + fmt(T.stockNote, { o: esc(ord), p: esc(c.pcPick || c.pcOrders.join(' / ')) }) +
+        '<div class="mono" style="font-size:22px;font-weight:800;margin-top:6px;color:var(--ink)">' + esc(stockCode(ord, c.lot)) + '</div><div class="sub">' + T.stockCodeSub + '</div></div>';
     } else if (c.orderOther || diff) {
       h += '<label class="tile" style="height:auto;min-height:64px;margin-top:10px"><span class="t-l">' + T.orderNew + '</span><input data-on="order" value="' + esc(diff ? c.order : '') + '" maxlength="40" placeholder="' + esc(T.orderPh) + '" autocomplete="off" autocapitalize="characters" style="font:700 20px var(--mono);text-transform:uppercase" aria-label="' + T.orderNew + '"></label>';
       if (diff && !c.orderMoved) {
@@ -1017,7 +1035,9 @@ function viewDone() {
   const st = last.sent ? 'sent' : item && item.err ? 'fail' : 'wait';   // honest: ✓ only when the server has it (Sal, 18 Nov 2026)
   return '<div class="done"><div class="tick' + (st === 'sent' ? '' : ' ' + st) + '"><div>' + (st === 'sent' ? '✓' : st === 'fail' ? '✕' : '<span class="spin"></span>') + '</div></div>' +
     '<h2 style="font-size:26px' + (st === 'fail' ? ';color:var(--red)' : '') + '">' + (st === 'sent' ? T.doneT : st === 'fail' ? T.refusedT : T.sendingT) + '</h2>' +
-    '<div class="sub mono" style="font-size:17px;font-weight:700;color:var(--ink)">' + esc(last.order || '') + '</div>' +
+    (last.stock ? '<div class="card glass" style="width:100%;border:2px solid var(--ink)"><div class="sub">📦 ' + T.stockCodeT + '</div><div class="mono" style="font-size:26px;font-weight:900;word-break:break-all">' + esc(last.order || '') + '</div>' +
+        '<button class="btn ghost" style="height:44px;font-size:15px;margin-top:6px" data-act="printcode">🖨 ' + T.printCode + '</button><div class="sub">' + T.stockCodeSub + '</div></div>'
+      : '<div class="sub mono" style="font-size:17px;font-weight:700;color:var(--ink)">' + esc(last.order || '') + '</div>') +
     '<div class="sub" style="font-size:15px">' + esc(last.item || '') + ' ' + esc(last.size || '') + ' · Lot ' + esc(last.lot || '') + '</div>' +
     '<div class="row" style="justify-content:center;flex-wrap:wrap">' + statusPill(last.status) + (last.gPct !== null && last.gPct !== undefined ? '<span class="pill p-mute">Glazing ' + numFmt(last.gPct) + '%</span>' : '') + '</div>' +
     (st === 'sent' ? '<span class="pill p-ok" style="font-size:13px;padding:5px 12px">✓ ' + T.sentOk + '</span>'
@@ -1229,7 +1249,7 @@ function saveCheck() {
   const e = evalCheck(c);
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
   const ord = cleanOrder(c.order);
-  const pcOrder = c.bulkFrom ? 'BULK' : c.pcOrders.indexOf(ord) >= 0 ? ord : c.pcPick || c.pcOrders.join(' / ');   // changed here → keep the PC order it was picked from
+  const pcOrder = c.bulkFrom ? (c.bulkFrom.code || 'BULK') : c.pcOrders.indexOf(ord) >= 0 ? ord : c.pcPick || c.pcOrders.join(' / ');   // changed here → keep the PC order it was picked from
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), order: ord, pcOrder: pcOrder, orderWhy: orderDiffers(c) ? String(c.orderWhy || '').trim() : '', bulkFrom: c.bulkFrom || null, code: cleanOrder(c.code), item: c.item, size: c.size, rmDate: c.rmDate, lot: c.lot, sup: c.sup,
     rmId: c.rmId, rmLine: c.rmLine, pcId: c.pcId, trim: c.trim || '', sizes: c.sizes.slice(), prodDate: c.prodDate, expDate: c.expDate, checks: Object.assign({}, c.checks),
@@ -1240,7 +1260,7 @@ function saveCheck() {
   };
   if (e.glazed) S.gLast[ord] = c.gOrder;
   S.outbox.push({ record: rec, staffId: S.staff.id, savedAt: Date.now(), draft: JSON.parse(JSON.stringify(c)) });
-  S.last = { id: rec.id, order: ord, lot: c.lot, item: c.item, size: c.size, status: rec._status, gPct: e.gPct, sent: false,
+  S.last = { id: rec.id, order: stockCode(ord, c.lot), stock: isStock(ord), trim: c.trim || '', lot: c.lot, item: c.item, size: c.size, status: rec._status, gPct: e.gPct, sent: false,
     again: { key: c.key, rmId: c.rmId, rmLine: c.rmLine, pcId: c.pcId, rmDate: c.rmDate, lot: c.lot, sup: c.sup, item: c.item, fish: c.fish, proc: c.proc, size: c.size, manual: c.manual, trim: c.trim, pcTypes: c.pcTypes.slice(),
       pcOrders: c.pcOrders.slice(), pcPick: c.pcPick || '', bulkFrom: c.bulkFrom || null, order: c.order, code: c.code, prodDate: c.prodDate, expDate: c.expDate, glazed: c.glazed, gOrder: c.glazed ? c.gOrder : '' } };
   pkPacked(c, c.trim);
@@ -1308,9 +1328,9 @@ const ACT = {
     const fish = String(l.item).split('-')[0], proc = String(l.item).split('-').slice(1).join('-');
     // packed from a BULK lot: same RM truck + line, the BULK check as the PC link, a real order to type
     Object.assign(S.c, { key: 'B|' + l.key, rmId: l.rmId, rmLine: l.rmLine, pcId: l.pcId, rmDate: l.rmDate, lot: l.lot, sup: l.sup, item: l.item, fish: fish, proc: proc, size: l.size, manual: false,
-      pcOrders: [], pcPick: '', bulkFrom: { pcId: l.pcId, pcDate: l.pcDate }, pcTypes: (l.types || []).map((x) => x.code) });
+      pcOrders: [], pcPick: '', bulkFrom: { pcId: l.pcId, pcDate: l.pcDate, code: l.code || 'BULK' }, pcTypes: (l.types || []).map((x) => x.code) });
     S.c.trim = S.c.pcTypes.length === 1 ? S.c.pcTypes[0] : '';
-    if (cleanOrder(S.c.order) === 'BULK') S.c.order = '';
+    if (isBulk(S.c.order)) S.c.order = '';
     go('check');
   },
   picklot: (el) => {
@@ -1337,6 +1357,7 @@ const ACT = {
     render();
   },
   pickorder: (el) => { if (cleanOrder(S.c.order) === el.dataset.v) S.c.order = ''; else { useOrder(el.dataset.v); S.c.pcPick = el.dataset.v; } Object.assign(S.c, { orderOther: false, orderMoved: false, orderWhy: '' }); S.err = ''; render(); },
+  printcode: () => { const l = S.last || {}; printCode(l.order, [String(l.item || '') + ' ' + String(l.size || '') + (l.trim ? ' · ' + l.trim : ''), 'Lot ' + String(l.lot || ''), todayStr().split('-').reverse().join('/')]); },
   pickstock: (el) => { if (cleanOrder(S.c.order) === el.dataset.v) { S.c.order = ''; S.c.orderMoved = false; } else { useOrder(el.dataset.v); S.c.orderMoved = true; } Object.assign(S.c, { orderOther: false, orderWhy: '' }); S.err = ''; render(); },
   orderother: () => { S.c.orderOther = true; S.c.orderMoved = false; S.err = ''; render(); const el = $('main').querySelector('[data-on="order"]'); if (el) el.focus(); },
   orderconfirm: () => { if (!String(S.c.orderWhy || '').trim()) { S.err = t().moveWhyNeed; return render(); } S.c.orderMoved = true; S.err = ''; render(); },
