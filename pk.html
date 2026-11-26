@@ -360,7 +360,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.4.1';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -1180,7 +1180,8 @@ function pkTypesFor(l) {
 function pkPacked(c, trim) {
   const l = S.lots && S.lots.lots.find((x) => x.key === c.key);
   if (l && l.pend) {
-    l.pend = l.pend.filter((p) => !(p.order === cleanOrder(c.order) && (p.trim === trim || !trim)));
+    const po = c.bulkFrom ? ['BULK'] : [cleanOrder(c.order)].concat(c.pcOrders.indexOf(cleanOrder(c.order)) >= 0 ? [] : [c.pcPick || '']).filter(String);   // the PC order closes the pair too (packing order may differ)
+    l.pend = l.pend.filter((p) => !(po.indexOf(p.order) >= 0 && (p.trim === trim || !trim)));
     l.orders = l.pend.map((p) => p.order).filter((x, i, a) => a.indexOf(x) === i);
     if (!l.orders.length) S.lots.lots = S.lots.lots.filter((x) => x !== l);
   }
