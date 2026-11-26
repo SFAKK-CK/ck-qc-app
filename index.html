@@ -333,7 +333,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Leave it as PASTE_… (or open with ?demo=1) to try the app without saving anything.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.6.3';
+const APP_VERSION = '1.6.5';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.demo.state' : 'ckqc.v1';
 const STORE = 'ckqc.v1';  // demo mode uses its own key (set below) so demo suppliers never show in the real app
@@ -866,7 +866,7 @@ function viewLogin() {
   return '<div class="stg"><div class="hero"><div class="mark glass"><span>👋</span></div><div class="brand">CK Frozen Fish · ' + esc(branch()) + '</div>' +
     '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
     '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' +
-    (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '</div>';
+    (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '<div class="sub mono" style="text-align:center;font-size:11px;opacity:.7">v' + APP_VERSION + '</div></div>';   // version on the login screen (Sal, 25 Nov 2026)
 }
 
 /* ---------- report by order (Sal, 17 Nov 2026): type an order → every %Loss (PC) and glazing (PK) of it ---------- */
@@ -1132,7 +1132,7 @@ function viewTruck() {
   }
   else if (d.supName) h += '<div class="card glass" style="flex-direction:row;align-items:center"><span class="num" style="width:auto;min-width:36px;height:36px;padding:0 6px">' + esc(d.supCode || '–') + '</span><span class="grow"><b>' + esc(d.supName) + '</b><div class="sub">' + T.fishNext + '</div></span></div>';
   if (d.lotAuto) h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400;color:var(--green)">· ✓ ' + T.lotAutoHint + '</span></span>' +
-    '<div class="tap glass f-ok" style="font-size:22px;letter-spacing:.5px" data-lot="auto"><b class="mono">' + esc(d.lot) + '</b></div></div>';
+    '<div class="tap glass f-ok" style="display:flex;align-items:center;height:56px;font-size:22px;letter-spacing:.5px" data-lot="auto"><b class="mono">' + esc(d.lot) + '</b></div></div>';   // centred like the other boxes (Sal, 26 Nov 2026)
   else h += '<div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">' + T.lot + ' <span style="font-weight:400">· ' + T.lotHint + '</span></span>' +
     '<button class="tap glass ' + (lotActive ? 'f-act' : d.lot ? 'f-ok' : 'f-empty') + '" data-act="focus" data-v="lot"><span class="' + (lotActive ? 'caret' : '') + '">' + esc(d.lot || (lotActive ? '' : '—')) + '</span></button></div>';
   const opt = (list, v) => '<option value="">' + T.none + '</option>' + list.map((x) => '<option' + (x === v ? ' selected' : '') + '>' + esc(x) + '</option>').join('');
