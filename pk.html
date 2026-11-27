@@ -360,7 +360,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.6.0';
+const APP_VERSION = '1.7.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -407,6 +407,7 @@ const L = {
     refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง แตะ "เปิดแก้ไข" แล้วส่งใหม่ (ส่งอีเมลแจ้งหัวหน้า QC แล้ว)', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — เริ่มรายการถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedN: 'ส่งไม่สำเร็จ', doneT: 'บันทึกแล้ว', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจ Order นี้อีกครั้ง', home: 'หน้าหลัก',
     pass: 'ผ่าน', passFix: 'ผ่านหลังแก้ไข', fail: 'ไม่ผ่าน', close: 'ปิด', by: 'โดย', cancelled: 'ยกเลิกแล้ว', cancelT: 'ยกเลิกการตรวจนี้',
     cancelWhy: 'เหตุผลที่ยกเลิก', reasons: ['บันทึกผิด Order', 'น้ำหนักผิด', 'บันทึกซ้ำ', 'ทดสอบระบบ'], confirmCancel: 'ยืนยันยกเลิก',
+   reopenT: '🔓 GM เปิดให้ตรวจซ้ำ', reopenSub: 'ล็อต × Order × แบบนี้บรรจุแล้ว — เปิดได้ครั้งเดียว แล้วกลับเข้ารายการรอบรรจุ บันทึกเหตุผลใน Audit', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล', reopenReasons: ['กล่อง / ถุงเสียหาย บรรจุใหม่', 'ตรวจผิด ต้องตรวจใหม่', 'บรรจุเพิ่ม Order เดิม'], reopenGo: '🔓 เปิดให้ตรวจซ้ำ', reopenedBy: 'GM {name} เปิดแล้ว — เลือกล็อตจากรายการรอบรรจุ', reopenedTag: 'GM เปิด', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM เปิด', nextLot: 'เลือกล็อตถัดไป',
     gmOnly: 'ยกเลิกได้เฉพาะ GM — ให้ GM เข้าสู่ระบบด้วยรหัสของตัวเองเพื่อยกเลิก', g: 'g'
   },
   en: {
@@ -440,6 +441,7 @@ const L = {
     refusedSub: 'The server refused this check — it is still on the phone; tap "Open to fix" and send again (the QC lead has been e-mailed)', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — you can start the next one', refusedT: 'Not accepted', refusedN: 'refused', doneT: 'Saved', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this order again', home: 'Home',
     pass: 'Pass', passFix: 'Pass after correction', fail: 'Fail', close: 'Close', by: 'by', cancelled: 'Cancelled', cancelT: 'Cancel this check',
     cancelWhy: 'Reason for cancelling', reasons: ['Wrong order', 'Wrong weight', 'Saved twice', 'Testing'], confirmCancel: 'Confirm cancel',
+   reopenT: '🔓 GM reopens for another check', reopenSub: 'This lot × order × type is packed — opened for one check, back on the waiting list; the reason goes to the Audit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason', reopenReasons: ['Box / bag damaged, packed again', 'Checked wrong, check again', 'More packed for the same order'], reopenGo: '🔓 Reopen', reopenedBy: 'reopened by GM {name} — pick it from the waiting list', reopenedTag: 'GM reopened', gmNeedNet: 'Reopening needs internet', nextLot: 'Next lot',
     gmOnly: 'Only a GM can cancel — the GM signs in with their own ID', g: 'g'
   },
   my: {
@@ -473,6 +475,7 @@ const L = {
     refusedSub: 'ဆာဗာ လက်မခံ — "ပြင်ရန် ဖွင့်" နှိပ်ပြီး ပြန်ပို့ပါ', sendingT: 'ပို့နေသည်…', sendingSub: 'ဖုန်းတွင် သိမ်းပြီး · နောက်တစ်ခု စနိုင်သည်', refusedT: 'ပို့မရ', refusedN: 'ပို့မရ', doneT: 'သိမ်းပြီး', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ Order ထပ်စစ်', home: 'ပင်မ',
     pass: 'အောင်', passFix: 'ပြင်ပြီး အောင်', fail: 'မအောင်', close: 'ပိတ်', by: '', cancelled: 'ပယ်ဖျက်ပြီး', cancelT: 'ဤစစ်ဆေးမှု ပယ်',
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['Order မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
+   reopenT: '🔓 GM ပြန်ဖွင့်', reopenSub: 'ထုပ်ပိုးပြီး — တစ်ကြိမ်သာ ဖွင့်', gmId: 'GM ဝန်ထမ်းနံပါတ်', gmWhy: 'အကြောင်းပြချက်', reopenReasons: ['ဘူး ပျက်', 'မှားစစ်', 'ထပ်ထုပ်'], reopenGo: '🔓 ဖွင့်', reopenedBy: 'GM {name} ဖွင့်ပြီး', reopenedTag: 'GM ဖွင့်', gmNeedNet: 'အင်တာနက် လိုသည်', nextLot: 'နောက် lot',
     gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g'
   }
 };
@@ -663,6 +666,7 @@ function demoApi(action, p) {
       { key: 'RM-DEMO-1#2', rmId: 'RM-DEMO-1', rmLine: 2, rmDate: d0, lot: '1', sup: 'ตัวอย่าง ผู้ขาย A / 01', item: 'ROHU-WR', size: '800G', pcIds: ['PC-DEMO-2'], orders: [], pcDate: d0, pcTime: '09:05' },
       { key: 'RM-DEMO-2#1', rmId: 'RM-DEMO-2', rmLine: 1, rmDate: d1, lot: '3', sup: 'ตัวอย่าง ผู้ขาย B / 02', item: 'PANGUSH-G', size: '1.5KG', pcIds: ['PC-DEMO-3'], orders: ['KHL-5'], pcDate: d1, pcTime: '15:40' }] });
     if (action === 'pkSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'ckUnlock') return res({ ok: true, hours: 12, gm: { id: p.staffId, name: 'GM ทดลอง', reason: p.reason } });
     if (action === 'pkVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
     try { localStorage.setItem('ckqc.pk.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
     if (action === 'pkToday') {
@@ -886,7 +890,7 @@ function viewLot() {
       (l.late ? '<div class="sub" style="color:var(--red);font-weight:800">' + fmt(T.late, { n: l.late }) + '</div>' : '') +
       (l.fz ? '<div class="sub" style="color:var(--green);font-weight:600">❄ ' + T.fzOut + ' ' + ddmm(l.fz.outDate) + ' ' + esc(l.fz.outTime) + ' · ' + esc((l.fz.rooms || []).join(', ')) + (l.fz.hours !== null && l.fz.hours !== undefined && l.fz.hours !== '' ? ' · ' + l.fz.hours + ' ' + T.fzH : '') +
         (l.fz.core && l.fz.core.length ? ' · ' + T.fzCore + ' ' + l.fz.core.map((x) => String(x).replace('-', '−')).join(' / ') + ' °C' : '') + '</div>' : '') + '</span><span class="go">›</span></button>' +
-      '<div class="fixes" style="padding:0 14px 10px">' + (l.orders.length ? l.orders.map((o) => { const nw = (l.pend || []).map((p) => (p.order === o ? p.now : '')).filter(Boolean)[0]; return '<button class="' + (on && c.order === o ? 'on' : '') + '" data-act="picklot" data-k="' + esc(l.key) + '" data-o="' + esc(o) + '">→ ' + esc(o) + (nw ? ' <small>→ ' + esc(nw) + '</small>' : '') + '</button>'; }).join('')
+      '<div class="fixes" style="padding:0 14px 10px">' + (l.orders.length ? l.orders.map((o) => { const nw = (l.pend || []).map((p) => (p.order === o ? p.now : '')).filter(Boolean)[0], ro = (l.pend || []).some((p) => p.order === o && p.reopened); return '<button class="' + (on && c.order === o ? 'on' : '') + '" data-act="picklot" data-k="' + esc(l.key) + '" data-o="' + esc(o) + '">→ ' + esc(o) + (nw ? ' <small>→ ' + esc(nw) + '</small>' : '') + (ro ? ' <small style="color:var(--amber-ink)">🔓 ' + T.reopenedTag + '</small>' : '') + '</button>'; }).join('')
         : '<span class="sub">' + T.noOrder + '</span>') + '</div></div>';
   });
   if (fzOnly && S.lots.hidden) h += '<div class="note">' + fmt(T.fzHidden, { n: S.lots.hidden }) + '</div>';
@@ -1157,7 +1161,8 @@ function viewAction() {
   const s = S.screen;
   if (s === 'manual') return '<button class="btn" data-act="usemanual"' + (S.c.lot && S.c.fish ? '' : ' disabled') + '>' + T.useManual + '</button>';
   if (s === 'check') return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + T.save + '</button>';
-  if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+  // lock after check (Sal, 27 Nov 2026: "In PK after fill out then I want the lot to be gone"): no "check this order again" — next lot; a repeat needs a GM
+  if (s === 'done') return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="start">' + T.nextLot + '</button>';
   return '';
 }
 
@@ -1326,6 +1331,14 @@ function openCheckSheet(id) {
     h += '<span class="lbl" style="color:var(--ink)">' + T.cancelT + '</span><div class="fixes">' + T.reasons.map((q, i) => '<button data-act="reason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
       '<textarea id="why" placeholder="' + esc(T.cancelWhy) + '"></textarea><button class="btn" style="background:var(--red);flex:none" data-act="dovoid" data-v="' + esc(id) + '">' + T.confirmCancel + '</button>';
   }
+  // lock after check (Sal, 27 Nov 2026): a GM types their own ID here to let this lot × order × type be checked once more
+  if (r && !r.void && r.lockKey) {
+    h += '<hr style="border:0;border-top:1px solid rgba(40,42,50,.12);width:100%"><b>' + T.reopenT + '</b><div class="sub">' + T.reopenSub + '</div>' +
+      '<span class="lbl" style="color:var(--ink)">' + T.gmId + '</span><input id="gmid" type="password" inputmode="numeric" maxlength="7" autocomplete="off" style="height:50px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:700 22px var(--mono);letter-spacing:.3em;background:#fff">' +
+      '<span class="lbl" style="color:var(--ink)">' + T.gmWhy + '</span><div class="fixes">' + T.reopenReasons.map((q, i) => '<button data-act="reopenreason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+      '<textarea id="gmwhy" placeholder="' + esc(T.gmWhy) + '"></textarea><div id="gmerr"></div>' +
+      '<button class="btn green" style="flex:none" data-act="reopengo" data-v="' + esc(id) + '">' + T.reopenGo + '</button>';
+  }
   $('sheet').innerHTML = '<div class="box">' + h + '</div>';
   $('sheet').classList.add('open');
 }
@@ -1350,6 +1363,25 @@ const ACT = {
   },
   sendnow: () => { S.outbox.forEach((o) => { o.hold = false; o.err = ''; }); S.online = true; flush(); render(); },
   start: startCheck,
+  reopenreason: (el) => { $('gmwhy').value = t().reopenReasons[Number(el.dataset.v)]; },
+  reopengo: (el) => {
+    const r = ((S.today && S.today.checks) || []).find((x) => x.id === el.dataset.v);
+    if (!r) return closeSheet();
+    const gid = ($('gmid').value || '').replace(/\D/g, ''), why = ($('gmwhy').value || '').trim();
+    const err = (m) => { $('gmerr').innerHTML = '<div class="err">' + esc(m) + '</div>'; };
+    if (gid.length !== 7) { $('gmid').focus(); return err(t().gmId); }
+    if (!why) { $('gmwhy').focus(); return err(t().gmWhy); }
+    if (!navigator.onLine) return err(t().gmNeedNet);
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    api('ckUnlock', { staffId: gid, area: 'PK', key: r.lockKey, lot: r.lot, item: r.item + ' ' + (r.size || ''), what: r.order + (r.trim ? ' / ' + r.trim : ''), reason: why, by: S.staff.id }).then((j) => {
+      closeSheet();
+      toast(fmt(t().reopenedBy, { name: j.gm.name }));
+      loadLots(true);
+    }, (e) => {
+      el.disabled = false; el.textContent = t().reopenGo;
+      err(e.code === 'STAFF' ? t().badId : e.net ? t().gmNeedNet : e.message);
+    });
+  },
   homelot: (el) => {
     if (S.c) { toast(t().draftFirst); return; }
     startCheck();

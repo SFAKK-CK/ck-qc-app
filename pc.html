@@ -359,7 +359,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.8.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -399,7 +399,7 @@ const L = {
     lockT: '🔒 %Loss เกินเกณฑ์ {trim} (≤ {lim}%)', lockSub: 'หยุดการตรวจนี้ไว้ก่อน — บันทึกหรือออกไม่ได้ จนกว่า GM จะมาใส่รหัสเพื่ออนุมัติ หรือสั่งให้ชั่งใหม่ — เรียก GM มาที่เครื่องนี้',
     lossHighT: '⚠ %Loss เกินเกณฑ์ {trim} ({lim}%) — ใส่หมายเหตุว่าทำไม แล้วบันทึกต่อได้', lossWhyL: 'หมายเหตุ %Loss เกิน (ต้องใส่)', lossWhys: ['ปลามีไข่', 'ปลาผอม / ปลาเล็ก', 'ตัดแต่งตามสเปคลูกค้า', 'ปลาช้ำ / ตัดส่วนเสียออก'], lossWhyPh: 'หรือพิมพ์เหตุผล…', needLossWhy: 'ใส่หมายเหตุว่าทำไม %Loss เกินเกณฑ์',
     lockMsg: 'ล็อกอยู่ — ให้ GM อนุมัติก่อน', callGm: '🔒 GM อนุมัติ', gmT: 'GM อนุมัติ %Loss เกินเกณฑ์', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล',
-    gmReasons: ['ปลาตัวเล็ก / ผอม', 'ตัดแต่งตามสเปคลูกค้า', 'ชั่งซ้ำแล้วยังเกิน'], gmApprove: '✓ อนุมัติให้บันทึก', gmReweigh: '↺ ให้ชั่งใหม่', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM อนุมัติ',
+    gmReasons: ['ปลาตัวเล็ก / ผอม', 'ตัดแต่งตามสเปคลูกค้า', 'ชั่งซ้ำแล้วยังเกิน'], gmApprove: '✓ อนุมัติให้บันทึก', gmReweigh: '↺ ให้ชั่งใหม่', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM อนุมัติ', lockedN: '🔒 ตรวจแล้ว {n} รายการ — ล็อกไว้ (GM เปิดได้)', lockedHide: 'ซ่อนรายการที่ตรวจแล้ว', unlockT: '🔓 GM เปิดให้ตรวจล็อตนี้อีกครั้ง', unlockSub: 'ล็อตนี้ตรวจแล้ว — เปิดได้ครั้งเดียว บันทึกเหตุผลใน Audit', unlockReasons: ['ลืมตรวจอีกแบบตัดแต่ง', 'ตรวจผิด ต้องตรวจใหม่', 'ลูกค้าเปลี่ยน Order'], unlockGo: '🔓 เปิดให้ตรวจ', unlockedBy: 'GM {name} เปิดแล้ว', nextLot: 'ตรวจล็อตถัดไป',
     gmOkT: '✓ GM {name} อนุมัติแล้ว', gmReweighed: 'GM ให้ชั่งใหม่ — ใส่น้ำหนักอีกครั้ง', lim: '≤{n}%'
   },
   en: {
@@ -429,7 +429,7 @@ const L = {
     lockT: '🔒 %Loss above the {trim} limit (≤ {lim}%)', lockSub: 'This check is stopped — it cannot be saved or left until a GM enters their ID to approve it or orders a re-weigh — call the GM to this phone',
     lossHighT: '⚠ %Loss above the {trim} limit ({lim}%) — write why, then save', lossWhyL: 'Why is %Loss high? (required)', lossWhys: ['Fish with eggs', 'Thin / small fish', 'Trimmed to customer spec', 'Bruised parts cut off'], lossWhyPh: 'or type the reason…', needLossWhy: 'Write why %Loss is above the limit',
     lockMsg: 'Locked — a GM must approve first', callGm: '🔒 GM approval', gmT: 'GM approval — %Loss above the limit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason',
-    gmReasons: ['Small / thin fish', 'Trimmed to customer spec', 'Re-weighed, still above'], gmApprove: '✓ Approve and save', gmReweigh: '↺ Weigh again', gmNeedNet: 'GM approval needs internet',
+    gmReasons: ['Small / thin fish', 'Trimmed to customer spec', 'Re-weighed, still above'], gmApprove: '✓ Approve and save', gmReweigh: '↺ Weigh again', gmNeedNet: 'GM approval needs internet', lockedN: '🔒 {n} checked — locked (a GM can reopen)', lockedHide: 'hide checked lines', unlockT: '🔓 GM reopens this lot', unlockSub: 'This lot is already checked — opened for one save; the reason goes to the Audit', unlockReasons: ['Forgot another processing type', 'Checked wrong, check again', 'Customer changed the order'], unlockGo: '🔓 Reopen', unlockedBy: 'reopened by GM {name}', nextLot: 'Next lot',
     gmOkT: '✓ Approved by GM {name}', gmReweighed: 'GM ordered a re-weigh — enter the weight again', lim: '≤{n}%'
   },
   my: {
@@ -457,7 +457,7 @@ const L = {
     cancelWhy: 'အကြောင်းပြချက်', reasons: ['lot မှား', 'အလေးချိန် မှား', 'နှစ်ခါ သိမ်း', 'စမ်းသပ်'], confirmCancel: 'အတည်ပြု',
     gmOnly: 'GM သာ ပယ်ဖျက်နိုင်', g: 'g', rcv: 'လက်ခံ',
     lockT: '🔒 %Loss စံထက် များ {trim} (≤ {lim}%)', lossHighT: '⚠ %Loss စံထက် များ {trim} ({lim}%) — အကြောင်းရေးပြီး သိမ်းပါ', lossWhyL: 'အကြောင်းပြချက် (လိုအပ်)', lossWhys: ['ငါးဥ ပါ', 'ငါး ပိန် / သေး', 'ဖောက်သည် စံ', 'ပွန်းပဲ့ ဖြတ်'], lossWhyPh: 'ရိုက်ပါ…', needLossWhy: 'အကြောင်းပြချက် ရေးပါ', lockSub: 'GM အတည်ပြုသည်အထိ သိမ်း/ထွက် မရ', lockMsg: 'သော့ခတ်ထား — GM အတည်ပြုရန်', callGm: '🔒 GM အတည်ပြု', gmT: 'GM အတည်ပြု', gmId: 'GM ဝန်ထမ်းနံပါတ်', gmWhy: 'အကြောင်းပြချက်',
-    gmReasons: ['ငါးသေး / ပိန်', 'ဖောက်သည် စံ', 'ပြန်ချိန်လည်း များ'], gmApprove: '✓ အတည်ပြု', gmReweigh: '↺ ပြန်ချိန်', gmNeedNet: 'အင်တာနက် လိုသည်',
+    gmReasons: ['ငါးသေး / ပိန်', 'ဖောက်သည် စံ', 'ပြန်ချိန်လည်း များ'], gmApprove: '✓ အတည်ပြု', gmReweigh: '↺ ပြန်ချိန်', gmNeedNet: 'အင်တာနက် လိုသည်', lockedN: '🔒 စစ်ပြီး {n} — သော့ခတ် (GM ဖွင့်နိုင်)', lockedHide: 'ဝှက်', unlockT: '🔓 GM ပြန်ဖွင့်', unlockSub: 'စစ်ပြီး lot — တစ်ကြိမ်သာ ဖွင့်', unlockReasons: ['အခြားအမျိုးအစား မေ့', 'မှားစစ်', 'Order ပြောင်း'], unlockGo: '🔓 ဖွင့်', unlockedBy: 'GM {name} ဖွင့်ပြီး', nextLot: 'နောက် lot',
     gmOkT: '✓ GM {name} အတည်ပြုပြီး', gmReweighed: 'ပြန်ချိန်ပါ', lim: '≤{n}%'
   }
 };
@@ -595,6 +595,20 @@ function sendLock() {
   api('pcLossLock', { staffId: S.staff.id, id: c.id, item: itemOf(c) + ' ' + c.size, lot: c.lot, trim: c.lock.trim, loss: c.lock.loss, lim: c.lock.lim })
     .then(() => { if (S.c && S.c.lock) { S.c.lock.sent = true; persist(); } }, () => {});
 }
+/** a line with a PC check is locked unless a GM reopened it (server: l.unlocked; this phone: S.unl) */
+function isLocked(l) { return !!(l && (l.locked || l.checks > 0) && !l.unlocked); }
+function openUnlockSheet(lot, l) {
+  const T = t();
+  S.unlockFor = { rmId: lot.id, n: l.n };
+  const h = '<div class="row"><b class="grow" style="font-size:18px">' + T.unlockT + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">Lot ' + esc(lot.lot) + ' · ' + esc(l.name) + ' · ' + T.checkedTypes + ' ' + (l.types || []).map((x) => esc(x.code)).join(', ') + '</div><div class="note">' + T.unlockSub + '</div>' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmId + '</span><input id="gmid" type="password" inputmode="numeric" maxlength="7" autocomplete="off" style="height:50px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:700 22px var(--mono);letter-spacing:.3em;background:#fff">' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmWhy + '</span><div class="fixes">' + T.unlockReasons.map((q, i) => '<button data-act="unlockreason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+    '<textarea id="gmwhy" placeholder="' + esc(T.gmWhy) + '"></textarea><div id="gmerr"></div>' +
+    '<button class="btn green" style="flex:none" data-act="unlockgo">' + T.unlockGo + '</button>';
+  $('sheet').innerHTML = '<div class="box">' + h + '</div>';
+  $('sheet').classList.add('open');
+}
 function openGmSheet() {
   const T = t();
   const c = S.c;
@@ -682,6 +696,7 @@ function demoApi(action, p) {
           { n: 1, name: 'PANGUSH/WR 1.5KG', fish: 'PANGUSH', proc: 'WR', size: '1.5KG', kind: 'FISH', wr: '501–1200', w: 0, status: 'ผ่านหลังแก้ไข' }] }] });
     }
     if (action === 'pcSave') { if (!mem.recs.some((r) => r.id === p.record.id)) mem.recs.push(Object.assign({}, p.record, { staffId: p.staffId })); }
+    if (action === 'ckUnlock') return res({ ok: true, area: p.area, key: p.key, hours: 12, gm: { id: p.staffId, name: 'GM ทดลอง', reason: p.reason } });
     if (action === 'pcGmOk') return res({ ok: true, mode: p.mode, gm: { id: p.staffId, name: 'GM ทดลอง', reason: p.reason } });
     if (action === 'pcVoid') mem.recs.forEach((r) => { if (r.id === p.id) { r.void = true; r.voidReason = p.reason; } });
     try { localStorage.setItem('ckqc.pc.demo', JSON.stringify(mem)); } catch (e) { /* ignore */ }
@@ -771,7 +786,7 @@ function applyCheck(key, rmDate, trim) {
   }
   const got = S.lots && S.lots[rmDate];
   if (got) got.lots.forEach((t) => t.lines.forEach((l) => { if (t.id + '#' + l.n === key) {
-    l.open = false; l.checks = (l.checks || 0) + 1; l.types = l.types || [];
+    l.open = false; l.checks = (l.checks || 0) + 1; l.types = l.types || []; l.locked = true; l.unlocked = null;   // saved = locked again (Sal, 27 Nov 2026)
     const ty = l.types.find((x) => x.code === trim); if (ty) ty.n++; else l.types.push({ code: trim, n: 1, last: todayStr() + ' ' + nowHM() });
   } }));
 }
@@ -892,10 +907,16 @@ function viewLot() {
   else if (!got && !S.online) h += '<div class="note">' + T.lotsOffline + '</div>';
   else if (got && !got.lots.length) h += '<div class="sub" style="text-align:center">' + T.noLots + '</div>';
   if (got && !S.online && got.lots.length) h += '<div class="sub">' + T.lotsOffline + '</div>';
+  let lockedN = 0;
   if (got) {
     got.lots.forEach((lot) => {
+      // lock after check (Sal, 27 Nov 2026): a checked line leaves the list; "🔒 ตรวจแล้ว" shows them for a GM to reopen
+      const shown = lot.lines.filter((l) => !isLocked(l) || S.showLocked);
+      lockedN += lot.lines.filter(isLocked).length;
+      if (!shown.length) return;
       h += '<div class="lotc glass"><div class="lh"><span class="lotno">Lot ' + esc(lot.lot) + '</span><span class="grow sub">' + esc(String(lot.sup).split(' / ')[0]) + ' · ' + esc(lot.start) + '</span></div>' +
-        lot.lines.map((l) => {
+        shown.map((l) => {
+          if (isLocked(l)) return '<button class="lline" style="opacity:.6" data-act="unlockline" data-v="' + esc(lot.id) + '" data-n="' + l.n + '"><span class="grow"><b>🔒 ' + esc(l.name) + '</b><div class="sub" style="font-weight:700;color:var(--green)">' + T.checkedTypes + ' ' + (l.types || []).map((x) => esc(x.code) + ' ✓').join(' · ') + '</div></span><span class="go">›</span></button>';
           const st = l.status === 'ไม่ผ่าน' ? 'p-bad' : l.status === 'ผ่านหลังแก้ไข' ? 'p-fix' : 'p-ok';
           const on = c.rmId === lot.id && Number(c.rmLine) === Number(l.n);
           const lst = l.open ? '<div class="sub" style="font-weight:700;color:var(--amber)">' + T.notStarted + '</div>'
@@ -908,6 +929,7 @@ function viewLot() {
         }).join('') + '</div>';
     });
   }
+  if (lockedN) h += '<button class="addline" style="border-style:solid;color:var(--ink-2)" data-act="showlocked">' + (S.showLocked ? T.lockedHide : fmt(T.lockedN, { n: lockedN })) + '</button>';
   h += '<button class="addline" data-act="manual">' + T.manual + '</button>';
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
@@ -1222,10 +1244,9 @@ function viewAction() {
   if (s === 'check') { const n = (S.stack || []).length + 1; return '<button class="btn green" data-act="save"' + (evalCheck(S.c).ok && !S.busy ? '' : ' disabled') + '>✓ ' + (n > 1 ? fmt(T.saveAll, { n: n }) : T.save) + '</button>'; }
   if (s === 'done') {
     const a = S.last && S.last.again;
+    // lock after check (Sal, 27 Nov 2026): once saved the lot is closed — no "ตรวจซ้ำ / + ตรวจอีกแบบ" here; more types go in the card before บันทึก, later only by a GM
     if (!a || !a.rmId) return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
-    // a lot cut into several processing types: one fish per type — "+ ตรวจอีกแบบ" opens a blank card for the same lot and asks the type first (Sal, 23 Nov 2026)
-    return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" style="flex:1.4;line-height:1.1" data-act="againtype">' + T.againType + '<br><small style="font-size:11px;font-weight:700;opacity:.85">' + T.againTypeSub + '</small></button>' +
-      '<button class="btn ghost" style="flex:1.1;line-height:1.1" data-act="again">' + T.againSame + '<br><small style="font-size:11px;font-weight:700">' + fmt(T.againSameSub, { t: esc(a.trim || '') }) + '</small></button>';
+    return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="start">' + T.nextLot + '</button>';
   }
   return '';
 }
@@ -1340,7 +1361,8 @@ function saveCheck() {
   if (!e.ok) { S.err = e.why.join(' · '); return render(); }
   const all = stack.concat([S.c]);
   S.stack = [];
-  all.forEach((x) => saveOne(x));
+  const batch = all.map((x) => x.id);   // the cards of one บันทึก go in together, even though the lot locks with the first (Sal, 27 Nov 2026)
+  all.forEach((x) => saveOne(x, batch));
   S.last.n = all.length;
   if (all.length > 1) { const ln0 = lineOf(S.c || all[0]); S.last.types = ln0 ? (ln0.types || []).map((x) => ({ code: x.code, n: x.n })) : S.last.types; }
   S.c = null;
@@ -1355,12 +1377,12 @@ function stackSwap(i) {
   if (untouched) stack.splice(i, 1); else stack[i] = c;
   S.c = open; S.pad = null; S.trimMenu = false; S.bMenu = false; S.err = ''; S.confirm = null;
 }
-function saveOne(c) {
+function saveOne(c, batch) {
   const e = evalCheck(c);
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
     item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '', fm: c.fm, fmFix: c.fm === 'bad' ? c.fmFix : '', viscera: visceraFish(c.fish) ? c.viscera : '',
-    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, lossWhy: e.high ? String(c.lossWhy || '').trim() : '', gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
+    before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, lossWhy: e.high ? String(c.lossWhy || '').trim() : '', gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION, batch: batch || [c.id],
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
   S.trimLast = c.trim;
@@ -1408,6 +1430,31 @@ const ACT = {
     go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home');
   },
   callgm: openGmSheet,
+  showlocked: () => { S.showLocked = !S.showLocked; render(); },
+  unlockline: (el) => {
+    const got = S.lots[S.c.rmDate], lot = got && got.lots.find((x) => x.id === el.dataset.v), l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
+    if (l) openUnlockSheet(lot, l);
+  },
+  unlockreason: (el) => { $('gmwhy').value = t().unlockReasons[Number(el.dataset.v)]; },
+  unlockgo: (el) => {
+    const f = S.unlockFor, got = f && S.lots[S.c.rmDate], lot = got && got.lots.find((x) => x.id === f.rmId), l = lot && lot.lines.find((x) => Number(x.n) === Number(f.n));
+    if (!l) return closeSheet();
+    const gid = ($('gmid').value || '').replace(/\D/g, ''), why = ($('gmwhy').value || '').trim();
+    const err = (m) => { $('gmerr').innerHTML = '<div class="err">' + esc(m) + '</div>'; };
+    if (gid.length !== 7) { $('gmid').focus(); return err(t().gmId); }
+    if (!why) { $('gmwhy').focus(); return err(t().gmWhy); }
+    if (!navigator.onLine) return err(t().gmNeedNet);
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    api('ckUnlock', { staffId: gid, area: 'PC', key: lot.id + '#' + l.n, lot: lot.lot, item: l.name, what: (l.types || []).map((x) => x.code).join('+'), reason: why, by: S.staff.id }).then((j) => {
+      closeSheet();
+      l.unlocked = { name: j.gm.name, reason: j.gm.reason }; S.showLocked = false;
+      toast(fmt(t().unlockedBy, { name: j.gm.name }));
+      ACT.pickline({ dataset: { v: lot.id, n: String(l.n) } });
+    }, (e) => {
+      el.disabled = false; el.textContent = t().unlockGo;
+      err(e.code === 'STAFF' ? t().badId : e.net ? t().gmNeedNet : e.message);
+    });
+  },
   losswhy: (el) => {
     const v = LOSSWHY_TH[Number(el.dataset.x)], c = S.c;
     const parts = String(c.lossWhy || '').split(' · ').map((x) => x.trim()).filter(Boolean);
@@ -1511,6 +1558,7 @@ const ACT = {
     const lot = got && got.lots.find((x) => x.id === el.dataset.v);
     const l = lot && lot.lines.find((x) => Number(x.n) === Number(el.dataset.n));
     if (!l) return;
+    if (isLocked(l)) return openUnlockSheet(lot, l);
     Object.assign(S.c, { lot: lot.lot, rmId: lot.id, rmLine: l.n, sup: lot.sup, fish: l.fish, proc: l.proc, size: l.size, rmStatus: l.status, manual: false });
     // weight before trim = the AVERAGE of the fish RM weighed in the AQL sample (Sal, 11 Nov 2026 — was the heaviest); none from RM → weighed here
     const avg = Number(l.fwAvg) > 0 ? Number(l.fwAvg) : (l.fw && l.fw.length ? Math.round((l.fw.reduce((x, y) => x + Number(y), 0) / l.fw.length) * 10) / 10 : 0);

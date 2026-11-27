@@ -376,7 +376,7 @@ div.lline{border-top:1px solid rgba(255,255,255,.55)}div.lline:first-child{borde
  * Replaces paper FM-PD-001.2 · FM-PD-001.03 · FM-QA-010.5 · FM-QA-010.3 (page 4) — numbers come from the server (Form_Register).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.3.0';
 const HOME_URL = 'index.html';
 const HAND_KEY = 'ckqc.hand';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -406,7 +406,8 @@ const L = {
     doneT: 'บันทึกแล้ว', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — ทำรายการถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedN: 'ส่งไม่สำเร็จ',
     refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง (ส่งอีเมลแจ้งหัวหน้า QC แล้ว) ลองส่งใหม่ทุก 10 นาที', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง',
     failedSend: 'ระบบไม่รับ', sendNow: 'ส่งตอนนี้', drop: 'ลบรายการนี้', dropQ: 'แตะอีกครั้งเพื่อลบ', pendingT: 'รอส่ง', pendingSub: 'จะส่งเองเมื่อมีสัญญาณ', home: 'หน้าหลัก', nextLot: 'ล็อตถัดไป', sameLot: 'เพิ่มรถของล็อตนี้',
-    outDraft: 'มีรายการค้าง — แตะออกอีกครั้งเพื่อออก', kIn: 'เข้าฟรีซ', kOut: 'ออกฟรีซ', kTemp: 'อุณหภูมิห้อง', kCore: 'ใจกลางไม่ผ่าน', stillIn: 'ในฟรีซ', outDone: 'ออกฟรีซแล้ว → PK', cart: 'รถ', gmCancel: 'ยกเลิกรถ (เฉพาะ GM)', cancelTro: 'ยกเลิก รถ', reason: 'เหตุผล (ต้องใส่)', confirmCancel: 'ยืนยันยกเลิก', cancelled: 'ยกเลิกแล้ว', close: 'ปิด'
+    outDraft: 'มีรายการค้าง — แตะออกอีกครั้งเพื่อออก', kIn: 'เข้าฟรีซ', kOut: 'ออกฟรีซ', kTemp: 'อุณหภูมิห้อง', kCore: 'ใจกลางไม่ผ่าน', stillIn: 'ในฟรีซ', outDone: 'ออกฟรีซแล้ว → PK', cart: 'รถ', gmCancel: 'ยกเลิกรถ (เฉพาะ GM)', cancelTro: 'ยกเลิก รถ', reason: 'เหตุผล (ต้องใส่)', confirmCancel: 'ยืนยันยกเลิก', cancelled: 'ยกเลิกแล้ว', close: 'ปิด',
+    closedN: '🔒 ออกฟรีซครบแล้ว {n} ล็อต — ล็อกไว้ (GM เปิดได้)', closedHide: 'ซ่อนล็อตที่ออกครบแล้ว', unlockT: '🔓 GM เปิดให้เข้าฟรีซอีกครั้ง', unlockSub: 'ล็อตนี้ออกฟรีซครบแล้ว — เปิดได้ครั้งเดียว บันทึกเหตุผลใน Audit', gmId: 'รหัสพนักงาน GM (7 หลัก)', gmWhy: 'เหตุผล', unlockReasons: ['ต้องฟรีซใหม่ (ไฟดับ / ห้องเสีย)', 'บันทึกออกผิด', 'มีของล็อตนี้เพิ่ม'], unlockGo: '🔓 เปิดให้เข้าฟรีซ', unlockedBy: 'GM {name} เปิดแล้ว', unlockedTag: 'GM เปิด ›', gmNeedNet: 'ต้องต่ออินเทอร์เน็ตเพื่อให้ GM เปิด', badGm: 'รหัสไม่ถูกต้อง', outAtL: 'ออก'
   },
   en: {
     title: 'Freezing', back: 'Back', signOut: 'Out', inspector: 'By', online: 'Online', offline: 'Offline', waiting: 'To send', branch: 'SMT · Samut Prakan',
@@ -428,7 +429,8 @@ const L = {
     doneT: 'Saved', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — carry on with the next one', refusedT: 'Not accepted', refusedN: 'refused',
     refusedSub: 'The server refused this record — it is still on the phone (the QC lead has been e-mailed); retried every 10 minutes', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on the phone · to send',
     failedSend: 'Refused', sendNow: 'Send now', drop: 'Delete this record', dropQ: 'Tap again to delete', pendingT: 'To send', pendingSub: 'Sent automatically when there is signal', home: 'Home', nextLot: 'Next lot', sameLot: 'Another trolley of this lot',
-    outDraft: 'A record is in progress — tap out again to leave', kIn: 'Into freezer', kOut: 'Out of freezer', kTemp: 'Room temperature', kCore: 'Core not passed', stillIn: 'in freezer', outDone: 'out → PK', cart: 'trolley', gmCancel: 'Cancel a trolley (GM only)', cancelTro: 'Cancel trolley', reason: 'Reason (required)', confirmCancel: 'Confirm cancel', cancelled: 'Cancelled', close: 'Close'
+    outDraft: 'A record is in progress — tap out again to leave', kIn: 'Into freezer', kOut: 'Out of freezer', kTemp: 'Room temperature', kCore: 'Core not passed', stillIn: 'in freezer', outDone: 'out → PK', cart: 'trolley', gmCancel: 'Cancel a trolley (GM only)', cancelTro: 'Cancel trolley', reason: 'Reason (required)', confirmCancel: 'Confirm cancel', cancelled: 'Cancelled', close: 'Close',
+    closedN: '🔒 {n} lots all out — locked (a GM can reopen)', closedHide: 'hide lots all out', unlockT: '🔓 GM reopens this lot for the freezer', unlockSub: 'This lot is all out of the freezer — opened for one entry; the reason goes to the Audit', gmId: 'GM staff ID (7 digits)', gmWhy: 'Reason', unlockReasons: ['Freeze again (power cut / room fault)', 'Out recorded by mistake', 'More of this lot'], unlockGo: '🔓 Reopen', unlockedBy: 'reopened by GM {name}', unlockedTag: 'GM reopened ›', gmNeedNet: 'Reopening needs internet', badGm: 'Staff ID not found', outAtL: 'out'
   }
 };
 L.my = Object.assign({}, L.en, { title: 'အအေးခဲ', back: 'နောက်သို့', signOut: 'ထွက်', home: 'ပင်မ', mainMenu: 'ပင်မ မီနူး', online: 'အွန်လိုင်း', offline: 'အော့ဖ်လိုင်း', waiting: 'ပို့ရန်',
@@ -533,6 +535,7 @@ function demoApi(action) {
   if (action === 'fzState') return Promise.resolve(Object.assign({ ok: true }, S.st || { waiting: [{ key: 'DEMO#1', rmId: 'DEMO', rmLine: 1, rmDate: todayStr(), lot: '18/26/02', sup: 'ผู้ขาย A', item: 'ROHU-WR', size: '1KG', orders: ['AOF-1/C'], pcDate: todayStr(), pcTime: '09:41',
     pc: { id: 'PC-DEMO-000001', time: '09:41', trim: 'G', before: 1240, after: 1199, loss: 3.31, lim: 17, temp: 1, status: 'ผ่าน' }, rm: { date: todayStr(), start: '07:10', sup: 'ผู้ขาย A / 01', fish: 'ROHU', proc: 'WR', size: '1000', kg: 257, status: 'ผ่าน' }, trolleys: [] }],
     entered: [], inFreezer: [], rooms: EMPTY_FZ.rooms.map((n) => ({ name: n, temp: null, ok: null })), limits: EMPTY_FZ.settings }));
+  if (action === 'ckUnlock') return Promise.resolve({ ok: true, hours: 12, gm: { id: '0000000', name: 'GM ทดลอง', reason: 'ทดลอง' } });
   return Promise.resolve({ ok: true, report: 'ok' });
 }
 
@@ -578,7 +581,7 @@ function refreshState(force) {
   api('fzState', { staffId: S.staff.id, date: todayStr() }).then((j) => {
     S.stBusy = false; S.online = true;
     if (S.outbox.some((o) => !o.hold)) return render();
-    S.st = { at: Date.now(), date: j.date, waiting: j.waiting || [], entered: j.entered || [], inFreezer: j.inFreezer || [], rooms: j.rooms || [], limits: j.limits || null };
+    S.st = { at: Date.now(), date: j.date, waiting: j.waiting || [], entered: j.entered || [], closed: j.closed || [], inFreezer: j.inFreezer || [], rooms: j.rooms || [], limits: j.limits || null };
     persist(); render();
   }, (e) => { S.stBusy = false; if (e.net) S.online = false; else if (e.code === 'STAFF') { forceOut(); S.err = t().badId; } render(); });
 }
@@ -605,7 +608,11 @@ function applyLocal(rec) {
   } else if (rec.kind === 'temp') setRoom(rec.room, Number(rec.roomTemp), rec.date, rec.time);
   else if (rec.kind === 'out') {
     st.inFreezer = st.inFreezer.filter((x) => !(x.key === rec.key && x.room === rec.room));
-    if (!st.inFreezer.some((x) => x.key === rec.key)) st.entered = st.entered.filter((l) => l.key !== rec.key);
+    if (!st.inFreezer.some((x) => x.key === rec.key)) {   // all out → closed (Sal, 27 Nov 2026)
+      const done = st.entered.find((l) => l.key === rec.key);
+      st.entered = st.entered.filter((l) => l.key !== rec.key);
+      if (done) { st.closed = st.closed || []; st.closed.unshift(Object.assign({}, done, { unlocked: null, outAt: rec.date + rec.time, trolleyN: (done.trolleys || []).length })); }
+    }
   }
   function setRoom(name, temp, date, time) {
     const ok = temp <= m.ROOM_MAX;
@@ -726,13 +733,33 @@ function viewLots() {
   if (st.waiting.length && !waitDay.length) h += '<div class="sub" style="color:var(--green);font-weight:700">' + T.dayNone + '</div>';
   if (waitDay.length) h += '<span class="lbl" style="color:var(--ink)">' + T.notIn + '</span><div class="tlist glass">' + waitDay.map((l) =>
     '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">' + lotTitle(l) + '</b><div class="sub">' + lotLine(l) + '</div></span>' +
-    '<span class="pill p-warn">' + T.notInTag + '</span></button>').join('') + '</div>';
+    '<span class="pill ' + (l.unlocked ? 'p-fix' : 'p-warn') + '">' + (l.unlocked ? T.unlockedTag : T.notInTag) + '</span></button>').join('') + '</div>';
   if (st.entered.length) h += '<span class="lbl" style="color:var(--ink)">' + T.inToday + '</span><div class="tlist glass">' + st.entered.map((l) =>
     '<button class="lline" data-act="picklot" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:17px">' + lotTitle(l) + '</b>' +
     '<div class="sub">' + lotLine(l) + '<br>' + esc((l.trolleys || []).map((x) => x.room + ' ' + T.cart + ' ' + x.no).join(' · ')) + '</div></span>' +
     '<span class="pill p-ok">' + fmt(T.nTro, { n: (l.trolleys || []).length }) + '</span></button>').join('') + '</div>';
+  // lock after check (Sal, 27 Nov 2026): a lot all out of the freezer is closed — listed here for a GM to reopen
+  const closed = st.closed || [];
+  if (closed.length) {
+    h += '<button class="btn ghost" style="flex:none;height:48px;font-size:15px" data-act="showclosed">' + (S.showClosed ? T.closedHide : fmt(T.closedN, { n: closed.length })) + '</button>';
+    if (S.showClosed) h += '<div class="tlist glass">' + closed.map((l) => '<button class="lline" style="opacity:.7" data-act="unlockfz" data-v="' + esc(l.key) + '"><span class="grow"><b style="font-size:16px">🔒 ' + lotTitle(l) + '</b><div class="sub">' +
+      T.outAtL + ' ' + esc(ddmm(String(l.outAt || '').slice(0, 10))) + ' ' + esc(String(l.outAt || '').slice(10)) + ' · ' + fmt(T.nTro, { n: l.trolleyN || 0 }).replace(' ›', '') + '</div></span><span class="go">›</span></button>').join('') + '</div>';
+  }
   return h + '<div class="sub" style="text-align:center">' + T.lotsFoot + '</div></div>';
 }
+function openUnlockSheet(l) {
+  const T = t();
+  S.unlockFor = l.key;
+  const h = '<div class="row"><b class="grow" style="font-size:18px">' + T.unlockT + '</b><button class="ibtn" data-act="closesheet" aria-label="' + T.close + '">✕</button></div>' +
+    '<div class="sub">' + lotTitle(l) + '</div><div class="note">' + T.unlockSub + '</div>' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmId + '</span><input id="gmid" type="password" inputmode="numeric" maxlength="7" autocomplete="off" style="height:50px;border-radius:12px;border:1.5px solid rgba(40,42,50,.15);padding:0 12px;font:700 22px var(--mono);letter-spacing:.3em;background:#fff">' +
+    '<span class="lbl" style="color:var(--ink)">' + T.gmWhy + '</span><div class="row" style="flex-wrap:wrap;gap:6px">' + T.unlockReasons.map((q, i) => '<button class="btn ghost" style="flex:0 0 auto;height:40px;font-size:14px" data-act="unlockreason" data-v="' + i + '">' + esc(q) + '</button>').join('') + '</div>' +
+    '<textarea id="gmwhy" placeholder="' + esc(T.gmWhy) + '"></textarea><div id="gmerr"></div>' +
+    '<button class="btn green" style="flex:none" data-act="unlockgo">' + T.unlockGo + '</button>';
+  $('sheet').innerHTML = '<div class="box">' + h + '</div>';
+  $('sheet').classList.add('open');
+}
+function closeSheet() { $('sheet').classList.remove('open'); }
 
 function numTile(kind, label, val, unit, cls, hint) {
   const on = S.pad && S.pad.kind === kind;
@@ -1063,6 +1090,31 @@ const ACT = {
   rroom: (el) => { S.rt.room = el.dataset.v; S.rt.temp = ''; S.rt.fix = ''; S.pad = { kind: 'rr' }; render(); },
   rrfix: (el) => { S.rt.fix = S.rt.fix === el.dataset.v ? '' : el.dataset.v; render(); },
   saveroom: () => saveRoom(),
+  showclosed: () => { S.showClosed = !S.showClosed; render(); },
+  closesheet: () => closeSheet(),
+  unlockfz: (el) => { const l = (state().closed || []).find((x) => x.key === el.dataset.v); if (l) openUnlockSheet(l); },
+  unlockreason: (el) => { $('gmwhy').value = t().unlockReasons[Number(el.dataset.v)]; },
+  unlockgo: (el) => {
+    const st = state(), l = (st.closed || []).find((x) => x.key === S.unlockFor);
+    if (!l) return closeSheet();
+    const gid = ($('gmid').value || '').replace(/\D/g, ''), why = ($('gmwhy').value || '').trim();
+    const err = (m) => { $('gmerr').innerHTML = '<div class="err">' + esc(m) + '</div>'; };
+    if (gid.length !== 7) { $('gmid').focus(); return err(t().gmId); }
+    if (!why) { $('gmwhy').focus(); return err(t().gmWhy); }
+    if (!navigator.onLine) return err(t().gmNeedNet);
+    el.disabled = true; el.innerHTML = '<span class="spin"></span>';
+    api('ckUnlock', { staffId: gid, area: 'FZ', key: l.key, lot: l.lot, item: l.item + ' ' + (l.size || ''), reason: why, by: S.staff.id }).then((j) => {
+      closeSheet(); S.showClosed = false;
+      st.closed = st.closed.filter((x) => x !== l);
+      st.waiting.unshift(Object.assign({}, l, { unlocked: { name: j.gm.name, reason: j.gm.reason } }));
+      S.fzDate = l.pcDate;
+      toast(fmt(t().unlockedBy, { name: j.gm.name }));
+      persist(); render();
+    }, (e) => {
+      el.disabled = false; el.textContent = t().unlockGo;
+      err(e.code === 'STAFF' ? t().badGm : e.net ? t().gmNeedNet : e.message);
+    });
+  },
   vopen: (el) => { S.vd = { g: el.dataset.v, id: '', reason: '' }; S.err = ''; render(); },
   vclose: () => { S.vd = null; S.err = ''; render(); },
   vpick: (el) => { S.vd.id = el.dataset.v; render(); },
