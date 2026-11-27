@@ -359,12 +359,16 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.6.0';
+const APP_VERSION = '1.7.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
 const STORE_KEY = DEMO ? 'ckqc.pc.demo.state' : 'ckqc.pc.v1';
 const FIX_TH = ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'];
+/** HACCP SD-HA-001.3 step 6 (27 Nov 2026): foreign matter after washing — what was done when found */
+const FMFIX_TH = ['คัดออก / ล้างซ้ำ', 'แยกสินค้าที่ปนเปื้อน', 'แจ้งหัวหน้า QC'];
+/** FSIS pangasius / catfish (step 5.5): viscera weighed every lot */
+const visceraFish = (fish) => ((pcCfg().settings && pcCfg().settings.VISCERA_FISH) || ['PANGUSH', 'PANGASIUS', 'CATFISH', 'MAGUR', 'DUK']).indexOf(String(fish || '').toUpperCase()) >= 0;
 
 /* ---------------- words (Thai main · English · Myanmar draft) ---------------- */
 const L = {
@@ -385,7 +389,7 @@ const L = {
     lotL: 'LOT', pickOne: '— เลือก —', useManual: 'ใช้ล็อตนี้ ›', sup: 'ผู้ขาย (ถ้าทราบ)',
     trimL: 'ประเภทการตัดแต่ง', tempL: 'อุณหภูมิหลังชั่งน้ำหนัก (0 °C, ≤ 2 °C)', tReq: 'ต้องใส่', tOpt: 'ไม่บังคับ', wideHint: 'แตะ = ≥10 °C', wideOn: '≥10 °C · กด 3 ตัว',
     before: 'น้ำหนักก่อนตัดแต่ง', bRm: 'ค่าเฉลี่ย RM ({n} ตัว) · ▾ เปลี่ยน', bManual: 'ไม่มีน้ำหนักจาก RM — ชั่งเอง', bTyped: 'ชั่งเอง · ▾ ใช้ค่าเฉลี่ย RM ได้', bType: '⌨ ชั่งเอง', bTypeSub: 'ชั่งปลาก่อนตัดแต่งที่ PC', bUseRm: '⚖ ใช้ค่าเฉลี่ยจาก RM', bUseRmSub: '{w} g · เฉลี่ยจาก {n} ตัว', heaviest: 'เฉลี่ย', after: 'น้ำหนักหลังตัดแต่ง', loss: '%Loss', lossHigh: 'สูงกว่าเกณฑ์ {max}%', lossLim: 'เกณฑ์ ≤ {max}%',
-    orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', stockNote: 'bulk / สต็อก (ไม่มีออเดอร์ลูกค้า) — ระบบออกรหัสกล่องให้:', stockCodeT: 'รหัสกล่องสต็อก — เขียน/พิมพ์ติดข้างกล่อง', stockCodeSub: 'ระบบออกรหัสให้เอง = SCK + ล็อต · ค้นหารหัสนี้จะเจอล็อตนี้เท่านั้น · PK เลือกจาก "จาก BULK" เมื่อบรรจุให้ออเดอร์จริง', printCode: 'พิมพ์ป้าย', printBlocked: 'เปิดหน้าพิมพ์ไม่ได้ — อนุญาต pop-up ในเบราว์เซอร์', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'],
+    orderL: 'Order — ล็อตนี้ไปออเดอร์ไหน', orderPh: 'พิมพ์ Order เช่น ABT-2/D', orderUsed: 'ล็อตนี้ใช้แล้ว:', stockNote: 'bulk / สต็อก (ไม่มีออเดอร์ลูกค้า) — ระบบออกรหัสกล่องให้:', stockCodeT: 'รหัสกล่องสต็อก — เขียน/พิมพ์ติดข้างกล่อง', stockCodeSub: 'ระบบออกรหัสให้เอง = SCK + ล็อต · ค้นหารหัสนี้จะเจอล็อตนี้เท่านั้น · PK เลือกจาก "จาก BULK" เมื่อบรรจุให้ออเดอร์จริง', printCode: 'พิมพ์ป้าย', printBlocked: 'เปิดหน้าพิมพ์ไม่ได้ — อนุญาต pop-up ในเบราว์เซอร์', orderRecent: 'ล่าสุด:', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', fixL: 'การแก้ไข (ต้องเลือก)', fixes: ['เติมน้ำแข็ง', 'คัดแยกออก', 'แจ้งหัวหน้า QC'], fmL: 'สิ่งแปลกปลอม (หลังล้าง)', fmOk: 'ไม่พบ', fmBad: 'พบ', fmFixL: 'พบสิ่งแปลกปลอม — การแก้ไข (ต้องเลือก)', fmFixes: ['คัดออก / ล้างซ้ำ', 'แยกสินค้าที่ปนเปื้อน', 'แจ้งหัวหน้า QC'], needFm: 'ตรวจสิ่งแปลกปลอมหลังล้าง (✓ ไม่พบ / ✗ พบ)', needFmFix: 'พบสิ่งแปลกปลอม — เลือกการแก้ไข', visL: 'น้ำหนักเศษไส้ (FSIS)', visSub: 'ชั่งเศษไส้ของล็อตนี้ (ถ้าชั่งแล้ว)',
     recheck: 'วัดซ้ำหลังแก้ไข', recheckHint: 'หลังแก้ไขแล้ว วัดอีกครั้ง', tooWarm: 'อุณหภูมิเกิน {t} °C', save: 'บันทึก',
     needT1: 'ใส่อุณหภูมิค่าที่ 1', needW: 'ใส่น้ำหนักก่อนและหลังตัดแต่ง', afterBig: 'น้ำหนักหลังตัดแต่งมากกว่าปลาตัวที่หนักที่สุด — ชั่งใหม่', needOrder: 'ใส่ Order (หรือ SCK = bulk)', watch: '⚠ %Loss ถึงเกณฑ์ {trim} ({lim}%) — บันทึกได้ ระบบเตือนไว้ในรายงาน', needTrim: 'เลือกประเภทการตัดแต่ง', needFix: 'อุณหภูมิเกิน — เลือกการแก้ไข',
     doneT: 'บันทึกแล้ว', sendingT: 'กำลังส่ง…', sendingSub: 'บันทึกในเครื่องแล้ว กำลังส่งเข้า Google Sheet — เริ่มล็อตถัดไปได้เลย', refusedT: 'ส่งไม่สำเร็จ', refusedSub: 'ระบบไม่รับรายการนี้ — ข้อมูลยังอยู่ในเครื่อง แตะ "เปิดแก้ไข" แล้วส่งใหม่', lossL: '%Loss', lossOk: 'ปกติ', lossWatch: 'ถึงเกณฑ์ (เฝ้าระวัง)', lossHigh: 'สูงกว่าเกณฑ์ — ต้องใส่หมายเหตุ', lossNoLim: 'ไม่มีเกณฑ์', lossWait: 'ใส่น้ำหนักก่อน/หลัง', trimPick: 'เลือกประเภทการตัดแต่ง', trimSearch: 'พิมพ์ค้นหา เช่น G, H/L, fillet', trimNone: 'ไม่พบ', refusedN: 'ส่งไม่สำเร็จ', sentOk: 'ส่งเข้า Google Sheet แล้ว', savedLocal: 'บันทึกในเครื่อง · รอส่ง', again: 'ตรวจล็อตนี้อีกครั้ง', home: 'หน้าหลัก',
@@ -415,7 +419,7 @@ const L = {
     lotL: 'LOT', pickOne: '— choose —', useManual: 'Use this lot ›', sup: 'Supplier (if known)',
     trimL: 'Trim type', tempL: 'Temperature after weighing (0 °C, ≤ 2 °C)', tReq: 'required', tOpt: 'optional', wideHint: 'tap = ≥10 °C', wideOn: '≥10 °C · 3 digits',
     before: 'Weight before trim', bRm: 'RM average ({n} fish) · ▾ change', bManual: 'No weight from RM — weigh it here', bTyped: 'Weighed here · ▾ RM average', bType: '⌨ Weigh here', bTypeSub: 'Weigh the fish before trimming at PC', bUseRm: '⚖ Use the RM average', bUseRmSub: '{w} g · average of {n} fish', heaviest: 'average', after: 'Weight after trim', loss: '%Loss', lossHigh: 'Above limit {max}%', lossLim: 'limit ≤ {max}%',
-    orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', stockNote: 'bulk / stock (no customer order) — the system makes the carton code:', stockCodeT: 'Stock carton code — write / print it on the carton', stockCodeSub: 'Made by the system = SCK + lot · searching this code finds this lot only · PK picks it from "From BULK" when packing for a real order', printCode: 'Print label', printBlocked: 'Could not open the print page — allow pop-ups in the browser', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'],
+    orderL: 'Order — which order this lot goes to', orderPh: 'Type the order, e.g. ABT-2/D', orderUsed: 'This lot:', stockNote: 'bulk / stock (no customer order) — the system makes the carton code:', stockCodeT: 'Stock carton code — write / print it on the carton', stockCodeSub: 'Made by the system = SCK + lot · searching this code finds this lot only · PK picks it from "From BULK" when packing for a real order', printCode: 'Print label', printBlocked: 'Could not open the print page — allow pop-ups in the browser', orderRecent: 'Recent:', remark: 'Remark (optional)', remarkPh: 'Type a remark…', fixL: 'Correction (required)', fixes: ['Add ice', 'Sort out', 'Tell QC lead'], fmL: 'Foreign matter (after washing)', fmOk: 'None', fmBad: 'Found', fmFixL: 'Foreign matter found — correction (required)', fmFixes: ['Removed / washed again', 'Contaminated product set aside', 'Tell QC lead'], needFm: 'Check foreign matter after washing (✓ none / ✗ found)', needFmFix: 'Foreign matter found — choose a correction', visL: 'Viscera weight (FSIS)', visSub: 'Weigh the viscera of this lot (if weighed)',
     recheck: 'Re-check after correction', recheckHint: 'Measure again after the correction', tooWarm: 'Above {t} °C', save: 'Save',
     needT1: 'Enter temperature 1', needW: 'Enter weight before and after trim', afterBig: 'After-trim weight is higher than the heaviest fish — weigh again', needOrder: 'Enter the order (or SCK = bulk)', watch: '⚠ %Loss at the {trim} limit ({lim}%) — can be saved, flagged in the report', needTrim: 'Choose the trim type', needFix: 'Too warm — choose a correction',
     doneT: 'Saved', sendingT: 'Sending…', sendingSub: 'Saved on this phone, sending to Google Sheets — you can start the next lot', refusedT: 'Not accepted', refusedSub: 'The server refused this check — it is still on the phone; tap "Open to fix" and send again', lossL: '%Loss', lossOk: 'normal', lossWatch: 'at the limit (watch)', lossHigh: 'over the limit — reason needed', lossNoLim: 'no limit', lossWait: 'enter the weights', trimPick: 'Choose the trim type', trimSearch: 'Search, e.g. G, H/L, fillet', trimNone: 'No match', refusedN: 'refused', sentOk: 'Sent to Google Sheets', savedLocal: 'Saved on phone · waiting', again: 'Check this lot again', home: 'Home',
@@ -445,7 +449,7 @@ const L = {
     lotL: 'LOT', pickOne: '— ရွေးပါ —', useManual: 'ဤ lot သုံး ›', sup: 'ပေးသွင်းသူ',
     trimL: 'ခုတ်ပြင်မှု အမျိုးအစား', tempL: 'ချိန်ပြီး အပူချိန် (0 °C, ≤ 2 °C)', tReq: 'လိုအပ်', tOpt: 'မလို', wideHint: '≥10 °C', wideOn: '≥10 °C · ၃ လုံး',
     before: 'ခုတ်ပြင်မီ အလေးချိန်', bRm: 'RM ပျမ်းမျှ ({n} ကောင်) · ပြောင်းရန် နှိပ်', bManual: 'RM အလေးချိန် မရှိ — ဒီမှာ ချိန်ပါ', bTyped: 'ဒီမှာ ချိန် · RM ပျမ်းမျှ သုံးရန် ▾', bType: '⌨ ဒီမှာ ချိန်', bTypeSub: 'PC တွင် ချိန်', bUseRm: '⚖ RM ပျမ်းမျှ သုံး', bUseRmSub: '{w} g · RM ချိန် {n} ကောင် ပျမ်းမျှ', heaviest: 'ပျမ်းမျှ', after: 'ခုတ်ပြင်ပြီး အလေးချိန်', loss: '%Loss', lossHigh: 'စံထက် များ {max}%', lossLim: 'စံ ≤ {max}%',
-    orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', stockNote: 'bulk / စတော့ — စနစ်က ကုဒ် ထုတ်ပေး:', stockCodeT: 'စတော့ ကုဒ် — ကတ်ထူပေါ် ရေး/ပုံနှိပ်ပါ', stockCodeSub: 'စနစ်က ထုတ်ပေး = SCK + lot', printCode: 'ပုံနှိပ်', printBlocked: 'ပုံနှိပ်စာမျက်နှာ ဖွင့်မရ', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'],
+    orderL: 'Order — ဒီ Lot ဘယ်အော်ဒါ', orderPh: 'Order ရိုက်ပါ ဥပမာ ABT-2/D', orderUsed: 'ဒီ Lot:', stockNote: 'bulk / စတော့ — စနစ်က ကုဒ် ထုတ်ပေး:', stockCodeT: 'စတော့ ကုဒ် — ကတ်ထူပေါ် ရေး/ပုံနှိပ်ပါ', stockCodeSub: 'စနစ်က ထုတ်ပေး = SCK + lot', printCode: 'ပုံနှိပ်', printBlocked: 'ပုံနှိပ်စာမျက်နှာ ဖွင့်မရ', orderRecent: 'နောက်ဆုံး:', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ရေခဲ ထပ်ထည့်', 'ခွဲထုတ်', 'QC ခေါင်းဆောင်ကို ပြော'], fmL: 'အညစ်အကြေး (ဆေးပြီး)', fmOk: 'မတွေ့', fmBad: 'တွေ့', fmFixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fmFixes: ['ဖယ်ရှား / ပြန်ဆေး', 'ညစ်ညမ်းပစ္စည်း ခွဲထား', 'QC ခေါင်းဆောင်ကို ပြော'], needFm: 'အညစ်အကြေး စစ်ပါ', needFmFix: 'ပြင်ဆင်ချက် ရွေးပါ', visL: 'အူ အလေးချိန် (FSIS)', visSub: 'ဒီ lot ၏ အူ ချိန်ပါ',
     recheck: 'ပြင်ပြီး ပြန်တိုင်း', recheckHint: 'ပြင်ပြီး ထပ်တိုင်းပါ', tooWarm: '{t} °C ထက် ပူ', save: 'သိမ်း',
     needT1: 'အပူချိန် ၁ ထည့်ပါ', needW: 'အလေးချိန် ထည့်ပါ', afterBig: 'ခုတ်ပြင်ပြီး အလေးချိန် များနေ', needOrder: 'Order ထည့်ပါ (သို့ SCK = bulk)', watch: '⚠ %Loss စံ အထိ {trim} ({lim}%) — သိမ်းနိုင်', needTrim: 'ခုတ်ပြင်မှု ရွေးပါ', needFix: 'ပူလွန်း — ပြင်ဆင်ချက် ရွေးပါ',
     doneT: 'သိမ်းပြီး', sendingT: 'ပို့နေသည်…', sendingSub: 'ဖုန်းတွင် သိမ်းပြီး · နောက် lot စနိုင်သည်', refusedT: 'ပို့မရ', refusedSub: 'ဆာဗာ လက်မခံ — "ပြင်ရန် ဖွင့်" နှိပ်ပြီး ပြန်ပို့ပါ', lossL: '%Loss', lossOk: 'ပုံမှန်', lossWatch: 'စံရောက်', lossHigh: 'စံကျော် — မှတ်ချက် လိုသည်', lossNoLim: 'စံ မရှိ', lossWait: 'အလေးချိန် ထည့်ပါ', trimPick: 'ခုတ်ပြင်မှု ရွေးပါ', trimSearch: 'ရှာရန် ရိုက်ပါ', trimNone: 'မတွေ့', refusedN: 'ပို့မရ', sentOk: 'Google Sheet သို့ ပို့ပြီး', savedLocal: 'ဖုန်းတွင် သိမ်း · ပို့ရန်', again: 'ဤ lot ထပ်စစ်', home: 'ပင်မ',
@@ -558,7 +562,7 @@ function lineOf(c) {
 }
 function blankCheck(rmDate) {
   return { id: newId(), date: todayStr(), rmDate: rmDate || todayStr(), lot: '', rmId: '', rmLine: '', sup: '', fish: '', proc: 'WR', size: '', rmStatus: '', manual: false,
-    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', before: '', bRm: 0, after: '', order: '', remark: '', stage: 'lot' };
+    trim: S.trimLast || '', temps: ['', '', ''], ti: 0, recheck: '', fix: '', fm: '', fmFix: '', viscera: '', before: '', bRm: 0, after: '', order: '', remark: '', stage: 'lot' };
 }
 const itemOf = (c) => (c.fish ? c.fish + (c.proc ? '-' + c.proc : '') : '');
 const heldOf = (c) => Math.max(0, daysBetween(c.rmDate, c.date || todayStr()));
@@ -627,13 +631,15 @@ function evalCheck(c) {
   else if (c.bulkFrom && isBulk(c.order)) why.push(t().needRealOrder);
   if (!(b > 0) || !(a > 0)) why.push(t().needW); else if (a > top) why.push(t().afterBig);
   if (warm && !c.fix) why.push(t().needFix);
+  if (c.fm !== 'ok' && c.fm !== 'bad') why.push(t().needFm);
+  else if (c.fm === 'bad' && !c.fmFix) why.push(t().needFmFix);
   // reaching the limit = flag; from limit + margin (0.6 → G 17.60 %) = lock until a GM approves (Sal, 11 Nov 2026)
   const lockAt = lim === null ? null : Math.round((lim + lockMargin()) * 100) / 100;
   const high = lim !== null && loss !== null && Math.round(loss * 100) >= Math.round(lockAt * 100);
   const watch = lim !== null && loss !== null && !high && loss >= lim;
   if (high && !c.gm && !String(c.lossWhy || '').trim()) why.push(t().needLossWhy);
   return { vals, max, warm, tFail, loss, lim, lockAt, high, watch, held: heldOf(c), ok: !why.length, why,
-    status: tFail ? 'fail' : warm ? 'fixed' : 'pass' };
+    status: tFail ? 'fail' : warm || c.fm === 'bad' ? 'fixed' : 'pass' };
 }
 
 /* ---------------- talking to Apps Script ---------------- */
@@ -1038,6 +1044,12 @@ function viewCheck() {
     h += '<button class="rc glass ' + (ra ? 'f-act' : '') + '" data-act="focus" data-v="prt"><span><b style="font-size:14px;font-weight:600;font-family:inherit">' + T.recheck + '</b><div class="sub" style="font-size:12px">' + T.recheckHint + '</div></span>' +
       '<b class="' + (ra ? 'caret' : '') + '" style="color:' + (rn === null ? 'var(--ink)' : rn > tempMax() ? 'var(--red)' : 'var(--green)') + '">' + esc(rv || (ra ? '' : '—')) + ' °C</b></button></div>';
   }
+  // foreign matter after washing (HACCP step 6) — one tap; found → what was done
+  h += '<div class="tog"><span>' + T.fmL + '</span><div class="seg"><button class="' + (c.fm === 'ok' ? 'on' : '') + '" data-act="fm" data-v="ok">✓ ' + T.fmOk + '</button><button class="' + (c.fm === 'bad' ? 'on warn' : '') + '" data-act="fm" data-v="bad">✗ ' + T.fmBad + '</button></div></div>';
+  if (c.fm === 'bad') h += '<div class="card glass" style="border:2px solid var(--red)"><span class="lbl" style="color:var(--ink)">' + T.fmFixL + '</span><div class="fixes">' + T.fmFixes.map((f, q) =>
+    '<button class="' + (c.fmFix === FMFIX_TH[q] ? 'on' : '') + '" data-act="fmfix" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div></div>';
+  // FSIS pangasius / catfish: viscera weight (kg) — every lot
+  if (visceraFish(c.fish)) h += '<button class="tile wt ' + (act('vk') ? 'f-act' : c.viscera ? 'filled' : '') + '" data-act="focus" data-v="vk"><span class="t-l">' + T.visL + '</span><span class="t-v"><b class="' + (act('vk') ? 'caret' : '') + '">' + (c.viscera ? esc(c.viscera) : act('vk') ? '' : '—') + '</b><span class="unit u-g">kg</span></span><span class="t-s">' + T.visSub + '</span></button>';
   // weights (the %Loss is worked out by the server and shown only in the Google Sheet — Sal, 11 Nov 2026)
   const wt = (k, lab) => '<button class="tile wt ' + (act(k) ? 'f-act' : c[k === 'gb' ? 'before' : 'after'] ? 'filled' : 'f-empty') + '" data-act="focus" data-v="' + k + '">' +
     '<span class="t-l">' + lab + '</span><span class="t-v"><b class="' + (act(k) ? 'caret' : '') + '">' + (c[k === 'gb' ? 'before' : 'after'] ? esc(wShow(c[k === 'gb' ? 'before' : 'after'])) : act(k) ? '' : '—') + '</b><span class="unit u-g">g</span></span></button>';
@@ -1109,7 +1121,7 @@ function viewPad() {
   if (!S.pad) return '';
   const T = t();
   const k = S.pad.kind;
-  const special = k === 'pt' || k === 'prt' ? 'pm' : k === 'lot' ? '/' : k === 'gb' || k === 'ga' ? '.' : '';
+  const special = k === 'pt' || k === 'prt' ? 'pm' : k === 'lot' ? '/' : k === 'gb' || k === 'ga' || k === 'vk' ? '.' : '';
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', special, '0', 'del'];
   let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
     '<button class="' + (x === 'del' || x === 'pm' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x === 'pm' ? 'plus minus' : x) + '">' + (x === 'del' ? '⌫' : x === 'pm' ? '+/−' : x) + '</button>').join('');
@@ -1143,6 +1155,15 @@ function press(key) {
     if (key === 'del') c.lot = c.lot.slice(0, -1);
     else if (key === 'ok') S.pad = null;
     else if ((/^\d$/.test(key) || key === '/') && c.lot.length < 12) c.lot += key;
+    return render();
+  }
+  if (pad.kind === 'vk') {   // viscera kg: up to 4 digits + 2 decimals
+    const v = String(c.viscera || '');
+    if (key === 'ok') { if (v.slice(-1) === '.') c.viscera = v.slice(0, -1); S.pad = null; }
+    else if (key === 'del') c.viscera = v.slice(0, -1);
+    else if (key === '.') { if (v && v.indexOf('.') < 0) c.viscera = v + '.'; }
+    else if (/^\d$/.test(key)) { const d = v.split('.'); if (v.indexOf('.') >= 0 ? d[1].length < 2 : d[0].length < 4 && v !== '0') c.viscera = v + key; }
+    S.err = '';
     return render();
   }
   if (pad.kind === 'gb' && c.bRm) { S.pad = { kind: 'ga' }; return render(); }   // from RM = locked
@@ -1338,7 +1359,7 @@ function saveOne(c) {
   const e = evalCheck(c);
   const rec = {
     id: c.id, date: todayStr(), time: nowHM(), rmDate: c.rmDate, lot: c.lot, rmId: c.rmId, rmLine: c.rmLine, sup: c.sup,
-    item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '',
+    item: itemOf(c), size: c.size, trim: c.trim, temps: c.temps.slice(), recheck: e.warm ? c.recheck : '', fix: e.warm ? c.fix : '', fm: c.fm, fmFix: c.fm === 'bad' ? c.fmFix : '', viscera: visceraFish(c.fish) ? c.viscera : '',
     before: c.before, bFrom: c.bRm ? 'RM' : 'MANUAL', after: c.after, order: cleanOrder(c.order), bulkFrom: c.bulkFrom || null, lossWhy: e.high ? String(c.lossWhy || '').trim() : '', gm: c.gm || null, reweigh: c.reweigh || [], remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน', _loss: e.loss
   };
@@ -1519,6 +1540,8 @@ const ACT = {
   pickorder: (el) => { S.c.order = S.c.order === el.dataset.v ? '' : el.dataset.v; S.err = ''; render(); },
   printcode: () => { const l = S.last || {}; printCode(l.order, [String(l.item || '') + ' ' + String(l.size || '') + (l.trim ? ' · ' + l.trim : ''), 'Lot ' + String(l.lot || ''), todayStr().split('-').reverse().join('/')]); },
   fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; S.c.fix = S.c.fix === v ? '' : v; S.err = ''; render(); },
+  fm: (el) => { S.c.fm = S.c.fm === el.dataset.v ? '' : el.dataset.v; if (S.c.fm !== 'bad') S.c.fmFix = ''; S.err = ''; render(); },
+  fmfix: (el) => { const v = FMFIX_TH[Number(el.dataset.x)]; S.c.fmFix = S.c.fmFix === v ? '' : v; S.err = ''; render(); },
   save: saveCheck,
   again: () => {
     const a = S.last && S.last.again;

@@ -376,7 +376,7 @@ div.lline{border-top:1px solid rgba(255,255,255,.55)}div.lline:first-child{borde
  * Replaces paper FM-PD-001.2 · FM-PD-001.03 · FM-QA-010.5 · FM-QA-010.3 (page 4) — numbers come from the server (Form_Register).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const HOME_URL = 'index.html';
 const HAND_KEY = 'ckqc.hand';
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -396,7 +396,7 @@ const L = {
     notIn: 'ยังไม่เข้าฟรีซ', fromRm: 'รับเข้าเป็น', rcvOn: 'รับ', dayL: 'วันที่ PC ตรวจ', d0: 'วันนี้', d1: 'เมื่อวาน', dN: '{n} วันก่อน', otherDay: 'วันอื่น', dayLegend: 'แดง = วันนั้นยังมีล็อตไม่เข้าฟรีซ', dayNone: '✓ วันนี้ไม่มีล็อตค้างเข้าฟรีซ', notInTag: 'ยังไม่เข้า ›', inToday: 'เข้าแล้ว — แตะเพื่อเพิ่มรถของล็อตเดิม', nTro: '✓ {n} รถ ›', lotsFoot: 'ล็อตที่ผ่าน PC แต่ไม่มีบันทึกเข้าฟรีซ จะแจ้งในอีเมลตรวจระบบ 06:00', loading: 'กำลังโหลด…', noLots: 'ยังไม่มีล็อตที่ผ่าน PC',
     inT: 'เข้าฟรีซ', rmL: 'RM', pcL: 'PC', received: 'รับเข้า', trimmed: 'ตัดแต่ง', lim: 'เกณฑ์ ≤', noRm: 'ล็อตพิมพ์เอง — ไม่มีใบรับ RM',
     trays: 'จำนวนถาด', traysHint: '1 รถ = 10–13', trolley: 'เบอร์รถ (Trolley)', foreign: 'สิ่งแปลกปลอม (เศษหิน พลาสติก พยาธิ)', notFound: '✓ ไม่พบ', found: '✕ พบ', fixL: 'การแก้ไข (ต้องเลือก)',
-    arr: 'เวลาเรียง (≤ {n} นาที/รถ)', arrS: 'เริ่ม', arrE: 'จบ', nowBtn: 'ตอนนี้', mins: '{n} นาที', arrSlow: '{n} นาที — เกิน {m} นาที/รถ · ต้องใส่หมายเหตุ',
+    arr: 'เวลาเรียง (≤ {n} นาที/รถ)', arrS: 'เริ่ม', arrE: 'จบ', nowBtn: 'ตอนนี้', mins: '{n} นาที', arrSlow: '{n} นาที — เกิน {m} นาที/รถ · ต้องใส่หมายเหตุ', chillOk: 'รอห้อง Chill ถึงตอนนี้ {h} ชม. (≤ {m})', chillLong: 'รอห้อง Chill {h} ชม. — เกิน {m} ชม. (HACCP ขั้น 12) · ต้องใส่หมายเหตุ', shortFreeze: 'แช่มา {h} ชม. — น้อยกว่า {m} ชม. (HACCP ขั้น 13) · ออกได้ถ้าใจกลางผ่าน รายงานจะบันทึกไว้',
     roomL: 'เลือกห้อง แล้วกรอกอุณหภูมิห้อง', roomT: 'อุณหภูมิห้อง', pass: '✓ ผ่าน', high: '✕ สูงกว่า {n} °C', roomHighNote: 'บันทึกได้ แต่ล็อตจะยังไม่ขึ้นในหน้าออกฟรีซ จนกว่าวัดห้องซ้ำแล้วผ่าน', tapTemp: 'แตะเพื่อใส่',
     remark: 'หมายเหตุ', remarkPh: 'เช่น รอถาด', saveIn: 'บันทึกเข้าฟรีซ', change: 'เปลี่ยนล็อต',
     outT: 'ออกจากฟรีซ', outPick: 'อุณหภูมิห้องผ่านแล้ว — แตะล็อตที่จะเอาออก', hiddenN: 'ไม่แสดง {n} ล็อต — อุณหภูมิห้องยังไม่ผ่าน', remeasure: 'วัดห้องซ้ำ', noneOut: 'ไม่มีล็อตที่พร้อมออก',
@@ -418,7 +418,7 @@ const L = {
     notIn: 'Not in the freezer yet', fromRm: 'received as', rcvOn: 'on', dayL: 'Day checked by PC', d0: 'Today', d1: 'Yesterday', dN: '{n} days ago', otherDay: 'Other day', dayLegend: 'red = lots of that day not in the freezer yet', dayNone: '✓ nothing waiting on this day', notInTag: 'not in ›', inToday: 'Already in — tap to add another trolley', nTro: '✓ {n} trolleys ›', lotsFoot: 'A lot that passed PC with no freezer record is e-mailed in the 06:00 check', loading: 'Loading…', noLots: 'No lot has finished PC yet',
     inT: 'Into the freezer', rmL: 'RM', pcL: 'PC', received: 'received', trimmed: 'trim', lim: 'limit ≤', noRm: 'Typed lot — no RM record',
     trays: 'Trays', traysHint: '1 trolley = 10–13', trolley: 'Trolley no.', foreign: 'Foreign matter (stones, plastic, parasites)', notFound: '✓ None', found: '✕ Found', fixL: 'Correction (required)',
-    arr: 'Arranging time (≤ {n} min / trolley)', arrS: 'Start', arrE: 'End', nowBtn: 'Now', mins: '{n} min', arrSlow: '{n} min — over {m} min / trolley · a remark is needed',
+    arr: 'Arranging time (≤ {n} min / trolley)', arrS: 'Start', arrE: 'End', nowBtn: 'Now', mins: '{n} min', arrSlow: '{n} min — over {m} min / trolley · a remark is needed', chillOk: 'Chill-room wait so far {h} h (≤ {m})', chillLong: 'Chill-room wait {h} h — over {m} h (HACCP step 12) · a remark is needed', shortFreeze: 'Frozen {h} h — under {m} h (HACCP step 13) · can go out if the core passes; the report notes it',
     roomL: 'Choose the room, then enter its temperature', roomT: 'Room temperature', pass: '✓ pass', high: '✕ above {n} °C', roomHighNote: 'It can be saved, but the lot stays hidden from "out" until the room is measured again and passes', tapTemp: 'tap to enter',
     remark: 'Remark', remarkPh: 'e.g. waiting for trays', saveIn: 'Save into the freezer', change: 'Change lot',
     outT: 'Out of the freezer', outPick: 'Room temperature passed — tap the lot to take out', hiddenN: '{n} lots hidden — room temperature not passed', remeasure: 'Measure room again', noneOut: 'No lot is ready',
@@ -477,7 +477,7 @@ const ddmm = (s) => (s && /^\d{4}-\d{2}-\d{2}$/.test(s) ? s.slice(8, 10) + '/' +
 const num = (v) => (v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v));
 const numFmt = (v) => (num(v) === null ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
 const tShow = (v) => (v === '' || v === null || v === undefined ? '' : String(v).replace('-', '−'));
-const EMPTY_FZ = { rooms: ['Air Blast 1', 'Air Blast 2', 'Contact'], settings: { ROOM_MAX: -30, CORE_MAX: -18, ARRANGE_MAX: 30, LOT_DAYS: 5 }, forms: {}, cancelDepts: ['general manager'] };
+const EMPTY_FZ = { rooms: ['Air Blast 1', 'Air Blast 2', 'Contact'], settings: { ROOM_MAX: -30, CORE_MAX: -18, ARRANGE_MAX: 30, CHILL_MAX: 10, MIN_H_ABF: 6, MIN_H_CONTACT: 0, LOT_DAYS: 5 }, forms: {}, cancelDepts: ['general manager'] };
 const fzCfg = () => (S.cfg && S.cfg.fz) || EMPTY_FZ;
 const lim = () => Object.assign({}, EMPTY_FZ.settings, fzCfg().settings || {}, (S.st && S.st.limits) || {});
 const rooms = () => (fzCfg().rooms && fzCfg().rooms.length ? fzCfg().rooms : EMPTY_FZ.rooms);
@@ -493,14 +493,19 @@ function newId(pre) {
 
 /* ---------------- rules (same as the server) ---------------- */
 function arrMins(c) { const a = hmMin(c.arrStart), b = hmMin(c.arrEnd); return a === null || b === null ? null : b >= a ? b - a : b + 1440 - a; }
+/** HACCP step 12 (27 Nov 2026): chill-room wait = arranging end → now (the freezer-in time is the save time) */
+function chillH(c) { const b = hmMin(c.arrEnd), t = hmMin(nowHM()); return b === null ? null : Math.round(((t >= b ? t - b : t + 1440 - b) / 60) * 10) / 10; }
+const chillMax = () => Number(lim().CHILL_MAX) || 10;
+const minHours = (room) => { const m = lim(); const v = /contact/i.test(String(room || '')) ? m.MIN_H_CONTACT : m.MIN_H_ABF; return Number(v === undefined ? (/contact/i.test(String(room || '')) ? 0 : 6) : v) || 0; };
 function evalIn(c) {
   const m = lim(), mins = arrMins(c), rt = num(c.roomTemp);
-  const slow = mins !== null && mins > m.ARRANGE_MAX, roomHigh = rt !== null && rt > m.ROOM_MAX;
+  const chill = chillH(c), longChill = chill !== null && chill > chillMax();
+  const slow = (mins !== null && mins > m.ARRANGE_MAX) || longChill, roomHigh = rt !== null && rt > m.ROOM_MAX;
   const trays = num(c.trays);
   const ok = !!c.key && /^[A-Za-z0-9\-\/]{1,6}$/.test(String(c.trolley || '')) && trays >= 1 && trays <= 60 && trays === Math.round(trays) &&
     (c.foreign === 'ok' || (c.foreign === 'bad' && !!String(c.foreignFix || '').trim())) && mins !== null && mins <= 600 && (!slow || !!String(c.remark || '').trim()) &&
     !!c.room && rt !== null && c.roomTemp !== '-' && (!roomHigh || !!String(c.roomFix || '').trim());
-  return { ok: ok, mins: mins, slow: slow, roomHigh: roomHigh, rt: rt };
+  return { ok: ok, mins: mins, slow: slow, arrSlow: mins !== null && mins > m.ARRANGE_MAX, chill: chill, longChill: longChill, roomHigh: roomHigh, rt: rt };
 }
 function evalOut(o) {
   const m = lim(), core = (o.core || []).map(num);
@@ -649,7 +654,7 @@ function viewLogin() {
   const cells = Array.from({ length: 7 }, (_, i) => '<i class="' + (i === S.sid.length ? 'now' : '') + '">' + (S.sid[i] ? (i === S.sid.length - 1 && S.peek ? esc(S.sid[i]) : '●') : '') + '</i>').join('');
   return '<div class="stg"><div class="hero"><div class="mark glass"><span>❄</span></div><div class="brand">CK Frozen Fish · ' + esc(T.title) + ' · ' + esc(branch()) + '</div>' +
     '<h1>' + T.welcome + '</h1><div class="sub">' + T.loginSub + '</div></div>' +
-    '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' + (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '</div>';
+    '<div class="otp" aria-label="staff id">' + cells + '</div><div class="sub" style="text-align:center">' + T.loginHint + '</div>' + (S.err ? '<div class="err">' + esc(S.err) + '</div>' : '') + '<div class="sub mono" style="text-align:center;font-size:11px;opacity:.7">v' + APP_VERSION + '</div></div>';
 }
 
 const since = (d, tm) => (d === todayStr() ? '' : d === dayStr(new Date(Date.now() - 864e5)) ? t().yest + ' ' : ddmm(d) + ' ') + (tm || '');
@@ -767,7 +772,9 @@ function viewIn() {
   h += '<span class="lbl" style="color:var(--ink)">' + fmt(T.arr, { n: m.ARRANGE_MAX }) + '</span><div class="grid2">' +
     ['arrStart', 'arrEnd'].map((k, i) => '<div class="tile ' + (c[k] ? 'filled' : 'f-empty') + '" style="height:auto;min-height:64px"><span class="t-l">' + (i ? T.arrE : T.arrS) + (i && ev.mins !== null ? ' · ' + fmt(T.mins, { n: ev.mins }) : '') +
       '<button class="linkbtn" data-act="timenow" data-v="' + k + '">' + T.nowBtn + '</button></span><input type="time" data-on="' + k + '" value="' + esc(c[k] || '') + '" aria-label="' + (i ? T.arrE : T.arrS) + '"></div>').join('') + '</div>';
-  if (ev.slow) h += '<div class="note">' + fmt(T.arrSlow, { n: ev.mins, m: m.ARRANGE_MAX }) + '</div>';
+  if (ev.arrSlow) h += '<div class="note">' + fmt(T.arrSlow, { n: ev.mins, m: m.ARRANGE_MAX }) + '</div>';
+  if (ev.chill !== null) h += ev.longChill ? '<div class="note" style="border-color:var(--red)"><b style="color:var(--red)">' + fmt(T.chillLong, { h: ev.chill, m: chillMax() }) + '</b></div>'
+    : '<div class="sub">' + fmt(T.chillOk, { h: ev.chill, m: chillMax() }) + '</div>';
   if (ev.slow || c.remark) h += '<label class="tile" style="height:auto;min-height:54px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark || '') + '" maxlength="160" placeholder="' + esc(T.remarkPh) + '" style="text-transform:none;font:600 16px inherit"></label>';
   h += '<span class="lbl" style="color:var(--ink)">' + T.roomL + '</span>' + roomBlock(c.room, c.roomTemp, c.roomFix, 'room', 'rfix', 'roomFix', 'rt');
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
@@ -796,6 +803,8 @@ function viewOut() {
   h += '<div class="g3"><div class="tile" style="height:60px"><span class="t-l">' + T.tin + '</span><b class="mono" style="font-size:16px">' + esc(since(o.inDate, o.inTime)) + '</b></div>' +
     '<div class="tile" style="height:60px"><span class="t-l">' + T.tout + '</span><b class="mono" style="font-size:18px">' + nowHM() + '</b></div>' +
     '<div class="tile" style="height:60px"><span class="t-l">' + T.dur + '</span><b class="mono" style="font-size:16px">' + Math.floor(mins / 60) + ':' + P2(mins % 60) + '</b></div></div>';
+  const mh = minHours(o.room);
+  if (mh && mins < mh * 60) h += '<div class="note">' + fmt(T.shortFreeze, { h: Math.floor(mins / 60) + ':' + P2(mins % 60), m: mh }) + '</div>';
   if (o.trolleys.length > 1) h += '<span class="lbl" style="color:var(--ink)">' + T.sampleTro + '</span><div class="row" style="flex-wrap:wrap">' + o.trolleys.map((x) =>
     '<button class="btn ' + (o.trolley === x ? '' : 'ghost') + '" style="flex:0 0 auto;height:44px;min-width:64px" data-act="samp" data-v="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>';
   h += '<span class="lbl" style="color:var(--ink)">' + fmt(T.coreL, { n: tShow(m.CORE_MAX) }) + (o.trolleys.length === 1 ? ' · ' + T.cart + ' ' + esc(o.trolley) : '') + '</span><div class="g3">' +

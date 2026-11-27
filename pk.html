@@ -172,7 +172,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tile .t-v b{font:700 20px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .unit{font-size:12px;font-weight:700;color:#fff;padding:2px 8px;border-radius:999px}
 .u-g{background:var(--teal)}.u-kg{background:var(--accent)}
-.tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}
+.tile.size.filled{background:var(--teal-soft)}.tile.wt.filled{background:var(--accent-soft)}.tile.wt.t-hi{background:#fde2e0;border:2px solid var(--red)!important}
 .tile.wt.lock{background:rgba(255,255,255,.3);border-style:dashed}.tile .t-s{font-size:11px;font-weight:600;color:var(--ink-3);line-height:1.2}
 .linkbtn{color:var(--accent);font-size:12px;font-weight:700;padding:0}
 .sample{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--accent-soft);border-radius:10px;padding:6px 12px}
@@ -360,7 +360,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * The lot is picked from the PC checks (PC wrote which ORDER each RM lot goes to); the order can be changed here.
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.5.2';
+const APP_VERSION = '1.6.0';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between the pages (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -368,6 +368,8 @@ const STORE_KEY = DEMO ? 'ckqc.pk.demo.state' : 'ckqc.pk.v1';
 /* what is written in the Google Sheet (Thai) — the buttons show them in the chosen language */
 const FIX_TH = ['บรรจุใหม่', 'ซีลใหม่', 'เปลี่ยนถุง / กล่อง', 'ติดสติ๊กเกอร์ใหม่', 'แจ้งหัวหน้า QC'];
 const GFIX_TH = ['Glazing ใหม่', 'ปรับเวลาชุบ / น้ำ', 'แจ้งหัวหน้า QC'];
+/** HACCP step 14 (27 Nov 2026): corrections when the glazing water / core temperature is over the limit */
+const GTFIX_TH = ['เติมน้ำแข็ง / เปลี่ยนน้ำ Glazing', 'นำสินค้ากลับเข้าฟรีซ', 'แจ้งหัวหน้า QC'];
 const CHECK_KEYS = ['std', 'seal', 'bag', 'box', 'strap', 'sack', 'stk', 'stick'];
 const NA_OK = { bag: 1, box: 1, strap: 1, sack: 1 };   // may be "–" (not used on this product); the rest must be ✓ or ✗
 const SIZE_N = 5;
@@ -398,7 +400,7 @@ const L = {
     fixL: 'การแก้ไข (ต้องเลือก · เลือกได้หลายข้อ)', fixes: ['บรรจุใหม่', 'ซีลใหม่', 'เปลี่ยนถุง / กล่อง', 'ติดสติ๊กเกอร์ใหม่', 'แจ้งหัวหน้า QC'],
     recheck: 'ตรวจซ้ำหลังแก้ไข', rcOk: '✓ ผ่าน', rcBad: '✗ ไม่ผ่าน',
     glT: 'Glazing (ชั่ง 1 แพ็ค)', glOn: 'มี Glazing', glOff: 'ไม่มี', glOrder: 'Order %Glazing', glBefore: 'ก่อน Glazing', glAfter: 'หลัง Glazing', glPct: '% Glazing ที่วัดได้',
-    glOk: 'ถึง Order ({lo}–{hi}%)', glLow: 'ไม่ถึง Order — ไม่ผ่าน', glHigh: 'สูงกว่า Order — ต้องแก้ไข', glFixL: 'การแก้ไข Glazing (ต้องเลือก)', glFixes: ['Glazing ใหม่', 'ปรับเวลาชุบ / น้ำ', 'แจ้งหัวหน้า QC'], glFixed: '% Glazing ที่แก้ไขแล้ว', glRe: 'แก้ไขแล้ว ชั่งแพ็คซ้ำ (ถ้าไม่ชั่งซ้ำ = ไม่ผ่าน)', glReOk: 'ชั่งซ้ำ ถึง Order → ผ่านหลังแก้ไข', glReBad: 'ชั่งซ้ำแล้วยังไม่ตรง Order → ไม่ผ่าน', glWillFail: 'บันทึกได้ แต่ผลจะเป็น ไม่ผ่าน', glMin: 'ชั่งทั้งแพ็ค — อย่างน้อย {g} g',
+    glOk: 'ถึง Order ({lo}–{hi}%)', glLow: 'ไม่ถึง Order — ไม่ผ่าน', glHigh: 'สูงกว่า Order — ต้องแก้ไข', glFixL: 'การแก้ไข Glazing (ต้องเลือก)', glFixes: ['Glazing ใหม่', 'ปรับเวลาชุบ / น้ำ', 'แจ้งหัวหน้า QC'], glFixed: '% Glazing ที่แก้ไขแล้ว', glRe: 'แก้ไขแล้ว ชั่งแพ็คซ้ำ (ถ้าไม่ชั่งซ้ำ = ไม่ผ่าน)', glReOk: 'ชั่งซ้ำ ถึง Order → ผ่านหลังแก้ไข', glReBad: 'ชั่งซ้ำแล้วยังไม่ตรง Order → ไม่ผ่าน', glWillFail: 'บันทึกได้ แต่ผลจะเป็น ไม่ผ่าน', glMin: 'ชั่งทั้งแพ็ค — อย่างน้อย {g} g', gtL: 'อุณหภูมิ Glazing (HACCP) — น้ำ ≤ {w} °C · ใจกลางหลัง Glazing ≤ {c} °C', gtWater: 'น้ำ Glazing', gtCore: 'ใจกลางหลัง Glazing', gtWaterHi: 'น้ำ Glazing เกิน {m} °C', gtCoreHi: 'ใจกลางสูงกว่า {m} °C', gtFixL: 'การแก้ไขอุณหภูมิ (ต้องเลือก)', gtFixes: ['เติมน้ำแข็ง / เปลี่ยนน้ำ Glazing', 'นำสินค้ากลับเข้าฟรีซ', 'แจ้งหัวหน้า QC'], gtRe: 'แก้ไขแล้ว วัดซ้ำ (ถ้าไม่วัดซ้ำ = ไม่ผ่าน)', gtReOk: 'วัดซ้ำผ่าน → ผ่านหลังแก้ไข', needGt: 'ใส่อุณหภูมิน้ำ Glazing และใจกลางหลัง Glazing', needGtFix: 'อุณหภูมิ Glazing เกิน — เลือกการแก้ไข',
     glFormula: '% = (หลัง − ก่อน) ÷ หลัง × 100', remark: 'หมายเหตุ (ถ้ามี)', remarkPh: 'พิมพ์หมายเหตุ…', save: 'บันทึก',
     needOrder: 'ใส่ Order', needSizes: 'ชั่ง Size ปลาให้ครบ 5 ตัว', needProd: 'ใส่ Production Date', needExp: 'ใส่ Expiry Date', needFix: 'บรรจุภัณฑ์ไม่ผ่าน — เลือกการแก้ไข', needRc: 'ตรวจซ้ำหลังแก้ไข',
     needSeal: 'รอยซีล / สติ๊กเกอร์ ต้องเป็น ✓ หรือ ✗', needG: 'ใส่ Order %Glazing และน้ำหนักก่อน / หลัง', gAfterLow: 'น้ำหนักหลัง Glazing น้อยกว่าก่อน Glazing', needGFix: 'Glazing ไม่ตรง Order — เลือกการแก้ไขและใส่ % ที่แก้ไขแล้ว',
@@ -431,7 +433,7 @@ const L = {
     fixL: 'Correction (required · more than one is fine)', fixes: ['Repack', 'Re-seal', 'Change bag / box', 'New sticker', 'Tell QC lead'],
     recheck: 'Re-check after correction', rcOk: '✓ Pass', rcBad: '✗ Fail',
     glT: 'Glazing (weigh 1 pack)', glOn: 'Glazed', glOff: 'None', glOrder: 'Order %glazing', glBefore: 'Before glazing', glAfter: 'After glazing', glPct: 'Measured % glazing',
-    glOk: 'Reaches the order ({lo}–{hi}%)', glLow: 'Below the order — fail', glHigh: 'Above the order — correct it', glFixL: 'Glazing correction (required)', glFixes: ['Glaze again', 'Adjust dip time / water', 'Tell QC lead'], glFixed: 'Corrected % glazing', glRe: 'Corrected — weigh the pack again (no re-weigh = fail)', glReOk: 'Re-weigh reaches the order → pass after correction', glReBad: 'Re-weigh still off the order → fail', glWillFail: 'Can be saved, but the result will be FAIL', glMin: 'Weigh the whole pack — at least {g} g',
+    glOk: 'Reaches the order ({lo}–{hi}%)', glLow: 'Below the order — fail', glHigh: 'Above the order — correct it', glFixL: 'Glazing correction (required)', glFixes: ['Glaze again', 'Adjust dip time / water', 'Tell QC lead'], glFixed: 'Corrected % glazing', glRe: 'Corrected — weigh the pack again (no re-weigh = fail)', glReOk: 'Re-weigh reaches the order → pass after correction', glReBad: 'Re-weigh still off the order → fail', glWillFail: 'Can be saved, but the result will be FAIL', glMin: 'Weigh the whole pack — at least {g} g', gtL: 'Glazing temperatures (HACCP) — water ≤ {w} °C · core after glazing ≤ {c} °C', gtWater: 'Glazing water', gtCore: 'Core after glazing', gtWaterHi: 'Glazing water above {m} °C', gtCoreHi: 'Core above {m} °C', gtFixL: 'Temperature correction (required)', gtFixes: ['Add ice / change glazing water', 'Back into the freezer', 'Tell QC lead'], gtRe: 'Corrected — measure again (no re-measure = fail)', gtReOk: 'Re-measure OK → pass after correction', needGt: 'Enter the glazing water and core temperatures', needGtFix: 'Glazing temperature over the limit — choose a correction',
     glFormula: '% = (after − before) ÷ after × 100', remark: 'Remark (optional)', remarkPh: 'Type a remark…', save: 'Save',
     needOrder: 'Enter the order', needSizes: 'Weigh all 5 sample fish', needProd: 'Enter the production date', needExp: 'Enter the expiry date', needFix: 'Packaging failed — choose a correction', needRc: 'Re-check after correction',
     needSeal: 'Seal / sticker must be ✓ or ✗', needG: 'Enter the order % and the weights before / after', gAfterLow: 'After glazing is lighter than before', needGFix: 'Glazing off the order — choose a correction and enter the corrected %',
@@ -464,7 +466,7 @@ const L = {
     fixL: 'ပြင်ဆင်ချက် (လိုအပ်)', fixes: ['ပြန်ထုပ်', 'ပြန်ဆီး', 'အိတ် / သေတ္တာ လဲ', 'စတစ်ကာ အသစ်', 'QC ခေါင်းဆောင်ကို ပြော'],
     recheck: 'ပြင်ပြီး ပြန်စစ်', rcOk: '✓ အောင်', rcBad: '✗ မအောင်',
     glT: 'Glazing (၁ ထုပ် ချိန်)', glOn: 'Glazing ရှိ', glOff: 'မရှိ', glOrder: 'Order %Glazing', glBefore: 'Glazing မတိုင်မီ', glAfter: 'Glazing ပြီး', glPct: 'တိုင်းရ % Glazing',
-    glOk: 'Order အထိ ({lo}–{hi}%)', glLow: 'Order မရောက် — မအောင်', glHigh: 'Order ထက် များ — ပြင်ပါ', glFixL: 'Glazing ပြင်ဆင်ချက်', glFixes: ['ပြန် Glazing', 'နှစ်ချိန် / ရေ ညှိ', 'QC ခေါင်းဆောင်ကို ပြော'], glFixed: 'ပြင်ပြီး % Glazing', glRe: 'ပြင်ပြီး ပြန်ချိန်ပါ', glReOk: 'ပြန်ချိန် အောင်', glReBad: 'ပြန်ချိန် မအောင်', glWillFail: 'သိမ်းနိုင် — မအောင်', glMin: 'ထုပ်လုံး ချိန်ပါ — အနည်းဆုံး {g} g',
+    glOk: 'Order အထိ ({lo}–{hi}%)', glLow: 'Order မရောက် — မအောင်', glHigh: 'Order ထက် များ — ပြင်ပါ', glFixL: 'Glazing ပြင်ဆင်ချက်', glFixes: ['ပြန် Glazing', 'နှစ်ချိန် / ရေ ညှိ', 'QC ခေါင်းဆောင်ကို ပြော'], glFixed: 'ပြင်ပြီး % Glazing', glRe: 'ပြင်ပြီး ပြန်ချိန်ပါ', glReOk: 'ပြန်ချိန် အောင်', glReBad: 'ပြန်ချိန် မအောင်', glWillFail: 'သိမ်းနိုင် — မအောင်', glMin: 'ထုပ်လုံး ချိန်ပါ — အနည်းဆုံး {g} g', gtL: 'Glazing အပူချိန် — ရေ ≤ {w} °C · အလယ် ≤ {c} °C', gtWater: 'Glazing ရေ', gtCore: 'Glazing ပြီး အလယ်', gtWaterHi: 'ရေ {m} °C ကျော်', gtCoreHi: 'အလယ် {m} °C ကျော်', gtFixL: 'ပြင်ဆင်ချက်', gtFixes: ['ရေခဲထည့် / ရေလဲ', 'ဖရီဇာ ပြန်ထည့်', 'QC ခေါင်းဆောင်ကို ပြော'], gtRe: 'ပြန်တိုင်းပါ', gtReOk: 'ပြန်တိုင်း အောင်', needGt: 'Glazing အပူချိန် ထည့်ပါ', needGtFix: 'ပြင်ဆင်ချက် ရွေးပါ',
     glFormula: '% = (ပြီး − မတိုင်မီ) ÷ ပြီး × 100', remark: 'မှတ်ချက်', remarkPh: 'မှတ်ချက်…', save: 'သိမ်း',
     needOrder: 'Order ထည့်ပါ', needSizes: 'ငါး ၅ ကောင် ချိန်ပါ', needProd: 'Production Date ထည့်ပါ', needExp: 'Expiry Date ထည့်ပါ', needFix: 'ပြင်ဆင်ချက် ရွေးပါ', needRc: 'ပြန်စစ်ပါ',
     needSeal: 'ဆီး / စတစ်ကာ ✓ သို့ ✗', needG: 'Glazing အလေးချိန် ထည့်ပါ', gAfterLow: 'Glazing ပြီး ပေါ့နေ', needGFix: 'Glazing ပြင်ဆင်ချက် ရွေးပါ',
@@ -523,7 +525,7 @@ const ddmm = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '');
 const ddmmyy = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4) : '');
 const plusMonths = (s, m) => { const p = s.split('-').map(Number); const d = new Date(p[0], p[1] - 1 + m, p[2] - 1); return dayStr(d); };   // +12 months − 1 day (11/11/2026 → 10/11/2027)
 const numFmt = (v) => (v === '' || v === null || v === undefined ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }));
-const wShow = (w) => { const p = String(w).split('.'); return Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
+const wShow = (w) => { const v = String(w); if (!/\d/.test(v)) return v === '-' ? '−' : v; const neg = v.charAt(0) === '-'; const p = v.replace('-', '').split('.'); return (neg ? '−' : '') + Number(p[0] || 0).toLocaleString('en-US') + (p.length > 1 ? '.' + p[1] : ''); };
 const EMPTY_PK = { checks: [], sizeN: SIZE_N, settings: { GLAZE_TOL: 2, GLAZE_TOL_LOW: 0, GLAZE_MIN_G: 100, LOT_DAYS: 7 }, stock: ['SCK'], cancelDepts: ['general manager'] };
 /** SCK = packed as bulk / stock, not a customer order (Sal, 26 Nov 2026) — a standing chip beside the PC orders, no move reason needed */
 const stockCodes = () => (pkCfg().stock || ['SCK']).map(cleanOrder);
@@ -537,6 +539,8 @@ const rmFish = () => ((S.cfg && S.cfg.rm && S.cfg.rm.fish) || (DEMO ? DEMO_CFG.r
 const rmProcs = () => (S.cfg && S.cfg.rm && S.cfg.rm.procs) || ['WR', 'G', 'GS', 'GGS', 'FC', 'CLN', 'SO', 'OTHER'];
 const glTol = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_TOL); return isNaN(v) ? 2 : v; };
 const glTolLow = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_TOL_LOW); return isNaN(v) ? 0 : v; };
+const glWaterMax = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_WATER_MAX); return pkCfg().settings && pkCfg().settings.GLAZE_WATER_MAX !== undefined && !isNaN(v) ? v : 4; };
+const glCoreMax = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_CORE_MAX); return pkCfg().settings && pkCfg().settings.GLAZE_CORE_MAX !== undefined && !isNaN(v) ? v : -18; };
 const glMin = () => { const v = Number(pkCfg().settings && pkCfg().settings.GLAZE_MIN_G); return isNaN(v) || !v ? 100 : v; };
 const lotDays = () => Number(pkCfg().settings && pkCfg().settings.LOT_DAYS) || 7;
 const branch = () => (S.cfg && S.cfg.branch && S.cfg.branch.code ? S.cfg.branch.code + ' · ' + S.cfg.branch.name : t().branch);
@@ -555,7 +559,7 @@ const allOk = () => ({ std: 'ok', seal: 'ok', bag: 'ok', box: 'ok', strap: 'ok',
 function blankCheck() {
   return { id: newId(), date: todayStr(), key: '', rmId: '', rmLine: '', pcId: '', rmDate: '', lot: '', sup: '', item: '', fish: '', proc: 'WR', size: '', manual: false, trim: '', pcTypes: [],
     pcOrders: [], order: '', orderOther: false, orderMoved: false, orderWhy: '', code: '', sizes: ['', '', '', '', ''], prodDate: todayStr(), expDate: '', checks: allOk(), fixes: [], recheck: '',
-    glazed: true, gOrder: '', gBefore: '', gAfter: '', gFix: '', gBefore2: '', gAfter2: '', remark: '', stage: 'lot' };
+    glazed: true, gOrder: '', gBefore: '', gAfter: '', gFix: '', gBefore2: '', gAfter2: '', gWater: '', gCore: '', gtFix: '', gWater2: '', gCore2: '', remark: '', stage: 'lot' };
 }
 const n = (v) => (v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v));
 /** the order typed differs from every order PC gave the lot (not for BULK / typed lots — they have no PC order) */
@@ -609,9 +613,19 @@ function evalCheck(c) {
     else if (gOut && !c.gFix) why.push(T.needGFix);
     else if (gOut && (g2B !== null || g2A !== null) && (gFixed === null)) why.push(T.needG);
   }
+  // glazing water + core after glazing (HACCP step 14) — same rule as the server
+  const gW = glazed ? n(c.gWater) : null, gC = glazed ? n(c.gCore) : null;
+  const wOut = gW !== null && gW > glWaterMax(), cOut = gC !== null && gC > glCoreMax();
+  const gtOut = wOut || cOut;
+  const gW2 = wOut ? n(c.gWater2) : null, gC2 = cOut ? n(c.gCore2) : null;
+  const gtFixOk = gtOut && (!wOut || (gW2 !== null && gW2 <= glWaterMax())) && (!cOut || (gC2 !== null && gC2 <= glCoreMax()));
+  if (glazed) {
+    if (gW === null || gC === null) why.push(T.needGt);
+    else if (gtOut && !c.gtFix) why.push(T.needGtFix);
+  }
   if (!c.manual) { if (!c.trim) why.push(T.trimNeed); else if ((c.pcTypes || []).indexOf(c.trim) < 0) why.push(fmt(T.trimNoPc, { t: c.trim })); }   // step 3 (Sal, 25 Nov 2026)
-  const fail = (bad.length && c.recheck === 'bad') || (gOut && !gFixOk);
-  return { bad, avg, glazed, gPct, gOut, gFixed, gFixOk, gOrder, lo, hi, ok: !why.length, why, status: fail ? 'fail' : bad.length || gOut ? 'fixed' : 'pass' };
+  const fail = (bad.length && c.recheck === 'bad') || (gOut && !gFixOk) || (gtOut && !gtFixOk);
+  return { bad, avg, glazed, gPct, gOut, gFixed, gFixOk, gOrder, lo, hi, wOut, cOut, gtOut, gtFixOk, ok: !why.length, why, status: fail ? 'fail' : bad.length || gOut || gtOut ? 'fixed' : 'pass' };
 }
 
 /* ---------------- talking to Apps Script ---------------- */
@@ -1022,6 +1036,18 @@ function viewCheck() {
         (e.gFixed !== null ? '<div class="lossbox ' + (e.gFixOk ? 'ok' : 'hi') + '"><span>' + T.glFixed + '</span><b>' + e.gFixed.toFixed(2) + '%</b><small>' + (e.gFixOk ? T.glReOk : T.glReBad) + '</small></div>'
           : '<div class="note">✗ ' + T.glWillFail + '</div>') + '</div>';
     }
+    // HACCP step 14: glazing water ≤ 4 °C and core after glazing ≤ −18 °C (once per lot)
+    h += '<span class="lbl" style="margin-top:6px">' + fmt(T.gtL, { w: numFmt(glWaterMax()), c: numFmt(glCoreMax()) }) + '</span>' +
+      '<div class="grid2">' + numTile('gw', null, T.gtWater, c.gWater, '°C', e.wOut ? 't-hi' : '') + numTile('gc', null, T.gtCore, c.gCore, '°C', e.cOut ? 't-hi' : '') + '</div>';
+    if (e.gtOut) {
+      h += '<div class="card glass glfix" style="border:2px solid ' + (e.gtFixOk ? 'var(--amber)' : 'var(--red)') + '"><b style="color:var(--red)">✗ ' +
+        [e.wOut ? fmt(T.gtWaterHi, { m: numFmt(glWaterMax()) }) : '', e.cOut ? fmt(T.gtCoreHi, { m: numFmt(glCoreMax()) }) : ''].filter(String).join(' · ') + '</b>' +
+        '<span class="lbl" style="color:var(--ink)">' + T.gtFixL + '</span><div class="fixes">' + T.gtFixes.map((f, q) =>
+        '<button class="' + (c.gtFix === GTFIX_TH[q] ? 'on' : '') + '" data-act="gtfix" data-x="' + q + '">' + esc(f) + '</button>').join('') + '</div>' +
+        '<span class="lbl" style="color:var(--ink)">' + T.gtRe + '</span>' +
+        '<div class="grid2">' + (e.wOut ? numTile('gw2', null, T.gtWater, c.gWater2, '°C') : '') + (e.cOut ? numTile('gc2', null, T.gtCore, c.gCore2, '°C') : '') + '</div>' +
+        (e.gtFixOk ? '<div class="note" style="color:var(--green)">✓ ' + T.gtReOk + '</div>' : '<div class="note">✗ ' + T.glWillFail + '</div>') + '</div>';
+    }
   }
   h += '<label class="tile" style="height:auto;min-height:72px"><span class="t-l">' + T.remark + '</span><input data-on="remark" value="' + esc(c.remark) + '" maxlength="200" placeholder="' + esc(T.remarkPh) + '" autocomplete="off" style="text-transform:none;font:600 16px inherit" aria-label="' + T.remark + '"></label>';
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
@@ -1057,14 +1083,18 @@ function viewPad() {
   let h = keys.map((x) => x === '' ? '<button class="blank" tabindex="-1" aria-hidden="true"></button>' :
     '<button class="' + (x === 'del' || x === '/' || x === '.' ? 'fn' : '') + '" data-key="' + x + '" aria-label="' + (x === 'del' ? 'delete' : x) + '">' + (x === 'del' ? '⌫' : x) + '</button>').join('');
   const okLabel = k === 'sid' ? (S.busy ? '<span class="spin"></span> ' + T.checking : T.enter) : T.ok + ' ✓';
-  h += '<button class="ok" data-key="ok"' + (k === 'sid' && (S.sid.length !== 7 || S.busy) ? ' disabled style="opacity:.45"' : '') + '>' + okLabel + '</button>';
+  const temp = TEMP_PADS[k];
+  if (temp) h += '<button class="fn" data-key="pm" aria-label="plus minus">±</button>';   // temperatures: core starts with "−", water with "+"; ± flips it
+  h += '<button class="ok" data-key="ok"' + (temp ? ' style="grid-column:span 2"' : '') + (k === 'sid' && (S.sid.length !== 7 || S.busy) ? ' disabled style="opacity:.45"' : '') + '>' + okLabel + '</button>';
   return h;
 }
 /** which field a pad edits: [get, set, max digits, decimals allowed] */
+const TEMP_PADS = { gw: 1, gc: 1, gw2: 1, gc2: 1 };
 function padField(pad) {
   const c = S.c;
   if (pad.kind === 's') return [() => c.sizes[pad.i], (v) => (c.sizes[pad.i] = v), 6, 1];
-  const f = { gor: ['gOrder', 3, 2], gbf: ['gBefore', 6, 2], gaf: ['gAfter', 6, 2], gb2: ['gBefore2', 6, 2], ga2: ['gAfter2', 6, 2] }[pad.kind];
+  const f = { gor: ['gOrder', 3, 2], gbf: ['gBefore', 6, 2], gaf: ['gAfter', 6, 2], gb2: ['gBefore2', 6, 2], ga2: ['gAfter2', 6, 2],
+    gw: ['gWater', 2, 1], gc: ['gCore', 2, 1], gw2: ['gWater2', 2, 1], gc2: ['gCore2', 2, 1] }[pad.kind];
   return f ? [() => c[f[0]], (v) => (c[f[0]] = v), f[1], f[2]] : null;
 }
 /** after OK: the next empty number on the screen (5 fish → glazing order % → before → after) */
@@ -1073,12 +1103,14 @@ function nextPad(pad) {
   if (pad.kind === 's') { const nx = c.sizes.findIndex((v, i) => i > pad.i && v === ''); if (nx >= 0) return { kind: 's', i: nx }; const fst = c.sizes.findIndex((v) => v === ''); return fst >= 0 ? { kind: 's', i: fst } : null; }
   if (!c.glazed) return null;
   if (pad.kind === 'gb2') return c.gAfter2 === '' ? { kind: 'ga2' } : null;   // re-weigh: before → after
+  if (pad.kind === 'gw') return c.gCore === '' ? { kind: 'gc' } : null;          // glazing water → core
+  if (pad.kind === 'gaf') { const e = evalCheck(c); if (!e.gOut && c.gWater === '') return { kind: 'gw' }; }
   const order = ['gor', 'gbf', 'gaf'];
   const at = order.indexOf(pad.kind);
   if (at < 0) return null;
   const f = { gor: 'gOrder', gbf: 'gBefore', gaf: 'gAfter' };
   const nx = order.slice(at + 1).find((k) => c[f[k]] === '');
-  return nx ? { kind: nx } : null;
+  return nx ? { kind: nx } : (c.gWater === '' ? { kind: 'gw' } : null);
 }
 function press(key) {
   const pad = S.pad;
@@ -1100,8 +1132,15 @@ function press(key) {
   const pf = padField(pad);
   if (!pf) return;
   const v = String(pf[0]() || '');
-  if (key === 'ok') { if (v.slice(-1) === '.') pf[1](v.slice(0, -1)); S.pad = nextPad(pad); if (pad.kind === 'gor' && c.order) S.gLast[cleanOrder(c.order)] = c.gOrder; }
+  if (key === 'ok') { let w = v; if (w.slice(-1) === '.') w = w.slice(0, -1); if (w === '-') w = ''; pf[1](w); S.pad = nextPad(pad); if (pad.kind === 'gor' && c.order) S.gLast[cleanOrder(c.order)] = c.gOrder; }
   else if (key === 'del') pf[1](v.slice(0, -1));
+  else if (key === 'pm') pf[1](v.charAt(0) === '-' ? v.slice(1) : '-' + v);
+  else if (TEMP_PADS[pad.kind] && /^\d$/.test(key)) {
+    let w = v;
+    if (w === '' && (pad.kind === 'gc' || pad.kind === 'gc2')) w = '-';     // product core is below zero: the minus is put in for you
+    const body = w.replace('-', ''), dec = body.split('.')[1];
+    if (dec === undefined ? body.length < 2 : dec.length < 1) pf[1](w + key);
+  }
   else if (key === '.') { if (v && v.indexOf('.') < 0 && pf[3]) pf[1](v + '.'); }
   else if (/^\d$/.test(key)) {
     const dec = (v.split('.')[1] || '');
@@ -1255,6 +1294,7 @@ function saveCheck() {
     rmId: c.rmId, rmLine: c.rmLine, pcId: c.pcId, trim: c.trim || '', sizes: c.sizes.slice(), prodDate: c.prodDate, expDate: c.expDate, checks: Object.assign({}, c.checks),
     fix: e.bad.length ? c.fixes.join(' · ') : '', recheck: e.bad.length ? c.recheck : '',
     gOrder: e.glazed ? c.gOrder : '', gBefore: e.glazed ? c.gBefore : '', gAfter: e.glazed ? c.gAfter : '', gFix: e.gOut ? c.gFix : '', gBefore2: e.gOut ? c.gBefore2 : '', gAfter2: e.gOut ? c.gAfter2 : '',
+    gWater: e.glazed ? c.gWater : '', gCore: e.glazed ? c.gCore : '', gtFix: e.gtOut ? c.gtFix : '', gWater2: e.wOut ? c.gWater2 : '', gCore2: e.cOut ? c.gCore2 : '',
     remark: c.remark, device: navigator.userAgent.slice(0, 120), appVersion: APP_VERSION,
     _status: e.status === 'fail' ? 'ไม่ผ่าน' : e.status === 'fixed' ? 'ผ่านหลังแก้ไข' : 'ผ่าน'
   };
@@ -1372,6 +1412,7 @@ const ACT = {
   fix: (el) => { const v = FIX_TH[Number(el.dataset.x)]; const i = S.c.fixes.indexOf(v); if (i >= 0) S.c.fixes.splice(i, 1); else S.c.fixes.push(v); S.err = ''; render(); },
   rc: (el) => { S.c.recheck = S.c.recheck === el.dataset.v ? '' : el.dataset.v; render(); },
   glazed: (el) => { S.c.glazed = el.dataset.v === '1'; if (!S.c.glazed && S.pad && /^g/.test(S.pad.kind)) S.pad = null; render(); },
+  gtfix: (el) => { const v = GTFIX_TH[Number(el.dataset.x)]; S.c.gtFix = S.c.gtFix === v ? '' : v; S.err = ''; render(); },
   gfix: (el) => { const v = GFIX_TH[Number(el.dataset.x)]; S.c.gFix = S.c.gFix === v ? '' : v; S.err = ''; render(); },
   save: saveCheck,
   again: () => {
