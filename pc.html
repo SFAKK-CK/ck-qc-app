@@ -359,7 +359,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
  * Same look, motion, number pad, offline outbox and server as the RM app. Opened from the RM home page (no second login).
  * ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbybeQ__NUkoXECXSSgvjz5532HyLaYjtess_2Udrnf8z8XkqeN9YsHDj8GgXN6gy6D5/exec';
-const APP_VERSION = '1.8.0';
+const APP_VERSION = '1.8.1';
 const HOME_URL = 'index.html';           // main menu (RM app) — same folder on GitHub
 const HAND_KEY = 'ckqc.hand';             // one-time hand-over of the signed-in staff between index.html and pc.html (same tab)
 const DEMO = API_URL.indexOf('PASTE_') === 0 || /[?&]demo=1/.test(location.search);
@@ -377,7 +377,7 @@ const L = {
     welcome: 'ยินดีต้อนรับ', loginSub: 'กรอกรหัสพนักงาน 7 หลัก', loginHint: 'รหัสเดียวกับ QC webpage · ใส่ทุกครั้งที่เปิดแอป', enter: 'เข้าสู่ระบบ', checking: 'กำลังตรวจ…',
     badId: 'ไม่พบรหัสพนักงานนี้', needNet: 'ต้องต่ออินเทอร์เน็ตในการเข้าใช้ครั้งแรกของเครื่องนี้', signOut: 'ออก', outDraft: 'ยังมีการตรวจที่ยังไม่บันทึก — กด ออก อีกครั้งเพื่อทิ้งและออก',
     demo: 'โหมดทดลอง — ข้อมูลไม่ถูกส่งเข้า Google Sheet', offline: 'ออฟไลน์', online: 'ออนไลน์', waiting: 'รอส่ง', inspector: 'ผู้ตรวจ', back: 'กลับ', ok: 'ตกลง',
-    mainMenu: 'เมนูหลัก', refresh: 'รีเฟรช', today: 'วันนี้ (PC)', checks: 'ครั้งที่ตรวจ', heldN: 'ปลาดอง', failShort: 'ไม่ผ่าน',
+    mainMenu: 'เมนูหลัก', todayBtn: '📋 ตรวจแล้ววันนี้ ({n}) ›', refresh: 'รีเฟรช', today: 'วันนี้ (PC)', checks: 'ครั้งที่ตรวจ', heldN: 'ปลาดอง', failShort: 'ไม่ผ่าน',
     start: 'เริ่มตรวจ PC', startSub: 'เลือกล็อตจาก RM แล้วตรวจ', resume: 'ทำต่อ', discard: 'ทิ้งการตรวจนี้', discardQ: 'แตะอีกครั้งเพื่อทิ้ง',
     todayList: 'ตรวจแล้ววันนี้', none: 'ยังไม่มีการตรวจวันนี้', pendingT: 'รอส่ง', pendingSub: 'บันทึกไว้ในเครื่องแล้ว แอปส่งเองเมื่อมีสัญญาณ', sendNow: 'ส่งตอนนี้',
     failedSend: 'ระบบไม่รับ', reopen: 'เปิดแก้ไข', finishFirst: 'บันทึกหรือทิ้งการตรวจที่ทำค้างก่อน',
@@ -407,7 +407,7 @@ const L = {
     welcome: 'Welcome', loginSub: 'Enter your 7-digit staff ID', loginHint: 'Same ID as the QC webpage · every time the app opens', enter: 'Sign in', checking: 'Checking…',
     badId: 'Staff ID not found', needNet: 'The first sign-in on this phone needs internet', signOut: 'Sign out', outDraft: 'Unsaved check — tap Sign out again to discard it',
     demo: 'Demo mode — nothing is sent to Google Sheets', offline: 'Offline', online: 'Online', waiting: 'Waiting', inspector: 'Inspector', back: 'Back', ok: 'OK',
-    mainMenu: 'Main menu', refresh: 'Refresh', today: 'Today (PC)', checks: 'checks', heldN: 'held fish', failShort: 'failed',
+    mainMenu: 'Main menu', todayBtn: '📋 Checked today ({n}) ›', refresh: 'Refresh', today: 'Today (PC)', checks: 'checks', heldN: 'held fish', failShort: 'failed',
     start: 'Start PC check', startSub: 'Pick the RM lot, then check', resume: 'Continue', discard: 'Discard this check', discardQ: 'Tap again to discard',
     todayList: 'Checked today', none: 'No checks yet today', pendingT: 'Waiting to send', pendingSub: 'Saved on this phone; sends itself when there is signal', sendNow: 'Send now',
     failedSend: 'Refused', reopen: 'Open to fix', finishFirst: 'Save or discard the open check first',
@@ -437,7 +437,7 @@ const L = {
     welcome: 'ကြိုဆိုပါသည်', loginSub: 'ဝန်ထမ်း နံပါတ် ၇ လုံး', loginHint: 'QC webpage နှင့် နံပါတ်တူ · ဖွင့်တိုင်း ထည့်ပါ', enter: 'ဝင်ရန်', checking: 'စစ်နေသည်…',
     badId: 'ဝန်ထမ်းနံပါတ် မတွေ့ပါ', needNet: 'ပထမဆုံး ဝင်ရန် အင်တာနက် လိုသည်', signOut: 'ထွက်', outDraft: 'မသိမ်းရသေး — ထွက်ရန် ထပ်နှိပ်ပါ',
     demo: 'စမ်းသပ်မုဒ်', offline: 'အော့ဖ်လိုင်း', online: 'အွန်လိုင်း', waiting: 'ပို့ရန်', inspector: 'စစ်ဆေးသူ', back: 'နောက်', ok: 'အိုကေ',
-    mainMenu: 'ပင်မ', refresh: 'ပြန်ဖွင့်', today: 'ယနေ့ (PC)', checks: 'စစ်ပြီး', heldN: 'ထိန်းထားသော ငါး', failShort: 'မအောင်',
+    mainMenu: 'ပင်မ', todayBtn: '📋 ယနေ့ စစ်ပြီး ({n}) ›', refresh: 'ပြန်ဖွင့်', today: 'ယနေ့ (PC)', checks: 'စစ်ပြီး', heldN: 'ထိန်းထားသော ငါး', failShort: 'မအောင်',
     start: 'PC စစ်ဆေး စတင်', startSub: 'RM lot ရွေးပြီး စစ်ပါ', resume: 'ဆက်လုပ်', discard: 'ဤစစ်ဆေးမှု ဖျက်', discardQ: 'ဖျက်ရန် ထပ်နှိပ်ပါ',
     todayList: 'ယနေ့ စစ်ပြီး', none: 'ယနေ့ မစစ်ရသေး', pendingT: 'ပို့ရန်', pendingSub: 'ဖုန်းတွင် သိမ်းပြီး', sendNow: 'ယခု ပို့',
     failedSend: 'လက်မခံ', reopen: 'ပြင်ရန် ဖွင့်', finishFirst: 'ဖွင့်ထားသည်ကို အရင် သိမ်း/ဖျက်ပါ',
@@ -481,7 +481,7 @@ function takeHandover() {
   if (h && h.staff && h.staff.id && Date.now() - (h.at || 0) < 120000) {
     S.staff = h.staff; if (h.lang) S.lang = h.lang;
     S.screen = 'home'; S.pad = null;
-    S.autoStart = !h.fromPc;   // from the main menu → straight to "pick the RM lot" (Sal, 18 Nov 2026); a draft in progress is resumed instead
+    S.autoStart = !h.fromPc;   // from the main menu → straight to "pick the RM lot" (Sal, 18 Nov 2026); a draft in progress is resumed instead. ↻ refresh (fromPc) stays on today's list
   }
 }
 function toMainMenu() {
@@ -804,7 +804,7 @@ function renderHeader() {
   const T = t();
   const steps = { lot: 0, manual: 0, check: 1 };
   const at = steps[S.screen] === undefined ? -1 : steps[S.screen];
-  const backTo = locked() && S.screen === 'check' ? '' : { lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen];
+  const backTo = locked() && S.screen === 'check' ? '' : { lot: 'menu', manual: 'lot', check: 'lot', done: 'menu', home: 'lot' }[S.screen];
   const pend = S.outbox.length, bad = S.outbox.filter((o) => o.err).length;
   const net = bad ? '<button class="net bad" data-act="home" style="border:0;font:inherit;font-weight:800">⚠ ' + T.refusedN + ' ' + bad + '</button>'
     : !S.online ? '<span class="net off">' + T.offline + (pend ? ' · ' + pend : '') + '</span>'
@@ -834,6 +834,32 @@ const statusPill = (s) => s === 'ไม่ผ่าน' || s === 'fail' ? '<span
   : s === 'ผ่านหลังแก้ไข' || s === 'fixed' ? '<span class="pill p-fix">✓ ' + t().passFix + '</span>' : '<span class="pill p-ok">✓ ' + t().pass + '</span>';
 const heldPill = (n) => (n > 0 ? '<span class="pill ' + (n >= holdWarn() ? 'p-bad' : 'p-warn') + '">🧊 ' + fmt(t().heldBadge, { n: n }) + '</span>' : '');
 
+/** report problem + unsent / refused saves (home and lot screen) */
+function viewWarnCards(onLot) {
+  const T = t();
+  let h = '';
+  // on the lot screen a save that is just being sent is not news — only offline, refused, or waiting over a minute
+  const quiet = onLot && S.online && !S.outbox.some((o) => o.err || Date.now() - (o.savedAt || 0) > 60000);
+  if (S.reportWarn) {
+    h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
+      '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
+      '<button class="linkbtn" data-act="hidewarn">' + T.hide + '</button></div></div>';
+  }
+  if (S.outbox.length && !quiet) {
+    const bad = S.outbox.find((o) => o.err);
+    h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
+      (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
+        (bad.draft ? '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') : '') + '</div>' +
+      '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
+  }
+  return h;
+}
+/** today's checks: one tap from the lot screen — the GM cancels from there (Sal, 28 Nov 2026) */
+function todayBtn() {
+  const td = S.today && S.today.date === todayStr() ? S.today.totals.checks : 0;
+  const pend = S.outbox.filter((o) => o.record.date === todayStr() && !(S.today && S.today.checks || []).some((x) => x.id === o.record.id)).length;
+  return '<button class="addline" style="border-style:solid;color:var(--ink-2)" data-act="home">' + fmt(t().todayBtn, { n: td + pend }) + '</button>';
+}
 function viewHome() {
   const T = t();
   const st = S.staff;
@@ -851,18 +877,7 @@ function viewHome() {
     (!S.online ? '<span class="net off">' + T.offline + '</span>' : S.outbox.length ? '<span class="net wait">' + T.waiting + ' ' + S.outbox.length + '</span>' : '<span class="net on">' + T.online + '</span>') + '</div>' +
     '<div class="sum"><div><b>' + td.totals.checks + '</b><span>' + T.checks + '</span></div><hr><div><b style="color:' + (td.totals.held ? 'var(--amber)' : 'var(--ink)') + '">' + td.totals.held + '</b><span>' + T.heldN + '</span></div><hr>' +
     '<div><b style="color:' + (td.totals.failed ? 'var(--red)' : 'var(--ink)') + '">' + td.totals.failed + '</b><span>' + T.failShort + '</span></div></div></div>';
-  if (S.reportWarn) {
-    h += '<div class="card glass" style="border:1.5px solid var(--red)"><div class="row"><div class="grow"><b style="color:var(--red)">⚠ ' + T.reportBadT + '</b>' +
-      '<div class="sub">' + T.reportBad + '</div><div class="sub mono" style="font-size:11px">Lot ' + esc(S.reportWarn.lot) + ' · ' + esc(S.reportWarn.at) + ' · ' + esc(S.reportWarn.msg) + '</div></div>' +
-      '<button class="linkbtn" data-act="hidewarn">' + T.hide + '</button></div></div>';
-  }
-  if (S.outbox.length) {
-    const bad = S.outbox.find((o) => o.err);
-    h += '<div class="card glass" style="border:1.5px solid var(--amber)"><div class="row"><div class="grow"><b>' + T.pendingT + ' ' + S.outbox.length + '</b><div class="sub">' + T.pendingSub + '</div>' +
-      (bad ? '<div class="sub" style="color:var(--red)">' + T.failedSend + ' (Lot ' + esc(bad.record.lot) + '): ' + esc(bad.err) + '</div>' +
-        (bad.draft ? '<button class="linkbtn" style="font-size:14px;margin-top:4px" data-act="reopen" data-v="' + esc(bad.record.id) + '">' + T.reopen + ' ›</button>' : '') : '') + '</div>' +
-      '<button class="btn" style="flex:0 0 auto;height:40px;padding:0 14px;font-size:14px" data-act="sendnow">' + T.sendNow + '</button></div></div>';
-  }
+  h += viewWarnCards();
   if (S.c) {
     const c = S.c;
     h += '<div class="card glass" style="border:2px solid var(--accent)"><button class="dept" style="padding:0" data-act="resume"><span class="ic">PC</span><span class="grow"><b style="font-size:17px">' + T.resume + (c.lot ? ' · Lot ' + esc(c.lot) : '') + '</b>' +
@@ -892,7 +907,8 @@ function viewLot() {
   let h = '<div class="stg"><div><h2>' + (S.lotSrc === 'bulk' ? T.lotTBulk : T.lotT) + '</h2><div class="sub">' + (S.lotSrc === 'bulk' ? fmt(T.bulkSub, { n: bulkDays() }) : T.lotSub) + '</div></div>';
   // where the fish comes from: received at RM, or a lot processed earlier as BULK (Sal, 15 Nov 2026)
   h += '<div class="seg srcseg"><button class="' + (S.lotSrc !== 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="rm">' + T.srcRm + '</button><button class="' + (S.lotSrc === 'bulk' ? 'on' : '') + '" data-act="lotsrc" data-v="bulk">' + T.srcBulk + '</button></div>';
-  if (S.lotSrc === 'bulk') return h + viewBulkList() + '</div>';
+  h += viewWarnCards(true);   // unsent / refused saves and report problems — here, where staff always are (Sal, 28 Nov 2026)
+  if (S.lotSrc === 'bulk') return h + viewBulkList() + todayBtn() + '</div>';
   const chips = [0, 1, 2, 3].map((n) => { const d = addDays(today, -n); return '<button class="' + (c.rmDate === d ? 'on' : '') + (pendOf(d) ? ' pend' : '') + '" data-act="rmdate" data-v="' + d + '"><b>' + (n === 0 ? T.d0 : n === 1 ? T.d1 : fmt(T.dN, { n: n })) + '</b><small>' + ddmm(d) + '</small></button>'; }).join('');
   const other = [0, 1, 2, 3].every((n) => addDays(today, -n) !== c.rmDate);
   const olderPend = !!(S.pend && S.pend.open.some((l) => l.date < addDays(today, -3)));
@@ -930,7 +946,7 @@ function viewLot() {
     });
   }
   if (lockedN) h += '<button class="addline" style="border-style:solid;color:var(--ink-2)" data-act="showlocked">' + (S.showLocked ? T.lockedHide : fmt(T.lockedN, { n: lockedN })) + '</button>';
-  h += '<button class="addline" data-act="manual">' + T.manual + '</button>';
+  h += '<button class="addline" data-act="manual">' + T.manual + '</button>' + todayBtn();
   if (S.err) h += '<div class="err">' + esc(S.err) + '</div>';
   return h + '</div>';
 }
@@ -1245,8 +1261,8 @@ function viewAction() {
   if (s === 'done') {
     const a = S.last && S.last.again;
     // lock after check (Sal, 27 Nov 2026): once saved the lot is closed — no "ตรวจซ้ำ / + ตรวจอีกแบบ" here; more types go in the card before บันทึก, later only by a GM
-    if (!a || !a.rmId) return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="again">' + T.again + '</button>';
-    return '<button class="btn ghost" data-act="home">' + T.home + '</button><button class="btn" data-act="start">' + T.nextLot + '</button>';
+    if (!a || !a.rmId) return '<button class="btn ghost" data-act="mainmenu">' + T.mainMenu + '</button><button class="btn" data-act="again">' + T.again + '</button>';
+    return '<button class="btn ghost" data-act="mainmenu">' + T.mainMenu + '</button><button class="btn" data-act="start">' + T.nextLot + '</button>';
   }
   return '';
 }
@@ -1305,7 +1321,7 @@ function login() {
   if (k0 && navigator.onLine) {
     const id = S.sid;
     S.staff = { id: id, name: k0.name, dept: k0.dept }; S.err = '';
-    go('home', { pad: null });
+    enterPc();
     refreshConfig(true); refreshToday(true);
     api('validateStaff', { staffId: id }).then((j) => {
       if (!S.staff || S.staff.id !== id) return;
@@ -1322,12 +1338,12 @@ function login() {
     S.staff = { id: S.sid, name: j.name || '', dept: j.department || '' };
     (S.known = S.known || {})[S.sid] = { name: S.staff.name, dept: S.staff.dept };
     S.online = true;
-    go('home', { pad: null });
+    enterPc();
     refreshConfig(true); refreshToday(true);
   }, (e) => {
     S.busy = false;
     const k = e.net && S.known && S.known[S.sid];
-    if (k) { S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false; go('home', { pad: null }); flush(); return; }
+    if (k) { S.staff = { id: S.sid, name: k.name, dept: k.dept }; S.online = false; enterPc(); flush(); return; }
     S.err = e.net ? t().needNet : e.message; render();
   });
 }
@@ -1345,6 +1361,13 @@ function toast(msg) {
   const el = $('toast');
   el.textContent = msg; el.classList.add('show');
   clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2600);
+}
+/** opening PC = pick the RM lot, or carry on with the check left open (Sal, 28 Nov 2026: back goes to the main menu, no PC home page) */
+function enterPc() {
+  S.pad = null;
+  if (!S.c) return startCheck();
+  go((S.c.lot || S.c.bulkFrom) && S.c.stage !== 'manual' ? 'check' : S.c.stage || 'lot');   // a lot already picked → back into its card
+  if (S.screen === 'lot') loadLots(S.c.rmDate);
 }
 function startCheck() {
   S.c = blankCheck(todayStr());
@@ -1427,7 +1450,9 @@ const ACT = {
   back: () => {
     if (locked() && S.screen === 'check') return toast(t().lockMsg);
     if (S.screen === 'lot' && S.c && !S.c.lot && !S.c.bulkFrom) S.c = null;   // nothing picked yet → no "continue" draft left behind
-    go({ lot: 'home', manual: 'lot', check: 'lot', done: 'home' }[S.screen] || 'home');
+    if (S.screen === 'lot' || S.screen === 'done') return toMainMenu();   // straight to the main menu (Sal, 28 Nov 2026); an open check stays on the phone
+    if (S.screen === 'home') return enterPc();
+    go({ manual: 'lot', check: 'lot' }[S.screen] || 'lot');
   },
   callgm: openGmSheet,
   showlocked: () => { S.showLocked = !S.showLocked; render(); },
@@ -1512,7 +1537,7 @@ const ACT = {
   start: startCheck,
   resume: () => { go(S.c.stage || 'lot'); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate, true); },
   discard: () => { if (locked()) return toast(t().lockMsg); if (S.confirm === 'discard') { S.c = null; S.stack = []; S.confirm = null; } else S.confirm = 'discard'; render(); },
-  home: () => go('home'),
+  home: () => { if (S.screen === 'lot' && S.c && !S.c.lot && !S.c.bulkFrom) S.c = null; go('home'); },
   rmdate: (el) => { S.c.rmDate = el.dataset.v; S.err = ''; render(); loadLots(S.c.rmDate); },
   againtypein: () => {   // position A: on the check screen — save this card (if complete), then "+ ตรวจอีกแบบ"
     const c = S.c; if (!c) return;
@@ -1690,18 +1715,20 @@ function checkUpdate() {
   }).catch(() => {});
 }
 function applyUpdate() {
-  if (!updTo || S.busy || ['login', 'home', 'done'].indexOf(S.screen) < 0 || (S.screen === 'login' && (S.sid || S.buf))) return;
+  // safe moments only: never inside a check. The lot screen with no lot picked counts too — staff hardly see the PC home now (Sal, 28 Nov 2026)
+  const idleLot = S.screen === 'lot' && (!S.c || (!S.c.lot && !S.c.bulkFrom)) && !(S.stack || []).length;
+  if (!updTo || S.busy || (['login', 'home', 'done'].indexOf(S.screen) < 0 && !idleLot) || (S.screen === 'login' && (S.sid || S.buf))) return;
   const v = updTo; updTo = '';
   try { sessionStorage.setItem('ckqc.upd', v); } catch (e) { /* ignore */ }
   persist();
-  if (S.staff) { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now(), fromPc: true })); } catch (e) { /* ignore */ } }
+  if (S.staff) { try { sessionStorage.setItem(HAND_KEY, JSON.stringify({ staff: S.staff, lang: S.lang, at: Date.now(), fromPc: S.screen === 'home' })); } catch (e) { /* ignore */ } }   // updated on the lot screen → back on the lot screen
   const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString());
 }
 
 if (/[?&]r=\d+/.test(location.search)) { try { const u = new URL(location.href); u.searchParams.delete('r'); history.replaceState(null, '', u.toString()); } catch (e) { /* ignore */ } }
 render();
 if (S.staff) { refreshConfig(true); refreshToday(true); flush(); }
-if (S.autoStart) { S.autoStart = false; if (S.c) go(S.c.stage || 'lot'); else startCheck(); if (S.c && S.screen === 'lot') loadLots(S.c.rmDate); }
+if (S.autoStart) { S.autoStart = false; enterPc(); }
 checkUpdate();
 
 /* the date box opens the calendar on a computer too (Sal, 23 Nov 2026) — phones already do; desktop Chrome only opens it on the small icon */
